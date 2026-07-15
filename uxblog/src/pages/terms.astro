@@ -1,0 +1,71 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+// NOTE FOR SAVELLE: This is a plain-language starter that reflects the site's
+// actual offers (e.g., the $997 UX audit with a money-back guarantee). Have it
+// reviewed by counsel and confirm the governing-law state before relying on it.
+const lastUpdated = 'June 9, 2026';
+---
+
+<BaseLayout
+  title="Terms of Service | Savelle McThias"
+  description="The terms that govern use of savellem.com and the services offered."
+>
+  <section class="container-custom py-20">
+    <div class="max-w-3xl">
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-gray-100 mb-4 tracking-tight">
+        Terms of Service
+      </h1>
+      <p class="text-sm text-gray-500 mb-12">Last updated: {lastUpdated}</p>
+
+      <div class="prose-custom">
+        <p>
+          These terms govern your use of savellem.com and any design services you purchase from
+          Savelle McThias / Savelle LLC (&ldquo;I&rdquo; or &ldquo;me&rdquo;). By using the site or
+          buying a service, you agree to these terms.
+        </p>
+
+        <h2>Services</h2>
+        <p>I provide UX/UI design, research, design systems, <span class="whitespace-nowrap">e-commerce</span> and conversion work,
+          enterprise SaaS design, and related consulting. Specific scope, deliverables, timelines,
+          and fees are agreed in a proposal or at checkout before work begins.</p>
+
+        <h2>Purchases and payment</h2>
+        <p>Productized services—such as the 48-hour UX audit—are sold at a fixed price and paid up
+          front through my payment provider (Stripe). For the UX audit, work begins once you have
+          completed payment and provided the access I need to evaluate your product.</p>
+
+        <h2>Money-back guarantee</h2>
+        <p>The UX audit includes a satisfaction guarantee: if you are not satisfied with the
+          quality of the audit, I will refund your payment. Custom project engagements are governed
+          by the refund and cancellation terms in their individual agreements.</p>
+
+        <h2>Intellectual property</h2>
+        <p>Deliverables I create for you become yours upon full payment, except for any third-party
+          assets and my own pre-existing tools, templates, and methods. The content, design, and
+          code of this website remain my property and may not be copied without permission.</p>
+
+        <h2>Acceptable use</h2>
+        <p>You agree not to misuse the site—no attempts to disrupt it, access it unlawfully, or use
+          it to infringe others&apos; rights.</p>
+
+        <h2>Disclaimer and limitation of liability</h2>
+        <p>The site and its content are provided &ldquo;as is&rdquo; without warranties of any kind.
+          To the fullest extent permitted by law, my liability for any claim relating to the site or
+          a service is limited to the amount you paid for that service.</p>
+
+        <h2>Governing law</h2>
+        <p>These terms are governed by the laws of the State of Arizona, without regard to its
+          conflict-of-law rules.</p>
+
+        <h2>Changes</h2>
+        <p>I may update these terms from time to time. Continued use of the site after an update
+          means you accept the revised terms.</p>
+
+        <h2>Contact</h2>
+        <p>Questions about these terms? Email
+          <a href="mailto:savellem@gmail.com">savellem@gmail.com</a>.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,601 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import FeaturedCaseStudy from '@components/FeaturedCaseStudy.astro';
+import Testimonials from '@components/Testimonials.astro';
+import { getCollection } from 'astro:content';
+import { reviewSchema } from '@/lib/schema';
+import { realTestimonials } from '@/data/testimonials';
+
+// Get the 3 homepage-featured case studies ordered by homepageOrder
+const caseStudies = (await getCollection('case-studies'))
+  .filter((study) => study.data.homepageFeatured)
+  .sort((a, b) => (a.data.homepageOrder ?? 99) - (b.data.homepageOrder ?? 99))
+  .slice(0, 4);
+
+// Emit Review structured data only for real (non-placeholder) testimonials.
+const reviewGraphs = realTestimonials.map((t) => reviewSchema({ quote: t.quote, name: t.name }));
+---
+
+<BaseLayout
+  title="Savelle McThias — Product Designer & Creative Director, Scottsdale AZ"
+  description="Savelle McThias is a product designer and creative director based in Scottsdale, AZ. Web design, branding, and development for Phoenix area businesses. Senior product design and design engineering for remote teams. Two decades of experience."
+  schema={reviewGraphs}
+>
+  <!-- Hero Video -->
+  <section class="container-custom pt-[36px] pb-3">
+    <div class="aspect-video max-w-5xl mx-auto rounded-2xl overflow-hidden bg-zinc-900">
+      <iframe
+        src="https://player.vimeo.com/video/1193063245?autoplay=1&muted=1"
+        class="w-full h-full"
+        title="Portfolio Showreel"
+        allow="autoplay; fullscreen; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </section>
+
+  <!-- Hero Intro (H1 + positioning) -->
+  <section class="container-custom pt-10 pb-16">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-gray-100 tracking-tight leading-[1.05] mb-6">
+        I design and build things people actually want to use.
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-200 leading-snug max-w-3xl mx-auto mb-8">
+        Web design, branding, and development for Phoenix area businesses. Senior product design and design engineering for remote teams. Two decades of experience.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/contact"
+          class="inline-flex items-center px-6 py-3 bg-gray-100 text-zinc-950 text-base font-medium rounded-full hover:bg-white transition-colors"
+        >
+          Start a project
+        </a>
+        <a
+          href="/ux-health-check"
+          class="inline-flex items-center px-6 py-3 border border-zinc-700 text-gray-100 text-base font-medium rounded-full hover:bg-zinc-900 transition-colors"
+        >
+          Free UX Health Check
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo Bar -->
+  <section class="pt-14 pb-10 border-t border-zinc-800/60">
+    <p class="text-center text-xs font-medium text-gray-500 uppercase tracking-widest mb-8">
+      Brands I've Worked With
+    </p>
+    <div class="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+      <div class="logo-marquee flex gap-20 items-center w-max">
+        {[
+          { src: '/images/logos/logo-bareminerals.svg',   alt: 'bareMinerals',    h: 'h-[20px]' },
+          { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 'h-[56px]' },
+          { src: '/images/logos/logo-gm.svg',             alt: 'GM',              h: 'h-[56px]' },
+          { src: '/images/logos/logo-petsmart.svg',       alt: 'PetSmart',        h: 'h-[42px]' },
+          { src: '/images/logos/logo-richdad.svg',        alt: 'Rich Dad',        h: 'h-[20px]' },
+          { src: '/images/logos/logo-sanity.svg',         alt: 'Sanity',          h: 'h-7'      },
+          { src: '/images/logos/logo-sothebys.svg',       alt: "Sotheby's",       h: 'h-7'      },
+          { src: '/images/logos/logo-thebeachboys.svg',   alt: 'The Beach Boys',  h: 'h-[56px]' },
+          { src: '/images/logos/logo-universal.svg',      alt: 'Universal',       h: 'h-[56px]' },
+          { src: '/images/logos/logo-bareminerals.svg',   alt: 'bareMinerals',    h: 'h-[20px]' },
+          { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 'h-[56px]' },
+          { src: '/images/logos/logo-gm.svg',             alt: 'GM',              h: 'h-[56px]' },
+          { src: '/images/logos/logo-petsmart.svg',       alt: 'PetSmart',        h: 'h-[42px]' },
+          { src: '/images/logos/logo-richdad.svg',        alt: 'Rich Dad',        h: 'h-[20px]' },
+          { src: '/images/logos/logo-sanity.svg',         alt: 'Sanity',          h: 'h-7'      },
+          { src: '/images/logos/logo-sothebys.svg',       alt: "Sotheby's",       h: 'h-7'      },
+          { src: '/images/logos/logo-thebeachboys.svg',   alt: 'The Beach Boys',  h: 'h-[56px]' },
+          { src: '/images/logos/logo-universal.svg',      alt: 'Universal',       h: 'h-[56px]' },
+        ].map(({ src, alt, h }) => (
+          <img
+            src={src}
+            alt={alt}
+            class={`${h} w-auto object-contain brightness-0 invert opacity-40 shrink-0`}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Work Section -->
+  {caseStudies.length > 0 && (
+    <section id="featured-work" class="container-custom pt-20 pb-8">
+      <div class="mb-4 flex items-end justify-between">
+        <div>
+          <h2 class="text-sm font-semibold text-gray-100 uppercase tracking-wider mb-3">
+            Featured Work
+          </h2>
+          <p class="text-gray-400 text-lg">
+            Recent projects and case studies
+          </p>
+        </div>
+        <a
+          href="/work"
+          class="hidden md:inline-flex items-center text-sm font-medium text-gray-100 hover:text-gray-300 transition-colors group"
+        >
+          View all case studies
+          <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <div>
+        {caseStudies.map((study) => (
+          <FeaturedCaseStudy
+            title={study.data.title}
+            client={study.data.client}
+            year={study.data.year}
+            yearEnd={study.data.yearEnd}
+            description={study.data.description}
+            role={study.data.role}
+            scope={study.data.scope}
+            media={study.data.media}
+            thumbnail={study.data.thumbnail}
+            slug={study.id}
+          />
+        ))}
+      </div>
+
+      <div class="mt-12 text-center md:hidden">
+        <a
+          href="/work"
+          class="inline-flex items-center text-sm font-medium text-gray-100 hover:text-gray-300 transition-colors group"
+        >
+          View all case studies
+          <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+    </section>
+  )}
+
+  <!-- Gallery Teaser Section -->
+  <section class="container-custom pb-20">
+    <div class="border-t border-zinc-800 pt-16 lg:pt-20">
+      <div class="mb-4 flex items-end justify-between">
+        <div>
+          <h2 class="text-sm font-semibold text-gray-100 uppercase tracking-wider mb-3">
+            Design Gallery
+          </h2>
+          <p class="text-gray-400 text-lg">
+            Selected work across web, branding, and digital experiences
+          </p>
+        </div>
+        <a
+          href="/gallery"
+          class="hidden md:inline-flex items-center text-sm font-medium text-gray-100 hover:text-gray-300 transition-colors group"
+        >
+          View full gallery
+          <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="border-t border-zinc-800">
+        <div class="teaser-masonry">
+          {[
+            'web-nikkl',
+            'branding-porkbun',
+            'web-vanup-02',
+            'web-greencompass-02',
+            'ui-ifoodds',
+            'web-vanup-04',
+            'web-yoli-03',
+            'ui-santa',
+            'web-greencompass',
+          ].map((slug) => (
+            <div
+              class="teaser-item"
+              data-full={`/images/gallery/full/full-${slug}.jpg`}
+              role="button"
+              tabindex="0"
+              aria-label="View full size image"
+            >
+              <img
+                class="teaser-thumb"
+                data-src={`/images/gallery/thumbs/thumb-${slug}.jpg`}
+                alt=""
+              />
+            </div>
+          ))}
+          <a href="/gallery" class="teaser-cta" aria-label="View full gallery">
+            <span class="teaser-cta-label">
+              View full gallery
+              <svg class="teaser-cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="teaser-modal" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
+    <button id="teaser-modal-close" aria-label="Close image viewer">&#x2715;</button>
+    <div id="teaser-modal-loading" aria-hidden="true">
+      <div class="teaser-spinner"></div>
+    </div>
+    <img id="teaser-modal-img" src="" alt="" />
+  </div>
+
+  <!-- Services Section -->
+  <section class="container-custom py-32">
+    <div class="mb-16 flex items-end justify-between">
+      <div>
+        <h2 class="text-sm font-semibold text-gray-100 uppercase tracking-wider mb-3">
+          What I Do
+        </h2>
+        <p class="text-gray-400 text-lg max-w-2xl">
+          Design, development, and strategy for local businesses and remote product teams.
+        </p>
+      </div>
+      <a
+        href="/services"
+        class="hidden md:inline-flex items-center text-sm font-medium text-gray-100 hover:text-gray-300 transition-colors group"
+      >
+        View all services
+        <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+      <div>
+        <div class="w-16 h-16 bg-zinc-900 rounded-2xl mb-6 flex items-center justify-center">
+          <svg class="w-8 h-8 text-gray-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-gray-100 mb-4">Design</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Websites, apps, branding, and interfaces that look great and actually work — for local businesses and product teams alike.
+        </p>
+      </div>
+
+      <div>
+        <div class="w-16 h-16 bg-zinc-900 rounded-2xl mb-6 flex items-center justify-center">
+          <svg class="w-8 h-8 text-gray-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-gray-100 mb-4">Build</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Front-end development in Webflow, WordPress, React, and Next.js. From landing pages to full web apps, design that ships.
+        </p>
+      </div>
+
+      <div>
+        <div class="w-16 h-16 bg-zinc-900 rounded-2xl mb-6 flex items-center justify-center">
+          <svg class="w-8 h-8 text-gray-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-gray-100 mb-4">Strategy</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Figuring out what to build before building it. UX audits, design systems, product direction, and the thinking that makes everything else work better.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-16 text-center md:hidden">
+      <a
+        href="/services"
+        class="inline-flex items-center text-sm font-medium text-gray-100 hover:text-gray-300 transition-colors group"
+      >
+        View all services
+        <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Testimonials / Proof -->
+  <Testimonials />
+
+  <!-- CTA Section -->
+  <section class="container-custom py-32">
+    <div class="bg-zinc-900 rounded-3xl p-16 md:p-24 text-center border border-zinc-800">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-100 mb-6 tracking-tight">
+        Let's create something amazing together
+      </h2>
+      <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+        Have a project in mind? I'd love to hear about it.
+      </p>
+      <a
+        href="/contact"
+        class="inline-flex items-center px-8 py-4 bg-gray-100 text-zinc-950 text-base font-medium rounded-full hover:bg-white transition-colors"
+      >
+        Start a project
+      </a>
+    </div>
+  </section>
+<style>
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .logo-marquee {
+    animation: marquee 40s linear infinite;
+  }
+  .logo-marquee:hover {
+    animation-play-state: paused;
+  }
+
+  /* ── Gallery teaser masonry ── */
+  .teaser-masonry {
+    columns: 4;
+    column-gap: 16px;
+    padding-top: 32px;
+  }
+  @media (max-width: 1280px) { .teaser-masonry { columns: 3; } }
+  @media (max-width: 768px)  { .teaser-masonry { columns: 2; } }
+  @media (max-width: 480px)  { .teaser-masonry { columns: 1; } }
+  .teaser-item {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    cursor: pointer;
+    overflow: hidden;
+    background: #27272a;
+    position: relative;
+    min-height: 120px;
+    border-radius: 0.75rem;
+  }
+  .teaser-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+    animation: teaser-shimmer 1.8s infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .teaser-item.img-loaded::before {
+    display: none;
+  }
+  @keyframes teaser-shimmer {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(100%); }
+  }
+  .teaser-thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.45s ease, transform 0.35s ease, filter 0.35s ease;
+    position: relative;
+    z-index: 2;
+  }
+  .teaser-thumb.loaded {
+    opacity: 1;
+  }
+  .teaser-item:hover .teaser-thumb {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+  }
+
+  .teaser-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    break-inside: avoid;
+    margin-bottom: 16px;
+    border-radius: 0.75rem;
+    aspect-ratio: 16 / 9;
+    background: #18181b;
+    border: 1px solid #3f3f46;
+    text-decoration: none;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .teaser-cta:hover {
+    background: #27272a;
+    border-color: #71717a;
+  }
+  .teaser-cta-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #f4f4f5;
+    transition: color 0.2s ease;
+  }
+  .teaser-cta:hover .teaser-cta-label {
+    color: #ffffff;
+  }
+  .teaser-cta-arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+  }
+  .teaser-cta:hover .teaser-cta-arrow {
+    transform: translateX(3px);
+  }
+
+  /* ── Teaser modal ── */
+  #teaser-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 1000;
+    overflow: auto;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 64px 24px 40px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+  }
+  #teaser-modal.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  #teaser-modal-close {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #f4f4f5;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 1001;
+  }
+  #teaser-modal-close:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+  #teaser-modal-img {
+    display: block;
+    max-width: calc(100vw - 48px);
+    height: auto;
+    cursor: default;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  #teaser-modal-img.loaded {
+    opacity: 1;
+  }
+
+  #teaser-modal-loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1002;
+  }
+
+  #teaser-modal-loading.hidden {
+    display: none;
+  }
+
+  .teaser-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    border-top-color: rgba(255, 255, 255, 0.75);
+    border-radius: 50%;
+    animation: teaser-spin 0.75s linear infinite;
+  }
+
+  @keyframes teaser-spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      const href = (anchor as HTMLAnchorElement).getAttribute('href');
+      const target = href ? document.querySelector(href) : null;
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+<script>
+  // ── Teaser lazy loading ──
+  const teaserThumbs = document.querySelectorAll<HTMLImageElement>('.teaser-thumb');
+
+  const teaserObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const img = entry.target as HTMLImageElement;
+        const src = img.dataset.src;
+        if (!src) continue;
+        img.src = src;
+        const reveal = () => {
+          img.classList.add('loaded');
+          img.closest('.teaser-item')?.classList.add('img-loaded');
+        };
+        img.onload = reveal;
+        img.onerror = reveal;
+        teaserObserver.unobserve(img);
+      }
+    },
+    { rootMargin: '300px 0px' }
+  );
+
+  teaserThumbs.forEach((img) => teaserObserver.observe(img));
+
+  // ── Teaser modal ──
+  const teaserModal    = document.getElementById('teaser-modal')!;
+  const teaserModalImg = document.getElementById('teaser-modal-img') as HTMLImageElement;
+  const teaserClose    = document.getElementById('teaser-modal-close')!;
+
+  function openTeaserModal(src: string) {
+    const loading = document.getElementById('teaser-modal-loading')!;
+    teaserModalImg.classList.remove('loaded');
+    loading.classList.remove('hidden');
+    teaserModalImg.src = src;
+    const onDone = () => {
+      loading.classList.add('hidden');
+      teaserModalImg.classList.add('loaded');
+    };
+    teaserModalImg.onload = onDone;
+    teaserModalImg.onerror = onDone;
+    teaserModal.classList.add('open');
+    teaserModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    teaserClose.focus();
+  }
+
+  function closeTeaserModal() {
+    teaserModal.classList.remove('open');
+    teaserModal.setAttribute('aria-hidden', 'true');
+    setTimeout(() => {
+      teaserModalImg.src = '';
+      teaserModalImg.classList.remove('loaded');
+      document.getElementById('teaser-modal-loading')!.classList.remove('hidden');
+    }, 230);
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll<HTMLElement>('.teaser-item').forEach((item) => {
+    item.addEventListener('click', () => {
+      const full = item.dataset.full;
+      if (full) openTeaserModal(full);
+    });
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const full = item.dataset.full;
+        if (full) openTeaserModal(full);
+      }
+    });
+  });
+
+  teaserModal.addEventListener('click', (e) => {
+    if (e.target !== teaserModalImg) closeTeaserModal();
+  });
+
+  teaserClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeTeaserModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && teaserModal.classList.contains('open')) closeTeaserModal();
+  });
+</script>
+</BaseLayout>

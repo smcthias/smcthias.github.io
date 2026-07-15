@@ -1,0 +1,568 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { serviceSchema, faqPageSchema, SITE_URL } from '@/lib/schema';
+
+// ──────────────────────────────────────────────────────────────────────────
+// EMAIL CAPTURE — DEFERRED ACTIVATION
+// The tool is fully functional now. To start capturing leads, set FORM_ENDPOINT
+// to a static-friendly form endpoint (e.g. Formspree, ConvertKit, Beehiiv, or a
+// serverless function) that accepts a JSON POST of { email, score, categories }.
+// While it is empty, the email step still gates the result (value exchange) but
+// no data is sent anywhere. See docs/ux-health-check-runbook.md.
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
+
+type Option = { label: string; value: number };
+type Question = { id: string; category: string; text: string; options: Option[] };
+
+const questions: Question[] = [
+  {
+    id: 'first-impression-1',
+    category: 'First Impression',
+    text: 'When someone finds your site, how fast can they tell what you do and how to contact you?',
+    options: [
+      { label: "Right away, it's obvious", value: 2 },
+      { label: 'Takes a little digging', value: 1 },
+      { label: 'Not clear at all', value: 0 },
+    ],
+  },
+  {
+    id: 'first-impression-2',
+    category: 'First Impression',
+    text: "If someone's never used your site before, is it easy for them to find what they came for (services, pricing, booking)?",
+    options: [
+      { label: 'Yes, clearly laid out', value: 2 },
+      { label: 'Somewhat, if they look around', value: 1 },
+      { label: "No, it's confusing", value: 0 },
+    ],
+  },
+  {
+    id: 'conversion-1',
+    category: 'Conversion',
+    text: 'Do you know how many people leave your site without calling, booking, or filling out a form?',
+    options: [
+      { label: 'Yes, we track this', value: 2 },
+      { label: 'We have a rough idea', value: 1 },
+      { label: 'No idea', value: 0 },
+    ],
+  },
+  {
+    id: 'conversion-2',
+    category: 'Conversion',
+    text: 'How many steps does it take for someone to book, call, or request a quote?',
+    options: [
+      { label: 'One or two steps, quick and easy', value: 2 },
+      { label: 'A few steps, could be simpler', value: 1 },
+      { label: 'Long or confusing process', value: 0 },
+    ],
+  },
+  {
+    id: 'mobile-1',
+    category: 'Mobile',
+    text: 'How does your site feel on a phone?',
+    options: [
+      { label: 'Looks and works great on mobile', value: 2 },
+      { label: 'Works, but clearly built for desktop', value: 1 },
+      { label: 'Hard to use on mobile', value: 0 },
+    ],
+  },
+  {
+    id: 'mobile-2',
+    category: 'Mobile',
+    text: 'Are buttons, text, and forms easy to tap and read on a phone?',
+    options: [
+      { label: 'Yes, no issues', value: 2 },
+      { label: 'Mostly, a few rough spots', value: 1 },
+      { label: 'No, hard to use', value: 0 },
+    ],
+  },
+  {
+    id: 'accessibility-1',
+    category: 'Accessibility',
+    text: 'Is your site easy to read for people with vision or color differences?',
+    options: [
+      { label: "Yes, we've checked", value: 2 },
+      { label: 'Not sure', value: 1 },
+      { label: 'Never thought about it', value: 0 },
+    ],
+  },
+  {
+    id: 'accessibility-2',
+    category: 'Accessibility',
+    text: 'Do your photos and forms make sense to someone using a screen reader or keyboard only?',
+    options: [
+      { label: 'Yes', value: 2 },
+      { label: 'Some of it', value: 1 },
+      { label: 'Not sure', value: 0 },
+    ],
+  },
+  {
+    id: 'consistency-1',
+    category: 'Consistency',
+    text: 'Does your site look consistent from page to page (same fonts, colors, buttons)?',
+    options: [
+      { label: "Yes, it's all consistent", value: 2 },
+      { label: 'Mostly, a few mismatches', value: 1 },
+      { label: 'No, it feels thrown together', value: 0 },
+    ],
+  },
+  {
+    id: 'consistency-2',
+    category: 'Consistency',
+    text: 'If you hired someone new to update your site, would they know where to find things and keep it looking right?',
+    options: [
+      { label: "Yes, it's organized well", value: 2 },
+      { label: "They'd need some help", value: 1 },
+      { label: "No, it'd be a mess", value: 0 },
+    ],
+  },
+];
+
+const faqs = [
+  {
+    question: 'What is the UX Health Check?',
+    answer:
+      'A free, 2-minute self-assessment that scores your business website across five UX dimensions — first impression, conversion, mobile, accessibility, and consistency — then returns a 0–100 score and three prioritized recommendations.',
+  },
+  {
+    question: 'How is the score calculated?',
+    answer:
+      'You answer ten quick questions, two per dimension. Each answer is worth 0–2 points; the total is normalized to a 0–100 score, and each dimension gets its own sub-score so you can see exactly where the friction is.',
+  },
+  {
+    question: 'How is this different from the paid UX Audit?',
+    answer:
+      'The Health Check is an instant, self-serve estimate based on your own answers. The 48-hour UX Audit is a hands-on expert review of your actual website — a recorded walkthrough, a prioritized issues list, and a strategy call.',
+  },
+];
+
+const pageSchema = [
+  serviceSchema({
+    name: 'Free UX Health Check',
+    serviceType: 'UX Assessment',
+    description:
+      'A free, interactive self-assessment that scores a local business website’s UX across first impression, conversion, mobile, accessibility, and consistency, then returns prioritized recommendations.',
+    url: `${SITE_URL}/ux-health-check`,
+    offer: { price: '0', priceCurrency: 'USD' },
+  }),
+  faqPageSchema(faqs),
+];
+---
+
+<BaseLayout
+  title="Free UX Health Check | Score Your Business Website's UX | Savelle McThias"
+  description="Take a free 2-minute UX Health Check built for local businesses — real estate, auto shops, dental, and more. Score your site across first impression, conversion, mobile, accessibility, and consistency, and get 3 prioritized fixes."
+  schema={pageSchema}
+  hideHealthCheckCta
+>
+  <!-- Hero -->
+  <section class="relative container-custom pt-24 pb-10 overflow-hidden">
+    <!-- Abstract device line art background -->
+    <svg
+      class="absolute inset-0 w-full h-full pointer-events-none select-none"
+      viewBox="0 0 1400 460"
+      preserveAspectRatio="xMidYMid slice"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <!-- Left abstract cluster -->
+      <circle cx="150" cy="140" r="60" stroke="rgba(255,255,255,0.05)" stroke-width="1.2" />
+      <circle cx="195" cy="172" r="45" stroke="rgba(255,255,255,0.035)" stroke-width="1" />
+      <circle cx="108" cy="186" r="34" stroke="rgba(255,255,255,0.045)" stroke-width="1" />
+
+      <!-- Dot grid -->
+      <circle cx="40" cy="320" r="1.6" fill="rgba(255,255,255,0.06)" />
+      <circle cx="64" cy="320" r="1.6" fill="rgba(255,255,255,0.06)" />
+      <circle cx="88" cy="320" r="1.6" fill="rgba(255,255,255,0.06)" />
+      <circle cx="112" cy="320" r="1.6" fill="rgba(255,255,255,0.06)" />
+      <circle cx="40" cy="344" r="1.6" fill="rgba(255,255,255,0.045)" />
+      <circle cx="64" cy="344" r="1.6" fill="rgba(255,255,255,0.045)" />
+      <circle cx="88" cy="344" r="1.6" fill="rgba(255,255,255,0.045)" />
+      <circle cx="112" cy="344" r="1.6" fill="rgba(255,255,255,0.045)" />
+      <circle cx="40" cy="368" r="1.6" fill="rgba(255,255,255,0.03)" />
+      <circle cx="64" cy="368" r="1.6" fill="rgba(255,255,255,0.03)" />
+      <circle cx="88" cy="368" r="1.6" fill="rgba(255,255,255,0.03)" />
+      <circle cx="112" cy="368" r="1.6" fill="rgba(255,255,255,0.03)" />
+
+      <!-- Health pulse line -->
+      <polyline points="20,420 66,420 82,388 98,442 114,404 130,420 260,420" stroke="rgba(255,255,255,0.06)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+
+      <!-- Small diamond accent -->
+      <rect x="222" y="40" width="15" height="15" rx="3" transform="rotate(20 229 47)" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+
+      <!-- Soft aura behind right-side devices -->
+      <circle cx="1215" cy="205" r="180" stroke="rgba(255,255,255,0.02)" stroke-width="1" />
+
+      <!-- Generic MacBook shape -->
+      <rect x="1085" y="70" width="255" height="165" rx="8" stroke="rgba(255,255,255,0.06)" stroke-width="1.2" />
+      <circle cx="1212" cy="76" r="1.5" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+      <path d="M1070,235 L1355,235 L1372,248 L1053,248 Z" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-linejoin="round" />
+      <rect x="1190" y="239" width="44" height="4" rx="2" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+
+      <!-- Generic iPhone shape, floating over the MacBook -->
+      <rect x="1245" y="185" width="105" height="215" rx="20" stroke="rgba(255,255,255,0.07)" stroke-width="1.2" />
+      <rect x="1278" y="197" width="38" height="8" rx="4" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+      <rect x="1259" y="222" width="76" height="10" rx="2" stroke="rgba(255,255,255,0.045)" stroke-width="1" />
+      <rect x="1259" y="240" width="56" height="6" rx="2" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+      <rect x="1259" y="330" width="76" height="28" rx="6" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+      <line x1="1268" y1="388" x2="1327" y2="388" stroke="rgba(255,255,255,0.05)" stroke-width="2" stroke-linecap="round" />
+
+      <!-- Floating accent dots near devices -->
+      <circle cx="980" cy="140" r="5" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+      <circle cx="1028" cy="110" r="3" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+    </svg>
+
+    <div class="max-w-3xl mx-auto relative">
+      <p class="text-sm font-medium text-gray-400 uppercase tracking-wider mb-6">Free Interactive Tool</p>
+      <h1 class="text-4xl md:text-6xl font-display font-bold text-gray-100 mb-6 tracking-tight leading-[1.05]">
+        How healthy is your business website?
+      </h1>
+      <p class="text-xl text-gray-300 leading-relaxed">
+        Built for real estate agents, auto shops, dental practices, and other local businesses —
+        answer ten quick questions and get an instant UX score across five dimensions, plus three
+        prioritized recommendations you can act on this week. Takes about two minutes.
+      </p>
+    </div>
+  </section>
+
+  <!-- Interactive tool -->
+  <section class="container-custom pb-20">
+    <div
+      id="uxhc"
+      data-endpoint={FORM_ENDPOINT}
+      class="max-w-3xl mx-auto bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-10"
+    >
+      <!-- Progress -->
+      <div id="uxhc-progress-wrap" class="mb-8">
+        <div class="flex items-center justify-between text-xs text-gray-500 mb-2">
+          <span id="uxhc-progress-label">Question 1 of {questions.length}</span>
+          <span id="uxhc-progress-pct">0%</span>
+        </div>
+        <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+          <div id="uxhc-progress-bar" class="h-full bg-gray-100 rounded-full transition-all duration-300" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Question steps -->
+      <form id="uxhc-form">
+        {questions.map((q, i) => (
+          <fieldset class="uxhc-step" data-step={i} data-category={q.category} hidden={i !== 0}>
+            <legend class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-3">{q.category}</legend>
+            <p class="text-2xl text-gray-100 leading-snug mb-8">{q.text}</p>
+            <div class="space-y-3">
+              {q.options.map((opt) => (
+                <label class="uxhc-option flex items-center gap-4 p-4 rounded-xl border border-zinc-800 bg-zinc-950 cursor-pointer hover:border-zinc-600 transition-colors">
+                  <input type="radio" name={q.id} value={opt.value} class="sr-only" />
+                  <span class="uxhc-dot w-5 h-5 rounded-full border-2 border-zinc-600 shrink-0 flex items-center justify-center"></span>
+                  <span class="text-gray-200">{opt.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+
+        <!-- Email gate step -->
+        <fieldset class="uxhc-step" data-step={questions.length} hidden>
+          <legend class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-3">Almost there</legend>
+          <p class="text-2xl text-gray-100 leading-snug mb-3">Where should I send your results?</p>
+          <p class="text-gray-400 mb-6">Enter your email to reveal your UX score and personalized recommendations.</p>
+          <input
+            type="email"
+            id="uxhc-email"
+            name="email"
+            required
+            placeholder="you@yourbusiness.com"
+            autocomplete="email"
+            class="w-full px-5 py-4 rounded-xl bg-zinc-950 border border-zinc-700 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-300 mb-2"
+          />
+          <p id="uxhc-email-error" class="text-sm text-red-400 mb-4 hidden">Please enter a valid email address.</p>
+          <p class="text-xs text-gray-500">No spam. Your results, and the occasional useful note on UX. Unsubscribe anytime.</p>
+        </fieldset>
+      </form>
+
+      <!-- Navigation -->
+      <div id="uxhc-nav" class="flex items-center justify-between mt-10">
+        <button id="uxhc-back" type="button" class="inline-flex items-center text-sm font-medium text-gray-400 hover:text-gray-100 transition-colors disabled:opacity-0" disabled>
+          <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+          Back
+        </button>
+        <button id="uxhc-next" type="button" class="inline-flex items-center px-6 py-3 bg-gray-100 text-zinc-950 text-sm font-medium rounded-full hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+          Next
+          <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </div>
+
+      <!-- Results (filled by JS) -->
+      <div id="uxhc-results" hidden></div>
+    </div>
+  </section>
+
+  <!-- What it measures -->
+  <section class="container-custom pb-20">
+    <div class="max-w-3xl mx-auto border-t border-zinc-800 pt-16">
+      <h2 class="text-sm font-semibold text-gray-100 uppercase tracking-wider mb-6">What it measures</h2>
+      <p class="text-gray-400 leading-relaxed mb-8 max-w-2xl">
+        Your website has one job: turn the people who find you into customers who call, book, or
+        walk in the door. The UX Health Check looks at the five things that most often get in the
+        way — explained in plain English, no jargon.
+      </p>
+      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
+        <div><dt class="text-gray-100 font-semibold mb-1">First Impression</dt><dd class="text-gray-400 text-sm leading-relaxed">Whether a first-time visitor instantly understands what your business does and how to reach you — before they click over to a competitor.</dd></div>
+        <div><dt class="text-gray-100 font-semibold mb-1">Conversion</dt><dd class="text-gray-400 text-sm leading-relaxed">How well your site turns visitors into calls, bookings, or form submissions — instead of clicks that go nowhere.</dd></div>
+        <div><dt class="text-gray-100 font-semibold mb-1">Mobile</dt><dd class="text-gray-400 text-sm leading-relaxed">Most people will find you on their phone while out and about. Whether your site is easy to read, tap, and use on a small screen.</dd></div>
+        <div><dt class="text-gray-100 font-semibold mb-1">Accessibility</dt><dd class="text-gray-400 text-sm leading-relaxed">Whether everyone — including older visitors and people with limited vision — can read and use your site without trouble. It also widens the customers you can serve.</dd></div>
+        <div><dt class="text-gray-100 font-semibold mb-1">Consistency</dt><dd class="text-gray-400 text-sm leading-relaxed">Whether your site looks consistent and polished from page to page, so you come across as credible and trustworthy.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <style is:global>
+    /* Styles for elements present at load and those injected by the tool script.
+       Namespaced under #uxhc / #uxhc-results so they don't leak. */
+    #uxhc .uxhc-option.is-selected {
+      border-color: #f4f4f5;
+      background: #18181b;
+    }
+    #uxhc .uxhc-option.is-selected .uxhc-dot {
+      border-color: #f4f4f5;
+      background: #f4f4f5;
+    }
+    #uxhc .uxhc-option.is-selected .uxhc-dot::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background: #18181b;
+    }
+    #uxhc-results .uxhc-bar-track { height: 6px; background: #27272a; border-radius: 9999px; overflow: hidden; }
+    #uxhc-results .uxhc-bar-fill { height: 100%; background: #f4f4f5; border-radius: 9999px; transition: width .6s ease; }
+  </style>
+
+  <script is:inline define:vars={{ stepCount: questions.length }}>
+    (() => {
+      const root = document.getElementById('uxhc');
+      if (!root) return;
+      const form = document.getElementById('uxhc-form');
+      const steps = Array.from(root.querySelectorAll('.uxhc-step'));
+      const backBtn = document.getElementById('uxhc-back');
+      const nextBtn = document.getElementById('uxhc-next');
+      const navWrap = document.getElementById('uxhc-nav');
+      const progressWrap = document.getElementById('uxhc-progress-wrap');
+      const progressBar = document.getElementById('uxhc-progress-bar');
+      const progressLabel = document.getElementById('uxhc-progress-label');
+      const progressPct = document.getElementById('uxhc-progress-pct');
+      const resultsEl = document.getElementById('uxhc-results');
+      const emailInput = document.getElementById('uxhc-email');
+      const emailError = document.getElementById('uxhc-email-error');
+      const endpoint = root.dataset.endpoint || '';
+      const EMAIL_STEP = stepCount; // index of the email fieldset
+      const TOTAL_STEPS = stepCount + 1;
+      const SCROLL_GAP = 24; // breathing room above the progress counter
+
+      let current = 0;
+
+      function scrollToTool() {
+        const header = document.querySelector('header');
+        const headerHeight = header ? header.getBoundingClientRect().height : 0;
+        const top = root.getBoundingClientRect().top + window.scrollY - headerHeight - SCROLL_GAP;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+
+      const RECOS = {
+        'First Impression': 'Make your headline and hero section instantly answer "what is this business and how do I reach them?" Put your service, location, and phone number or booking button above the fold so visitors never have to scroll or guess.',
+        'Conversion': 'Add simple analytics to see where visitors drop off before calling or booking, then shorten the path — a single "Call Now" or "Book Appointment" button beats a multi-step contact process every time.',
+        'Mobile': 'Since most local searches happen on a phone, rebuild your key pages mobile-first: big tap-friendly buttons, a click-to-call number, and forms that don\'t require pinching or zooming.',
+        'Accessibility': 'Check color contrast, add alt text to photos, and make sure forms and menus work with a keyboard or screen reader — it helps more customers find and use your site, and is increasingly expected.',
+        'Consistency': 'Standardize your fonts, colors, and buttons across every page, and write it down somewhere simple so future updates — by you or anyone you hire — keep the site looking professional.',
+      };
+
+      function selectedValue(step) {
+        const checked = step.querySelector('input[type="radio"]:checked');
+        return checked ? Number(checked.value) : null;
+      }
+
+      function isAnswered(index) {
+        if (index === EMAIL_STEP) return validEmail();
+        return selectedValue(steps[index]) !== null;
+      }
+
+      function validEmail() {
+        const v = (emailInput && emailInput.value || '').trim();
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      }
+
+      function updateChrome() {
+        backBtn.disabled = current === 0;
+        nextBtn.disabled = !isAnswered(current);
+        const isEmail = current === EMAIL_STEP;
+        nextBtn.textContent = isEmail ? 'See my results' : 'Next';
+        const pct = Math.round((current / (TOTAL_STEPS - 1)) * 100);
+        progressBar.style.width = pct + '%';
+        progressPct.textContent = pct + '%';
+        progressLabel.textContent = isEmail ? 'Last step' : 'Question ' + (current + 1) + ' of ' + stepCount;
+      }
+
+      function show(index) {
+        steps.forEach((s, i) => { s.hidden = i !== index; });
+        current = index;
+        updateChrome();
+        scrollToTool();
+      }
+
+      // Option selection styling + enabling Next
+      steps.forEach((step) => {
+        step.querySelectorAll('.uxhc-option').forEach((label) => {
+          const input = label.querySelector('input');
+          input.addEventListener('change', () => {
+            step.querySelectorAll('.uxhc-option').forEach((l) => l.classList.remove('is-selected'));
+            label.classList.add('is-selected');
+            nextBtn.disabled = false;
+          });
+        });
+      });
+
+      if (emailInput) {
+        emailInput.addEventListener('input', () => {
+          nextBtn.disabled = !validEmail();
+          if (emailError) emailError.classList.add('hidden');
+        });
+      }
+
+      backBtn.addEventListener('click', () => { if (current > 0) show(current - 1); });
+
+      nextBtn.addEventListener('click', () => {
+        if (!isAnswered(current)) {
+          if (current === EMAIL_STEP && emailError) emailError.classList.remove('hidden');
+          return;
+        }
+        if (current === EMAIL_STEP) { finish(); return; }
+        show(current + 1);
+      });
+
+      function computeScores() {
+        const cat = {};
+        steps.forEach((step) => {
+          const c = step.dataset.category;
+          if (!c) return;
+          const v = selectedValue(step) || 0;
+          if (!cat[c]) cat[c] = { sum: 0, max: 0 };
+          cat[c].sum += v;
+          cat[c].max += 2;
+        });
+        let total = 0, totalMax = 0;
+        const perCategory = Object.keys(cat).map((c) => {
+          total += cat[c].sum; totalMax += cat[c].max;
+          return { category: c, score: Math.round((cat[c].sum / cat[c].max) * 100) };
+        });
+        return { overall: Math.round((total / totalMax) * 100), perCategory };
+      }
+
+      function band(score) {
+        if (score >= 80) return { label: 'Strong online presence', note: 'Your site is doing right by your customers. The opportunities below are about squeezing out a few more calls and bookings from an already-solid site.' };
+        if (score >= 55) return { label: 'Solid, with clear opportunities', note: 'Your site is working, but a few specific gaps are likely costing you calls, bookings, or walk-ins.' };
+        if (score >= 30) return { label: 'Needs work', note: 'There’s real friction here, and it’s likely turning away customers before they ever contact you. Fixing the areas below should make a real difference.' };
+        return { label: 'At risk', note: 'Your website may be costing you more customers than you realize. The good news: that means there are fast, high-impact wins available.' };
+      }
+
+      function esc(s) { return String(s).replace(/[&<>"]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m])); }
+
+      function renderResults(data) {
+        const b = band(data.overall);
+        const weakest = [...data.perCategory].sort((a, z) => a.score - z.score).slice(0, 3);
+        const bars = data.perCategory
+          .map((c) => (
+            '<div class="mb-4">' +
+              '<div class="flex items-center justify-between text-sm mb-1.5">' +
+                '<span class="text-gray-300">' + esc(c.category) + '</span>' +
+                '<span class="text-gray-500">' + c.score + '/100</span>' +
+              '</div>' +
+              '<div class="uxhc-bar-track"><div class="uxhc-bar-fill" style="width:' + c.score + '%"></div></div>' +
+            '</div>'
+          )).join('');
+        const recos = weakest
+          .map((c, i) => (
+            '<div class="border-t border-zinc-800 pt-5">' +
+              '<p class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-2">Priority ' + (i + 1) + ' &middot; ' + esc(c.category) + '</p>' +
+              '<p class="text-gray-300 leading-relaxed">' + esc(RECOS[c.category]) + '</p>' +
+            '</div>'
+          )).join('');
+
+        resultsEl.innerHTML =
+          '<div class="text-center mb-10">' +
+            '<p class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-3">Your Website\'s UX Score</p>' +
+            '<p class="text-7xl font-display font-bold text-gray-100 leading-none mb-3">' + data.overall + '<span class="text-3xl text-gray-500">/100</span></p>' +
+            '<p class="text-xl text-gray-100 font-semibold">' + esc(b.label) + '</p>' +
+            '<p class="text-gray-400 max-w-xl mx-auto mt-2">' + esc(b.note) + '</p>' +
+          '</div>' +
+          '<div class="mb-10">' +
+            '<h3 class="text-sm font-semibold text-gray-100 uppercase tracking-wider mb-5">By dimension</h3>' + bars +
+          '</div>' +
+          '<div class="space-y-5 mb-10">' +
+            '<h3 class="text-sm font-semibold text-gray-100 uppercase tracking-wider">Your top 3 priorities</h3>' + recos +
+          '</div>' +
+          '<div class="bg-zinc-950 border border-zinc-800 rounded-2xl p-8 text-center">' +
+            '<p class="text-xl text-gray-100 font-semibold mb-2">Want help turning this into more calls and bookings?</p>' +
+            '<p class="text-gray-400 max-w-xl mx-auto mb-6">This score is based on your own answers. Ask me about your results and I\'ll walk you through what\'s really going on with your site — no obligation. Or explore the 48-hour UX Audit: a hands-on expert review of your actual website, with a recorded walkthrough, a prioritized issues list, and a strategy call.</p>' +
+            '<div class="flex flex-wrap gap-3 justify-center">' +
+              '<a href="/contact" class="inline-flex items-center px-6 py-3 bg-gray-100 text-zinc-950 text-sm font-medium rounded-full hover:bg-white transition-colors">Ask about your results</a>' +
+              '<a href="/ux-audit" class="inline-flex items-center px-6 py-3 border border-zinc-700 text-gray-100 text-sm font-medium rounded-full hover:bg-zinc-900 transition-colors">Explore the 48-Hour UX Audit</a>' +
+            '</div>' +
+          '</div>';
+      }
+
+      function finish() {
+        const data = computeScores();
+        const email = (emailInput.value || '').trim();
+        const params = new URLSearchParams(window.location.search);
+        const utm = {
+          utm_source: params.get('utm_source') || '',
+          utm_medium: params.get('utm_medium') || '',
+          utm_campaign: params.get('utm_campaign') || '',
+          utm_content: params.get('utm_content') || '',
+        };
+
+        // Best-effort lead capture (no-op until FORM_ENDPOINT is configured).
+        // Posts to the shared Google Apps Script endpoint as a no-cors text/plain
+        // request (Apps Script returns no CORS headers); tagged form_type so it
+        // lands in the same sheet alongside contact-form leads.
+        if (endpoint) {
+          const details = data.perCategory.map((c) => c.category + ' ' + c.score).join(' · ');
+          try {
+            fetch(endpoint, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                form_type: 'health-check',
+                email: email,
+                score: data.overall,
+                details: details,
+                ...utm,
+              }),
+            }).catch(() => {});
+          } catch (_) { /* ignore */ }
+        }
+
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'ux_health_check_completed', { score: data.overall });
+          // GA4-standard lead conversion, with source attribution passed through
+          // so tool completions attribute back to the parasite-SEO placement.
+          window.gtag('event', 'generate_lead', {
+            method: 'ux_health_check',
+            score: data.overall,
+            ...utm,
+          });
+        }
+
+        form.hidden = true;
+        navWrap.hidden = true;
+        progressWrap.hidden = true;
+        resultsEl.hidden = false;
+        renderResults(data);
+        scrollToTool();
+      }
+
+      updateChrome();
+    })();
+  </script>
+</BaseLayout>

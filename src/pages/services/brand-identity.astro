@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout title="Brand Identity Touchups - Savelle Design" description="Refine and elevate your brand identity to create a consistent, professional look across all touchpoints.">
+    <!-- Hero Section -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href={`${base}/services`} class="inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors mb-8">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Services
+      </a>
+      <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6">Brand Identity Touchups</h1>
+      <p class="text-xl md:text-2xl text-zinc-600 max-w-3xl mb-8">
+        Refine and modernize your brand's visual identity to create a cohesive, professional look that resonates with your audience.
+      </p>
+      </div>
+    </section>
+
+    <!-- Service Overview -->
+    <section class="py-12 border-t border-zinc-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-3xl font-bold text-zinc-900 mb-6">What is a Brand Touchup?</h2>
+          <p class="text-lg text-zinc-600 mb-6">
+            You already have a brand, but it might need some polish. Maybe your logo feels dated, your colors don't work well together, or you're not sure how to use your brand consistently across different materials.
+          </p>
+          <p class="text-lg text-zinc-600">
+            A brand identity touchup refreshes and refines your existing brand elements, creating a cohesive visual system that makes your business look professional and trustworthy.
+          </p>
+        </div>
+        <div class="aspect-[4/3] rounded-lg overflow-hidden">
+          <img src={`${base}/images/works/adorned-hero.png`} alt="Brand Identity Touchups Example" class="w-full h-full object-cover" />
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- What's Included -->
+    <section class="py-12 bg-zinc-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-zinc-900 mb-8">What's Included</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Logo Refinement</h3>
+          <p class="text-zinc-600">
+            Polish your existing logo or create variations that work better in different contexts.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Color Palette</h3>
+          <p class="text-zinc-600">
+            Refine your brand colors to ensure they work well together and across all materials.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Typography Selection</h3>
+          <p class="text-zinc-600">
+            Choose fonts that reflect your brand personality and ensure readability.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Brand Guidelines</h3>
+          <p class="text-zinc-600">
+            A simple guide showing how to use your brand elements consistently.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Marketing Templates</h3>
+          <p class="text-zinc-600">
+            Social media graphics, business cards, or other templates you need.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">File Delivery</h3>
+          <p class="text-zinc-600">
+            All your brand assets in the right formats for print and digital use.
+          </p>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- Why It Matters -->
+    <section class="py-12 bg-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-white mb-8">Why Consistent Branding Matters</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">Build Trust</h3>
+          <p class="text-zinc-300">
+            A consistent, professional brand makes your business appear more credible and established.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">Stand Out</h3>
+          <p class="text-zinc-300">
+            Strong visual identity helps you stand out from competitors and be memorable.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">Save Time</h3>
+          <p class="text-zinc-300">
+            Clear guidelines and templates make it faster to create marketing materials.
+          </p>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to refine your brand identity?
+          </h2>
+          <p class="text-xl text-zinc-300 mb-8">
+            Let's create a cohesive visual identity that makes your business look professional and memorable.
+          </p>
+          <a
+            href={`${base}/contact`}
+            class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
+          >
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </section>
+</Layout>

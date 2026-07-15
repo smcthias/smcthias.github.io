@@ -1,0 +1,187 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Get all posts sorted by date for navigation
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+// Find current post index and get adjacent posts
+const currentIndex = allPosts.findIndex((p) => p.slug === post.slug);
+const prev = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+const next = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+
+// Format date
+const date = new Date(post.data.date);
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// Prepare structured data for article
+const articleData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.data.title,
+  "description": post.data.description,
+  "image": `${Astro.site || 'https://savelledesign.com'}${base}/images/works/${post.data.image}`,
+  "datePublished": post.data.date,
+  "dateModified": post.data.date,
+  "author": {
+    "@type": "Person",
+    "name": post.data.author,
+    "url": `${Astro.site || 'https://savelledesign.com'}${base}/about`
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Savelle Design",
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${Astro.site || 'https://savelledesign.com'}${base}/favicon.svg`
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `${Astro.site || 'https://savelledesign.com'}${base}/blog/${post.slug}`
+  }
+};
+---
+
+<Layout
+  title={`${post.data.title} | Savelle Design Blog`}
+  description={post.data.description}
+  image={`/images/works/${post.data.image}`}
+>
+  <!-- Hero Section -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href={`${base}/blog`} class="inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors mb-8">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Blog
+      </a>
+      <div class="mb-4 flex items-center gap-3">
+        <span class="text-sm font-semibold text-zinc-500">{post.data.category}</span>
+        <span class="text-sm text-zinc-400">•</span>
+        <span class="text-sm text-zinc-500">{formattedDate}</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6">{post.data.title}</h1>
+      <p class="text-xl md:text-2xl text-zinc-600 max-w-3xl">
+        {post.data.description}
+      </p>
+    </div>
+  </section>
+
+  <!-- Full-width border -->
+  <div class="border-t border-zinc-200"></div>
+
+  <!-- Featured Image -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="aspect-[16/9] rounded-lg overflow-hidden bg-zinc-100">
+        <img
+          src={`${base}/images/works/${post.data.image}`}
+          alt={post.data.imageAlt}
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Content -->
+  <section class="pb-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="prose prose-lg prose-zinc max-w-none
+        prose-headings:font-bold prose-headings:text-zinc-900
+        prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
+        prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
+        prose-p:text-zinc-600 prose-p:leading-relaxed prose-p:mb-6
+        prose-strong:text-zinc-900 prose-strong:font-semibold
+        prose-ul:my-6 prose-li:text-zinc-600
+        prose-a:text-zinc-900 prose-a:no-underline hover:prose-a:text-zinc-600">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <!-- Full-width border -->
+  <div class="border-t border-zinc-200"></div>
+
+  <!-- Post Navigation -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex-1 w-full sm:w-auto">
+          {prev && (
+            <a href={`${base}/blog/${prev.slug}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
+              <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              <div>
+                <div class="text-sm text-zinc-500">Previous Post</div>
+                <div class="font-semibold">{prev.data.title}</div>
+              </div>
+            </a>
+          )}
+        </div>
+        <div class="flex-1 w-full sm:w-auto text-left sm:text-right">
+          {next && (
+            <a href={`${base}/blog/${next.slug}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
+              <div>
+                <div class="text-sm text-zinc-500">Next Post</div>
+                <div class="font-semibold">{next.data.title}</div>
+              </div>
+              <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full-width border -->
+  <div class="border-t border-zinc-200"></div>
+
+  <!-- CTA Section (Dark Background) -->
+  <section class="py-20 bg-zinc-900">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+        Interested in working together?
+      </h2>
+      <p class="text-xl text-zinc-300 mb-8">
+        Let's discuss how I can help bring your project to life with the same approach and attention to detail.
+      </p>
+      <a
+        href={`${base}/contact`}
+        class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
+      >
+        Start a Conversation
+      </a>
+    </div>
+  </section>
+
+  <!-- Article Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(articleData)} />
+</Layout>

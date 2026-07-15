@@ -1,0 +1,203 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Get all projects from content collections and sort by date (newest first), limit to 6
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 6);
+---
+
+<Layout
+  title="Savelle Design - UX/UI Designer & Web Developer in Scottsdale, AZ"
+  description="Professional web design and development services for growing businesses. Specializing in landing pages, website refresh, brand identity, and email campaigns. 18+ years experience."
+>
+    <!-- Hero Section -->
+    <section class="py-20 md:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl">
+        <h1 class="text-5xl md:text-7xl font-bold text-zinc-900 mb-6 leading-tight">
+          Hi, I'm Savelle
+        </h1>
+        <p class="text-xl md:text-2xl text-zinc-600 mb-8 leading-relaxed">
+          I help growing businesses create beautiful, effective websites and design that connect with customers. With 18+ years of experience, I focus on practical solutions that look professional and drive real results.
+        </p>
+        <div class="flex gap-4">
+          <a
+            href={`${base}/works`}
+            class="px-8 py-3 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors font-medium"
+          >
+            View Projects
+          </a>
+          <a
+            href={`${base}/contact`}
+            class="px-8 py-3 border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
+          >
+            Let's Talk
+          </a>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- Featured Work Section -->
+    <section class="py-20 bg-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Featured Work</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredProjects.map((project) => (
+            <a href={`${base}/works/${project.slug}`} class="group block">
+              <div class="aspect-[4/3] rounded-lg mb-4 overflow-hidden">
+                <img
+                  src={`${base}/images/works/${project.data.thumbnail}`}
+                  alt={`${project.data.title} - ${project.data.category} project showcase`}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </div>
+              <h3 class="text-lg font-semibold text-white group-hover:text-zinc-300 transition-colors">{project.data.title}</h3>
+              <p class="text-sm text-zinc-400">{project.data.category}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Preview -->
+    <section class="py-20 bg-zinc-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">What I Do</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <a href={`${base}/services/landing-page-design`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
+          <div class="w-12 h-12 text-zinc-900 mb-4">
+            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Landing Page Design</h3>
+          <p class="text-zinc-600">
+            High-converting landing pages that turn your website visitors into customers.
+          </p>
+        </a>
+        <a href={`${base}/services/website-refresh`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
+          <div class="w-12 h-12 text-zinc-900 mb-4">
+            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Website Refresh & Redesign</h3>
+          <p class="text-zinc-600">
+            Modernize your website with a fresh design that better represents your brand.
+          </p>
+        </a>
+        <a href={`${base}/services/brand-identity`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
+          <div class="w-12 h-12 text-zinc-900 mb-4">
+            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Brand Identity Touchups</h3>
+          <p class="text-zinc-600">
+            Refine your visual identity to create a consistent, professional look.
+          </p>
+        </a>
+        <a href={`${base}/services/email-campaigns`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
+          <div class="w-12 h-12 text-zinc-900 mb-4">
+            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Email Campaign Series</h3>
+          <p class="text-zinc-600">
+            Design engaging email campaigns that connect with your audience and drive results.
+          </p>
+        </a>
+      </div>
+      <div class="mt-12">
+        <a
+          href={`${base}/services`}
+          class="inline-flex items-center text-zinc-900 font-medium hover:text-zinc-600 transition-colors"
+        >
+          View all services
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+      </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">What Clients Say</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Testimonial 1 - Brian Fidler -->
+          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
+            <div class="mb-6">
+              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+            </div>
+            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
+              "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 13 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare."
+            </p>
+            <div class="pt-6 border-t border-zinc-200">
+              <p class="font-semibold text-zinc-900">Brian Fidler</p>
+              <p class="text-zinc-600">Former Head of Marketing, La Mesa RV & Van Up</p>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 - Daniel Kruger -->
+          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
+            <div class="mb-6">
+              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+              </svg>
+            </div>
+            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
+              "Savelle is one of the most talented UX experts I've had the pleasure of working with. Within a very short period of time after his hire, he was knocking out work items and client side code. The impact of his effort and his work will be felt for a very long time. It seemed like every day, he was revealing a new talent. My favorite Savelle anecdote is the time he re-designed the product logo, and came up with something better than the marketing company effort after doodling for about 10 minutes. Simply amazing."
+            </p>
+            <div class="pt-6 border-t border-zinc-200">
+              <p class="font-semibold text-zinc-900">Daniel Kruger</p>
+              <p class="text-zinc-600">VP of Software Development, SyberSafe</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8">
+          <a
+            href={`${base}/about#testimonials`}
+            class="inline-flex items-center text-zinc-900 font-medium hover:text-zinc-600 transition-colors"
+          >
+            Read more testimonials
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to start your project?
+          </h2>
+          <p class="text-xl text-zinc-300 mb-8">
+            Whether you're launching a new business, growing an existing one, or just need a website refresh, I'm here to help. Let's discuss how we can work together to create design that works for you.
+          </p>
+          <a
+            href={`${base}/contact`}
+            class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
+          >
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </section>
+</Layout>

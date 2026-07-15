@@ -1,0 +1,158 @@
+---
+import Layout from '../../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout title="Landing Page Design - Savelle Design" description="Create high-converting landing pages that turn visitors into customers.">
+    <!-- Hero Section -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href={`${base}/services`} class="inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors mb-8">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Services
+      </a>
+      <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6">Landing Page Design</h1>
+      <p class="text-xl md:text-2xl text-zinc-600 max-w-3xl mb-8">
+        Turn your website visitors into customers with beautifully designed landing pages that communicate your value and drive action.
+      </p>
+      </div>
+    </section>
+
+    <!-- Service Overview -->
+    <section class="py-12 border-t border-zinc-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-3xl font-bold text-zinc-900 mb-6">What You Get</h2>
+          <p class="text-lg text-zinc-600 mb-6">
+            A landing page is often your first impression with potential customers. I design landing pages that are visually appealing, easy to understand, and optimized to convert visitors into leads or customers.
+          </p>
+          <p class="text-lg text-zinc-600">
+            Whether you're launching a new product, running an ad campaign, or growing your email list, I'll create a landing page that helps you achieve your goals.
+          </p>
+        </div>
+        <div class="aspect-[4/3] rounded-lg overflow-hidden">
+          <img src={`${base}/images/works/yoli-detail2.png`} alt="Landing Page Design Example" class="w-full h-full object-cover" />
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- What's Included -->
+    <section class="py-12 bg-zinc-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-zinc-900 mb-8">What's Included</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Custom Design</h3>
+          <p class="text-zinc-600">
+            A unique design tailored to your brand and campaign goals, not a generic template.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Mobile-First Approach</h3>
+          <p class="text-zinc-600">
+            Fully responsive design that looks great and works perfectly on all devices.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Clear Call-to-Action</h3>
+          <p class="text-zinc-600">
+            Strategic placement of buttons and forms to guide visitors toward taking action.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Fast Loading Speed</h3>
+          <p class="text-zinc-600">
+            Optimized for performance to keep visitors engaged and reduce bounce rates.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">SEO Optimization</h3>
+          <p class="text-zinc-600">
+            Built with search engine best practices to help your page get found.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Analytics Ready</h3>
+          <p class="text-zinc-600">
+            Set up tracking so you can measure performance and optimize over time.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="py-12 bg-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-white mb-8">How It Works</h2>
+      <div class="space-y-8">
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold flex-shrink-0">
+            1
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-2">Discovery Call</h3>
+            <p class="text-zinc-300">
+              We'll discuss your goals, target audience, and what action you want visitors to take.
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold flex-shrink-0">
+            2
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-2">Design & Review</h3>
+            <p class="text-zinc-300">
+              I'll create a custom design and share it with you for feedback and refinement.
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold flex-shrink-0">
+            3
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-2">Development</h3>
+            <p class="text-zinc-300">
+              Once approved, I'll build your landing page with clean code and optimize for performance.
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold flex-shrink-0">
+            4
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-2">Launch & Support</h3>
+            <p class="text-zinc-300">
+              Your landing page goes live, and I'll be available to make adjustments as needed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to create a landing page that converts?
+          </h2>
+          <p class="text-xl text-zinc-300 mb-8">
+            Let's discuss your project and build a landing page that drives real results for your business.
+          </p>
+          <a
+            href={`${base}/contact`}
+            class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
+          >
+            Get Started
+          </a>
+        </div>
+      </div>
+    </section>
+</Layout>

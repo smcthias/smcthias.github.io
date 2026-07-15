@@ -1,0 +1,321 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { realTestimonials } from '@/data/testimonials';
+
+// ──────────────────────────────────────────────────────────────────────────
+// DEFERRED ACTIVATION (same pattern as the UX Health Check)
+// FORM_ENDPOINT: set to a static-friendly form endpoint (Formspree, Web3Forms,
+//   Basin, or a serverless function) to start capturing inquiries. The form
+//   POSTs JSON { name, email, project_type, budget, message, ...utm }. While
+//   empty, the form still validates and shows the success state, but nothing is
+//   sent. See docs/contact-form-runbook.md.
+// BOOKING_URL: set to a Cal.com / Calendly link to enable the "Book a call"
+//   path (the secondary CTA appears only when this is set).
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
+const BOOKING_URL = '';
+
+const testimonial = realTestimonials[0];
+
+const logos = [
+  { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart', h: 'h-[34px]' },
+  { src: '/images/logos/logo-gm.svg', alt: 'GM', h: 'h-[44px]' },
+  { src: '/images/logos/logo-sothebys.svg', alt: "Sotheby's", h: 'h-6' },
+  { src: '/images/logos/logo-universal.svg', alt: 'Universal', h: 'h-[44px]' },
+  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals', h: 'h-4' },
+];
+
+const projectTypes = ['Project', 'Retainer / fractional', 'UX audit', 'Not sure yet'];
+const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
+---
+
+<BaseLayout
+  title="Work With Me — Savelle McThias"
+  description="Have a project or role in mind? I work with Phoenix area businesses on web design, branding, and development — and with remote product teams as a senior designer or design engineer. Let's talk."
+>
+  <!-- Hero -->
+  <section class="container-custom pt-32 pb-12">
+    <div class="max-w-6xl mx-auto">
+      <p class="text-sm font-medium text-gray-400 uppercase tracking-wider mb-6">Start a project</p>
+      <h1 class="text-4xl md:text-6xl font-display font-bold text-gray-100 mb-6 tracking-tight leading-[1.05]">
+        Tell me what&apos;s broken.<br />I&apos;ll tell you how I&apos;ll fix it.
+      </h1>
+      <p class="text-xl text-gray-300 leading-relaxed max-w-2xl">
+        Share a few details about your product and goals. You&apos;ll hear back from me personally —
+        usually within one business day. Not ready to commit?
+        <a href="/ux-health-check" class="text-gray-100 underline underline-offset-4 hover:text-white whitespace-nowrap">Take the free UX Health Check first</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Two-column: trust rail + form -->
+  <section class="container-custom pb-24">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto">
+
+      <!-- Form (first on mobile — the action) -->
+      <div class="order-1 lg:order-2">
+        <form
+          id="contact-form"
+          data-endpoint={FORM_ENDPOINT}
+          action={FORM_ENDPOINT}
+          method="POST"
+          class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8"
+          novalidate
+        >
+          <h2 class="text-xl font-semibold text-gray-100 mb-6">Tell me about your project</h2>
+
+          <!-- hidden attribution fields (populated by script) -->
+          <input type="hidden" name="form_type" value="contact" />
+          <input type="hidden" name="utm_source" />
+          <input type="hidden" name="utm_medium" />
+          <input type="hidden" name="utm_campaign" />
+          <input type="hidden" name="utm_content" />
+          <!-- honeypot -->
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+          <div class="space-y-6">
+            <div>
+              <label for="cf-name" class="block text-sm text-gray-300 mb-2">Name</label>
+              <input id="cf-name" name="name" type="text" required autocomplete="name"
+                class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-100 transition-colors" />
+              <p data-error-for="cf-name" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter your name.</p>
+            </div>
+
+            <div>
+              <label for="cf-email" class="block text-sm text-gray-300 mb-2">Work email</label>
+              <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="you@company.com"
+                class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-100 transition-colors" />
+              <p data-error-for="cf-email" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter a valid email address.</p>
+            </div>
+
+            <fieldset>
+              <legend class="block text-sm text-gray-300 mb-2">What do you need? <span class="text-gray-600">(optional)</span></legend>
+              <div class="flex flex-wrap gap-2">
+                {projectTypes.map((t, i) => (
+                  <label class="cursor-pointer">
+                    <input type="radio" name="project_type" value={t} class="peer sr-only" />
+                    <span class="inline-flex px-4 py-2 rounded-full border border-zinc-700 text-sm text-gray-300 transition-colors hover:border-zinc-500 peer-checked:bg-gray-100 peer-checked:text-zinc-950 peer-checked:border-gray-100 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-100">{t}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend class="block text-sm text-gray-300 mb-2">Budget range <span class="text-gray-600">(optional)</span></legend>
+              <div class="flex flex-wrap gap-2">
+                {budgets.map((b) => (
+                  <label class="cursor-pointer">
+                    <input type="radio" name="budget" value={b} class="peer sr-only" />
+                    <span class="inline-flex px-4 py-2 rounded-full border border-zinc-700 text-sm text-gray-300 transition-colors hover:border-zinc-500 peer-checked:bg-gray-100 peer-checked:text-zinc-950 peer-checked:border-gray-100 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-100">{b}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <div>
+              <label for="cf-message" class="block text-sm text-gray-300 mb-2">Tell me about the project</label>
+              <textarea id="cf-message" name="message" rows="5" required
+                class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-gray-100 transition-colors resize-y"
+                placeholder="What are you building, what's not working, and what would success look like?"></textarea>
+              <p data-error-for="cf-message" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please add a few details.</p>
+            </div>
+          </div>
+
+          <button type="submit" id="cf-submit"
+            class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-zinc-950 font-medium rounded-full hover:bg-white transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+            <span id="cf-submit-label">Send project inquiry</span>
+            <svg id="cf-spinner" class="hidden ml-2 w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+          </button>
+
+          <p id="cf-form-error" class="text-sm text-red-400 mt-4 hidden" role="alert"></p>
+          <p class="text-xs text-gray-500 mt-4">No newsletter — this goes straight to my inbox. Personal reply within one business day.</p>
+        </form>
+
+        <!-- Success state (replaces the form) -->
+        <div id="contact-success" class="bg-zinc-900 border border-zinc-800 rounded-2xl p-10 text-center" hidden>
+          <div class="w-16 h-16 mx-auto bg-zinc-950 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-gray-100" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-display font-bold text-gray-100 mb-2">Got it<span id="cf-success-name"></span> — your inquiry is in.</h2>
+          <p class="text-gray-400 max-w-md mx-auto">I read every message personally and reply within one business day. Talk soon.</p>
+        </div>
+
+        <!-- Secondary contact methods -->
+        <p class="text-sm text-gray-500 mt-6">
+          Prefer email or a call?
+          <a href="mailto:savellem@gmail.com" class="text-gray-300 hover:text-gray-100 transition-colors">savellem@gmail.com</a>
+          ·
+          <a href="tel:+16029311474" class="text-gray-300 hover:text-gray-100 transition-colors">602-931-1474</a>
+        </p>
+      </div>
+
+      <!-- Trust rail -->
+      <div class="order-2 lg:order-1">
+        <!-- You work with me directly -->
+        <div class="border-l-2 border-gray-100 pl-6 mb-12">
+          <p class="text-lg text-gray-200 leading-relaxed mb-3">
+            You&apos;ll work directly with me — no account managers, no junior hand-off. Senior,
+            hands-on design from first call to final delivery.
+          </p>
+          <p class="text-gray-400">— Savelle McThias</p>
+        </div>
+
+        {BOOKING_URL && (
+          <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center px-6 py-3 mb-12 border border-zinc-700 text-gray-100 text-base font-medium rounded-full hover:bg-zinc-900 transition-colors">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            Prefer to talk? Book a 30-min intro call
+          </a>
+        )}
+
+        <!-- What happens next -->
+        <div class="mb-12">
+          <h2 class="text-xs font-semibold text-gray-100 uppercase tracking-widest mb-6">What happens next</h2>
+          <ol class="space-y-6">
+            {[
+              { t: 'You send a few details', d: 'The form on the right — takes about a minute.' },
+              { t: 'We do a 30-minute discovery call', d: 'I learn your product, users, and goals.' },
+              { t: 'You get a proposal', d: 'Clear scope, timeline, and investment. No surprises.' },
+            ].map((step, i) => (
+              <li class="flex gap-4">
+                <div class="shrink-0 w-9 h-9 rounded-full bg-gray-100 text-zinc-950 font-bold flex items-center justify-center text-sm">{i + 1}</div>
+                <div>
+                  <p class="text-gray-100 font-medium">{step.t}</p>
+                  <p class="text-sm text-gray-400">{step.d}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <!-- Proof: logos -->
+        <div class="mb-10">
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-5">Trusted by teams at</p>
+          <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
+            {logos.map(({ src, alt, h }) => (
+              <img src={src} alt={alt} class={`${h} w-auto object-contain brightness-0 invert opacity-40`} />
+            ))}
+          </div>
+        </div>
+
+        <!-- Proof: testimonial -->
+        {testimonial && (
+          <figure class="border-t border-zinc-800 pt-8">
+            <blockquote class="text-gray-300 leading-relaxed mb-4">&ldquo;{testimonial.quote}&rdquo;</blockquote>
+            <figcaption class="text-sm">
+              <span class="text-gray-100 font-semibold">{testimonial.name}</span>
+              <span class="text-gray-400"> · {testimonial.title}, {testimonial.company}</span>
+            </figcaption>
+          </figure>
+        )}
+
+        <!-- Mid-tier offer callout -->
+        <p class="text-sm text-gray-500 mt-10">
+          Want something concrete first?
+          <a href="/ux-audit" class="text-gray-300 hover:text-gray-100 transition-colors">Get a 48-hour UX Audit for $997 →</a>
+        </p>
+
+        <p class="text-sm text-gray-400 mt-4">NDAs welcome · Based in Scottsdale, AZ · Working with teams anywhere</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (form) {
+      const endpoint = (form.dataset.endpoint || '').trim();
+      const submitBtn = document.getElementById('cf-submit') as HTMLButtonElement;
+      const submitLabel = document.getElementById('cf-submit-label')!;
+      const spinner = document.getElementById('cf-spinner')!;
+      const formError = document.getElementById('cf-form-error')!;
+      const successEl = document.getElementById('contact-success')!;
+      const successName = document.getElementById('cf-success-name')!;
+
+      // Populate attribution fields from the landing URL.
+      const params = new URLSearchParams(window.location.search);
+      (['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'] as const).forEach((k) => {
+        const input = form.querySelector(`input[name="${k}"]`) as HTMLInputElement | null;
+        if (input) input.value = params.get(k) || '';
+      });
+
+      const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+      function showFieldError(id: string, show: boolean) {
+        const el = form!.querySelector(`[data-error-for="${id}"]`);
+        el?.classList.toggle('hidden', !show);
+      }
+
+      function validate() {
+        const name = (form!.querySelector('#cf-name') as HTMLInputElement).value.trim();
+        const email = (form!.querySelector('#cf-email') as HTMLInputElement).value;
+        const message = (form!.querySelector('#cf-message') as HTMLTextAreaElement).value.trim();
+        showFieldError('cf-name', !name);
+        showFieldError('cf-email', !emailOk(email));
+        showFieldError('cf-message', !message);
+        return !!name && emailOk(email) && !!message;
+      }
+
+      // Clear an error as the user fixes it.
+      ['cf-name', 'cf-email', 'cf-message'].forEach((id) => {
+        form!.querySelector(`#${id}`)?.addEventListener('input', () => showFieldError(id, false));
+      });
+
+      function setLoading(on: boolean) {
+        submitBtn.disabled = on;
+        spinner.classList.toggle('hidden', !on);
+        submitLabel.textContent = on ? 'Sending…' : 'Send project inquiry';
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        formError.classList.add('hidden');
+        if ((form.querySelector('input[name="_gotcha"]') as HTMLInputElement).value) return; // bot
+        if (!validate()) {
+          (form.querySelector('[data-error-for]:not(.hidden)') as HTMLElement)
+            ?.previousElementSibling?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        const data = Object.fromEntries(new FormData(form).entries());
+        delete (data as Record<string, unknown>)._gotcha;
+        setLoading(true);
+
+        try {
+          if (endpoint) {
+            // Google Apps Script (and similar static-friendly endpoints) don't return
+            // CORS headers, so we send a simple no-cors POST. The response is opaque;
+            // a resolved fetch means the request was delivered. A network failure
+            // rejects and is handled below (with the email fallback).
+            await fetch(endpoint, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(data),
+            });
+          }
+
+          if (typeof (window as any).gtag === 'function') {
+            (window as any).gtag('event', 'generate_lead', {
+              method: 'contact_form',
+              project_type: data.project_type || 'unspecified',
+            });
+          }
+
+          successName.textContent = data.name ? `, ${String(data.name).split(' ')[0]}` : '';
+          form.hidden = true;
+          successEl.hidden = false;
+          successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (_) {
+          setLoading(false);
+          formError.innerHTML =
+            'Something went wrong sending that. Please try again, or email <a class="underline" href="mailto:savellem@gmail.com">savellem@gmail.com</a> directly.';
+          formError.classList.remove('hidden');
+        }
+      });
+    }
+  </script>
+</BaseLayout>

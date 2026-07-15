@@ -1,0 +1,215 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { breadcrumbListSchema, SITE_URL } from '@/lib/schema';
+
+const posts = (await getCollection('insights'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const pillars = posts.filter((post) => post.data.pillar);
+const articles = posts.filter((post) => !post.data.pillar);
+
+const dateFormat = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+
+const pageSchema = breadcrumbListSchema([
+  { name: 'Home', url: SITE_URL },
+  { name: 'Insights', url: `${SITE_URL}/insights` },
+]);
+---
+
+<BaseLayout
+  title="Insights on UX, Conversion & Product Clarity | Savelle McThias"
+  description="Plainspoken writing on why products lose customers to confusion — onboarding, conversion, mobile, accessibility, and design systems — from 18+ years of UX work."
+  schema={pageSchema}
+>
+  <!-- Hero -->
+  <section class="relative container-custom pt-32 pb-16 overflow-hidden">
+    <!-- Reports & research line art background -->
+    <svg
+      class="absolute inset-0 w-full h-full pointer-events-none select-none"
+      viewBox="0 0 1400 460"
+      preserveAspectRatio="xMidYMid slice"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <!-- Faint baseline -->
+      <line x1="0" y1="430" x2="1400" y2="430" stroke="rgba(255,255,255,0.025)" stroke-width="1" />
+
+      <!-- Scattered data points, bottom-left -->
+      <polyline points="70,400 130,415 190,395 250,410" stroke="rgba(255,255,255,0.025)" stroke-width="1" fill="none" />
+      <g fill="rgba(255,255,255,0.035)" stroke="none">
+        <circle cx="70" cy="400" r="2.5" />
+        <circle cx="130" cy="415" r="2.5" />
+        <circle cx="190" cy="395" r="2.5" />
+        <circle cx="250" cy="410" r="2.5" />
+      </g>
+
+      <!-- Background report card, offset behind -->
+      <rect x="696" y="56" width="180" height="232" rx="8" stroke="rgba(255,255,255,0.025)" stroke-width="1.2" />
+
+      <!-- Main report card with folded corner -->
+      <g stroke="rgba(255,255,255,0.06)" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M730 40 H862 L900 78 V302 H730 Z" />
+        <path d="M862 40 V78 H900" />
+        <line x1="752" y1="112" x2="878" y2="112" stroke-width="2.2" />
+        <line x1="752" y1="136" x2="878" y2="136" />
+        <line x1="752" y1="152" x2="878" y2="152" />
+        <line x1="752" y1="168" x2="846" y2="168" />
+        <line x1="752" y1="196" x2="878" y2="196" />
+        <line x1="752" y1="212" x2="878" y2="212" />
+        <line x1="752" y1="228" x2="818" y2="228" />
+      </g>
+
+      <!-- Magnifying glass over research snippet -->
+      <g stroke="rgba(255,255,255,0.05)" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="646" cy="330" r="42" />
+        <line x1="676" y1="360" x2="716" y2="400" />
+      </g>
+      <g stroke="rgba(255,255,255,0.032)" stroke-width="1">
+        <line x1="620" y1="320" x2="672" y2="320" />
+        <line x1="620" y1="334" x2="672" y2="334" />
+        <line x1="620" y1="348" x2="654" y2="348" />
+      </g>
+
+      <!-- Bar chart with trend line -->
+      <g stroke="rgba(255,255,255,0.05)" stroke-width="1.4" stroke-linecap="round">
+        <line x1="950" y1="404" x2="1146" y2="404" stroke="rgba(255,255,255,0.035)" stroke-width="1" />
+        <line x1="970" y1="404" x2="970" y2="344" />
+        <line x1="1002" y1="404" x2="1002" y2="304" />
+        <line x1="1034" y1="404" x2="1034" y2="364" />
+        <line x1="1066" y1="404" x2="1066" y2="264" />
+        <line x1="1098" y1="404" x2="1098" y2="324" />
+        <line x1="1130" y1="404" x2="1130" y2="224" />
+      </g>
+      <polyline points="970,344 1002,304 1034,364 1066,264 1098,324 1130,224" stroke="rgba(255,255,255,0.04)" stroke-width="1.2" fill="none" />
+      <g fill="rgba(255,255,255,0.06)" stroke="none">
+        <circle cx="970" cy="344" r="3" />
+        <circle cx="1002" cy="304" r="3" />
+        <circle cx="1034" cy="364" r="3" />
+        <circle cx="1066" cy="264" r="3" />
+        <circle cx="1098" cy="324" r="3" />
+        <circle cx="1130" cy="224" r="3" />
+      </g>
+
+      <!-- Blog article card, rotated -->
+      <g stroke="rgba(255,255,255,0.045)" stroke-width="1.3" stroke-linejoin="round" transform="rotate(4 1210 125)">
+        <rect x="1110" y="50" width="200" height="150" rx="8" />
+        <rect x="1130" y="70" width="60" height="46" rx="3" />
+        <line x1="1202" y1="76" x2="1290" y2="76" />
+        <line x1="1202" y1="92" x2="1290" y2="92" />
+        <line x1="1202" y1="108" x2="1270" y2="108" />
+        <line x1="1130" y1="140" x2="1290" y2="140" />
+        <line x1="1130" y1="156" x2="1290" y2="156" />
+        <line x1="1130" y1="172" x2="1230" y2="172" />
+      </g>
+
+      <!-- Bookmark tag -->
+      <path d="M1340 50 H1372 V118 L1356 104 L1340 118 Z" stroke="rgba(255,255,255,0.05)" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" />
+
+      <!-- Speech bubble / comment icon -->
+      <g stroke="rgba(255,255,255,0.045)" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M760 340 h140 a10 10 0 0 1 10 10 v58 a10 10 0 0 1 -10 10 h-88 l-24 24 v-24 h-28 a10 10 0 0 1 -10 -10 v-58 a10 10 0 0 1 10 -10 z" />
+        <line x1="780" y1="364" x2="878" y2="364" />
+        <line x1="780" y1="378" x2="858" y2="378" />
+      </g>
+    </svg>
+
+    <div class="max-w-4xl relative">
+      <p class="text-sm font-medium text-gray-400 uppercase tracking-wider mb-6">
+        Insights
+      </p>
+      <h1 class="text-5xl md:text-6xl font-bold text-gray-100 mb-8 tracking-tight leading-tight text-balance">
+        Clarity sells. Confusion refunds.
+      </h1>
+      <p class="text-xl text-gray-400 leading-relaxed max-w-3xl text-pretty">
+        Writing on why products lose customers — and where the fixes actually are.
+        Drawn from 18+ years designing for enterprise SaaS and
+        <span class="whitespace-nowrap">e-commerce</span>, from PetSmart to solo-founder products.
+      </p>
+    </div>
+  </section>
+
+  <!-- Pillar articles -->
+  {pillars.length > 0 && (
+    <section class="container-custom pb-8">
+      {pillars.map((post) => (
+        <a
+          href={`/insights/${post.id}`}
+          class="block bg-zinc-900 border border-zinc-800 rounded-3xl p-10 md:p-14 mb-8 hover:border-zinc-600 transition-colors group"
+        >
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-widest mb-4">
+            Start here
+          </p>
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4 tracking-tight leading-tight text-balance group-hover:text-white transition-colors">
+            {post.data.title}
+          </h2>
+          <p class="text-lg text-gray-400 leading-relaxed max-w-3xl mb-6 text-pretty">
+            {post.data.description}
+          </p>
+          <div class="flex items-center gap-4 text-sm text-gray-500">
+            <time datetime={post.data.pubDate.toISOString().slice(0, 10)}>
+              {dateFormat.format(post.data.pubDate)}
+            </time>
+            <span class="inline-flex items-center text-gray-100 font-medium">
+              Read the article
+              <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </div>
+        </a>
+      ))}
+    </section>
+  )}
+
+  <!-- Article list -->
+  <section class="container-custom pb-24">
+    {articles.length > 0 ? (
+      <div class="divide-y divide-zinc-800 border-t border-zinc-800">
+        {articles.map((post) => (
+          <a
+            href={`/insights/${post.id}`}
+            class="grid grid-cols-1 md:grid-cols-[160px_1fr_auto] gap-2 md:gap-10 py-8 items-baseline group"
+          >
+            <time
+              datetime={post.data.pubDate.toISOString().slice(0, 10)}
+              class="text-sm text-gray-500"
+            >
+              {dateFormat.format(post.data.pubDate)}
+            </time>
+            <div>
+              <h2 class="text-xl md:text-2xl font-semibold text-gray-100 mb-2 leading-snug text-balance group-hover:text-white transition-colors">
+                {post.data.title}
+              </h2>
+              <p class="text-gray-400 leading-relaxed max-w-2xl text-pretty">
+                {post.data.description}
+              </p>
+            </div>
+            <svg
+              class="hidden md:block w-5 h-5 text-gray-500 group-hover:text-gray-100 group-hover:translate-x-1 transition-all self-center"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        ))}
+      </div>
+    ) : (
+      pillars.length === 0 && (
+        <p class="text-gray-400 border-t border-zinc-800 pt-8">
+          First articles are on the way. In the meantime,
+          <a href="/ux-health-check" class="text-gray-100 underline hover:no-underline">score your product's UX</a>.
+        </p>
+      )
+    )}
+  </section>
+</BaseLayout>

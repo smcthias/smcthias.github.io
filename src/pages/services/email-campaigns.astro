@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Layout title="Email Campaign Design - Savelle Design" description="Design engaging email campaigns that connect with your audience and drive action.">
+    <!-- Hero Section -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href={`${base}/services`} class="inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors mb-8">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Services
+      </a>
+      <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6">Email Campaign Design</h1>
+      <p class="text-xl md:text-2xl text-zinc-600 max-w-3xl mb-8">
+        Create engaging email campaigns that your audience actually wants to open, read, and act on.
+      </p>
+      </div>
+    </section>
+
+    <!-- Service Overview -->
+    <section class="py-12 border-t border-zinc-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-3xl font-bold text-zinc-900 mb-6">Why Email Still Matters</h2>
+          <p class="text-lg text-zinc-600 mb-6">
+            With so much noise online, email remains one of the most effective ways to reach your audience directly. A well-designed email campaign can nurture leads, drive sales, and build lasting relationships with customers.
+          </p>
+          <p class="text-lg text-zinc-600">
+            I'll help you create email campaigns that look professional, work across all devices, and guide readers to take action.
+          </p>
+        </div>
+        <div class="aspect-[4/3] rounded-lg overflow-hidden">
+          <img src={`${base}/images/works/yoli-detail3.png`} alt="Email Campaign Design Example" class="w-full h-full object-cover" />
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- What's Included -->
+    <section class="py-12 bg-zinc-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-zinc-900 mb-8">What's Included</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Custom Email Templates</h3>
+          <p class="text-zinc-600">
+            Branded email designs that work across all email clients and devices.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Campaign Strategy</h3>
+          <p class="text-zinc-600">
+            Guidance on email frequency, content ideas, and best practices for your audience.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Mobile-Responsive Design</h3>
+          <p class="text-zinc-600">
+            Emails that look great whether opened on a phone, tablet, or computer.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Series Design</h3>
+          <p class="text-zinc-600">
+            Welcome sequences, nurture campaigns, or promotional series with cohesive design.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Clear Call-to-Actions</h3>
+          <p class="text-zinc-600">
+            Well-designed buttons and links that guide readers to take action.
+          </p>
+        </div>
+        <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Platform Integration</h3>
+          <p class="text-zinc-600">
+            Templates compatible with popular email platforms like Mailchimp, Klaviyo, or ConvertKit.
+          </p>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="py-12 bg-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-white mb-8">Perfect For</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">Product Launches</h3>
+          <p class="text-zinc-300">
+            Build anticipation and drive sales with beautifully designed launch campaigns.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">Newsletters</h3>
+          <p class="text-zinc-300">
+            Keep your audience engaged with regular updates, tips, and valuable content.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-white mb-3">Welcome Series</h3>
+          <p class="text-zinc-300">
+            Make a great first impression with new subscribers and guide them to engage.
+          </p>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-zinc-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to design emails that get results?
+          </h2>
+          <p class="text-xl text-zinc-300 mb-8">
+            Let's create email campaigns that your audience looks forward to receiving and actually opens.
+          </p>
+          <a
+            href={`${base}/contact`}
+            class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
+          >
+            Start a Project
+          </a>
+        </div>
+      </div>
+    </section>
+</Layout>

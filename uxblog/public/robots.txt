@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# AI assistant guide
+# See /llms.txt
+
+Sitemap: https://savellem.com/sitemap-index.xml
