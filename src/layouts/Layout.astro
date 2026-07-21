@@ -177,9 +177,66 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
     </main>
 
     <footer class="bg-zinc-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="text-center text-zinc-400 text-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div class="col-span-2">
+            <a href={`${base}/`} class="text-xl font-bold text-white hover:text-zinc-300 transition-colors">
+              Savelle Design
+            </a>
+            <p class="mt-4 text-sm text-zinc-400 max-w-xs">
+              UX/UI design and web development for growing businesses, based in Scottsdale, AZ.
+            </p>
+            <a
+              href="https://www.linkedin.com/in/savelle/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Savelle McThias on LinkedIn"
+              class="mt-6 inline-flex items-center justify-center w-9 h-9 rounded-lg bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white transition-colors"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+          </div>
+
+          <div>
+            <h2 class="text-xs font-semibold text-zinc-200 uppercase tracking-wider mb-4">Explore</h2>
+            <ul class="space-y-3 text-sm">
+              <li><a href={`${base}/`} class="text-zinc-400 hover:text-white transition-colors">Home</a></li>
+              <li><a href={`${base}/about`} class="text-zinc-400 hover:text-white transition-colors">About</a></li>
+              <li><a href={`${base}/works`} class="text-zinc-400 hover:text-white transition-colors">Works</a></li>
+              <li><a href={`${base}/gallery`} class="text-zinc-400 hover:text-white transition-colors">Gallery</a></li>
+              <li><a href={`${base}/blog`} class="text-zinc-400 hover:text-white transition-colors">Blog</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 class="text-xs font-semibold text-zinc-200 uppercase tracking-wider mb-4">Services</h2>
+            <ul class="space-y-3 text-sm">
+              <li><a href={`${base}/services`} class="text-zinc-400 hover:text-white transition-colors">All Services</a></li>
+              <li><a href={`${base}/services/landing-page-design`} class="text-zinc-400 hover:text-white transition-colors">Landing Page Design</a></li>
+              <li><a href={`${base}/services/website-refresh`} class="text-zinc-400 hover:text-white transition-colors">Website Refresh</a></li>
+              <li><a href={`${base}/services/brand-identity`} class="text-zinc-400 hover:text-white transition-colors">Brand Identity</a></li>
+              <li><a href={`${base}/services/email-campaigns`} class="text-zinc-400 hover:text-white transition-colors">Email Campaigns</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 class="text-xs font-semibold text-zinc-200 uppercase tracking-wider mb-4">Get Started</h2>
+            <ul class="space-y-3 text-sm">
+              <li><a href={`${base}/ux-health-check`} class="text-zinc-400 hover:text-white transition-colors">UX Health Check</a></li>
+              <li><a href={`${base}/contact`} class="text-zinc-400 hover:text-white transition-colors">Contact</a></li>
+              <li><a href="mailto:savellem@gmail.com" class="text-zinc-400 hover:text-white transition-colors">savellem@gmail.com</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-12 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-zinc-500">
           <p>&copy; {new Date().getFullYear()} Savelle Design. All rights reserved.</p>
+          <div class="flex items-center gap-6">
+            <a href={`${base}/privacy`} class="hover:text-zinc-200 transition-colors">Privacy Policy</a>
+            <a href={`${base}/terms`} class="hover:text-zinc-200 transition-colors">Terms of Service</a>
+          </div>
         </div>
       </div>
     </footer>
@@ -210,7 +267,7 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
         "areaServed": "Worldwide",
         "priceRange": "$$",
         "sameAs": [
-          "https://linkedin.com"
+          "https://www.linkedin.com/in/savelle/"
         ]
       }
     </script>
