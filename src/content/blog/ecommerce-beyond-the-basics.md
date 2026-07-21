@@ -5,7 +5,7 @@ date: "2025-07-15"
 author: "Savelle Design"
 category: "E-Commerce"
 tags: ["E-Commerce", "UX Design", "Web Development", "Complex Systems"]
-image: "lamesa-hero.png"
+image: "works/lamesa-hero.png"
 imageAlt: "La Mesa RV e-commerce interface showcasing intuitive inventory filtering"
 ---
 

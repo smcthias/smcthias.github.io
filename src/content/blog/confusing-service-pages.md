@@ -1,0 +1,73 @@
+---
+title: "Confusing Service Pages: Why 'We Do Everything' Costs You the Job"
+description: "One catch-all Services page feels efficient and reads like a menu with no prices. A service page is a decision tool, not a brochure — and the businesses winning your jobs figured that out first."
+date: "2026-04-08"
+author: "Savelle Design"
+category: "Service Pages"
+tags: ["Service Pages", "Local Business", "Conversion", "Local SEO"]
+image: "blog/confusing-service-pages-hero.jpg"
+imageAlt: "A dim hallway of identical doors with one door standing open and glowing"
+---
+
+Here's a page I see on almost every multi-service local business site. It's called "Services," and it's a wall: twelve offerings in a grid, two sentences each, one "Contact Us" button at the bottom serving all of them.
+
+The owner is proud of this page. It's complete. It's efficient. It says everything the company does.
+
+And that's exactly the problem — because the customer isn't looking for everything you do. She's looking for the one thing she needs, in the town where she lives, right now. A homeowner with a dead AC in Chandler doesn't want "HVAC Services." She wants *AC repair in Chandler* — and if your page makes her do the work of connecting her problem to your grid, the next site in her search results will happily do that work instead.
+
+## A service page is a decision tool, not a brochure
+
+A brochure describes the business. A decision tool helps one specific buyer answer three questions:
+
+1. **Do they handle my exact problem?** Named the way the customer names it — "AC not cooling," "furnace won't start," "thermostat blank" — not the way your industry categorizes it internally.
+2. **Can I trust them with it?** Proof scoped to *this* service: photos of this kind of job, a review about this kind of job, what it roughly costs, how long it takes.
+3. **What do I do next?** One action, matched to the urgency of this service. An emergency repair gets tap-to-call; a full system replacement gets "request a quote."
+
+The catch-all Services page can't do any of this, because it's trying to talk to twelve buyers at once. When everyone is the audience, no one is convinced.
+
+## The service × area matrix
+
+Here's the structure that wins, and why the businesses beating you in search almost certainly use it: **one page per service, per area you seriously serve.**
+
+An HVAC company doing four services across three cities isn't maintaining one Services page — it's maintaining twelve: "AC repair in Gilbert," "furnace installation in Mesa," "duct cleaning in Chandler," and so on.
+
+This sounds like a lot of pages, because it is. It's also the rare move that pays twice:
+
+- **It's how buyers convert.** Someone landing on a page about their exact problem in their exact town has nothing left to figure out.
+- **It's how local search works.** Google matches pages, not businesses, to "emergency ac repair chandler." A business with a dedicated page for that phrase beats a stronger competitor whose only match is a twelve-item grid — visibility and conversion, same investment.
+
+<img src="/images/blog/confusing-service-pages-body.jpg" alt="A table of sticky notes being sorted into a service-and-area grid" class="rounded-2xl my-10" loading="lazy" />
+
+## Write for the decision, not the keyword
+
+The service × area idea has a well-earned bad reputation, because most companies implement it lazily: one template, find-and-replace the city name, twelve pages of identical filler. Buyers can smell it, and search engines have gotten good at ignoring it.
+
+The difference between a doorway page and a page that wins jobs is whether it's written for the *decision*:
+
+- What actually fails on AC units in desert summers, and how you diagnose it
+- What the job roughly costs and how long it takes — ranges are fine; silence is not
+- A photo from a real local job, a review from a customer in that town
+- The honest boundaries: what you don't do, when a repair beats a replacement
+
+That content can't be find-and-replaced, which is exactly why it works. If you can't yet write twelve pages at that standard, write four — your highest-value services in your best area — and build from there. Four real pages beat twelve hollow ones.
+
+## Organize by how customers think, not how you do
+
+One more lesson, learned at scale. At PetSmart I restructured the global navigation of an e-commerce platform serving millions of visitors, and the single biggest unlock was letting go of how the company *wished* people would browse. The merchandising org chart said one thing; the heat maps and user behavior said another. We rebuilt the hierarchy around how customers actually moved — and the paths to the highest-converting sections got shorter and clearer.
+
+Your services menu has the same trap at a smaller scale. "Residential / Commercial / Specialty" might mirror how your company is organized internally. Your customer thinks "my AC is broken." The menu should speak her language, surface your most-searched services first, and leave your org chart out of it. [The five-second rule](/blog/homepage-5-second-test) applies to navigation too: if she can't find her problem in one glance, she assumes you don't solve it.
+
+## The one-glance audit
+
+Open your services section and ask:
+
+1. Can a customer find their exact problem, named their way, in one glance?
+2. Does each major service have its own page — with its own proof and its own next step — or does everything funnel to one generic contact button?
+3. If you serve multiple areas, does anything on the page tell a Gilbert customer you work in Gilbert?
+4. Could any page be swapped onto a competitor's site without edits? (If yes, it's persuading no one.)
+
+"We do everything" feels like casting a wide net. In practice it reads like a menu with no prices — technically complete, quietly costing you the job. Specific pages for specific problems in specific places: that's not busywork. That's [trust](/blog/nice-template-no-trust), built one decision at a time.
+
+---
+
+**Want a teardown of your service pages?** I'll look at them the way a buyer does — one job, one city, one decision — and flag what to split, what to say, and what to cut. [Let's talk about your project](/contact).

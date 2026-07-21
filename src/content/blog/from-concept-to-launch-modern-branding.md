@@ -5,7 +5,7 @@ date: "2025-06-10"
 author: "Savelle Design"
 category: "Branding"
 tags: ["Branding", "Visual Design", "AR/VR", "Brand Identity"]
-image: "adorned-hero.png"
+image: "works/adorned-hero.png"
 imageAlt: "Adorned brand identity showcasing modern, innovative design"
 ---
 

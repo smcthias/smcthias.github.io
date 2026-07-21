@@ -5,7 +5,7 @@ date: "2025-09-20"
 author: "Savelle Design"
 category: "Branding"
 tags: ["Branding", "Web Development", "Fintech", "Rapid Delivery"]
-image: "nikkl-hero.png"
+image: "works/nikkl-hero.png"
 imageAlt: "Nikkl branding and website showcasing modern fintech design"
 ---
 

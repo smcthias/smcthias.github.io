@@ -42,7 +42,7 @@ const articleData = {
   "@type": "BlogPosting",
   "headline": post.data.title,
   "description": post.data.description,
-  "image": `${Astro.site || 'https://savelledesign.com'}${base}/images/works/${post.data.image}`,
+  "image": `${Astro.site || 'https://savelledesign.com'}${base}/images/${post.data.image}`,
   "datePublished": post.data.date,
   "dateModified": post.data.date,
   "author": {
@@ -68,7 +68,7 @@ const articleData = {
 <Layout
   title={`${post.data.title} | Savelle Design Blog`}
   description={post.data.description}
-  image={`/images/works/${post.data.image}`}
+  image={`/images/${post.data.image}`}
 >
   <!-- Hero Section -->
   <section class="py-12">
@@ -99,7 +99,7 @@ const articleData = {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="aspect-[16/9] rounded-lg overflow-hidden bg-zinc-100">
         <img
-          src={`${base}/images/works/${post.data.image}`}
+          src={`${base}/images/${post.data.image}`}
           alt={post.data.imageAlt}
           class="w-full h-full object-cover"
           loading="lazy"

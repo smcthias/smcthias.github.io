@@ -5,7 +5,7 @@ date: "2025-08-25"
 author: "Savelle Design"
 category: "Web Design"
 tags: ["Web Design", "UX Design", "Content Strategy", "Responsive Design"]
-image: "young-living-hero.png"
+image: "works/young-living-hero.png"
 imageAlt: "Young Living Grow News platform showcasing engaging content layout"
 ---
 

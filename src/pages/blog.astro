@@ -42,7 +42,7 @@ const sortedPosts = allPosts.sort((a, b) =>
           <a href={`${base}/blog/${post.slug}`} class="group block">
             <div class="aspect-[16/9] rounded-lg mb-6 overflow-hidden bg-zinc-100">
               <img
-                src={`${base}/images/works/${post.data.image}`}
+                src={`${base}/images/${post.data.image}`}
                 alt={post.data.imageAlt}
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 loading="lazy"

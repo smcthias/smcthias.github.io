@@ -5,7 +5,7 @@ date: "2025-10-10"
 author: "Savelle Design"
 category: "Email Marketing"
 tags: ["Email Design", "Klaviyo", "Marketing Strategy"]
-image: "yoli-hero.png"
+image: "works/yoli-hero.png"
 imageAlt: "Yoli email campaign design showcasing cohesive branding"
 ---
 

@@ -5,7 +5,7 @@ date: "2025-11-15"
 author: "Savelle Design"
 category: "Landing Pages"
 tags: ["Landing Pages", "Web Design", "SEO", "Trust"]
-image: "omegas411-hero.png"
+image: "works/omegas411-hero.png"
 imageAlt: "Omegas411 landing page design showcasing clean, trustworthy layout"
 ---
 
