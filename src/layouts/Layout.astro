@@ -74,6 +74,12 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
               Works
             </a>
             <a
+              href={`${base}/gallery`}
+              class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/gallery') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+            >
+              Gallery
+            </a>
+            <a
               href={`${base}/about`}
               class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/about') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
             >
@@ -84,6 +90,12 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
               class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/blog') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
             >
               Blog
+            </a>
+            <a
+              href={`${base}/ux-health-check`}
+              class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/ux-health-check') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+            >
+              UX Health Check
             </a>
             <a
               href={`${base}/contact`}
@@ -127,6 +139,12 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
             Works
           </a>
           <a
+            href={`${base}/gallery`}
+            class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/gallery') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+          >
+            Gallery
+          </a>
+          <a
             href={`${base}/about`}
             class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/about') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
           >
@@ -137,6 +155,12 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
             class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/blog') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
           >
             Blog
+          </a>
+          <a
+            href={`${base}/ux-health-check`}
+            class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/ux-health-check') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+          >
+            UX Health Check
           </a>
           <a
             href={`${base}/contact`}
@@ -175,7 +199,6 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
           "name": "Savelle McThias",
           "jobTitle": "UX/UI Designer & Developer",
           "email": "savellem@gmail.com",
-          "telephone": "+1-602-931-1474",
           "url": "https://savelledesign.com/about"
         },
         "address": {
