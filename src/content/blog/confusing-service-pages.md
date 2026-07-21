@@ -70,4 +70,4 @@ Open your services section and ask:
 
 ---
 
-**Want a teardown of your service pages?** I'll look at them the way a buyer does — one job, one city, one decision — and flag what to split, what to say, and what to cut. [Let's talk about your project](/contact).
+**Want a teardown of your service pages?** The 48-hour UX Audit looks at your site the way a buyer does — one job, one city, one decision — and hands you a recorded, prioritized teardown of what to split, what to say, and what to cut. [Book the 48-hour UX Audit](/ux-audit).

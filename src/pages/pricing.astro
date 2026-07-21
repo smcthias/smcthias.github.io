@@ -1,0 +1,134 @@
+---
+import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const categories = [
+  {
+    title: 'Brand & Visual',
+    items: [
+      { name: 'Logo and brand identity', price: '$1,500 – $3,500 flat' },
+      { name: 'Ad creative and campaign assets', price: '$65/hr or $300 – $800 per deliverable' },
+      { name: 'Print and digital collateral', price: '$55/hr or flat per piece' },
+    ],
+  },
+  {
+    title: 'UX & Product Design',
+    items: [
+      { name: 'UX audit and recommendations', price: '$1,500 – $3,000 flat', note: 'For a fixed-scope, fixed-price option, see the productized 48-Hour UX Audit.', noteHref: `${base}/ux-audit` },
+      { name: 'Wireframes and user flows', price: '$75/hr' },
+      { name: 'Full UI/UX design for web or app', price: '$85/hr or project-based starting at $5,000' },
+    ],
+  },
+  {
+    title: 'Web Design and Build',
+    items: [
+      { name: 'Webflow design and development', price: '$95/hr or $3,500 – $8,000 flat depending on scope' },
+      { name: 'Landing page design and build', price: '$1,500 – $3,500 flat' },
+      { name: 'Full website design and build', price: '$6,000 – $15,000 flat' },
+    ],
+  },
+  {
+    title: 'Design Systems',
+    items: [
+      { name: 'Component library and design system', price: '$85/hr or $4,000 – $10,000 flat' },
+    ],
+  },
+];
+
+const retainerTiers = [
+  { hours: '10 hours/month', price: '$650' },
+  { hours: '20 hours/month', price: '$1,200' },
+  { hours: '40 hours/month', price: '$2,200' },
+];
+---
+
+<Layout
+  title="Pricing - Savelle Design"
+  description="Transparent pricing for brand identity, UX and product design, web design and build, design systems, and ongoing retainer support."
+>
+  <!-- Hero -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-6">Pricing</h1>
+        <p class="text-xl text-zinc-600 leading-relaxed">
+          General starting rates for the way I most often work with clients. Every project is
+          scoped individually — flat rates depend on complexity, and these ranges are a starting
+          point for that conversation, not a final quote.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rate Card -->
+  <section class="pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-6">
+        {categories.map((category) => (
+          <div class="p-8 bg-white border border-zinc-200 rounded-lg">
+            <h2 class="text-xl font-semibold text-zinc-900 mb-2">{category.title}</h2>
+            <div>
+              {category.items.map((item) => (
+                <div class="py-4 border-b border-zinc-100 last:border-0 first:pt-4">
+                  <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                    <span class="text-zinc-900 font-medium">{item.name}</span>
+                    <span class="text-zinc-600 sm:text-right sm:pl-6">{item.price}</span>
+                  </div>
+                  {item.note && (
+                    <p class="text-sm text-zinc-500 mt-1.5">
+                      {item.note}{' '}
+                      {item.noteHref && (
+                        <a href={item.noteHref} class="text-zinc-700 underline underline-offset-2 hover:text-zinc-900">
+                          View details
+                        </a>
+                      )}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Ongoing Retainer -->
+  <section class="py-20 bg-zinc-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">Ongoing Retainer</h2>
+        <p class="text-xl text-zinc-600 max-w-2xl mx-auto">
+          For businesses that need consistent design support month to month — priority turnaround, no re-onboarding, unused hours don't roll over.
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        {retainerTiers.map((tier) => (
+          <div class="p-8 bg-white border border-zinc-200 rounded-lg text-center">
+            <div class="text-3xl font-bold text-zinc-900 mb-1">{tier.price}</div>
+            <div class="text-zinc-500 mb-6">per month</div>
+            <div class="text-zinc-900 font-medium">{tier.hours}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-zinc-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Not sure what you need?</h2>
+        <p class="text-xl text-zinc-300 mb-8">
+          Every project is different. Tell me what you're trying to build and I'll recommend the right scope and a firm quote.
+        </p>
+        <a
+          href={`${base}/contact`}
+          class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
+        >
+          Get a Custom Quote
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -64,4 +64,4 @@ If the honest answer is no, the good news is the same as always in this series �
 
 ---
 
-**Want your booking path mapped?** I'll walk your site the way a new patient does — landing page to confirmed appointment — and flag exactly where it breaks. [Let's talk about your project](/contact).
+**Want your booking path mapped?** The 48-hour UX Audit walks your site the way a new patient does — landing page to confirmed appointment — and hands you a prioritized, recorded teardown of exactly where the path breaks. [Book the 48-hour UX Audit](/ux-audit).

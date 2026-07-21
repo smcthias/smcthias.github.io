@@ -68,4 +68,4 @@ The work is rarely a rebuild. It's a handful of screens, tested where your custo
 
 ---
 
-**Want your mobile experience scored?** I'll test your site the way your customers actually use it — on a phone, in a hurry. [Let's talk about your project](/contact).
+**Want your mobile experience scored?** The free UX Health Check includes a mobile dimension — two minutes, an instant 0–100 score, and your three highest-priority fixes. Take it on your phone; that's where your customers are. [Take the free UX Health Check](/ux-health-check).

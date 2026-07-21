@@ -1,0 +1,361 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const STRIPE_URL = 'https://buy.stripe.com/9B614nadB2L82Aw01c7wA00';
+
+// FAQ schema is derived from the on-page Q&As below — keep the two in sync.
+const faqs = [
+  {
+    question: 'What if my product is complex or has multiple user types?',
+    answer:
+      "The audit covers your primary user journey and key conversion paths. If you have multiple personas or complex workflows, I'll focus on the most critical business-impacting areas within the 48-hour timeframe.",
+  },
+  {
+    question: 'Do you sign NDAs?',
+    answer:
+      "Absolutely. I'm happy to sign an NDA before accessing your product or any confidential information.",
+  },
+  {
+    question: 'What if I need help implementing the recommendations?',
+    answer:
+      'The audit includes implementation guidance, but if you need hands-on help, I offer ongoing design services. We can discuss this during the strategy call.',
+  },
+  {
+    question: 'Is there a money-back guarantee?',
+    answer:
+      "Yes. If you're not satisfied with the audit quality, I'll refund your investment—no questions asked. I stand behind my work.",
+  },
+  {
+    question: 'Can you audit mobile apps?',
+    answer:
+      'Yes! The audit works for web applications, mobile apps (iOS/Android), and responsive websites. Just provide TestFlight access or APK for mobile apps.',
+  },
+  {
+    question: 'How soon can you start?',
+    answer:
+      "I begin within one business day of receiving access and deliver your complete audit within two business days of starting. Requests that come in over the weekend start the next business day — so if you send access Friday evening, you'll have your audit back early the following week.",
+  },
+];
+
+const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
+
+const pageSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: '48-Hour UX Audit',
+    serviceType: 'UX Audit',
+    description:
+      'A productized UX audit delivered in 48 hours: a recorded walkthrough video, a prioritized issues list, quick-win recommendations, and a 60-minute strategy call.',
+    url: `${siteUrl}/ux-audit`,
+    provider: { '@type': 'Person', name: 'Savelle McThias' },
+    offers: { '@type': 'Offer', price: '997', priceCurrency: 'USD' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  },
+];
+---
+
+<Layout
+  title="48-Hour UX Audit - Savelle Design"
+  description="A 48-hour UX audit with recorded walkthrough, prioritized issues, quick-win recommendations, and a strategy call. For teams that need answers fast."
+>
+  <!-- Hero -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-6">Limited Availability &middot; 48-Hour Turnaround</p>
+        <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-6 leading-tight">
+          Get Expert UX Insights in Just 48 Hours
+        </h1>
+        <p class="text-xl text-zinc-600 leading-relaxed mb-10">
+          Discover exactly what's holding back your conversions, frustrating your users, and costing you revenue. Receive a comprehensive UX audit with actionable recommendations — delivered in two business days.
+        </p>
+        <div class="flex flex-wrap gap-4 mb-6">
+          <a
+            href={STRIPE_URL}
+            class="inline-flex items-center px-8 py-4 bg-zinc-900 text-white text-base font-medium rounded-lg hover:bg-zinc-800 transition-colors"
+          >
+            Get Your Audit Now &mdash; $997
+          </a>
+          <a
+            href="#whats-included"
+            class="inline-flex items-center px-8 py-4 border-2 border-zinc-300 text-zinc-900 text-base font-medium rounded-lg hover:bg-zinc-50 transition-colors"
+          >
+            See What's Included
+          </a>
+        </div>
+        <p class="text-sm text-zinc-500">
+          <svg class="w-4 h-4 inline-block mr-1 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          One-time payment &middot; No recurring fees &middot; Money-back guarantee
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="py-16 bg-zinc-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
+        <div>
+          <div class="text-4xl font-bold text-white mb-2">48 Hours</div>
+          <div class="text-zinc-400">Turnaround Time</div>
+        </div>
+        <div>
+          <div class="text-4xl font-bold text-white mb-2">Two Decades</div>
+          <div class="text-zinc-400">UX Design Experience</div>
+        </div>
+        <div>
+          <div class="text-4xl font-bold text-white mb-2">$997</div>
+          <div class="text-zinc-400">Fixed Investment</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's Included -->
+  <section id="whats-included" class="py-20 bg-zinc-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">What You'll Receive</h2>
+        <p class="text-xl text-zinc-600">A complete UX evaluation delivered in two business days</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div class="p-8 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Recorded Walkthrough Video</h3>
+          <p class="text-zinc-600 mb-4">
+            Watch me navigate your product as a first-time user. I'll verbalize my thought process, identify confusion points, and highlight where the experience breaks down.
+          </p>
+          <ul class="space-y-2 text-zinc-600 text-sm">
+            <li>&bull; 20-30 minute screen recording</li>
+            <li>&bull; Real-time first impressions</li>
+            <li>&bull; User perspective insights</li>
+          </ul>
+        </div>
+
+        <div class="p-8 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Prioritized UX/UI Issues</h3>
+          <p class="text-zinc-600 mb-4">
+            Detailed documentation of every usability problem, accessibility concern, and design inconsistency — organized by severity and business impact.
+          </p>
+          <ul class="space-y-2 text-zinc-600 text-sm">
+            <li>&bull; Critical, high, medium, low priority ranking</li>
+            <li>&bull; Screenshots with annotations</li>
+            <li>&bull; Impact on conversions noted</li>
+          </ul>
+        </div>
+
+        <div class="p-8 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Quick-Win Recommendations</h3>
+          <p class="text-zinc-600 mb-4">
+            Actionable improvements you can implement immediately for maximum impact with minimal effort. Start seeing results this week.
+          </p>
+          <ul class="space-y-2 text-zinc-600 text-sm">
+            <li>&bull; Low-effort, high-impact changes</li>
+            <li>&bull; Specific implementation guidance</li>
+            <li>&bull; Estimated effort for each item</li>
+          </ul>
+        </div>
+
+        <div class="p-8 bg-white border border-zinc-200 rounded-lg">
+          <h3 class="text-xl font-semibold text-zinc-900 mb-3">60-Minute Strategy Call</h3>
+          <p class="text-zinc-600 mb-4">
+            Live video call to review findings, answer questions, discuss implementation priorities, and create an action plan for your team.
+          </p>
+          <ul class="space-y-2 text-zinc-600 text-sm">
+            <li>&bull; Walkthrough of all findings</li>
+            <li>&bull; Q&amp;A about recommendations</li>
+            <li>&bull; Prioritization roadmap</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">Why a 48-Hour UX Audit?</h2>
+        <p class="text-xl text-zinc-600">Fast, affordable, actionable — without the months-long agency engagement</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div class="flex gap-4">
+          <div class="shrink-0 w-12 h-12 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold">1</div>
+          <div>
+            <h3 class="text-lg font-semibold text-zinc-900 mb-2">Get Results Fast</h3>
+            <p class="text-zinc-600">Don't wait weeks or months. Identify critical issues and start improving your UX in about two business days.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="shrink-0 w-12 h-12 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold">2</div>
+          <div>
+            <h3 class="text-lg font-semibold text-zinc-900 mb-2">Fraction of Agency Cost</h3>
+            <p class="text-zinc-600">Get expert UX insights for $997 instead of $10,000+ agency audits. Same quality, better price.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="shrink-0 w-12 h-12 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold">3</div>
+          <div>
+            <h3 class="text-lg font-semibold text-zinc-900 mb-2">Actionable, Not Academic</h3>
+            <p class="text-zinc-600">No fluff or theory. Every recommendation includes specific implementation steps your team can act on immediately.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="shrink-0 w-12 h-12 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold">4</div>
+          <div>
+            <h3 class="text-lg font-semibold text-zinc-900 mb-2">Two Decades of Experience</h3>
+            <p class="text-zinc-600">Benefit from nearly two decades designing for PetSmart, Plexus, Green Compass, and dozens of other brands.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Perfect For -->
+  <section class="py-20 bg-zinc-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12 text-center">Perfect For</h2>
+      <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div class="p-8 bg-white border border-zinc-200 rounded-lg text-center">
+          <div class="text-4xl mb-4">&#128640;</div>
+          <h3 class="text-lg font-semibold text-zinc-900 mb-3">Startups</h3>
+          <p class="text-zinc-600 text-sm">Validate your MVP and identify quick wins before raising your next round.</p>
+        </div>
+        <div class="p-8 bg-white border border-zinc-200 rounded-lg text-center">
+          <div class="text-4xl mb-4">&#128202;</div>
+          <h3 class="text-lg font-semibold text-zinc-900 mb-3">SaaS Companies</h3>
+          <p class="text-zinc-600 text-sm">Improve onboarding, reduce churn, and increase feature adoption with expert UX insights.</p>
+        </div>
+        <div class="p-8 bg-white border border-zinc-200 rounded-lg text-center">
+          <div class="text-4xl mb-4">&#128722;</div>
+          <h3 class="text-lg font-semibold text-zinc-900 mb-3"><span class="whitespace-nowrap">E-commerce</span></h3>
+          <p class="text-zinc-600 text-sm">Reduce cart abandonment and increase conversions with checkout flow optimization.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-20 bg-zinc-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">How It Works</h2>
+        <p class="text-xl text-zinc-400">Simple, fast, and completely hassle-free</p>
+      </div>
+
+      <div class="space-y-8 max-w-3xl mx-auto">
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold flex-shrink-0">1</div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-2">Purchase &amp; Share Access</h3>
+            <p class="text-zinc-300">Complete your purchase and provide access to your website or application. I'll need a demo account for SaaS products or your production URL for public sites.</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold flex-shrink-0">2</div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-2">I Conduct the Audit</h3>
+            <p class="text-zinc-300">Within two business days, I'll thoroughly evaluate your product, record my walkthrough, document all issues, and compile quick-win recommendations.</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold flex-shrink-0">3</div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-2">Receive Your Audit</h3>
+            <p class="text-zinc-300">Get your complete audit deliverable including video walkthrough, prioritized issues list, and actionable recommendations document.</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold flex-shrink-0">4</div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-2">Strategy Call</h3>
+            <p class="text-zinc-300">Schedule your 60-minute strategy call to review findings, ask questions, prioritize improvements, and create your implementation roadmap.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto p-10 md:p-12 bg-zinc-50 border border-zinc-200 rounded-lg">
+        <blockquote class="text-xl text-zinc-700 leading-relaxed mb-8">
+          &ldquo;Savelle is one of the most talented UX experts I've had the pleasure of working with. Within a very short period of time after his hire, he was knocking out work items and client side code. The impact of his effort and his work will be felt for a very long time.&rdquo;
+        </blockquote>
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-zinc-900 text-white flex items-center justify-center font-semibold">DK</div>
+          <div>
+            <div class="font-semibold text-zinc-900">Daniel Kruger</div>
+            <div class="text-sm text-zinc-500">VP of Software Development, SyberSafe</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 bg-zinc-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12 text-center">Frequently Asked Questions</h2>
+      <div class="max-w-3xl mx-auto space-y-4">
+        {faqs.map((f) => (
+          <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+            <h3 class="text-lg font-semibold text-zinc-900 mb-2">{f.question}</h3>
+            <p class="text-zinc-600">{f.answer}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 bg-zinc-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Fix What's Broken?</h2>
+        <p class="text-xl text-zinc-300 mb-10">
+          Stop guessing. Get expert insights that show you exactly where your product is failing users — and how to fix it fast.
+        </p>
+        <a
+          href={STRIPE_URL}
+          class="inline-flex items-center px-8 py-4 bg-white text-zinc-900 text-lg font-semibold rounded-lg hover:bg-zinc-100 transition-colors mb-8"
+        >
+          Start Your Audit Now &mdash; $997
+        </a>
+        <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-zinc-400">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+            48-Hour Delivery
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+            Money-Back Guarantee
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+            Strategy Call Included
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Structured Data -->
+  {pageSchema.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
+</Layout>

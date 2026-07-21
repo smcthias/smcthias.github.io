@@ -67,4 +67,4 @@ Four or five: your site is earning the call. Two or three: you're losing skeptic
 
 ---
 
-**Want to know what signals your site is sending?** I'll read it the way a skeptical first-time visitor does and tell you what's missing. [Let's talk about your project](/contact).
+**Want to know what signals your site is sending?** The free UX Health Check reads your site the way a skeptical first-time visitor does and returns a 0–100 score with your three highest-priority fixes. [Take the free UX Health Check](/ux-health-check).

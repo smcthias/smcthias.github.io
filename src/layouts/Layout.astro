@@ -54,49 +54,71 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
           </a>
 
           <!-- Desktop Navigation -->
-          <div class="hidden md:flex space-x-8">
-            <a
-              href={`${base}/`}
-              class={`hover:text-zinc-600 transition-colors ${currentPath === base || currentPath === `${base}/` ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
-            >
-              Home
-            </a>
-            <a
-              href={`${base}/services`}
-              class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/services') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
-            >
-              Services
-            </a>
-            <a
-              href={`${base}/works`}
-              class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/works') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
-            >
-              Works
-            </a>
-            <a
-              href={`${base}/gallery`}
-              class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/gallery') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
-            >
-              Gallery
-            </a>
-            <a
-              href={`${base}/about`}
-              class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/about') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
-            >
-              About
-            </a>
-            <a
-              href={`${base}/blog`}
-              class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/blog') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
-            >
-              Blog
-            </a>
-            <a
-              href={`${base}/ux-health-check`}
-              class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/ux-health-check') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
-            >
-              UX Health Check
-            </a>
+          <div class="hidden md:flex items-center space-x-8">
+            <!-- Work dropdown -->
+            <div class="relative group">
+              <a
+                href={`${base}/works`}
+                class={`flex items-center gap-1 hover:text-zinc-600 transition-colors ${currentPath.includes('/works') || currentPath.includes('/gallery') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+              >
+                Work
+                <svg class="w-4 h-4 transition-transform duration-150 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              <div class="absolute left-0 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-150 z-50">
+                <div class="bg-white border border-zinc-200 rounded-lg shadow-lg py-2 min-w-[180px]">
+                  <a href={`${base}/works`} class={`block px-4 py-2.5 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/works') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}>Case Studies</a>
+                  <a href={`${base}/gallery`} class={`block px-4 py-2.5 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/gallery') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}>Gallery</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Services dropdown -->
+            <div class="relative group">
+              <a
+                href={`${base}/services`}
+                class={`flex items-center gap-1 hover:text-zinc-600 transition-colors ${currentPath.includes('/services') || currentPath.includes('/ux-health-check') || currentPath.includes('/ux-audit') || currentPath.includes('/pricing') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+              >
+                Services
+                <svg class="w-4 h-4 transition-transform duration-150 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              <div class="absolute left-0 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-150 z-50">
+                <div class="bg-white border border-zinc-200 rounded-lg shadow-lg py-2 min-w-[220px]">
+                  <a href={`${base}/services`} class={`block px-4 py-2.5 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath === `${base}/services` || currentPath === `${base}/services/` ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}>Our Services</a>
+                  <a href={`${base}/services/landing-page-design`} class={`block pl-7 pr-4 py-2 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/services/landing-page-design') ? 'text-zinc-900 font-semibold' : 'text-zinc-500'}`}>Landing Page Design</a>
+                  <a href={`${base}/services/website-refresh`} class={`block pl-7 pr-4 py-2 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/services/website-refresh') ? 'text-zinc-900 font-semibold' : 'text-zinc-500'}`}>Website Refresh</a>
+                  <a href={`${base}/services/brand-identity`} class={`block pl-7 pr-4 py-2 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/services/brand-identity') ? 'text-zinc-900 font-semibold' : 'text-zinc-500'}`}>Brand Identity</a>
+                  <a href={`${base}/services/email-campaigns`} class={`block pl-7 pr-4 py-2 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/services/email-campaigns') ? 'text-zinc-900 font-semibold' : 'text-zinc-500'}`}>Email Campaigns</a>
+                  <div class="my-2 border-t border-zinc-100"></div>
+                  <a href={`${base}/pricing`} class={`block px-4 py-2.5 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/pricing') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}>Pricing</a>
+                  <a href={`${base}/ux-health-check`} class={`block px-4 py-2.5 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/ux-health-check') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}>UX Health Check</a>
+                  <a href={`${base}/ux-audit`} class={`block px-4 py-2.5 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/ux-audit') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}>UX Audit</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- About dropdown -->
+            <div class="relative group">
+              <a
+                href={`${base}/about`}
+                class={`flex items-center gap-1 hover:text-zinc-600 transition-colors ${currentPath.includes('/about') || currentPath.includes('/blog') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+              >
+                About
+                <svg class="w-4 h-4 transition-transform duration-150 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              <div class="absolute left-0 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-150 z-50">
+                <div class="bg-white border border-zinc-200 rounded-lg shadow-lg py-2 min-w-[180px]">
+                  <a href={`${base}/about`} class={`block px-4 py-2.5 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/about') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}>About Me</a>
+                  <a href={`${base}/blog`} class={`block px-4 py-2.5 text-sm hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${currentPath.includes('/blog') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}>Blog</a>
+                </div>
+              </div>
+            </div>
+
             <a
               href={`${base}/contact`}
               class={`hover:text-zinc-600 transition-colors ${currentPath.includes('/contact') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
@@ -127,16 +149,10 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
             Home
           </a>
           <a
-            href={`${base}/services`}
-            class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/services') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
-          >
-            Services
-          </a>
-          <a
             href={`${base}/works`}
             class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/works') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
           >
-            Works
+            Case Studies
           </a>
           <a
             href={`${base}/gallery`}
@@ -145,10 +161,46 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
             Gallery
           </a>
           <a
+            href={`${base}/services`}
+            class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath === `${base}/services` || currentPath === `${base}/services/` ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+          >
+            Our Services
+          </a>
+          <a
+            href={`${base}/services/landing-page-design`}
+            class={`block py-2 pl-4 text-sm hover:text-zinc-600 transition-colors ${currentPath.includes('/services/landing-page-design') ? 'text-zinc-900 font-semibold' : 'text-zinc-500'}`}
+          >
+            Landing Page Design
+          </a>
+          <a
+            href={`${base}/services/website-refresh`}
+            class={`block py-2 pl-4 text-sm hover:text-zinc-600 transition-colors ${currentPath.includes('/services/website-refresh') ? 'text-zinc-900 font-semibold' : 'text-zinc-500'}`}
+          >
+            Website Refresh
+          </a>
+          <a
+            href={`${base}/services/brand-identity`}
+            class={`block py-2 pl-4 text-sm hover:text-zinc-600 transition-colors ${currentPath.includes('/services/brand-identity') ? 'text-zinc-900 font-semibold' : 'text-zinc-500'}`}
+          >
+            Brand Identity
+          </a>
+          <a
+            href={`${base}/services/email-campaigns`}
+            class={`block py-2 pl-4 text-sm hover:text-zinc-600 transition-colors ${currentPath.includes('/services/email-campaigns') ? 'text-zinc-900 font-semibold' : 'text-zinc-500'}`}
+          >
+            Email Campaigns
+          </a>
+          <a
+            href={`${base}/pricing`}
+            class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/pricing') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+          >
+            Pricing
+          </a>
+          <a
             href={`${base}/about`}
             class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/about') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
           >
-            About
+            About Me
           </a>
           <a
             href={`${base}/blog`}
@@ -161,6 +213,12 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
             class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/ux-health-check') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
           >
             UX Health Check
+          </a>
+          <a
+            href={`${base}/ux-audit`}
+            class={`block py-2 hover:text-zinc-600 transition-colors ${currentPath.includes('/ux-audit') ? 'text-zinc-900 font-semibold' : 'text-zinc-700'}`}
+          >
+            UX Audit
           </a>
           <a
             href={`${base}/contact`}
@@ -218,6 +276,7 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
               <li><a href={`${base}/services/website-refresh`} class="text-zinc-400 hover:text-white transition-colors">Website Refresh</a></li>
               <li><a href={`${base}/services/brand-identity`} class="text-zinc-400 hover:text-white transition-colors">Brand Identity</a></li>
               <li><a href={`${base}/services/email-campaigns`} class="text-zinc-400 hover:text-white transition-colors">Email Campaigns</a></li>
+              <li><a href={`${base}/pricing`} class="text-zinc-400 hover:text-white transition-colors">Pricing</a></li>
             </ul>
           </div>
 
@@ -225,6 +284,7 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
             <h2 class="text-xs font-semibold text-zinc-200 uppercase tracking-wider mb-4">Get Started</h2>
             <ul class="space-y-3 text-sm">
               <li><a href={`${base}/ux-health-check`} class="text-zinc-400 hover:text-white transition-colors">UX Health Check</a></li>
+              <li><a href={`${base}/ux-audit`} class="text-zinc-400 hover:text-white transition-colors">UX Audit</a></li>
               <li><a href={`${base}/contact`} class="text-zinc-400 hover:text-white transition-colors">Contact</a></li>
               <li><a href="mailto:savellem@gmail.com" class="text-zinc-400 hover:text-white transition-colors">savellem@gmail.com</a></li>
             </ul>

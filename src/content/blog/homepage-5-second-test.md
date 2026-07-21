@@ -75,4 +75,4 @@ Clarity sells. Especially in the first five seconds.
 
 ---
 
-**Want a second pair of eyes on your homepage?** I'll run the five-second test on your site and tell you what's missing. [Let's talk about your project](/contact).
+**Want a second pair of eyes on your homepage?** The free UX Health Check runs the five-second test and four other checks on your site, with an instant 0–100 score and three prioritized fixes. [Take the free UX Health Check](/ux-health-check).

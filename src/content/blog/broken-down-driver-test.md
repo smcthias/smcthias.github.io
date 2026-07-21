@@ -56,4 +56,4 @@ The drivers are already breaking down. The only question is whose site is ready 
 
 ---
 
-**Want a second opinion on whether your site would pass the test?** I review local-service sites for the same three questions every stressed customer is asking: do you fix this, can I trust you, and how fast can you help. [Let's talk about your project](/contact).
+**Want a second opinion on whether your site would pass the test?** The free UX Health Check scores your site across clarity, conversion, mobile, accessibility, and consistency — the same territory as the three questions every stressed customer is asking. [Take the free UX Health Check](/ux-health-check).
