@@ -1,6 +1,58 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
+
+// FAQ schema is derived from the on-page Q&As below — keep the two in sync.
+const faqs = [
+  {
+    question: 'What do I need to provide to get started?',
+    answer:
+      "The offer, your goal for the page — a signup, a demo, a purchase — and any brand assets you have: logo, colors, product photos, and copy if it exists. If the copy isn't written yet, I can work from a clear brief. The sharper the goal, the sharper the page.",
+  },
+  {
+    question: 'Do you write the copy, or just design it?',
+    answer:
+      "Design is my core, but a landing page lives or dies on its message, so I won't design around weak copy. I shape the structure, headlines, and flow, and I flag anything working against the conversion. If you need full copywriting, we can scope that in.",
+  },
+  {
+    question: 'Will the page work on mobile?',
+    answer:
+      "Yes. Most of your traffic is on a phone, so I design mobile-first and test on real devices before launch. A page that only looks right on a desktop is a page that's losing you leads.",
+  },
+  {
+    question: 'How do I know a new page will convert better than my current one?',
+    answer:
+      'Start with the free UX Health Check — it scores your current page across the five things that decide whether a visitor acts. For a deeper read on a live page, the 48-Hour UX Audit shows exactly where you are losing people before we redesign anything.',
+  },
+  {
+    question: 'What does a landing page cost?',
+    answer:
+      'It depends on scope — the number of sections, whether copy and photography are ready, and any integrations. You will find ranges on the pricing page, and we settle on a fixed number before any work starts. No hourly surprises.',
+  },
+];
+
+const pageSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Landing Page Design',
+    serviceType: 'Landing Page Design',
+    description:
+      'High-converting landing page design focused on a single conversion goal, designed mobile-first and built to launch.',
+    url: `${siteUrl}/services/landing-page-design`,
+    provider: { '@type': 'Person', name: 'Savelle McThias' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  },
+];
 ---
 
 <Layout title="Landing Page Design - Savelle Design" description="Create high-converting landing pages that turn visitors into customers.">
@@ -142,6 +194,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="py-20 bg-zinc-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12 text-center">Frequently Asked Questions</h2>
+        <div class="max-w-3xl mx-auto space-y-4">
+          {faqs.map((f) => (
+            <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+              <h3 class="text-lg font-semibold text-zinc-900 mb-2">{f.question}</h3>
+              <p class="text-zinc-600">{f.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-20 bg-zinc-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -161,4 +228,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </div>
     </section>
+
+  <!-- Structured Data -->
+  {pageSchema.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
 </Layout>

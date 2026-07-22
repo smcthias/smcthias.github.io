@@ -1,6 +1,58 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
+
+// FAQ schema is derived from the on-page Q&As below — keep the two in sync.
+const faqs = [
+  {
+    question: "What's the difference between a refresh and a full rebuild?",
+    answer:
+      "A refresh keeps what's working — your structure, content, and platform — and modernizes the look, the layout, and the parts that frustrate visitors. A rebuild starts over. Most businesses need a refresh, not a teardown; we'll figure out which on the first call.",
+  },
+  {
+    question: 'Will a redesign hurt my Google rankings?',
+    answer:
+      'Not when it is done carefully. I preserve your URLs, keep your content intact, and set up redirects for anything that moves, so the search equity you have built comes with you. A good redesign helps findability — it does not reset it.',
+  },
+  {
+    question: 'Can you work with my existing website platform?',
+    answer:
+      "Usually, yes — WordPress, Squarespace, Webflow, Shopify, and most common setups. If your current platform is holding you back, I'll tell you plainly and lay out the tradeoffs before you commit to a move.",
+  },
+  {
+    question: 'How do I know my site actually needs work?',
+    answer:
+      'Take the free UX Health Check — ten questions, an instant score, and your three highest-priority fixes. If you want a hands-on review of a live site, the 48-Hour UX Audit pinpoints what is costing you conversions.',
+  },
+  {
+    question: 'How much does a website refresh cost?',
+    answer:
+      'It comes down to how many pages change and how much new design and content is involved. Ranges are on the pricing page, and we agree on a fixed scope and price before I start.',
+  },
+];
+
+const pageSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Website Refresh & Redesign',
+    serviceType: 'Website Redesign',
+    description:
+      'A website redesign that modernizes structure, visuals, and content while preserving the search equity you have already built.',
+    url: `${siteUrl}/services/website-refresh`,
+    provider: { '@type': 'Person', name: 'Savelle McThias' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  },
+];
 ---
 
 <Layout title="Website Refresh & Redesign - Savelle Design" description="Modernize your website with a fresh design that better represents your brand and engages your audience.">
@@ -118,6 +170,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="py-20 bg-zinc-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12 text-center">Frequently Asked Questions</h2>
+        <div class="max-w-3xl mx-auto space-y-4">
+          {faqs.map((f) => (
+            <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+              <h3 class="text-lg font-semibold text-zinc-900 mb-2">{f.question}</h3>
+              <p class="text-zinc-600">{f.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-20 bg-zinc-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -137,4 +204,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </div>
     </section>
+
+  <!-- Structured Data -->
+  {pageSchema.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
 </Layout>

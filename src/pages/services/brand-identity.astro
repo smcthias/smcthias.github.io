@@ -1,6 +1,58 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
+
+// FAQ schema is derived from the on-page Q&As below — keep the two in sync.
+const faqs = [
+  {
+    question: 'Do I need a full rebrand, or just a touch-up?',
+    answer:
+      "Most businesses don't need to start over — they need consistency. If your logo, colors, and type work but show up differently everywhere, a touch-up pulls them into one coherent system. If the identity itself is off, we can talk about something bigger.",
+  },
+  {
+    question: 'What do I get at the end?',
+    answer:
+      'A tightened visual system you can actually use — logo files, a defined color palette, type choices, and simple guidelines so your brand looks the same on your site, in email, and on social. Anyone on your team should be able to apply it without guessing.',
+  },
+  {
+    question: 'Can you keep my existing logo?',
+    answer:
+      "Yes, if it's serving you. Plenty of brands have a solid logo surrounded by inconsistent everything-else. I'll be straight with you about whether the logo is worth keeping or quietly working against you.",
+  },
+  {
+    question: 'How does brand identity connect to my website?',
+    answer:
+      "They're the same job. A brand system is only real when it shows up where customers actually look — most of all your site. If you're refreshing your identity, it's often worth aligning your website at the same time.",
+  },
+  {
+    question: 'What does this cost?',
+    answer:
+      "It depends on how much you already have and how far it needs to go. Rates are on the pricing page, and we'll agree on scope and a fixed price up front.",
+  },
+];
+
+const pageSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Brand Identity',
+    serviceType: 'Brand Identity Design',
+    description:
+      'Refinement of your logo, color, type, and guidelines into one consistent visual system across your site, email, and social.',
+    url: `${siteUrl}/services/brand-identity`,
+    provider: { '@type': 'Person', name: 'Savelle McThias' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  },
+];
 ---
 
 <Layout title="Brand Identity Touchups - Savelle Design" description="Refine and elevate your brand identity to create a consistent, professional look across all touchpoints.">
@@ -118,6 +170,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="py-20 bg-zinc-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12 text-center">Frequently Asked Questions</h2>
+        <div class="max-w-3xl mx-auto space-y-4">
+          {faqs.map((f) => (
+            <div class="p-6 bg-white border border-zinc-200 rounded-lg">
+              <h3 class="text-lg font-semibold text-zinc-900 mb-2">{f.question}</h3>
+              <p class="text-zinc-600">{f.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-20 bg-zinc-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -137,4 +204,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </div>
     </section>
+
+  <!-- Structured Data -->
+  {pageSchema.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
 </Layout>
