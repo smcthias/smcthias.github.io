@@ -20,7 +20,17 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
     <!-- Google Tag Manager -->
     <script define:vars={{ gtmId: GTM_ID }}>
       window.dataLayer = window.dataLayer || [];
-      window.gtag = function gtag() { window.dataLayer.push(arguments); };
+      // Normalized gtag shim: turn gtag('event', name, params) into a clean
+      // dataLayer push ({event: name, ...params}) so GTM Custom Event triggers
+      // fire. gtm.js/config/set/consent commands still push raw arguments.
+      window.gtag = function gtag() {
+        const a = arguments;
+        if (a[0] === 'event' && typeof a[1] === 'string') {
+          window.dataLayer.push(Object.assign({ event: a[1] }, a[2] || {}));
+        } else {
+          window.dataLayer.push(a);
+        }
+      };
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });

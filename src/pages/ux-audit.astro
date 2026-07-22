@@ -358,4 +358,21 @@ const pageSchema = [
   {pageSchema.map((schema) => (
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   ))}
+
+  <!-- Fire begin_checkout when a visitor clicks through to the Stripe checkout,
+       so paid-audit intent is measurable even though payment completes off-site. -->
+  <script>
+    document.querySelectorAll('a[href^="https://buy.stripe.com"]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const gtag = (window as any).gtag;
+        if (typeof gtag === 'function') {
+          gtag('event', 'begin_checkout', {
+            currency: 'USD',
+            value: 997,
+            items: [{ item_name: '48-Hour UX Audit', price: 997 }],
+          });
+        }
+      });
+    });
+  </script>
 </Layout>
