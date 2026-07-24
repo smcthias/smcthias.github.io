@@ -1,11 +1,11 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 // Get all posts sorted by date for navigation
@@ -24,7 +24,7 @@ const allPosts = (await getCollection('blog')).sort(
 );
 
 // Find current post index and get adjacent posts
-const currentIndex = allPosts.findIndex((p) => p.slug === post.slug);
+const currentIndex = allPosts.findIndex((p) => p.id === post.id);
 const prev = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
 const next = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
@@ -60,7 +60,7 @@ const articleData = {
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": `${Astro.site || 'https://savelledesign.com'}${base}/blog/${post.slug}`
+    "@id": `${Astro.site || 'https://savelledesign.com'}${base}/blog/${post.id}`
   }
 };
 ---
@@ -133,8 +133,8 @@ const articleData = {
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div class="flex-1 w-full sm:w-auto">
           {prev && (
-            <a href={`${base}/blog/${prev.slug}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
-              <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`${base}/blog/${prev.id}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
+              <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
               <div>
@@ -146,12 +146,12 @@ const articleData = {
         </div>
         <div class="flex-1 w-full sm:w-auto text-left sm:text-right">
           {next && (
-            <a href={`${base}/blog/${next.slug}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
+            <a href={`${base}/blog/${next.id}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
               <div>
                 <div class="text-sm text-zinc-500">Next Post</div>
                 <div class="font-semibold">{next.data.title}</div>
               </div>
-              <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
             </a>

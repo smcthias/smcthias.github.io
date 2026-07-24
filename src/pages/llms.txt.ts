@@ -58,7 +58,7 @@ ${projects
 ${link('Blog', '/blog', 'Articles on UX, conversion, and web design for business owners')}
 ${posts
   .map((p) =>
-    link(p.data.title, `/blog/${p.slug}`, `${p.data.date.slice(0, 10)}. ${p.data.description}`)
+    link(p.data.title, `/blog/${p.id}`, `${p.data.date.slice(0, 10)}. ${p.data.description}`)
   )
   .join('\n')}
 
