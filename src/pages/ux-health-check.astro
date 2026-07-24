@@ -178,8 +178,8 @@ const questions: Question[] = [
           <!-- Email gate step -->
           <fieldset class="uxhc-step" data-step={questions.length} hidden>
             <legend class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-3">Almost there</legend>
-            <p class="text-2xl text-zinc-900 leading-snug mb-3">Where should I send your results?</p>
-            <p class="text-zinc-600 mb-6">Enter your email to reveal your UX score and personalized recommendations.</p>
+            <p class="text-2xl text-zinc-900 leading-snug mb-3">Enter your email to unlock your results</p>
+            <p class="text-zinc-600 mb-6">Your UX score and personalized recommendations appear right here on this page.</p>
             <input
               type="email"
               id="uxhc-email"
@@ -190,7 +190,7 @@ const questions: Question[] = [
               class="w-full px-5 py-4 rounded-lg bg-white border border-zinc-300 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-900 mb-2"
             />
             <p id="uxhc-email-error" class="text-sm text-red-600 mb-4 hidden">Please enter a valid email address.</p>
-            <p class="text-xs text-zinc-500">No spam. Your results, and the occasional useful note on UX. Unsubscribe anytime.</p>
+            <p class="text-xs text-zinc-500">No spam, no newsletter. I may follow up personally with a thought or two about your score — that's it.</p>
           </fieldset>
         </form>
 
@@ -417,13 +417,33 @@ const questions: Question[] = [
           '<div class="space-y-5 mb-10">' +
             '<h3 class="text-sm font-semibold text-zinc-900 uppercase tracking-wider">Your top 3 priorities</h3>' + recos +
           '</div>' +
+          buildCta(data.overall);
+      }
+
+      // The results CTA bridges to the paid 48-Hour UX Audit for scores with
+      // clear room to improve; strong scores get the lighter-touch contact ask.
+      function buildCta(score) {
+        if (score < 80) {
+          return (
+            '<div class="bg-zinc-50 border border-zinc-200 rounded-lg p-8 text-center">' +
+              '<p class="text-xl text-zinc-900 font-semibold mb-2">Want the real score?</p>' +
+              '<p class="text-zinc-600 max-w-xl mx-auto mb-6">This score is based on your own answers. In the 48-Hour UX Audit, I score your actual site: a recorded video walkthrough, a prioritized list of fixes, and a 60-minute strategy call — delivered in two business days for $997.</p>' +
+              '<div class="flex flex-wrap gap-3 justify-center">' +
+                '<a href="/ux-audit?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors">Get the 48-Hour UX Audit</a>' +
+                '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 border-2 border-zinc-300 text-zinc-900 text-sm font-medium rounded-lg hover:bg-white transition-colors">Ask about your results</a>' +
+              '</div>' +
+            '</div>'
+          );
+        }
+        return (
           '<div class="bg-zinc-50 border border-zinc-200 rounded-lg p-8 text-center">' +
             '<p class="text-xl text-zinc-900 font-semibold mb-2">Want help turning this into more calls and bookings?</p>' +
             '<p class="text-zinc-600 max-w-xl mx-auto mb-6">This score is based on your own answers. Ask me about your results and I\'ll walk you through what\'s really going on with your site — no obligation.</p>' +
             '<div class="flex flex-wrap gap-3 justify-center">' +
-              '<a href="/contact" class="inline-flex items-center px-6 py-3 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors">Ask about your results</a>' +
+              '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors">Ask about your results</a>' +
             '</div>' +
-          '</div>';
+          '</div>'
+        );
       }
 
       function finish() {

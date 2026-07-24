@@ -12,12 +12,10 @@ brief:
   - "Adorned was an innovative augmented reality mobile game that brought digital experiences to life in the real world. The game allowed users to discover themed and timed event scenarios through their mobile devices - from digital petting zoos at the park to virtual parades down the street."
   - "They needed a very modern branding kit to help pitch to investors and communicate the innovative nature of their platform. The branding needed to reflect the cutting-edge technology while remaining approachable and engaging for the target audience."
 results:
+  - value: "1"
+    label: "Investor-ready brand identity kit"
   - value: "209K+"
-    label: "American mobile gaming audience"
-  - value: "45%"
-    label: "Female audience"
-  - value: "38%"
-    label: "Ages 16-24"
+    label: "Target audience of U.S. mobile AR gamers"
 ctaHeading: "Need a modern brand identity?"
 ctaDescription: "Let's create a compelling brand that resonates with your audience and helps you stand out."
 images:

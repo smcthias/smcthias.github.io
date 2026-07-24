@@ -7,7 +7,7 @@ interface Props {
 
 const GTM_ID = 'GTM-5CKC7W8X';
 
-const { title, description = "Digital Experience Leader & UX/UI Designer in Scottsdale, AZ. 18+ years transforming business objectives into exceptional user experiences.", image = "/images/og-default.jpg" } = Astro.props;
+const { title, description = "UX/UI design that turns visitors into customers. Websites, brand identity, and email campaigns for growing businesses — 18+ years of experience, based in Scottsdale, AZ.", image = "/images/og-default.jpg" } = Astro.props;
 const currentPath = Astro.url.pathname;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const canonicalURL = new URL(currentPath, Astro.site || 'https://savelledesign.com');
@@ -340,7 +340,7 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
         "name": "Savelle Design",
-        "description": "Digital Experience Leader & UX/UI Designer specializing in landing pages, website refresh, brand identity, and email campaigns for growing businesses.",
+        "description": "UX/UI design studio specializing in landing pages, website refresh, brand identity, and email campaigns for growing businesses.",
         "url": "https://savelledesign.com",
         "logo": "https://savelledesign.com/favicon.svg",
         "image": "https://savelledesign.com/images/og-default.jpg",

@@ -14,11 +14,11 @@ brief:
   - "The project had a very quick turnaround of 5 days from concept to launch, requiring efficient collaboration and rapid iteration."
 results:
   - value: "5 Days"
-    label: "Completion time"
-  - value: "800"
-    label: "Unicorn companies in America"
-  - value: "260K"
-    label: "Unicorn employees"
+    label: "From concept to launched brand and website"
+  - value: "1"
+    label: "Logo redesigned and identity modernized"
+  - value: "Custom"
+    label: "Illustrations that simplify complex finance"
 ctaHeading: "Need a fast turnaround on your project?"
 ctaDescription: "I specialize in rapid delivery without compromising quality. Let's discuss your tight deadline."
 images:

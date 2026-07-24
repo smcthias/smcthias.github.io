@@ -9,14 +9,14 @@ image: "works/lamesa-hero.png"
 imageAlt: "La Mesa RV e-commerce interface showcasing intuitive inventory filtering"
 ---
 
-Most e-commerce platforms show you products and let you buy them. But what if your inventory spans 13 locations? Or what if you're not just selling products, but services and experiences?
+Most e-commerce platforms show you products and let you buy them. But what if your inventory spans 11 locations? Or what if you're not just selling products, but services and experiences?
 
 Working with La Mesa RV and their sister company Van Up taught me that e-commerce is only "basic" when your needs are basic. Complex businesses need thoughtful solutions.
 
 ## Two Problems, One Approach: User-First Design
 
 **La Mesa RV: Making Inventory Searchable**
-When you have RV inventory across 13 locations, filtering becomes everything. I designed an intuitive system that works for both sales teams and customers—complex data, simple interface.
+When you have RV inventory across 11 locations, filtering becomes everything. I designed an intuitive system that works for both sales teams and customers—complex data, simple interface.
 
 **Van Up: E-Commerce Meets Service Scheduling**
 Van Up wasn't just selling parts—they were selling upgrade services. The site needed to let users schedule van upgrades, browse accessories, track their service status, and explore a lifestyle blog. All in one cohesive experience.
@@ -31,7 +31,7 @@ Van Up wasn't just selling parts—they were selling upgrade services. The site 
 
 ## The Impact
 
-10,000 monthly views. A $20 billion market. 13 locations seamlessly integrated. But the real measure of success? Sales teams and customers both love using it.
+10,000 monthly views. A $20 billion market. 11 locations seamlessly integrated. But the real measure of success? Sales teams and customers both love using it.
 
 E-commerce isn't about the transaction—it's about the experience. When you get the UX right, everything else follows.
 
