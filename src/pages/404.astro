@@ -8,33 +8,37 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   title="Page Not Found - Savelle Design"
   description="That page doesn't exist — but your project still can. Explore Savelle Design's work, services, and free UX Health Check."
 >
-  <section>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
+  <section class="relative overflow-hidden">
+    <!-- faint depth glow, matches the homepage hero stage -->
+    <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full opacity-60" style="background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 60%)"></div>
+
+    <div class="relative max-w-[1400px] mx-auto px-5 sm:px-8 py-24 md:py-36">
       <div class="max-w-2xl">
-        <p class="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-6">404 — Page not found</p>
-        <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6 leading-tight">
-          This page never came together.
+        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-6">404 — Page not found</p>
+        <h1 class="text-huge font-display text-paper mb-6">
+          This page never <span class="bracketed text-accent">came together</span>.
         </h1>
-        <p class="text-xl text-zinc-600 mb-8 leading-relaxed">
+        <p class="text-lg md:text-xl text-muted mb-8 leading-relaxed">
           The pieces are all here — they just don't add up to the page you were looking for.
           Your project, on the other hand, still can.
         </p>
         <div class="flex flex-wrap gap-4">
           <a
+            href={`${base}/`}
+            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
+          >
+            Back home
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a
             href={`${base}/works`}
-            class="px-8 py-3 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors font-medium"
+            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-md border border-line text-paper hover:border-accent hover:text-accent transition-colors"
           >
             See the Work
           </a>
           <a
-            href={`${base}/services`}
-            class="px-8 py-3 border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
-          >
-            Services
-          </a>
-          <a
             href={`${base}/contact`}
-            class="px-8 py-3 border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
+            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-md border border-line text-paper hover:border-accent hover:text-accent transition-colors"
           >
             Get in Touch
           </a>

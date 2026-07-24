@@ -70,31 +70,31 @@ const pageSchema = [
 >
   <!-- Hero -->
   <section class="py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="max-w-3xl">
-        <p class="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-6">Limited Availability &middot; 48-Hour Turnaround</p>
-        <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-6 leading-tight">
-          Get Expert UX Insights in Just 48 Hours
+        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">Limited Availability &middot; 48-Hour Turnaround</p>
+        <h1 class="font-display text-huge text-paper mb-6 leading-tight">
+          Get Expert UX Insights in Just <span class="bracketed text-accent">48 Hours</span>
         </h1>
-        <p class="text-xl text-zinc-600 leading-relaxed mb-10">
+        <p class="text-xl text-muted leading-relaxed mb-10">
           I take your site apart — piece by piece — and show you exactly how to put it back together better. A comprehensive UX audit with actionable recommendations, delivered in two business days.
         </p>
         <div class="flex flex-wrap gap-4 mb-6">
           <a
             href={STRIPE_URL}
-            class="inline-flex items-center px-8 py-4 bg-zinc-900 text-white text-base font-medium rounded-lg hover:bg-zinc-800 transition-colors"
+            class="inline-flex items-center px-7 py-3.5 bg-accent text-ink text-base font-medium rounded-md hover:bg-accent-dim transition-colors"
           >
             Get Your Audit Now &mdash; $997
           </a>
           <a
             href="#whats-included"
-            class="inline-flex items-center px-8 py-4 border-2 border-zinc-300 text-zinc-900 text-base font-medium rounded-lg hover:bg-zinc-50 transition-colors"
+            class="inline-flex items-center px-7 py-3.5 border border-line text-paper text-base font-medium rounded-md hover:border-accent hover:text-accent transition-colors"
           >
             See What's Included
           </a>
         </div>
-        <p class="text-sm text-zinc-500">
-          <svg class="w-4 h-4 inline-block mr-1 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+        <p class="text-sm text-faint">
+          <svg class="w-4 h-4 inline-block mr-1 text-accent" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
           </svg>
           One-time payment &middot; No recurring fees &middot; Money-back guarantee
@@ -104,76 +104,76 @@ const pageSchema = [
   </section>
 
   <!-- Stats -->
-  <section class="py-16 bg-zinc-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="py-16 bg-surface border-y border-line">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
         <div>
-          <div class="text-4xl font-bold text-white mb-2">48 Hours</div>
-          <div class="text-zinc-400">Turnaround Time</div>
+          <div class="text-big font-display text-accent mb-2">48 Hours</div>
+          <div class="text-muted">Turnaround Time</div>
         </div>
         <div>
-          <div class="text-4xl font-bold text-white mb-2">Two Decades</div>
-          <div class="text-zinc-400">UX Design Experience</div>
+          <div class="text-big font-display text-accent mb-2">Two Decades</div>
+          <div class="text-muted">UX Design Experience</div>
         </div>
         <div>
-          <div class="text-4xl font-bold text-white mb-2">$997</div>
-          <div class="text-zinc-400">Fixed Investment</div>
+          <div class="text-big font-display text-accent mb-2">$997</div>
+          <div class="text-muted">Fixed Investment</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- What's Included -->
-  <section id="whats-included" class="py-20 bg-zinc-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="whats-included" class="py-20 bg-surface border-y border-line">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">What You'll Receive</h2>
-        <p class="text-xl text-zinc-600">A complete UX evaluation delivered in two business days</p>
+        <h2 class="text-big md:text-huge font-display text-paper mb-4">What You'll Receive</h2>
+        <p class="text-xl text-muted">A complete UX evaluation delivered in two business days</p>
       </div>
 
       <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-        <div class="p-8 bg-white border border-zinc-200 rounded-lg">
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Recorded Walkthrough Video</h3>
-          <p class="text-zinc-600 mb-4">
+        <div class="p-8 bg-ink border border-line rounded-lg">
+          <h3 class="text-xl font-display text-paper mb-3">Recorded Walkthrough Video</h3>
+          <p class="text-muted mb-4">
             Watch me navigate your product as a first-time user. I'll verbalize my thought process, identify confusion points, and highlight where the experience breaks down.
           </p>
-          <ul class="space-y-2 text-zinc-600 text-sm">
+          <ul class="space-y-2 text-muted text-sm">
             <li>&bull; 20-30 minute screen recording</li>
             <li>&bull; Real-time first impressions</li>
             <li>&bull; User perspective insights</li>
           </ul>
         </div>
 
-        <div class="p-8 bg-white border border-zinc-200 rounded-lg">
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Prioritized UX/UI Issues</h3>
-          <p class="text-zinc-600 mb-4">
+        <div class="p-8 bg-ink border border-line rounded-lg">
+          <h3 class="text-xl font-display text-paper mb-3">Prioritized UX/UI Issues</h3>
+          <p class="text-muted mb-4">
             Detailed documentation of every usability problem, accessibility concern, and design inconsistency — organized by severity and business impact.
           </p>
-          <ul class="space-y-2 text-zinc-600 text-sm">
+          <ul class="space-y-2 text-muted text-sm">
             <li>&bull; Critical, high, medium, low priority ranking</li>
             <li>&bull; Screenshots with annotations</li>
             <li>&bull; Impact on conversions noted</li>
           </ul>
         </div>
 
-        <div class="p-8 bg-white border border-zinc-200 rounded-lg">
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Quick-Win Recommendations</h3>
-          <p class="text-zinc-600 mb-4">
+        <div class="p-8 bg-ink border border-line rounded-lg">
+          <h3 class="text-xl font-display text-paper mb-3">Quick-Win Recommendations</h3>
+          <p class="text-muted mb-4">
             Actionable improvements you can implement immediately for maximum impact with minimal effort. Start seeing results this week.
           </p>
-          <ul class="space-y-2 text-zinc-600 text-sm">
+          <ul class="space-y-2 text-muted text-sm">
             <li>&bull; Low-effort, high-impact changes</li>
             <li>&bull; Specific implementation guidance</li>
             <li>&bull; Estimated effort for each item</li>
           </ul>
         </div>
 
-        <div class="p-8 bg-white border border-zinc-200 rounded-lg">
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">60-Minute Strategy Call</h3>
-          <p class="text-zinc-600 mb-4">
+        <div class="p-8 bg-ink border border-line rounded-lg">
+          <h3 class="text-xl font-display text-paper mb-3">60-Minute Strategy Call</h3>
+          <p class="text-muted mb-4">
             Live video call to review findings, answer questions, discuss implementation priorities, and create an action plan for your team.
           </p>
-          <ul class="space-y-2 text-zinc-600 text-sm">
+          <ul class="space-y-2 text-muted text-sm">
             <li>&bull; Walkthrough of all findings</li>
             <li>&bull; Q&amp;A about recommendations</li>
             <li>&bull; Prioritization roadmap</li>
@@ -187,37 +187,37 @@ const pageSchema = [
   <section class="py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">Why a 48-Hour UX Audit?</h2>
-        <p class="text-xl text-zinc-600">Fast, affordable, actionable — without the months-long agency engagement</p>
+        <h2 class="text-big md:text-huge font-display text-paper mb-4">Why a 48-Hour UX Audit?</h2>
+        <p class="text-xl text-muted">Fast, affordable, actionable — without the months-long agency engagement</p>
       </div>
 
       <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
         <div class="flex gap-4">
-          <div class="shrink-0 w-12 h-12 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold">1</div>
+          <div class="shrink-0 w-12 h-12 rounded-lg bg-accent text-ink flex items-center justify-center font-bold">1</div>
           <div>
-            <h3 class="text-lg font-semibold text-zinc-900 mb-2">Get Results Fast</h3>
-            <p class="text-zinc-600">Don't wait weeks or months. Identify critical issues and start improving your UX in about two business days.</p>
+            <h3 class="text-lg font-display text-paper mb-2">Get Results Fast</h3>
+            <p class="text-muted">Don't wait weeks or months. Identify critical issues and start improving your UX in about two business days.</p>
           </div>
         </div>
         <div class="flex gap-4">
-          <div class="shrink-0 w-12 h-12 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold">2</div>
+          <div class="shrink-0 w-12 h-12 rounded-lg bg-accent text-ink flex items-center justify-center font-bold">2</div>
           <div>
-            <h3 class="text-lg font-semibold text-zinc-900 mb-2">Fraction of Agency Cost</h3>
-            <p class="text-zinc-600">Get expert UX insights for $997 instead of $10,000+ agency audits. Same quality, better price.</p>
+            <h3 class="text-lg font-display text-paper mb-2">Fraction of Agency Cost</h3>
+            <p class="text-muted">Get expert UX insights for $997 instead of $10,000+ agency audits. Same quality, better price.</p>
           </div>
         </div>
         <div class="flex gap-4">
-          <div class="shrink-0 w-12 h-12 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold">3</div>
+          <div class="shrink-0 w-12 h-12 rounded-lg bg-accent text-ink flex items-center justify-center font-bold">3</div>
           <div>
-            <h3 class="text-lg font-semibold text-zinc-900 mb-2">Actionable, Not Academic</h3>
-            <p class="text-zinc-600">No fluff or theory. Every recommendation includes specific implementation steps your team can act on immediately.</p>
+            <h3 class="text-lg font-display text-paper mb-2">Actionable, Not Academic</h3>
+            <p class="text-muted">No fluff or theory. Every recommendation includes specific implementation steps your team can act on immediately.</p>
           </div>
         </div>
         <div class="flex gap-4">
-          <div class="shrink-0 w-12 h-12 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold">4</div>
+          <div class="shrink-0 w-12 h-12 rounded-lg bg-accent text-ink flex items-center justify-center font-bold">4</div>
           <div>
-            <h3 class="text-lg font-semibold text-zinc-900 mb-2">Two Decades of Experience</h3>
-            <p class="text-zinc-600">Benefit from nearly two decades designing for PetSmart, Plexus, Green Compass, and dozens of other brands.</p>
+            <h3 class="text-lg font-display text-paper mb-2">Two Decades of Experience</h3>
+            <p class="text-muted">Benefit from nearly two decades designing for PetSmart, Plexus, Green Compass, and dozens of other brands.</p>
           </div>
         </div>
       </div>
@@ -225,64 +225,64 @@ const pageSchema = [
   </section>
 
   <!-- Perfect For -->
-  <section class="py-20 bg-zinc-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12 text-center">Perfect For</h2>
+  <section class="py-20 bg-surface border-y border-line">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
+      <h2 class="text-big md:text-huge font-display text-paper mb-12 text-center">Perfect For</h2>
       <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-        <div class="p-8 bg-white border border-zinc-200 rounded-lg text-center">
+        <div class="p-8 bg-ink border border-line rounded-lg text-center">
           <div class="text-4xl mb-4">&#128205;</div>
-          <h3 class="text-lg font-semibold text-zinc-900 mb-3">Local &amp; Service Businesses</h3>
-          <p class="text-zinc-600 text-sm">Your site should be producing calls and bookings. Find out exactly what's stopping it.</p>
+          <h3 class="text-lg font-display text-paper mb-3">Local &amp; Service Businesses</h3>
+          <p class="text-muted text-sm">Your site should be producing calls and bookings. Find out exactly what's stopping it.</p>
         </div>
-        <div class="p-8 bg-white border border-zinc-200 rounded-lg text-center">
+        <div class="p-8 bg-ink border border-line rounded-lg text-center">
           <div class="text-4xl mb-4">&#128722;</div>
-          <h3 class="text-lg font-semibold text-zinc-900 mb-3"><span class="whitespace-nowrap">E-commerce</span></h3>
-          <p class="text-zinc-600 text-sm">Reduce cart abandonment and increase conversions with checkout flow optimization.</p>
+          <h3 class="text-lg font-display text-paper mb-3"><span class="whitespace-nowrap">E-commerce</span></h3>
+          <p class="text-muted text-sm">Reduce cart abandonment and increase conversions with checkout flow optimization.</p>
         </div>
-        <div class="p-8 bg-white border border-zinc-200 rounded-lg text-center">
+        <div class="p-8 bg-ink border border-line rounded-lg text-center">
           <div class="text-4xl mb-4">&#128640;</div>
-          <h3 class="text-lg font-semibold text-zinc-900 mb-3">SaaS &amp; Startups</h3>
-          <p class="text-zinc-600 text-sm">Improve onboarding, reduce churn, and validate your MVP with expert UX insights.</p>
+          <h3 class="text-lg font-display text-paper mb-3">SaaS &amp; Startups</h3>
+          <p class="text-muted text-sm">Improve onboarding, reduce churn, and validate your MVP with expert UX insights.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- How It Works -->
-  <section class="py-20 bg-zinc-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="py-20">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">How It Works</h2>
-        <p class="text-xl text-zinc-400">Simple, fast, and completely hassle-free</p>
+        <h2 class="text-big md:text-huge font-display text-paper mb-4">How It Works</h2>
+        <p class="text-xl text-muted">Simple, fast, and completely hassle-free</p>
       </div>
 
       <div class="space-y-8 max-w-3xl mx-auto">
         <div class="flex gap-6">
-          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold shrink-0">1</div>
+          <div class="w-12 h-12 bg-accent text-ink rounded-lg flex items-center justify-center text-xl font-bold shrink-0">1</div>
           <div>
-            <h3 class="text-xl font-semibold text-white mb-2">Purchase &amp; Share Access</h3>
-            <p class="text-zinc-300">Complete your purchase and provide access to your website or application. I'll need a demo account for SaaS products or your production URL for public sites.</p>
+            <h3 class="text-xl font-display text-paper mb-2">Purchase &amp; Share Access</h3>
+            <p class="text-muted">Complete your purchase and provide access to your website or application. I'll need a demo account for SaaS products or your production URL for public sites.</p>
           </div>
         </div>
         <div class="flex gap-6">
-          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold shrink-0">2</div>
+          <div class="w-12 h-12 bg-accent text-ink rounded-lg flex items-center justify-center text-xl font-bold shrink-0">2</div>
           <div>
-            <h3 class="text-xl font-semibold text-white mb-2">I Conduct the Audit</h3>
-            <p class="text-zinc-300">Within two business days, I'll thoroughly evaluate your product, record my walkthrough, document all issues, and compile quick-win recommendations.</p>
+            <h3 class="text-xl font-display text-paper mb-2">I Conduct the Audit</h3>
+            <p class="text-muted">Within two business days, I'll thoroughly evaluate your product, record my walkthrough, document all issues, and compile quick-win recommendations.</p>
           </div>
         </div>
         <div class="flex gap-6">
-          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold shrink-0">3</div>
+          <div class="w-12 h-12 bg-accent text-ink rounded-lg flex items-center justify-center text-xl font-bold shrink-0">3</div>
           <div>
-            <h3 class="text-xl font-semibold text-white mb-2">Receive Your Audit</h3>
-            <p class="text-zinc-300">Get your complete audit deliverable including video walkthrough, prioritized issues list, and actionable recommendations document.</p>
+            <h3 class="text-xl font-display text-paper mb-2">Receive Your Audit</h3>
+            <p class="text-muted">Get your complete audit deliverable including video walkthrough, prioritized issues list, and actionable recommendations document.</p>
           </div>
         </div>
         <div class="flex gap-6">
-          <div class="w-12 h-12 bg-white text-zinc-900 rounded-lg flex items-center justify-center text-xl font-bold shrink-0">4</div>
+          <div class="w-12 h-12 bg-accent text-ink rounded-lg flex items-center justify-center text-xl font-bold shrink-0">4</div>
           <div>
-            <h3 class="text-xl font-semibold text-white mb-2">Strategy Call</h3>
-            <p class="text-zinc-300">Schedule your 60-minute strategy call to review findings, ask questions, prioritize improvements, and create your implementation roadmap.</p>
+            <h3 class="text-xl font-display text-paper mb-2">Strategy Call</h3>
+            <p class="text-muted">Schedule your 60-minute strategy call to review findings, ask questions, prioritize improvements, and create your implementation roadmap.</p>
           </div>
         </div>
       </div>
@@ -291,16 +291,16 @@ const pageSchema = [
 
   <!-- Testimonial -->
   <section class="py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-3xl mx-auto p-10 md:p-12 bg-zinc-50 border border-zinc-200 rounded-lg">
-        <blockquote class="text-xl text-zinc-700 leading-relaxed mb-8">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
+      <div class="max-w-3xl mx-auto p-10 md:p-12 bg-surface border border-line rounded-lg">
+        <blockquote class="text-xl text-paper leading-relaxed mb-8">
           &ldquo;Savelle is one of the most talented UX experts I've had the pleasure of working with. Within a very short period of time after his hire, he was knocking out work items and client side code. The impact of his effort and his work will be felt for a very long time.&rdquo;
         </blockquote>
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-full bg-zinc-900 text-white flex items-center justify-center font-semibold">DK</div>
+          <div class="w-12 h-12 rounded-full bg-accent text-ink flex items-center justify-center font-semibold">DK</div>
           <div>
-            <div class="font-semibold text-zinc-900">Daniel Kruger</div>
-            <div class="text-sm text-zinc-500">VP of Software Development, SyberSafe</div>
+            <div class="font-medium text-paper">Daniel Kruger</div>
+            <div class="text-sm text-faint">VP of Software Development, SyberSafe</div>
           </div>
         </div>
       </div>
@@ -308,14 +308,14 @@ const pageSchema = [
   </section>
 
   <!-- FAQ -->
-  <section class="py-20 bg-zinc-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12 text-center">Frequently Asked Questions</h2>
+  <section class="py-20 bg-surface border-y border-line">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
+      <h2 class="text-big md:text-huge font-display text-paper mb-12 text-center">Frequently Asked Questions</h2>
       <div class="max-w-3xl mx-auto space-y-4">
         {faqs.map((f) => (
-          <div class="p-6 bg-white border border-zinc-200 rounded-lg">
-            <h3 class="text-lg font-semibold text-zinc-900 mb-2">{f.question}</h3>
-            <p class="text-zinc-600">{f.answer}</p>
+          <div class="p-6 bg-ink border border-line rounded-lg">
+            <h3 class="text-lg font-display text-paper mb-2">{f.question}</h3>
+            <p class="text-muted">{f.answer}</p>
           </div>
         ))}
       </div>
@@ -323,30 +323,30 @@ const pageSchema = [
   </section>
 
   <!-- Final CTA -->
-  <section class="py-20 bg-zinc-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="py-20 bg-surface border-t border-line">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Fix What's Broken?</h2>
-        <p class="text-xl text-zinc-300 mb-10">
+        <h2 class="text-big md:text-huge font-display text-paper mb-6">Ready to Fix What's Broken?</h2>
+        <p class="text-xl text-muted mb-10">
           Stop guessing. Get expert insights that show you exactly where your product is failing users — and how to fix it fast.
         </p>
         <a
           href={STRIPE_URL}
-          class="inline-flex items-center px-8 py-4 bg-white text-zinc-900 text-lg font-semibold rounded-lg hover:bg-zinc-100 transition-colors mb-8"
+          class="inline-flex items-center px-8 py-4 bg-accent text-ink text-lg font-medium rounded-md hover:bg-accent-dim transition-colors mb-8"
         >
           Start Your Audit Now &mdash; $997
         </a>
-        <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-zinc-400">
+        <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-faint">
           <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+            <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
             48-Hour Delivery
           </div>
           <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+            <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
             Money-Back Guarantee
           </div>
           <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+            <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
             Strategy Call Included
           </div>
         </div>

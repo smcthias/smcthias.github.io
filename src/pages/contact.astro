@@ -46,16 +46,16 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 >
   <!-- Hero -->
   <section class="py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="max-w-3xl">
-        <p class="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-6">Start a project</p>
-        <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-6 leading-tight">
-          Tell me what's broken. I'll tell you how I'll fix it.
+        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">Start a project</p>
+        <h1 class="font-display text-huge text-paper mb-6 leading-tight">
+          Tell me what's broken. I'll tell you how I'll <span class="bracketed text-accent">fix it</span>.
         </h1>
-        <p class="text-xl text-zinc-600 leading-relaxed">
+        <p class="text-xl text-muted leading-relaxed">
           Share a few details about your product and goals. You'll hear back from me personally —
           usually within one business day. Not ready to commit?
-          <a href="/ux-health-check" class="text-zinc-900 underline underline-offset-4 hover:text-zinc-600 whitespace-nowrap">Take the free UX Health Check first</a>.
+          <a href="/ux-health-check" class="text-paper underline underline-offset-4 decoration-line hover:text-accent hover:decoration-accent transition-colors whitespace-nowrap">Take the free UX Health Check first</a>.
         </p>
       </div>
     </div>
@@ -63,7 +63,7 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 
   <!-- Two-column: trust rail + form -->
   <section class="pb-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto">
 
         <!-- Form (first on mobile — the action) -->
@@ -73,10 +73,10 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
             data-endpoint={FORM_ENDPOINT}
             action={FORM_ENDPOINT}
             method="POST"
-            class="bg-white border border-zinc-200 rounded-lg shadow-xs p-8"
+            class="bg-surface border border-line rounded-lg p-8"
             novalidate
           >
-            <h2 class="text-xl font-semibold text-zinc-900 mb-6">Tell me about your project</h2>
+            <h2 class="text-xl font-display text-paper mb-6">Tell me about your project</h2>
 
             <!-- hidden attribution fields (populated by script) -->
             <input type="hidden" name="form_type" value="contact" />
@@ -90,54 +90,54 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 
             <div class="space-y-6">
               <div>
-                <label for="cf-name" class="block text-sm text-zinc-700 mb-2">Name</label>
+                <label for="cf-name" class="block text-sm text-muted mb-2">Name</label>
                 <input id="cf-name" name="name" type="text" required autocomplete="name"
-                  class="w-full bg-white border border-zinc-300 rounded-lg px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:outline-hidden focus:border-zinc-900 transition-colors" />
-                <p data-error-for="cf-name" class="text-sm text-red-600 mt-1.5 hidden" role="alert">Please enter your name.</p>
+                  class="w-full bg-surface-2 border border-line rounded-md px-4 py-3 text-base text-paper placeholder-faint focus:outline-hidden focus:border-accent transition-colors" />
+                <p data-error-for="cf-name" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter your name.</p>
               </div>
 
               <div>
-                <label for="cf-email" class="block text-sm text-zinc-700 mb-2">Work email</label>
+                <label for="cf-email" class="block text-sm text-muted mb-2">Work email</label>
                 <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="you@company.com"
-                  class="w-full bg-white border border-zinc-300 rounded-lg px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:outline-hidden focus:border-zinc-900 transition-colors" />
-                <p data-error-for="cf-email" class="text-sm text-red-600 mt-1.5 hidden" role="alert">Please enter a valid email address.</p>
+                  class="w-full bg-surface-2 border border-line rounded-md px-4 py-3 text-base text-paper placeholder-faint focus:outline-hidden focus:border-accent transition-colors" />
+                <p data-error-for="cf-email" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter a valid email address.</p>
               </div>
 
               <fieldset>
-                <legend class="block text-sm text-zinc-700 mb-2">What do you need? <span class="text-zinc-400">(optional)</span></legend>
+                <legend class="block text-sm text-muted mb-2">What do you need? <span class="text-faint">(optional)</span></legend>
                 <div class="flex flex-wrap gap-2">
                   {projectTypes.map((t) => (
                     <label class="cursor-pointer">
                       <input type="radio" name="project_type" value={t} class="peer sr-only" />
-                      <span class="inline-flex px-4 py-2 rounded-lg border border-zinc-300 text-sm text-zinc-700 transition-colors hover:border-zinc-400 peer-checked:bg-zinc-900 peer-checked:text-white peer-checked:border-zinc-900 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-zinc-900">{t}</span>
+                      <span class="inline-flex px-4 py-2 rounded-md border border-line text-sm text-muted transition-colors hover:border-line-2 peer-checked:bg-accent peer-checked:text-ink peer-checked:border-accent peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent">{t}</span>
                     </label>
                   ))}
                 </div>
               </fieldset>
 
               <fieldset>
-                <legend class="block text-sm text-zinc-700 mb-2">Budget range <span class="text-zinc-400">(optional)</span></legend>
+                <legend class="block text-sm text-muted mb-2">Budget range <span class="text-faint">(optional)</span></legend>
                 <div class="flex flex-wrap gap-2">
                   {budgets.map((b) => (
                     <label class="cursor-pointer">
                       <input type="radio" name="budget" value={b} class="peer sr-only" />
-                      <span class="inline-flex px-4 py-2 rounded-lg border border-zinc-300 text-sm text-zinc-700 transition-colors hover:border-zinc-400 peer-checked:bg-zinc-900 peer-checked:text-white peer-checked:border-zinc-900 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-zinc-900">{b}</span>
+                      <span class="inline-flex px-4 py-2 rounded-md border border-line text-sm text-muted transition-colors hover:border-line-2 peer-checked:bg-accent peer-checked:text-ink peer-checked:border-accent peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent">{b}</span>
                     </label>
                   ))}
                 </div>
               </fieldset>
 
               <div>
-                <label for="cf-message" class="block text-sm text-zinc-700 mb-2">Tell me about the project</label>
+                <label for="cf-message" class="block text-sm text-muted mb-2">Tell me about the project</label>
                 <textarea id="cf-message" name="message" rows="5" required
-                  class="w-full bg-white border border-zinc-300 rounded-lg px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:outline-hidden focus:border-zinc-900 transition-colors resize-y"
+                  class="w-full bg-surface-2 border border-line rounded-md px-4 py-3 text-base text-paper placeholder-faint focus:outline-hidden focus:border-accent transition-colors resize-y"
                   placeholder="What are you building, what's not working, and what would success look like?"></textarea>
-                <p data-error-for="cf-message" class="text-sm text-red-600 mt-1.5 hidden" role="alert">Please add a few details.</p>
+                <p data-error-for="cf-message" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please add a few details.</p>
               </div>
             </div>
 
             <button type="submit" id="cf-submit"
-              class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 bg-zinc-900 text-white font-medium rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+              class="mt-8 w-full inline-flex items-center justify-center px-6 py-3.5 bg-accent text-ink font-medium rounded-md hover:bg-accent-dim transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
               <span id="cf-submit-label">Send project inquiry</span>
               <svg id="cf-spinner" class="hidden ml-2 w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -145,44 +145,44 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
               </svg>
             </button>
 
-            <p id="cf-form-error" class="text-sm text-red-600 mt-4 hidden" role="alert"></p>
-            <p class="text-xs text-zinc-500 mt-4">No newsletter — this goes straight to my inbox. Personal reply within one business day.</p>
+            <p id="cf-form-error" class="text-sm text-red-400 mt-4 hidden" role="alert"></p>
+            <p class="text-xs text-faint mt-4">No newsletter — this goes straight to my inbox. Personal reply within one business day.</p>
           </form>
 
           <!-- Success state (replaces the form) -->
-          <div id="contact-success" class="bg-white border border-zinc-200 rounded-lg shadow-xs p-10 text-center" hidden>
-            <div class="w-16 h-16 mx-auto bg-zinc-100 rounded-2xl flex items-center justify-center mb-6">
-              <svg class="w-8 h-8 text-zinc-900" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <div id="contact-success" class="bg-surface border border-line rounded-lg p-10 text-center" hidden>
+            <div class="w-16 h-16 mx-auto bg-accent rounded-2xl flex items-center justify-center mb-6">
+              <svg class="w-8 h-8 text-ink" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
               </svg>
             </div>
-            <h2 class="text-2xl font-bold text-zinc-900 mb-2">Got it<span id="cf-success-name"></span> — your inquiry is in.</h2>
-            <p class="text-zinc-600 max-w-md mx-auto">I read every message personally and reply within one business day. Talk soon.</p>
+            <h2 class="text-2xl font-display text-paper mb-2">Got it<span id="cf-success-name"></span> — your inquiry is in.</h2>
+            <p class="text-muted max-w-md mx-auto">I read every message personally and reply within one business day. Talk soon.</p>
           </div>
 
           <!-- Secondary contact method -->
-          <p class="text-sm text-zinc-500 mt-6">
+          <p class="text-sm text-faint mt-6">
             Prefer email?
-            <a href="mailto:savellem@gmail.com" class="text-zinc-700 hover:text-zinc-900 transition-colors">savellem@gmail.com</a>
+            <a href="mailto:savellem@gmail.com" class="text-muted hover:text-accent transition-colors">savellem@gmail.com</a>
             &middot;
-            <a href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer" class="text-zinc-700 hover:text-zinc-900 transition-colors">Connect on LinkedIn</a>
+            <a href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer" class="text-muted hover:text-accent transition-colors">Connect on LinkedIn</a>
           </p>
         </div>
 
         <!-- Trust rail -->
         <div class="order-2 lg:order-1">
           <!-- You work with me directly -->
-          <div class="border-l-2 border-zinc-900 pl-6 mb-12">
-            <p class="text-lg text-zinc-700 leading-relaxed mb-3">
+          <div class="border-l-2 border-accent pl-6 mb-12">
+            <p class="text-lg text-muted leading-relaxed mb-3">
               You'll work directly with me — no account managers, no junior hand-off. Senior,
               hands-on design from first call to final delivery.
             </p>
-            <p class="text-zinc-500">— Savelle McThias</p>
+            <p class="text-faint">— Savelle McThias</p>
           </div>
 
           {BOOKING_URL && (
             <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer"
-              class="inline-flex items-center px-6 py-3 mb-12 border-2 border-zinc-900 text-zinc-900 text-base font-medium rounded-lg hover:bg-zinc-50 transition-colors">
+              class="inline-flex items-center px-6 py-3 mb-12 border border-line text-paper text-base font-medium rounded-md hover:border-accent hover:text-accent transition-colors">
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
               Prefer to talk? Book a 30-min intro call
             </a>
@@ -190,7 +190,7 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 
           <!-- What happens next -->
           <div class="mb-12">
-            <h2 class="text-xs font-semibold text-zinc-900 uppercase tracking-widest mb-6">What happens next</h2>
+            <h2 class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-6">What happens next</h2>
             <ol class="space-y-6">
               {[
                 { t: 'You send a few details', d: 'The form on the right — takes about a minute.' },
@@ -198,10 +198,10 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
                 { t: 'You get a proposal', d: 'Clear scope, timeline, and investment. No surprises.' },
               ].map((step, i) => (
                 <li class="flex gap-4">
-                  <div class="shrink-0 w-9 h-9 rounded-full bg-zinc-900 text-white font-bold flex items-center justify-center text-sm">{i + 1}</div>
+                  <div class="shrink-0 w-9 h-9 rounded-full bg-accent text-ink font-bold flex items-center justify-center text-sm">{i + 1}</div>
                   <div>
-                    <p class="text-zinc-900 font-medium">{step.t}</p>
-                    <p class="text-sm text-zinc-600">{step.d}</p>
+                    <p class="text-paper font-medium">{step.t}</p>
+                    <p class="text-sm text-muted">{step.d}</p>
                   </div>
                 </li>
               ))}
@@ -210,12 +210,12 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 
           <!-- Proof: logos -->
           <div class="mb-10">
-            <p class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-5">Trusted by teams at</p>
+            <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-5">Trusted by teams at</p>
             <div>
               {logoRows.map((row, i) => (
                 <div class={`flex flex-wrap items-center gap-x-8 gap-y-4 ${i < logoRows.length - 1 ? 'mb-7' : ''}`}>
                   {row.map(({ src, alt, h }) => (
-                    <img src={src} alt={alt} class={`${h} w-auto object-contain brightness-0 opacity-40`} />
+                    <img src={src} alt={alt} class={`${h} w-auto object-contain brightness-0 invert opacity-50 hover:opacity-100 transition-opacity`} />
                   ))}
                 </div>
               ))}
@@ -224,16 +224,16 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 
           <!-- Proof: testimonial -->
           {testimonial && (
-            <figure class="border-t border-zinc-200 pt-8">
-              <blockquote class="text-zinc-700 leading-relaxed mb-4">&ldquo;{testimonial.quote}&rdquo;</blockquote>
+            <figure class="border-t border-line pt-8">
+              <blockquote class="text-muted leading-relaxed mb-4">&ldquo;{testimonial.quote}&rdquo;</blockquote>
               <figcaption class="text-sm">
-                <span class="text-zinc-900 font-semibold">{testimonial.name}</span>
-                <span class="text-zinc-500"> · {testimonial.title}, {testimonial.company}</span>
+                <span class="text-paper font-medium">{testimonial.name}</span>
+                <span class="text-faint"> · {testimonial.title}, {testimonial.company}</span>
               </figcaption>
             </figure>
           )}
 
-          <p class="text-sm text-zinc-500 mt-10">NDAs welcome · Based in Scottsdale, AZ · Working with teams anywhere</p>
+          <p class="text-sm text-faint mt-10">NDAs welcome · Based in Scottsdale, AZ · Working with teams anywhere</p>
         </div>
       </div>
     </div>
