@@ -13,7 +13,7 @@ const BOOKING_URL = '';
 
 const testimonial = {
   quote:
-    "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 13 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare.",
+    "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 11 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare.",
   name: 'Brian Fidler',
   title: 'Former Head of Marketing',
   company: 'La Mesa RV & Van Up',
@@ -22,10 +22,19 @@ const testimonial = {
 const logos = [
   { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart', h: 'h-[26px]' },
   { src: '/images/logos/logo-gm.svg', alt: 'GM', h: 'h-[34px]' },
+  { src: '/images/logos/logo-plexus.svg', alt: 'Plexus Worldwide', h: 'h-[30px]' },
   { src: '/images/logos/logo-sothebys.svg', alt: "Sotheby's", h: 'h-5' },
+  { src: '/images/logos/logo-lamesa.svg', alt: 'La Mesa RV', h: 'h-[26px]' },
   { src: '/images/logos/logo-universal.svg', alt: 'Universal', h: 'h-[34px]' },
+  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 'h-[34px]' },
+  { src: '/images/logos/logo-thebeachboys.svg', alt: 'The Beach Boys', h: 'h-[34px]' },
   { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals', h: 'h-3' },
+  { src: '/images/logos/logo-richdad.svg', alt: 'Rich Dad', h: 'h-3' },
+  { src: '/images/logos/logo-sanity.svg', alt: 'Sanity', h: 'h-5' },
 ];
+
+// 4 / 3 / 4 rows so no logo strands alone on the last line
+const logoRows = [logos.slice(0, 4), logos.slice(4, 7), logos.slice(7)];
 
 const projectTypes = ['Project', 'Retainer / fractional', 'UX audit', 'Not sure yet'];
 const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
@@ -33,7 +42,7 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 
 <Layout
   title="Work With Me - Savelle Design"
-  description="Have a project or role in mind? I work with growing businesses on web design, branding, and development — and with remote product teams as a senior designer or design engineer. Let's talk."
+  description="Have a project in mind? I work with growing businesses on web design, branding, and development. Share a few details and you'll hear back from me personally within one business day."
 >
   <!-- Hero -->
   <section class="py-20">
@@ -202,9 +211,13 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
           <!-- Proof: logos -->
           <div class="mb-10">
             <p class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-5">Trusted by teams at</p>
-            <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
-              {logos.map(({ src, alt, h }) => (
-                <img src={src} alt={alt} class={`${h} w-auto object-contain brightness-0 opacity-40`} />
+            <div>
+              {logoRows.map((row, i) => (
+                <div class={`flex flex-wrap items-center gap-x-8 gap-y-4 ${i < logoRows.length - 1 ? 'mb-7' : ''}`}>
+                  {row.map(({ src, alt, h }) => (
+                    <img src={src} alt={alt} class={`${h} w-auto object-contain brightness-0 opacity-40`} />
+                  ))}
+                </div>
               ))}
             </div>
           </div>
