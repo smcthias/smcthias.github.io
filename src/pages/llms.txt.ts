@@ -43,7 +43,6 @@ ${link('48-Hour UX Audit', '/ux-audit', 'Fixed-price $997 audit: recorded walkth
 ## Work
 
 ${link('Case Studies', '/works', 'Detailed project write-ups with brief, role, and measured results')}
-${link('Gallery', '/gallery', 'Visual portfolio of web, branding, UI, and email work')}
 ${projects
   .map((p) =>
     link(

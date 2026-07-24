@@ -43,21 +43,18 @@ pattern rather than introducing new tokens:
 
 ### Scanline theme & motion policy
 
-The site's "scattered pieces assemble into one picture" theme is expressed
-in canvas animation. **Motion is hover-only everywhere except the homepage
-hero.** `src/scripts/scanline-cards.ts` exports `initScanlineHover()`: the
-plain `<img>` stays put for layout/scroll and only shreds into horizontal
-strips for a brief pulse on hover (canvas built lazily on first hover, so a
-large grid like the 29 gallery thumbs costs nothing until touched). It's
-wired on the homepage Featured Work grid, `/works`, case-study visuals
-(`works/[slug]`), blog cards, and gallery thumbs — containers need
-`relative overflow-hidden` + `data-sl-hover`. The homepage hero
-(`#hero-weave`, inline script in `index.astro`, lg+) is the ONE full-volume
-moment (ambient drift + formation cycle). **Do not reintroduce the old
-construct/deconstruct-on-scroll treatment** — Brian found it disruptive and
-it was cut; it's in git history if ever wanted. `SectionDivider.astro` (a
-few ragged offset strips) echoes the theme statically at major section
-breaks. Below lg / reduced-motion / no-JS all fall back to the plain `<img>`.
+**All canvas/JS motion has been removed (2026-07-24) — the user found it
+glitchy.** The homepage hero canvas weave (`#hero-weave`), the hover shred
+pulse (`src/scripts/scanline-cards.ts`, `initScanlineHover()`, wired via
+`data-sl-hover` on the homepage Featured Work grid, `/works`, case-study
+visuals, blog cards, and gallery thumbs), the gallery hover zoom/shimmer
+loading effect, and the 404 page's ambient drift canvas (`#nf-weave`) were
+all deleted. `scanline-cards.ts` no longer exists. Images sitewide are now
+plain static `<img>` tags with zero animation — no hover zoom, no fade-in,
+no shred/glitch effects. **Do not reintroduce any of this** without
+explicit user request; the old implementation is in git history
+(pre-2026-07-24) if it's ever wanted again. `SectionDivider.astro` (a few
+ragged offset strips) is unaffected — it was always static CSS, no motion.
 
 ### Known Tailwind gotcha
 
@@ -82,12 +79,15 @@ nothing left to clean up on that front.
 
 Features ported from it into the main site before deletion:
 
-- **Gallery** (`src/pages/gallery.astro`) — same 29 images and copy as the old
-  `uxblog/src/pages/gallery.astro`. Assets live in
-  `public/images/gallery/{full,thumbs}/`, filenames unchanged
-  (`{full,thumb}-<slug>.jpg`). Restyled from dark to light theme; lightbox
-  modal intentionally keeps a dark overlay (standard lightbox convention,
-  independent of page theme).
+- **Gallery** — ported from `uxblog/src/pages/gallery.astro` (same 29 images
+  and copy), then **removed again at the user's request on 2026-07-24**. The
+  page (`src/pages/gallery.astro`), its nav entries (desktop "Work" dropdown,
+  mobile menu, footer sitemap), and its `llms.txt.ts` entry are gone; the
+  desktop nav's "Work" dropdown was collapsed back into a plain link straight
+  to `/works`. The image assets (`public/images/gallery/{full,thumbs}/`,
+  `{full,thumb}-<slug>.jpg`) were left in place, orphaned, in case the page
+  is ever brought back — check with the user before deleting them or
+  resurrecting the page (recoverable from git history pre-2026-07-24).
 - **UX Health Check** (`src/pages/ux-health-check.astro`) — same 10 questions,
   scoring logic, and lead-capture flow as the old uxblog page. Restyled to
   light theme. The Google Apps Script `FORM_ENDPOINT` for lead capture was
@@ -135,10 +135,11 @@ Features ported from it into the main site before deletion:
   like a joke aside than a testimonial) — mention this if the user asks why
   it's "missing."
 
-Both the Gallery and UX Health Check pages were added to the main nav
-(desktop + mobile) in `Layout.astro`, which the original uxblog nav did for
-Gallery but not for UX Health Check (it only linked to that page via a
-promotional CTA band component that wasn't ported).
+The UX Health Check page was added to the main nav (desktop + mobile) in
+`Layout.astro`, unlike the original uxblog nav, which only linked to that
+page via a promotional CTA band component that wasn't ported. (Gallery was
+also added to nav when ported, but both the page and its nav entries were
+later removed — see above.)
 
 **No phone number anywhere on this site.** It was removed from `contact.astro`
 and from the `telephone` field of the `Person` JSON-LD in `Layout.astro` at

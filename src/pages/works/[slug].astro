@@ -81,10 +81,8 @@ const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 
   <!-- Visuals Section -->
   <section class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Detail pages stay still so the work itself can be studied — the
-           theme only whispers here via a brief shred pulse on hover. -->
       <div class="space-y-8">
-        <div class="relative aspect-[16/9] rounded-lg overflow-hidden bg-zinc-100" data-sl-hover>
+        <div class="relative aspect-[16/9] rounded-lg overflow-hidden bg-zinc-100">
           <img
             src={`${base}/images/works/${project.data.images.hero}`}
             alt={`${project.data.title} Hero`}
@@ -93,7 +91,7 @@ const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 
           />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="relative aspect-[4/3] rounded-lg overflow-hidden bg-zinc-100" data-sl-hover>
+          <div class="relative aspect-[4/3] rounded-lg overflow-hidden bg-zinc-100">
             <img
               src={`${base}/images/works/${project.data.images.detail1}`}
               alt={`${project.data.title} Detail 1`}
@@ -101,7 +99,7 @@ const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 
               loading="lazy"
             />
           </div>
-          <div class="relative aspect-[4/3] rounded-lg overflow-hidden bg-zinc-100" data-sl-hover>
+          <div class="relative aspect-[4/3] rounded-lg overflow-hidden bg-zinc-100">
             <img
               src={`${base}/images/works/${project.data.images.detail2}`}
               alt={`${project.data.title} Detail 2`}
@@ -110,7 +108,7 @@ const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 
             />
           </div>
         </div>
-        <div class="relative aspect-[16/9] rounded-lg overflow-hidden bg-zinc-100" data-sl-hover>
+        <div class="relative aspect-[16/9] rounded-lg overflow-hidden bg-zinc-100">
           <img
             src={`${base}/images/works/${project.data.images.detail3}`}
             alt={`${project.data.title} Detail 3`}
@@ -198,9 +196,4 @@ const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 
     </div>
   </section>
 
-  <!-- Hover-only scanline pulse on project visuals (shared module) -->
-  <script>
-    import { initScanlineHover } from '../../scripts/scanline-cards';
-    initScanlineHover();
-  </script>
 </Layout>
