@@ -10,6 +10,13 @@ covers conventions and history that aren't obvious from reading the code.
   setup — this is v3, not v4).
 - Static output, deployed to GitHub Pages at savelledesign.com via
   `.github/workflows/deploy.yml` on push to `main`/`master`/`claude/**`.
+- **The deploy workflow gates on `astro check` (which `astro build` does
+  NOT run).** Run `npx astro check` before pushing — a change that builds
+  clean locally can still fail CI on TypeScript errors. Recurring trap: TS
+  doesn't carry a null-guard (`const el = getElementById(...) as X|null; if
+  (!el) return;`) into nested closures — re-alias after the guard
+  (`const canvas: X = el;`). This bit the hero weave script (9 "possibly
+  null" errors in CI, green local build).
 - Content collections (`src/content/projects`, `src/content/blog`) defined in
   `src/content/config.ts`.
 
@@ -33,6 +40,24 @@ pattern rather than introducing new tokens:
   — both must be updated together when adding/removing a page from nav.
 - No custom fonts beyond Plus Jakarta Sans (`font-sans`); there's no
   `font-display` token like the old uxblog site had.
+
+### Scanline theme & motion policy
+
+The site's "scattered pieces assemble into one picture" theme is expressed
+in canvas animation. **Motion is hover-only everywhere except the homepage
+hero.** `src/scripts/scanline-cards.ts` exports `initScanlineHover()`: the
+plain `<img>` stays put for layout/scroll and only shreds into horizontal
+strips for a brief pulse on hover (canvas built lazily on first hover, so a
+large grid like the 29 gallery thumbs costs nothing until touched). It's
+wired on the homepage Featured Work grid, `/works`, case-study visuals
+(`works/[slug]`), blog cards, and gallery thumbs — containers need
+`relative overflow-hidden` + `data-sl-hover`. The homepage hero
+(`#hero-weave`, inline script in `index.astro`, lg+) is the ONE full-volume
+moment (ambient drift + formation cycle). **Do not reintroduce the old
+construct/deconstruct-on-scroll treatment** — Brian found it disruptive and
+it was cut; it's in git history if ever wanted. `SectionDivider.astro` (a
+few ragged offset strips) echoes the theme statically at major section
+breaks. Below lg / reduced-motion / no-JS all fall back to the plain `<img>`.
 
 ### Known Tailwind gotcha
 
