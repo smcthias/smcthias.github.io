@@ -42,6 +42,10 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
           window.dataLayer.push(a);
         }
       };
+      // Only load GTM/GA on the production host — keeps previews and localhost
+      // out of the live GA4 property (the dataLayer/gtag shim above stays so
+      // nothing errors when the tag isn't loaded).
+      if (location.hostname === 'savelledesign.com' || location.hostname === 'www.savelledesign.com')
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
