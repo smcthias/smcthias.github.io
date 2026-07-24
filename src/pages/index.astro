@@ -274,8 +274,11 @@ const logos = [
     <script>
       (() => {
         const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-        const canvas = document.getElementById('hero-weave') as HTMLCanvasElement | null;
-        if (!canvas) return;
+        const canvasEl = document.getElementById('hero-weave') as HTMLCanvasElement | null;
+        if (!canvasEl) return;
+        // Re-alias after the guard: TS doesn't carry the null-narrowing
+        // into the nested function closures below.
+        const canvas: HTMLCanvasElement = canvasEl;
         const desktop = window.matchMedia('(min-width: 1024px)');
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
