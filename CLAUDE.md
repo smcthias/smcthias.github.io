@@ -6,8 +6,28 @@ covers conventions and history that aren't obvious from reading the code.
 
 ## Stack
 
-- Astro 5, Tailwind CSS 3 (config in `tailwind.config.mjs`, no `@theme`/CSS-first
-  setup — this is v3, not v4).
+- Astro 7, Tailwind CSS 4 — **CSS-first config, not the old v3
+  `tailwind.config.mjs` setup.** Theme customization (colors, font) lives in
+  the `@theme` block of `src/styles/global.css`, imported once from
+  `Layout.astro`. There is no `@astrojs/tailwind` integration anymore —
+  Tailwind is wired in via the `@tailwindcss/vite` plugin in
+  `astro.config.mjs`'s `vite.plugins`. `@tailwindcss/typography` is loaded
+  in CSS via `@plugin "@tailwindcss/typography";`, not the old
+  `plugins: [require(...)]` array.
+  - TypeScript is pinned to the 6.x line (`^6.0.3`), not the latest 7.x —
+    `@astrojs/check`'s peer range (`^5.0.0 || ^6.0.0`) doesn't support
+    TS 7 yet. Don't bump past 6.x until `@astrojs/check` does.
+  - **Trap: don't reintroduce a sitewide `* { margin: 0; padding: 0; }`
+    reset in a plain (unlayered) `<style is:global>` block.** Tailwind v4's
+    Preflight (auto-included by `@import "tailwindcss";`) already ships an
+    equivalent reset inside its own `base` CSS layer. An unlayered rule with
+    the same properties silently wins over *any* layered Tailwind utility —
+    including `.px-4`, `.mx-auto`, `.p-6`, etc. — regardless of selector
+    specificity or source order, because in CSS, unlayered styles always
+    beat `@layer`-wrapped ones. This exact bug shipped once already (every
+    page's padding/margin utilities silently no-op'd) and was fixed by
+    deleting the redundant reset from `Layout.astro`'s global style block
+    and trusting Preflight instead.
 - Static output, deployed to GitHub Pages at savelledesign.com via
   `.github/workflows/deploy.yml` on push to `main`/`master`/`claude/**`.
 - **The deploy workflow gates on `astro check` (which `astro build` does
@@ -17,8 +37,21 @@ covers conventions and history that aren't obvious from reading the code.
   (!el) return;`) into nested closures — re-alias after the guard
   (`const canvas: X = el;`). This bit the hero weave script (9 "possibly
   null" errors in CI, green local build).
+  - Separately, `astro check` and `astro build` can disagree: `astro check`
+    (the language server) tolerated an unclosed `<div>` that `astro build`'s
+    stricter JSX-style compiler rejected outright (`CompilerError: Expected
+    corresponding JSX closing tag for 'div'`). Don't treat a clean `astro
+    check` as proof the build will succeed — run `astro build` too before
+    trusting a change, especially after touching markup-heavy `.astro` files.
 - Content collections (`src/content/projects`, `src/content/blog`) defined in
-  `src/content/config.ts`.
+  `src/content.config.ts` (Astro 6 removed the legacy `src/content/config.ts`
+  + `type: 'content'` API — collections now require an explicit `loader`,
+  here `glob()` from `astro/loaders`). Entries no longer have a `.slug`
+  property; use `.id` instead (e.g. `project.id`, not `project.slug`).
+  Rendering an entry's Markdown body also changed: import `render` from
+  `astro:content` and call `const { Content } = await render(entry)` instead
+  of the old `entry.render()` method, which no longer exists on
+  loader-based collections.
 
 ## Design conventions
 

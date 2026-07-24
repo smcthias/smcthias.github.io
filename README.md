@@ -4,7 +4,7 @@ A modern, responsive portfolio website built with Astro, Tailwind CSS, and Astro
 
 ## Features
 
-- 🚀 Built with Astro 5 for optimal performance
+- 🚀 Built with Astro 7 for optimal performance
 - 🎨 Styled with Tailwind CSS
 - 📱 Fully responsive design
 - 📝 Content managed via Astro Content Collections
@@ -121,7 +121,6 @@ The production build is generated in the `dist/` directory with:
 │   │       └── [slug].astro  # Dynamic project pages
 │   └── env.d.ts
 ├── astro.config.mjs
-├── tailwind.config.mjs
 └── package.json
 ```
 
@@ -169,7 +168,7 @@ images:
 1. **Site URL**: Edit `astro.config.mjs` to update the `site` value
 2. **Page Content**: Modify content in `src/pages/`
 3. **Contact Info**: Update `src/pages/contact.astro`
-4. **Content Schema**: Modify `src/content/config.ts` to add/change project fields
+4. **Content Schema**: Modify `src/content.config.ts` to add/change project fields
 
 ### Styling
 
@@ -178,13 +177,14 @@ The site uses Tailwind CSS with a zinc color palette. Main colors:
 - Text: Zinc shades (`text-zinc-900`, `text-zinc-600`)
 - Accents: Zinc dark (`bg-zinc-900`)
 
-Customize colors in `tailwind.config.mjs` or use Tailwind's utility classes directly.
+Customize theme values in the `@theme` block of `src/styles/global.css` or use
+Tailwind's utility classes directly.
 
 ## Tech Stack
 
-- **Framework**: Astro 5
-- **Styling**: Tailwind CSS 3
-- **Content**: Astro Content Collections with Zod validation
+- **Framework**: Astro 7
+- **Styling**: Tailwind CSS 4 (CSS-first config via `src/styles/global.css`)
+- **Content**: Astro Content Collections (glob loader) with Zod validation
 - **TypeScript**: For type safety
 - **Deployment**: Static site generation
 

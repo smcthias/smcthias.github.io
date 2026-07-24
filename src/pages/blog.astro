@@ -41,7 +41,7 @@ const sortedPosts = allPosts.sort((a, b) =>
           });
 
           return (
-          <a href={`${base}/blog/${post.slug}`} class="group block">
+          <a href={`${base}/blog/${post.id}`} class="group block">
             <div class="relative aspect-[16/9] rounded-lg mb-6 overflow-hidden bg-zinc-100">
               <img
                 src={`${base}/images/${post.data.image}`}

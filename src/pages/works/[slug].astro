@@ -1,11 +1,11 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
   return projects.map((project) => ({
-    params: { slug: project.slug },
+    params: { slug: project.id },
     props: { project },
   }));
 }
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { Content } = await project.render();
+const { Content } = await render(project);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 // Get all projects sorted by date for navigation
@@ -24,7 +24,7 @@ const allProjects = (await getCollection('projects')).sort(
 );
 
 // Find current project index and get adjacent projects
-const currentIndex = allProjects.findIndex((p) => p.slug === project.slug);
+const currentIndex = allProjects.findIndex((p) => p.id === project.id);
 const prev = currentIndex > 0 ? allProjects[currentIndex - 1] : null;
 const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
 ---
@@ -147,8 +147,8 @@ const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div class="flex-1 w-full sm:w-auto">
           {prev && (
-            <a href={`${base}/works/${prev.slug}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
-              <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`${base}/works/${prev.id}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
+              <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
               <div>
@@ -160,12 +160,12 @@ const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 
         </div>
         <div class="flex-1 w-full sm:w-auto text-left sm:text-right">
           {next && (
-            <a href={`${base}/works/${next.slug}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
+            <a href={`${base}/works/${next.id}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
               <div>
                 <div class="text-sm text-zinc-500">Next Project</div>
                 <div class="font-semibold">{next.data.title}</div>
               </div>
-              <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
             </a>
