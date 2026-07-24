@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SectionDivider from '../components/SectionDivider.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -52,10 +53,12 @@ const images = [
   </section>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <SectionDivider class="mb-12" />
     <div class="gallery-grid">
       {images.map((slug) => (
         <div
           class="gallery-item"
+          data-sl-hover
           data-full={`${base}/images/gallery/full/full-${slug}.jpg`}
           role="button"
           tabindex="0"
@@ -102,17 +105,28 @@ const images = [
     border-radius: 0.5rem;
   }
 
-  /* Shimmer placeholder */
+  /* Shimmer placeholder — horizontal scanline strips (echoes the homepage
+     weave: images "assemble" from horizontal slices) */
   .gallery-item::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(0, 0, 0, 0.04) 50%,
-      transparent 100%
-    );
+    background-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.05) 50%, transparent 100%),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.045) 0px,
+        rgba(0, 0, 0, 0.045) 5px,
+        transparent 5px,
+        transparent 13px,
+        rgba(0, 0, 0, 0.03) 13px,
+        rgba(0, 0, 0, 0.03) 16px,
+        transparent 16px,
+        transparent 26px
+      );
+    background-size: 60% 100%, auto;
+    background-repeat: no-repeat, repeat;
+    background-position: -60% 0, 0 0;
     animation: gallery-shimmer 1.8s infinite;
     z-index: 1;
     pointer-events: none;
@@ -123,8 +137,8 @@ const images = [
   }
 
   @keyframes gallery-shimmer {
-    from { transform: translateX(-100%); }
-    to   { transform: translateX(100%); }
+    from { background-position: -60% 0, 0 0; }
+    to   { background-position: 160% 0, 0 0; }
   }
 
   .gallery-thumb {
@@ -234,6 +248,11 @@ const images = [
 </style>
 
 <script>
+  import { initScanlineHover } from '../scripts/scanline-cards';
+
+  // ── Hover-only scanline pulse on thumbnails (shared module) ──
+  initScanlineHover();
+
   // ── Lazy Loading via IntersectionObserver ──
   const thumbs = document.querySelectorAll<HTMLImageElement>('.gallery-thumb');
 

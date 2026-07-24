@@ -1,0 +1,12 @@
+---
+// Ragged scanline divider: a few loose horizontal strips that haven't
+// assembled — a quiet echo of the site theme at major section breaks.
+// Purely decorative; parent supplies container width and spacing.
+const { class: className = '' } = Astro.props;
+---
+
+<div class={className} aria-hidden="true">
+  <span class="block h-[3px] w-24 bg-zinc-300"></span>
+  <span class="mt-[5px] ml-7 block h-[3px] w-40 bg-zinc-200"></span>
+  <span class="mt-[5px] ml-3 block h-[3px] w-14 bg-zinc-300"></span>
+</div>

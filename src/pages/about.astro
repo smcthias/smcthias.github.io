@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SectionDivider from '../components/SectionDivider.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
@@ -125,7 +126,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <!-- Values Section -->
     <section class="py-20 bg-zinc-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">How I Work</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">How the Pieces Come Together</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div>
           <h3 class="text-xl font-semibold text-zinc-900 mb-3">Data-Driven</h3>
@@ -158,6 +159,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionDivider class="mb-12" />
         <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">What Clients Say</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Testimonial 1 - Heather Jablow -->
@@ -190,7 +192,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
               </svg>
             </div>
             <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 13 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare.
+              "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 11 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare.
             </p>
             <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
               Then we threw him the Van Up curveball - a completely new brand, e-commerce platform, service tracker, and lifestyle blog all rolled into one. Most designers would've buckled under that scope. Savelle thrived. He helped us figure out who we were as a brand while simultaneously building the entire digital experience from scratch.

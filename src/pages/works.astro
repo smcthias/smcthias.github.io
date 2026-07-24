@@ -29,7 +29,7 @@ const sortedProjects = allProjects.sort((a, b) =>
         {sortedProjects.map((project) => {
           return (
           <a href={`${base}/works/${project.slug}`} class="group block">
-            <div class="aspect-[4/3] rounded-lg mb-6 overflow-hidden bg-zinc-100">
+            <div class="relative aspect-[4/3] rounded-lg mb-6 overflow-hidden bg-zinc-100" data-sl-hover>
               <img
                 src={`${base}/images/works/${project.data.thumbnail}`}
                 alt={`${project.data.title} - ${project.data.category} project by Savelle Design`}
@@ -118,4 +118,10 @@ const sortedProjects = allProjects.sort((a, b) =>
         </div>
       </div>
     </section>
+
+    <!-- Hover-only scanline pulse on project thumbnails (shared module) -->
+    <script>
+      import { initScanlineHover } from '../scripts/scanline-cards';
+      initScanlineHover();
+    </script>
 </Layout>

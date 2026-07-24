@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import SectionDivider from '../components/SectionDivider.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -9,37 +10,92 @@ const allProjects = await getCollection('projects');
 const featuredProjects = allProjects
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 6);
+
+const logos = [
+  { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart', h: 'h-[26px]' },
+  { src: '/images/logos/logo-gm.svg', alt: 'GM', h: 'h-[34px]' },
+  { src: '/images/logos/logo-plexus.svg', alt: 'Plexus Worldwide', h: 'h-[30px]' },
+  { src: '/images/logos/logo-sothebys.svg', alt: "Sotheby's", h: 'h-5' },
+  { src: '/images/logos/logo-lamesa.svg', alt: 'La Mesa RV', h: 'h-[26px]' },
+  { src: '/images/logos/logo-universal.svg', alt: 'Universal', h: 'h-[34px]' },
+  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 'h-[34px]' },
+  { src: '/images/logos/logo-thebeachboys.svg', alt: 'The Beach Boys', h: 'h-[34px]' },
+  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals', h: 'h-3' },
+  { src: '/images/logos/logo-richdad.svg', alt: 'Rich Dad', h: 'h-3' },
+  { src: '/images/logos/logo-sanity.svg', alt: 'Sanity', h: 'h-5' },
+];
 ---
 
 <Layout
   title="Savelle Design - UX/UI Designer & Web Developer in Scottsdale, AZ"
   description="Professional web design and development services for growing businesses. Specializing in landing pages, website refresh, brand identity, and email campaigns. 18+ years experience."
 >
-    <!-- Hero Section -->
-    <section class="py-20 md:py-32">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl">
-        <h1 class="text-5xl md:text-7xl font-bold text-zinc-900 mb-6 leading-tight">
-          Hi, I'm Savelle 
-        </h1>
-        <p class="text-xl md:text-2xl text-zinc-600 mb-8 leading-relaxed">
-          I help growing businesses create beautiful, effective websites and design that connect with customers. With 18+ years of experience, I focus on practical solutions that look professional and drive real results.
-        </p>
-        <div class="flex gap-4">
-          <a
-            href={`${base}/works`}
-            class="px-8 py-3 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors font-medium"
-          >
-            View Projects
-          </a>
-          <a
-            href={`${base}/contact`}
-            class="px-8 py-3 border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
-          >
-            Let's Talk
-          </a>
+    <!-- Hero Section: copy over a "scanline weave" — horizontal strips of
+         Savelle's portfolio images animate in and out, periodically aligning
+         to construct one project (click it to open the case study), then
+         deconstructing. Canvas is decorative-interactive (aria-hidden); all
+         projects remain reachable via Featured Work below. lg+ only. -->
+    <section>
+      <div class="relative">
+        <canvas id="hero-weave" class="absolute inset-0 w-full h-full hidden lg:block" aria-hidden="true"></canvas>
+        <div
+          class="absolute inset-0 hidden lg:block pointer-events-none"
+          style="background: linear-gradient(100deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.7) 38%, rgba(255,255,255,0) 60%);"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 lg:pointer-events-none">
+          <div class="max-w-2xl">
+            <p class="flex items-center gap-3 text-xl md:text-2xl text-zinc-600 mb-4">
+              <img
+                src={`${base}/images/about/profile.jpg`}
+                alt=""
+                class="w-12 h-12 rounded-full object-cover border border-zinc-200"
+                width="48"
+                height="48"
+              />
+              Hi, I'm Savelle.
+            </p>
+            <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6 leading-tight">
+              I design websites that turn visitors into customers.
+            </h1>
+            <p class="text-xl text-zinc-600 mb-8 leading-relaxed">
+              A business is a thousand moving pieces — your brand, your products, your customers' questions. For 18+ years I've pulled them together into websites that bring in more calls, bookings, and sales. You work directly with me, start to finish.
+            </p>
+            <div class="flex flex-wrap gap-4 mb-6">
+              <a
+                href={`${base}/works`}
+                class="pointer-events-auto px-8 py-3 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors font-medium"
+              >
+                View Projects
+              </a>
+              <a
+                href={`${base}/contact`}
+                class="pointer-events-auto px-8 py-3 border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
+              >
+                Let's Talk
+              </a>
+            </div>
+            <a
+              href={`${base}/ux-health-check`}
+              class="pointer-events-auto inline-flex items-center text-zinc-600 hover:text-zinc-900 font-medium underline underline-offset-4 transition-colors"
+            >
+              Not ready yet? Get your free UX score
+            </a>
+          </div>
         </div>
       </div>
+
+      <!-- Trusted by -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div class="pt-10 border-t border-zinc-200">
+          <p class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-5">Trusted by teams at</p>
+          <div class="flex flex-wrap items-center gap-x-8 gap-y-4 lg:justify-between lg:gap-x-4">
+            {logos.map(({ src, alt, h }) => (
+              <img src={src} alt={alt} class={`${h} w-auto object-contain brightness-0 opacity-40`} />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
 
@@ -50,7 +106,7 @@ const featuredProjects = allProjects
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredProjects.map((project) => (
             <a href={`${base}/works/${project.slug}`} class="group block">
-              <div class="aspect-[4/3] rounded-lg mb-4 overflow-hidden">
+              <div class="relative aspect-[4/3] rounded-lg mb-4 overflow-hidden bg-zinc-800" data-sl-hover>
                 <img
                   src={`${base}/images/works/${project.data.thumbnail}`}
                   alt={`${project.data.title} - ${project.data.category} project showcase`}
@@ -69,7 +125,8 @@ const featuredProjects = allProjects
     <!-- Services Preview -->
     <section class="py-20 bg-zinc-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">What I Do</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-3">What I Do</h2>
+        <p class="text-lg text-zinc-600 mb-12">Four ways I help you pull the pieces together.</p>
       <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
         <a href={`${base}/services/landing-page-design`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
           <div class="w-12 h-12 text-zinc-900 mb-4">
@@ -142,6 +199,7 @@ const featuredProjects = allProjects
     <!-- Testimonial Section -->
     <section class="py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionDivider class="mb-12" />
         <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">What Clients Say</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <!-- Testimonial 1 - Brian Fidler -->
@@ -152,7 +210,7 @@ const featuredProjects = allProjects
               </svg>
             </div>
             <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 13 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare."
+              "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 11 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare."
             </p>
             <div class="pt-6 border-t border-zinc-200">
               <p class="font-semibold text-zinc-900">Brian Fidler</p>
@@ -195,10 +253,10 @@ const featuredProjects = allProjects
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl">
           <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to start your project?
+            Have all the pieces but no picture?
           </h2>
           <p class="text-xl text-zinc-300 mb-8">
-            Whether you're launching a new business, growing an existing one, or just need a website refresh, I'm here to help. Let's discuss how we can work together to create design that works for you.
+            Whether you're launching a new business, growing an existing one, or just need a website refresh — let's put it together.
           </p>
           <a
             href={`${base}/contact`}
@@ -209,4 +267,350 @@ const featuredProjects = allProjects
         </div>
       </div>
     </section>
+
+    <!-- Scanline-weave hero: horizontal strips of portfolio images drift as an
+         ambient weave; every few seconds one project's strips align into a
+         ragged-edged image (clickable -> case study), holds, then shreds. -->
+    <script>
+      (() => {
+        const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+        const canvas = document.getElementById('hero-weave') as HTMLCanvasElement | null;
+        if (!canvas) return;
+        const desktop = window.matchMedia('(min-width: 1024px)');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        const PROJECTS = [
+          { slug: 'lamesa', title: 'La Mesa RV & Van Up', category: 'E-Commerce' },
+          { slug: 'nikkl', title: 'Nikkl', category: 'Branding & Web' },
+          { slug: 'yoli', title: 'Yoli', category: 'Email Design' },
+          { slug: 'young-living', title: 'Young Living', category: 'Web Design' },
+          { slug: 'adorned', title: 'Adorned', category: 'Branding' },
+          { slug: 'omegas411', title: 'Omegas411', category: 'Web Design' },
+        ];
+
+        const AMBIENT_COUNT = 26;
+        const IN_STAGGER = 0.03; // s per row
+        const IN_DUR = 0.9;
+        const HOLD_DUR = 2.6;
+        const OUT_DUR = 1.1;
+        const GAP_DUR = 0.9;
+
+        const ctx = canvas.getContext('2d')!;
+        const container = canvas.parentElement!;
+        let W = 0;
+        let H = 0;
+        let raf = 0;
+        let running = false;
+        let started = false;
+
+        const rand = (a: number, b: number) => a + Math.random() * (b - a);
+        const easeOutCubic = (p: number) => 1 - Math.pow(1 - p, 3);
+        const easeInCubic = (p: number) => p * p * p;
+        const clamp01 = (p: number) => Math.max(0, Math.min(1, p));
+
+        type Ambient = {
+          imgIdx: number;
+          srcY: number;
+          y: number;
+          h: number;
+          x: number;
+          w: number;
+          vx: number;
+          life: number;
+          maxLife: number;
+          alpha: number;
+        };
+
+        type Row = {
+          ry: number;
+          rh: number;
+          delayIn: number;
+          delayOut: number;
+          slideDir: number;
+          slideMag: number;
+          ragL: number;
+          ragR: number;
+        };
+
+        const images: HTMLImageElement[] = PROJECTS.map(() => {
+          const img = new Image();
+          img.decoding = 'async';
+          return img;
+        });
+        let loadedCount = 0;
+
+        const ambients: Ambient[] = [];
+        function spawnAmbient(fresh: boolean): Ambient {
+          const w = Math.random() < 0.25 ? rand(W * 0.9, W * 1.15) : rand(180, W * 0.6);
+          const maxLife = rand(4, 9);
+          return {
+            imgIdx: Math.floor(Math.random() * images.length),
+            srcY: Math.random(),
+            y: rand(0, H),
+            h: rand(2.5, 9),
+            x: rand(-W * 0.15, W - w * 0.4),
+            w,
+            vx: rand(-14, 14),
+            life: fresh ? rand(0, maxLife) : 0,
+            maxLife,
+            alpha: rand(0.1, 0.32),
+          };
+        }
+
+        // formation state machine
+        let formIdx = 0;
+        let phase: 'in' | 'hold' | 'out' | 'gap' = 'gap';
+        let phaseStart = 0;
+        let region = { x: 0, y: 0, w: 0, h: 0 };
+        let rows: Row[] = [];
+
+        function buildFormation() {
+          const RW = Math.min(540, W * 0.38);
+          const RH = RW * 0.75;
+          region = {
+            x: Math.min(W * 0.56 + rand(-30, 30), W - RW - 40),
+            y: Math.max(24, (H - RH) * 0.45 + rand(-24, 24)),
+            w: RW,
+            h: RH,
+          };
+          rows = [];
+          const order: number[] = [];
+          let ry = 0;
+          while (ry < RH) {
+            const rh = Math.min(rand(5, 16), RH - ry);
+            order.push(rows.length);
+            rows.push({
+              ry,
+              rh,
+              delayIn: 0,
+              delayOut: 0,
+              slideDir: Math.random() < 0.5 ? -1 : 1,
+              slideMag: rand(90, 340),
+              ragL: rand(0, 46),
+              ragR: rand(0, 46),
+            });
+            ry += rh;
+          }
+          // shuffled stagger so rows arrive/leave in scattered order
+          for (let i = order.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [order[i], order[j]] = [order[j], order[i]];
+          }
+          order.forEach((rowI, k) => {
+            rows[rowI].delayIn = k * IN_STAGGER;
+            rows[rowI].delayOut = (order.length - 1 - k) * IN_STAGGER * 0.7;
+          });
+        }
+
+        function drawStrip(
+          img: HTMLImageElement,
+          srcYFrac: number,
+          dx: number,
+          dy: number,
+          dw: number,
+          dh: number,
+          scale: number
+        ) {
+          const sh = Math.min(img.height, Math.max(1, dh / scale));
+          const sy = Math.min(img.height - sh, srcYFrac * (img.height - sh));
+          ctx.drawImage(img, 0, sy, img.width, sh, dx, dy, dw, dh);
+        }
+
+        function drawFormationRow(img: HTMLImageElement, r: Row, offset: number, alpha: number) {
+          if (alpha <= 0.01) return;
+          const scaleY = region.h / img.height;
+          const sy = r.ry / scaleY;
+          const sh = r.rh / scaleY;
+          // ragged trim on both ends (kept during hold -> torn-edge look)
+          const la = r.ragL;
+          const ra = r.ragR;
+          const dw = region.w - la - ra;
+          if (dw <= 2) return;
+          const sx = (la / region.w) * img.width;
+          const sw = (dw / region.w) * img.width;
+          ctx.globalAlpha = alpha;
+          ctx.drawImage(img, sx, sy, sw, sh, region.x + la + offset, region.y + r.ry, dw, r.rh);
+        }
+
+        function resize() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          W = container.clientWidth;
+          H = container.clientHeight;
+          canvas.width = Math.round(W * dpr);
+          canvas.height = Math.round(H * dpr);
+          canvas.style.width = W + 'px';
+          canvas.style.height = H + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          if (reducedMotion.matches && loadedCount === images.length) drawStatic();
+        }
+
+        let lastNow = 0;
+        function drawFrame(now: number) {
+          const dt = Math.min(0.05, (now - lastNow) / 1000 || 0.016);
+          lastNow = now;
+          ctx.clearRect(0, 0, W, H);
+
+          // ambient weave
+          for (let i = 0; i < ambients.length; i++) {
+            const a = ambients[i];
+            a.life += dt;
+            a.x += a.vx * dt;
+            if (a.life > a.maxLife || a.x > W + 60 || a.x + a.w < -60) {
+              ambients[i] = spawnAmbient(false);
+              continue;
+            }
+            const img = images[a.imgIdx];
+            if (!img.complete || !img.naturalWidth) continue;
+            const lifeFrac = a.life / a.maxLife;
+            const fade = Math.min(1, Math.min(lifeFrac, 1 - lifeFrac) / 0.15);
+            ctx.globalAlpha = a.alpha * fade;
+            drawStrip(img, a.srcY, a.x, a.y, a.w, a.h, a.w / img.width);
+          }
+          ctx.globalAlpha = 1;
+
+          // formation cycle
+          const img = images[formIdx];
+          const tPhase = (now - phaseStart) / 1000;
+          if (img.complete && img.naturalWidth) {
+            if (phase === 'gap') {
+              if (tPhase > GAP_DUR) {
+                buildFormation();
+                phase = 'in';
+                phaseStart = now;
+              }
+            } else if (phase === 'in') {
+              let done = true;
+              for (const r of rows) {
+                const p = clamp01((tPhase - r.delayIn) / IN_DUR);
+                if (p < 1) done = false;
+                const e = easeOutCubic(p);
+                drawFormationRow(img, r, r.slideDir * r.slideMag * (1 - e), e);
+              }
+              if (done) {
+                phase = 'hold';
+                phaseStart = now;
+              }
+            } else if (phase === 'hold') {
+              for (const r of rows) drawFormationRow(img, r, 0, 1);
+              if (tPhase > HOLD_DUR) {
+                phase = 'out';
+                phaseStart = now;
+              }
+            } else if (phase === 'out') {
+              let done = true;
+              for (const r of rows) {
+                const p = clamp01((tPhase - r.delayOut) / OUT_DUR);
+                if (p < 1) done = false;
+                const e = easeInCubic(p);
+                drawFormationRow(img, r, -r.slideDir * r.slideMag * 1.4 * e, 1 - e);
+              }
+              if (done) {
+                formIdx = (formIdx + 1) % PROJECTS.length;
+                phase = 'gap';
+                phaseStart = now;
+              }
+            }
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        function drawStatic() {
+          // reduced-motion fallback: one aligned formation + static lines
+          ctx.clearRect(0, 0, W, H);
+          if (!rows.length) buildFormation();
+          for (const a of ambients) {
+            const img = images[a.imgIdx];
+            if (!img.complete || !img.naturalWidth) continue;
+            ctx.globalAlpha = a.alpha * 0.8;
+            drawStrip(img, a.srcY, a.x, a.y, a.w, a.h, a.w / img.width);
+          }
+          ctx.globalAlpha = 1;
+          const img = images[formIdx];
+          if (img.complete && img.naturalWidth) {
+            phase = 'hold';
+            for (const r of rows) drawFormationRow(img, r, 0, 1);
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        function inRegion(px: number, py: number) {
+          return (
+            px >= region.x &&
+            px <= region.x + region.w &&
+            py >= region.y &&
+            py <= region.y + region.h
+          );
+        }
+
+        function loop(now: number) {
+          drawFrame(now);
+          raf = requestAnimationFrame(loop);
+        }
+
+        function setRunning(next: boolean) {
+          if (next === running) return;
+          running = next;
+          if (running) {
+            lastNow = performance.now();
+            raf = requestAnimationFrame(loop);
+          } else {
+            cancelAnimationFrame(raf);
+          }
+        }
+
+        function start() {
+          if (started) return;
+          started = true;
+          resize();
+          for (let i = 0; i < AMBIENT_COUNT; i++) ambients.push(spawnAmbient(true));
+
+          images.forEach((img, i) => {
+            img.onload = () => {
+              loadedCount++;
+              if (reducedMotion.matches && loadedCount === images.length) drawStatic();
+            };
+            img.src = `${base}/images/works/${PROJECTS[i].slug}-thumb.png`;
+          });
+
+          window.addEventListener('resize', resize);
+
+          canvas.addEventListener('mousemove', (e) => {
+            const r = canvas.getBoundingClientRect();
+            const active = phase === 'hold' || phase === 'in';
+            canvas.style.cursor =
+              active && inRegion(e.clientX - r.left, e.clientY - r.top) ? 'pointer' : 'default';
+          });
+          canvas.addEventListener('click', (e) => {
+            const r = canvas.getBoundingClientRect();
+            const active = phase === 'hold' || phase === 'in' || phase === 'out';
+            if (active && inRegion(e.clientX - r.left, e.clientY - r.top)) {
+              window.location.href = `${base}/works/${PROJECTS[formIdx].slug}`;
+            }
+          });
+
+          if (!reducedMotion.matches) {
+            phaseStart = performance.now();
+            const io = new IntersectionObserver((entries) => {
+              setRunning(entries[0].isIntersecting);
+            });
+            io.observe(container);
+            setRunning(true);
+          }
+        }
+
+        if (desktop.matches) {
+          start();
+        } else {
+          desktop.addEventListener('change', (e) => {
+            if (e.matches) start();
+          });
+        }
+      })();
+    </script>
+
+    <!-- Hover-only scanline pulse on Featured Work thumbnails (shared module) -->
+    <script>
+      import { initScanlineHover } from '../scripts/scanline-cards';
+      initScanlineHover();
+    </script>
 </Layout>

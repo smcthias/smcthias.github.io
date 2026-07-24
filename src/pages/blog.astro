@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import SectionDivider from '../components/SectionDivider.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -28,6 +29,7 @@ const sortedPosts = allPosts.sort((a, b) =>
     <!-- Blog Posts Grid -->
     <section class="pb-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionDivider class="mb-12" />
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         {sortedPosts.map((post) => {
           // Format date
@@ -40,7 +42,7 @@ const sortedPosts = allPosts.sort((a, b) =>
 
           return (
           <a href={`${base}/blog/${post.slug}`} class="group block">
-            <div class="aspect-[16/9] rounded-lg mb-6 overflow-hidden bg-zinc-100">
+            <div class="relative aspect-[16/9] rounded-lg mb-6 overflow-hidden bg-zinc-100" data-sl-hover>
               <img
                 src={`${base}/images/${post.data.image}`}
                 alt={post.data.imageAlt}
@@ -92,4 +94,10 @@ const sortedPosts = allPosts.sort((a, b) =>
         </div>
       </div>
     </section>
+
+    <!-- Hover-only scanline pulse on post thumbnails (shared module) -->
+    <script>
+      import { initScanlineHover } from '../scripts/scanline-cards';
+      initScanlineHover();
+    </script>
 </Layout>

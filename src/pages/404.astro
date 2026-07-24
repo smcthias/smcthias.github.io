@@ -1,0 +1,152 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const slugs = ['lamesa', 'nikkl', 'yoli', 'young-living', 'adorned', 'omegas411'];
+---
+
+<Layout
+  title="Page Not Found - Savelle Design"
+  description="That page doesn't exist — but your project still can. Explore Savelle Design's work, services, and free UX Health Check."
+>
+  <!-- 404: the one page where the pieces never come together. Ambient
+       scanline strips drift but never assemble — on brand for a page that
+       never quite made it. -->
+  <section class="relative overflow-hidden">
+    <canvas id="nf-weave" class="absolute inset-0 w-full h-full hidden md:block" aria-hidden="true"></canvas>
+    <div
+      class="absolute inset-0 hidden md:block pointer-events-none"
+      style="background: linear-gradient(100deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.7) 45%, rgba(255,255,255,0.25) 100%);"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
+      <div class="max-w-2xl">
+        <p class="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-6">404 — Page not found</p>
+        <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6 leading-tight">
+          This page never came together.
+        </h1>
+        <p class="text-xl text-zinc-600 mb-8 leading-relaxed">
+          The pieces are all here — they just don't add up to the page you were looking for.
+          Your project, on the other hand, still can.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a
+            href={`${base}/works`}
+            class="px-8 py-3 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors font-medium"
+          >
+            See the Work
+          </a>
+          <a
+            href={`${base}/services`}
+            class="px-8 py-3 border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
+          >
+            Services
+          </a>
+          <a
+            href={`${base}/contact`}
+            class="px-8 py-3 border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
+          >
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script define:vars={{ base, slugs }}>
+    (() => {
+      const canvas = document.getElementById('nf-weave');
+      if (!canvas) return;
+      if (!window.matchMedia('(min-width: 768px)').matches) return;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const ctx = canvas.getContext('2d');
+      const container = canvas.parentElement;
+      let W = 0;
+      let H = 0;
+
+      const rand = (a, b) => a + Math.random() * (b - a);
+      const images = slugs.map((slug) => {
+        const img = new Image();
+        img.decoding = 'async';
+        img.src = base + '/images/works/' + slug + '-thumb.png';
+        return img;
+      });
+
+      const strips = [];
+      function spawn(fresh) {
+        const w = Math.random() < 0.25 ? rand(W * 0.9, W * 1.15) : rand(180, W * 0.6);
+        const maxLife = rand(4, 9);
+        return {
+          imgIdx: Math.floor(Math.random() * images.length),
+          srcY: Math.random(),
+          y: rand(0, H),
+          h: rand(2.5, 9),
+          x: rand(-W * 0.15, W - w * 0.4),
+          w,
+          vx: rand(-14, 14),
+          life: fresh ? rand(0, maxLife) : 0,
+          maxLife,
+          alpha: rand(0.12, 0.35),
+        };
+      }
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = container.clientWidth;
+        H = container.clientHeight;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function drawStrip(a) {
+        const img = images[a.imgIdx];
+        if (!img.complete || !img.naturalWidth) return;
+        const scale = a.w / img.width;
+        const sh = Math.min(img.height, Math.max(1, a.h / scale));
+        const sy = Math.min(img.height - sh, a.srcY * (img.height - sh));
+        ctx.drawImage(img, 0, sy, img.width, sh, a.x, a.y, a.w, a.h);
+      }
+
+      let lastNow = 0;
+      function frame(now) {
+        const dt = Math.min(0.05, (now - lastNow) / 1000 || 0.016);
+        lastNow = now;
+        ctx.clearRect(0, 0, W, H);
+        for (let i = 0; i < strips.length; i++) {
+          const a = strips[i];
+          a.life += dt;
+          a.x += a.vx * dt;
+          if (a.life > a.maxLife || a.x > W + 60 || a.x + a.w < -60) {
+            strips[i] = spawn(false);
+            continue;
+          }
+          const lifeFrac = a.life / a.maxLife;
+          const fade = Math.min(1, Math.min(lifeFrac, 1 - lifeFrac) / 0.15);
+          ctx.globalAlpha = a.alpha * fade;
+          drawStrip(a);
+        }
+        ctx.globalAlpha = 1;
+        if (!reducedMotion) requestAnimationFrame(frame);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      for (let i = 0; i < 30; i++) strips.push(spawn(true));
+      if (reducedMotion) {
+        // static scatter — redraw as each image arrives
+        images.forEach((im) => {
+          if (im.complete) frame(performance.now());
+          else im.onload = () => frame(performance.now());
+        });
+      } else {
+        requestAnimationFrame(frame);
+      }
+    })();
+  </script>
+</Layout>
