@@ -125,11 +125,11 @@ const questions: Question[] = [
   <section class="py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
-        <p class="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-6">Free Interactive Tool</p>
-        <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-6 leading-tight">
+        <p class="font-mono text-xs tracking-[0.25em] uppercase text-ultra mb-6">Free diagnostic &middot; No meeting, no pitch</p>
+        <h1 class="[font-stretch:125%] text-4xl md:text-5xl font-extrabold text-ink mb-6 leading-tight">
           How healthy is your business website?
         </h1>
-        <p class="text-xl text-zinc-600 leading-relaxed">
+        <p class="text-xl text-graphite leading-relaxed">
           Built for real estate agents, auto shops, dental practices, and other local businesses —
           answer ten quick questions and get an instant UX score across five dimensions, plus three
           prioritized recommendations you can act on this week. Takes about two minutes.
@@ -144,16 +144,16 @@ const questions: Question[] = [
       <div
         id="uxhc"
         data-endpoint={FORM_ENDPOINT}
-        class="max-w-3xl mx-auto bg-white border border-zinc-200 rounded-lg shadow-sm p-6 sm:p-10"
+        class="max-w-3xl mx-auto bg-white border border-ink/10 rounded shadow-sm p-6 sm:p-10"
       >
         <!-- Progress -->
         <div id="uxhc-progress-wrap" class="mb-8">
-          <div class="flex items-center justify-between text-xs text-zinc-500 mb-2">
+          <div class="flex items-center justify-between text-xs text-graphite/70 mb-2">
             <span id="uxhc-progress-label">Question 1 of {questions.length}</span>
             <span id="uxhc-progress-pct">0%</span>
           </div>
-          <div class="h-1.5 w-full bg-zinc-200 rounded-full overflow-hidden">
-            <div id="uxhc-progress-bar" class="h-full bg-zinc-900 rounded-full transition-all duration-300" style="width:0%"></div>
+          <div class="h-1.5 w-full bg-ink/10 rounded-full overflow-hidden">
+            <div id="uxhc-progress-bar" class="h-full bg-ultra rounded-full transition-all duration-300" style="width:0%"></div>
           </div>
         </div>
 
@@ -161,14 +161,14 @@ const questions: Question[] = [
         <form id="uxhc-form">
           {questions.map((q, i) => (
             <fieldset class="uxhc-step" data-step={i} data-category={q.category} hidden={i !== 0}>
-              <legend class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-3">{q.category}</legend>
-              <p class="text-2xl text-zinc-900 leading-snug mb-8">{q.text}</p>
+              <legend class="font-mono text-[11px] font-medium text-graphite/70 uppercase tracking-[0.2em] mb-3">{q.category}</legend>
+              <p class="text-2xl text-ink leading-snug mb-8">{q.text}</p>
               <div class="space-y-3">
                 {q.options.map((opt) => (
-                  <label class="uxhc-option flex items-center gap-4 p-4 rounded-lg border border-zinc-200 bg-zinc-50 cursor-pointer hover:border-zinc-400 transition-colors">
+                  <label class="uxhc-option flex items-center gap-4 p-4 rounded border border-ink/10 bg-gesso/60 cursor-pointer hover:border-ultra transition-colors">
                     <input type="radio" name={q.id} value={opt.value} class="sr-only" />
-                    <span class="uxhc-dot w-5 h-5 rounded-full border-2 border-zinc-300 shrink-0 flex items-center justify-center"></span>
-                    <span class="text-zinc-800">{opt.label}</span>
+                    <span class="uxhc-dot w-5 h-5 rounded-full border-2 border-graphite/30 shrink-0 flex items-center justify-center"></span>
+                    <span class="text-ink">{opt.label}</span>
                   </label>
                 ))}
               </div>
@@ -177,9 +177,9 @@ const questions: Question[] = [
 
           <!-- Email gate step -->
           <fieldset class="uxhc-step" data-step={questions.length} hidden>
-            <legend class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-3">Almost there</legend>
-            <p class="text-2xl text-zinc-900 leading-snug mb-3">Enter your email to unlock your results</p>
-            <p class="text-zinc-600 mb-6">Your UX score and personalized recommendations appear right here on this page.</p>
+            <legend class="font-mono text-[11px] font-medium text-graphite/70 uppercase tracking-[0.2em] mb-3">Almost there</legend>
+            <p class="text-2xl text-ink leading-snug mb-3">Enter your email to unlock your results</p>
+            <p class="text-graphite mb-6">Your UX score and personalized recommendations appear right here on this page.</p>
             <input
               type="email"
               id="uxhc-email"
@@ -187,20 +187,20 @@ const questions: Question[] = [
               required
               placeholder="you@yourbusiness.com"
               autocomplete="email"
-              class="w-full px-5 py-4 rounded-lg bg-white border border-zinc-300 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-900 mb-2"
+              class="w-full px-5 py-4 rounded bg-white border border-graphite/30 text-ink placeholder-graphite/40 focus:outline-none focus:border-ultra mb-2"
             />
             <p id="uxhc-email-error" class="text-sm text-red-600 mb-4 hidden">Please enter a valid email address.</p>
-            <p class="text-xs text-zinc-500">No spam, no newsletter. I may follow up personally with a thought or two about your score — that's it.</p>
+            <p class="text-xs text-graphite/70">No spam, no newsletter. I may follow up personally with a thought or two about your score — that's it.</p>
           </fieldset>
         </form>
 
         <!-- Navigation -->
         <div id="uxhc-nav" class="flex items-center justify-between mt-10">
-          <button id="uxhc-back" type="button" class="inline-flex items-center text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors disabled:opacity-0" disabled>
+          <button id="uxhc-back" type="button" class="inline-flex items-center text-sm font-medium text-graphite/70 hover:text-ink transition-colors disabled:opacity-0" disabled>
             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             Back
           </button>
-          <button id="uxhc-next" type="button" class="inline-flex items-center px-6 py-3 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+          <button id="uxhc-next" type="button" class="inline-flex items-center px-6 py-3 bg-ultra text-white text-sm font-medium rounded hover:bg-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
             Next
             <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
           </button>
@@ -215,19 +215,19 @@ const questions: Question[] = [
   <!-- What it measures -->
   <section class="pb-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-3xl mx-auto border-t border-zinc-200 pt-16">
-        <h2 class="text-sm font-semibold text-zinc-900 uppercase tracking-wider mb-6">What it measures</h2>
-        <p class="text-zinc-600 leading-relaxed mb-8 max-w-2xl">
+      <div class="max-w-3xl mx-auto border-t border-ink/10 pt-16">
+        <h2 class="font-mono text-xs font-semibold text-ink uppercase tracking-[0.2em] mb-6">What it measures</h2>
+        <p class="text-graphite leading-relaxed mb-8 max-w-2xl">
           Your website has one job: turn the people who find you into customers who call, book, or
           walk in the door. The UX Health Check looks at the five things that most often get in the
           way — explained in plain English, no jargon.
         </p>
         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
-          <div><dt class="text-zinc-900 font-semibold mb-1">First Impression</dt><dd class="text-zinc-600 text-sm leading-relaxed">Whether a first-time visitor instantly understands what your business does and how to reach you — before they click over to a competitor.</dd></div>
-          <div><dt class="text-zinc-900 font-semibold mb-1">Conversion</dt><dd class="text-zinc-600 text-sm leading-relaxed">How well your site turns visitors into calls, bookings, or form submissions — instead of clicks that go nowhere.</dd></div>
-          <div><dt class="text-zinc-900 font-semibold mb-1">Mobile</dt><dd class="text-zinc-600 text-sm leading-relaxed">Most people will find you on their phone while out and about. Whether your site is easy to read, tap, and use on a small screen.</dd></div>
-          <div><dt class="text-zinc-900 font-semibold mb-1">Accessibility</dt><dd class="text-zinc-600 text-sm leading-relaxed">Whether everyone — including older visitors and people with limited vision — can read and use your site without trouble. It also widens the customers you can serve.</dd></div>
-          <div><dt class="text-zinc-900 font-semibold mb-1">Consistency</dt><dd class="text-zinc-600 text-sm leading-relaxed">Whether your site looks consistent and polished from page to page, so you come across as credible and trustworthy.</dd></div>
+          <div><dt class="text-ink font-semibold mb-1">First Impression</dt><dd class="text-graphite text-sm leading-relaxed">Whether a first-time visitor instantly understands what your business does and how to reach you — before they click over to a competitor.</dd></div>
+          <div><dt class="text-ink font-semibold mb-1">Conversion</dt><dd class="text-graphite text-sm leading-relaxed">How well your site turns visitors into calls, bookings, or form submissions — instead of clicks that go nowhere.</dd></div>
+          <div><dt class="text-ink font-semibold mb-1">Mobile</dt><dd class="text-graphite text-sm leading-relaxed">Most people will find you on their phone while out and about. Whether your site is easy to read, tap, and use on a small screen.</dd></div>
+          <div><dt class="text-ink font-semibold mb-1">Accessibility</dt><dd class="text-graphite text-sm leading-relaxed">Whether everyone — including older visitors and people with limited vision — can read and use your site without trouble. It also widens the customers you can serve.</dd></div>
+          <div><dt class="text-ink font-semibold mb-1">Consistency</dt><dd class="text-graphite text-sm leading-relaxed">Whether your site looks consistent and polished from page to page, so you come across as credible and trustworthy.</dd></div>
         </dl>
       </div>
     </div>
@@ -237,12 +237,12 @@ const questions: Question[] = [
     /* Styles for elements present at load and those injected by the tool script.
        Namespaced under #uxhc / #uxhc-results so they don't leak. */
     #uxhc .uxhc-option.is-selected {
-      border-color: #18181b;
-      background: #fafafa;
+      border-color: #2b3fde;
+      background: #ffffff;
     }
     #uxhc .uxhc-option.is-selected .uxhc-dot {
-      border-color: #18181b;
-      background: #18181b;
+      border-color: #2b3fde;
+      background: #2b3fde;
     }
     #uxhc .uxhc-option.is-selected .uxhc-dot::after {
       content: '';
@@ -251,8 +251,8 @@ const questions: Question[] = [
       border-radius: 9999px;
       background: #fafafa;
     }
-    #uxhc-results .uxhc-bar-track { height: 6px; background: #e4e4e7; border-radius: 9999px; overflow: hidden; }
-    #uxhc-results .uxhc-bar-fill { height: 100%; background: #18181b; border-radius: 9999px; transition: width .6s ease; }
+    #uxhc-results .uxhc-bar-track { height: 6px; background: rgba(20, 23, 28, 0.12); border-radius: 9999px; overflow: hidden; }
+    #uxhc-results .uxhc-bar-fill { height: 100%; background: #2b3fde; border-radius: 9999px; transition: width .6s ease; }
   </style>
 
   <script is:inline define:vars={{ stepCount: questions.length }}>
@@ -390,32 +390,32 @@ const questions: Question[] = [
           .map((c) => (
             '<div class="mb-4">' +
               '<div class="flex items-center justify-between text-sm mb-1.5">' +
-                '<span class="text-zinc-700">' + esc(c.category) + '</span>' +
-                '<span class="text-zinc-500">' + c.score + '/100</span>' +
+                '<span class="text-graphite">' + esc(c.category) + '</span>' +
+                '<span class="text-graphite/70">' + c.score + '/100</span>' +
               '</div>' +
               '<div class="uxhc-bar-track"><div class="uxhc-bar-fill" style="width:' + c.score + '%"></div></div>' +
             '</div>'
           )).join('');
         const recos = weakest
           .map((c, i) => (
-            '<div class="border-t border-zinc-200 pt-5">' +
-              '<p class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-2">Priority ' + (i + 1) + ' &middot; ' + esc(c.category) + '</p>' +
-              '<p class="text-zinc-700 leading-relaxed">' + esc(RECOS[c.category]) + '</p>' +
+            '<div class="border-t border-ink/10 pt-5">' +
+              '<p class="font-mono text-[11px] font-medium text-graphite/70 uppercase tracking-[0.2em] mb-2">Priority ' + (i + 1) + ' &middot; ' + esc(c.category) + '</p>' +
+              '<p class="text-graphite leading-relaxed">' + esc(RECOS[c.category]) + '</p>' +
             '</div>'
           )).join('');
 
         resultsEl.innerHTML =
           '<div class="text-center mb-10">' +
-            '<p class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-3">Your Website\'s UX Score</p>' +
-            '<p class="text-7xl font-bold text-zinc-900 leading-none mb-3">' + data.overall + '<span class="text-3xl text-zinc-400">/100</span></p>' +
-            '<p class="text-xl text-zinc-900 font-semibold">' + esc(b.label) + '</p>' +
-            '<p class="text-zinc-600 max-w-xl mx-auto mt-2">' + esc(b.note) + '</p>' +
+            '<p class="font-mono text-[11px] font-medium text-graphite/70 uppercase tracking-[0.2em] mb-3">Your Website\'s UX Score</p>' +
+            '<p class="text-7xl font-bold text-ink leading-none mb-3">' + data.overall + '<span class="text-3xl text-graphite/50">/100</span></p>' +
+            '<p class="text-xl text-ink font-semibold">' + esc(b.label) + '</p>' +
+            '<p class="text-graphite max-w-xl mx-auto mt-2">' + esc(b.note) + '</p>' +
           '</div>' +
           '<div class="mb-10">' +
-            '<h3 class="text-sm font-semibold text-zinc-900 uppercase tracking-wider mb-5">By dimension</h3>' + bars +
+            '<h3 class="font-mono text-xs font-semibold text-ink uppercase tracking-[0.2em] mb-5">By dimension</h3>' + bars +
           '</div>' +
           '<div class="space-y-5 mb-10">' +
-            '<h3 class="text-sm font-semibold text-zinc-900 uppercase tracking-wider">Your top 3 priorities</h3>' + recos +
+            '<h3 class="font-mono text-xs font-semibold text-ink uppercase tracking-[0.2em]">Your top 3 priorities</h3>' + recos +
           '</div>' +
           buildCta(data.overall);
       }
@@ -425,22 +425,22 @@ const questions: Question[] = [
       function buildCta(score) {
         if (score < 80) {
           return (
-            '<div class="bg-zinc-50 border border-zinc-200 rounded-lg p-8 text-center">' +
-              '<p class="text-xl text-zinc-900 font-semibold mb-2">Want the real score?</p>' +
-              '<p class="text-zinc-600 max-w-xl mx-auto mb-6">This score is based on your own answers. In the 48-Hour UX Audit, I score your actual site: a recorded video walkthrough, a prioritized list of fixes, and a 60-minute strategy call — delivered in two business days for $997.</p>' +
+            '<div class="bg-gesso/60 border border-ink/10 rounded p-8 text-center">' +
+              '<p class="text-xl text-ink font-semibold mb-2">Want the real score?</p>' +
+              '<p class="text-graphite max-w-xl mx-auto mb-6">This score is based on your own answers. In the 48-Hour UX Audit, I score your actual site: a recorded video walkthrough, a prioritized list of fixes, and a 60-minute strategy call — delivered in two business days for $997.</p>' +
               '<div class="flex flex-wrap gap-3 justify-center">' +
-                '<a href="/ux-audit?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors">Get the 48-Hour UX Audit</a>' +
-                '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 border-2 border-zinc-300 text-zinc-900 text-sm font-medium rounded-lg hover:bg-white transition-colors">Ask about your results</a>' +
+                '<a href="/ux-audit?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-ultra text-white text-sm font-medium rounded hover:bg-ink transition-colors">Get the 48-Hour UX Audit</a>' +
+                '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 border-2 border-graphite/30 text-ink text-sm font-medium rounded hover:bg-white transition-colors">Ask about your results</a>' +
               '</div>' +
             '</div>'
           );
         }
         return (
-          '<div class="bg-zinc-50 border border-zinc-200 rounded-lg p-8 text-center">' +
-            '<p class="text-xl text-zinc-900 font-semibold mb-2">Want help turning this into more calls and bookings?</p>' +
-            '<p class="text-zinc-600 max-w-xl mx-auto mb-6">This score is based on your own answers. Ask me about your results and I\'ll walk you through what\'s really going on with your site — no obligation.</p>' +
+          '<div class="bg-gesso/60 border border-ink/10 rounded p-8 text-center">' +
+            '<p class="text-xl text-ink font-semibold mb-2">Want help turning this into more calls and bookings?</p>' +
+            '<p class="text-graphite max-w-xl mx-auto mb-6">This score is based on your own answers. Ask me about your results and I\'ll walk you through what\'s really going on with your site — no obligation.</p>' +
             '<div class="flex flex-wrap gap-3 justify-center">' +
-              '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors">Ask about your results</a>' +
+              '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-ultra text-white text-sm font-medium rounded hover:bg-ink transition-colors">Ask about your results</a>' +
             '</div>' +
           '</div>'
         );

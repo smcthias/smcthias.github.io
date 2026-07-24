@@ -1,261 +1,1009 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
-import SectionDivider from '../components/SectionDivider.astro';
 
+const GTM_ID = 'GTM-5CKC7W8X';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://savelledesign.com');
+const ogImage = new URL('/images/og-default.jpg', Astro.site || 'https://savelledesign.com');
 
-// Get all projects from content collections and sort by date (newest first), limit to 6
+const title = 'Savelle Design | Senior Product Designer & Creative Director in Scottsdale, AZ';
+const description =
+  '18 years of product design and creative direction for brands like PetSmart, General Motors, and Sotheby’s, now available directly. Websites, brand identity, UX audits, and overflow design capacity for agencies.';
+
+// Contact form posts to the same Google Apps Script sheet as /contact and
+// /ux-health-check (form_type distinguishes rows).
+const FORM_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
+
+const VIMEO_ID = '1193063245';
+
+// Curated to five. Copy is hand-written here; images and outcome stats come
+// from the projects collection so they stay in sync with the case study pages.
 const allProjects = await getCollection('projects');
-const featuredProjects = allProjects
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 6);
+const pick = (slug: string) => {
+  const entry = allProjects.find((p) => p.slug === slug);
+  if (!entry) throw new Error(`Missing project for homepage case study: ${slug}`);
+  return entry;
+};
+
+const caseStudies = [
+  {
+    entry: pick('lamesa'),
+    client: 'La Mesa RV & Van Up',
+    discipline: 'E-commerce design & build',
+    problem:
+      'Eleven dealership locations, thousands of vehicles, and customers who could not find any of them. The sales team was fighting the inventory system as hard as the shoppers were.',
+    approach:
+      'I designed a search and filter experience built around how people actually shop for RVs, then designed and built Van Up’s e-commerce site from scratch: upgrade scheduling, accessory upsells, and a tracker that shows customers where their van is in the process.',
+    quote: {
+      text: 'It felt more like having a co-founder who just happened to be insanely talented at UX. He got in the weeds with us, understood our sales team’s pain points, and built something that made everyone’s life easier. That’s rare.',
+      name: 'Brian Fidler',
+      role: 'Former Head of Marketing, La Mesa RV & Van Up',
+    },
+  },
+  {
+    entry: pick('young-living'),
+    client: 'Young Living',
+    discipline: 'Content platform design',
+    problem:
+      'Six million brand partners around the world and no single place to send them for product education, promotions, or company news.',
+    approach:
+      'I designed Grow News from wireframe to launch: a promotion and education hub that matched a brand its audience already loved, structured so a massive distributor network could actually navigate it.',
+    quote: null,
+  },
+  {
+    entry: pick('yoli'),
+    client: 'Yoli',
+    discipline: 'Email design system',
+    problem:
+      'A wellness brand selling in four countries with email doing the heavy lifting and no system behind it. Every send was a one-off.',
+    approach:
+      'I built an email design system in Klaviyo, then the campaigns on top of it: onboarding, transactional, and promotional flows, plus the landing pages they pointed to.',
+    quote: null,
+  },
+  {
+    entry: pick('nikkl'),
+    client: 'Nikkl',
+    discipline: 'Brand & website, 5-day sprint',
+    problem:
+      'A fintech startup helping unicorn employees unlock their stock options needed to look credible to a skeptical audience. And it needed to happen in five days.',
+    approach:
+      'I rebuilt the logo and color system, illustrated the complicated finance parts so a human could follow them, and designed and developed the site. Concept to launch inside the deadline.',
+    quote: null,
+  },
+  {
+    entry: pick('adorned'),
+    client: 'Adorned',
+    discipline: 'Brand identity',
+    problem:
+      'An augmented reality mobile game heading into investor pitches with genuinely novel tech and no visual identity to point at.',
+    approach:
+      'I built an investor-ready brand kit that made cutting-edge AR feel approachable instead of alienating, so the pitch could focus on the product.',
+    quote: null,
+  },
+];
+
+const heroClients = ['PetSmart', 'General Motors', 'Sotheby’s', 'Universal', 'bareMinerals', 'Capitol Records'];
 
 const logos = [
-  { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart', h: 'h-[26px]' },
-  { src: '/images/logos/logo-gm.svg', alt: 'GM', h: 'h-[34px]' },
-  { src: '/images/logos/logo-plexus.svg', alt: 'Plexus Worldwide', h: 'h-[30px]' },
-  { src: '/images/logos/logo-sothebys.svg', alt: "Sotheby's", h: 'h-5' },
-  { src: '/images/logos/logo-lamesa.svg', alt: 'La Mesa RV', h: 'h-[26px]' },
-  { src: '/images/logos/logo-universal.svg', alt: 'Universal', h: 'h-[34px]' },
-  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 'h-[34px]' },
-  { src: '/images/logos/logo-thebeachboys.svg', alt: 'The Beach Boys', h: 'h-[34px]' },
-  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals', h: 'h-3' },
-  { src: '/images/logos/logo-richdad.svg', alt: 'Rich Dad', h: 'h-3' },
-  { src: '/images/logos/logo-sanity.svg', alt: 'Sanity', h: 'h-5' },
+  { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart logo', h: 'h-[26px]' },
+  { src: '/images/logos/logo-gm.svg', alt: 'General Motors logo', h: 'h-[34px]' },
+  { src: '/images/logos/logo-plexus.svg', alt: 'Plexus Worldwide logo', h: 'h-[30px]' },
+  { src: '/images/logos/logo-sothebys.svg', alt: 'Sotheby’s logo', h: 'h-5' },
+  { src: '/images/logos/logo-lamesa.svg', alt: 'La Mesa RV logo', h: 'h-[26px]' },
+  { src: '/images/logos/logo-universal.svg', alt: 'Universal logo', h: 'h-[34px]' },
+  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records logo', h: 'h-[34px]' },
+  { src: '/images/logos/logo-thebeachboys.svg', alt: 'The Beach Boys logo', h: 'h-[34px]' },
+  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals logo', h: 'h-3' },
+  { src: '/images/logos/logo-richdad.svg', alt: 'Rich Dad logo', h: 'h-3' },
+  { src: '/images/logos/logo-sanity.svg', alt: 'Sanity logo', h: 'h-5' },
 ];
+const logoRows = [logos.slice(0, 4), logos.slice(4, 7), logos.slice(7)];
+
+const projectTypes = ['Full website', 'Brand identity', 'Agency overflow', 'UX audit', 'Not sure yet'];
+const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
+
+const chapters = [
+  { id: 'reel', n: '01', label: 'Reel' },
+  { id: 'work', n: '02', label: 'Work' },
+  { id: 'check', n: '03', label: 'Checkup' },
+  { id: 'capacity', n: '04', label: 'Capacity' },
+  { id: 'about', n: '05', label: 'About' },
+  { id: 'contact', n: '06', label: 'Contact' },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': 'https://savelledesign.com/#savelle',
+      name: 'Savelle McThias',
+      jobTitle: 'Senior Product Designer & Creative Director',
+      url: 'https://savelledesign.com',
+      sameAs: ['https://www.linkedin.com/in/savelle/'],
+      address: { '@type': 'PostalAddress', addressLocality: 'Scottsdale', addressRegion: 'AZ', addressCountry: 'US' },
+      knowsAbout: [
+        'UX design',
+        'UI design',
+        'web design',
+        'brand identity design',
+        'email marketing design',
+        'e-commerce design',
+        'creative direction',
+      ],
+    },
+    {
+      '@type': 'ProfessionalService',
+      name: 'Savelle Design',
+      url: 'https://savelledesign.com',
+      description:
+        'Independent product design studio of Savelle McThias: websites, brand identity, UX audits, and overflow design capacity for agencies and marketing teams.',
+      founder: { '@id': 'https://savelledesign.com/#savelle' },
+      areaServed: 'United States',
+      address: { '@type': 'PostalAddress', addressLocality: 'Scottsdale', addressRegion: 'AZ', addressCountry: 'US' },
+      makesOffer: [
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Website design and development' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Brand identity design' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'UX audit' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Overflow design capacity for agencies' } },
+      ],
+    },
+  ],
+};
 ---
 
-<Layout
-  title="Savelle Design - UX/UI Designer & Web Developer in Scottsdale, AZ"
-  description="Professional web design and development services for growing businesses. Specializing in landing pages, website refresh, brand identity, and email campaigns. 18+ years experience."
->
-    <!-- Hero Section -->
-    <section>
-      <div class="relative">
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div class="max-w-2xl">
-            <p class="flex items-center gap-3 text-xl md:text-2xl text-zinc-600 mb-4">
-              <img
-                src={`${base}/images/about/profile.jpg`}
-                alt=""
-                class="w-12 h-12 rounded-full object-cover border border-zinc-200"
-                width="48"
-                height="48"
-              />
-              Hi, I'm Savelle.
-            </p>
-            <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6 leading-tight">
-              I design websites that turn visitors into customers.
-            </h1>
-            <p class="text-xl text-zinc-600 mb-8 leading-relaxed">
-              A business is a thousand moving pieces — your brand, your products, your customers' questions. For 18+ years I've pulled them together into websites that bring in more calls, bookings, and sales. You work directly with me, start to finish.
-            </p>
-            <div class="flex flex-wrap gap-4 mb-6">
-              <a
-                href={`${base}/works`}
-                class="px-8 py-3 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors font-medium"
-              >
-                View Projects
-              </a>
-              <a
-                href={`${base}/contact`}
-                class="px-8 py-3 border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50 transition-colors font-medium"
-              >
-                Let's Talk
-              </a>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Google Tag Manager -->
+    <script define:vars={{ gtmId: GTM_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() {
+        const a = arguments;
+        if (a[0] === 'event' && typeof a[1] === 'string') {
+          window.dataLayer.push(Object.assign({ event: a[1] }, a[2] || {}));
+        } else {
+          window.dataLayer.push(a);
+        }
+      };
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        const f = d.getElementsByTagName(s)[0];
+        const j = d.createElement(s);
+        const dl = l !== 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', gtmId);
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Savelle Design" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="author" content="Savelle McThias" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,500;100,600;125,700;125,800;125,900&family=Newsreader:ital,opsz,wght@1,6..72,400..500&family=Spline+Sans+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+
+  <body class="bg-gesso text-ink font-sans antialiased">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <a
+      href="#work"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-ultra focus:text-white focus:px-4 focus:py-2 focus:rounded"
+    >
+      Skip to content
+    </a>
+
+    <!-- Header -->
+    <header class="fixed top-0 inset-x-0 z-50 bg-ink/90 backdrop-blur-sm text-gesso">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+        <a href={`${base}/`} class="font-mono text-sm tracking-widest uppercase hover:text-signal transition-colors">
+          Savelle Design
+        </a>
+        <nav aria-label="Primary" class="flex items-center gap-6">
+          <a href="#work" class="hidden md:inline font-mono text-xs tracking-widest uppercase text-putty hover:text-gesso transition-colors">Work</a>
+          <a href="#check" class="hidden md:inline font-mono text-xs tracking-widest uppercase text-putty hover:text-gesso transition-colors">UX Check</a>
+          <a href="#capacity" class="hidden md:inline font-mono text-xs tracking-widest uppercase text-putty hover:text-gesso transition-colors">Agencies</a>
+          <a
+            href="#contact"
+            class="inline-flex items-center px-4 py-1.5 bg-ultra text-white font-mono text-xs tracking-widest uppercase rounded hover:bg-signal hover:text-ink transition-colors"
+          >
+            Start a project
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Chapter rail (desktop) -->
+    <nav id="rail" aria-label="Page sections" class="hidden xl:flex fixed left-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-3">
+      {chapters.map((c) => (
+        <a
+          href={`#${c.id}`}
+          data-rail={c.id}
+          class="rail-link font-mono text-[11px] tracking-[0.2em] uppercase transition-colors"
+        >
+          {c.n} {c.label}
+        </a>
+      ))}
+    </nav>
+
+    <main>
+      <!-- ============ 01 · HERO / THE REEL (dark) ============ -->
+      <section id="reel" data-theme="dark" class="bg-ink text-gesso relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-40 md:pb-20 min-h-[92svh] flex flex-col justify-center">
+          <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            <div class="lg:col-span-7">
+              <p class="rv font-mono text-xs tracking-[0.25em] uppercase text-putty mb-6" style="--d:0ms">
+                Scottsdale, Arizona &middot; Est. 18 years in
+              </p>
+              <h1 class="rv wide text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold leading-[1.02] mb-6" style="--d:80ms">
+                Enterprise-grade design.<br />
+                <span class="text-signal">No agency in the way.</span>
+              </h1>
+              <p class="rv text-lg md:text-xl text-gesso/80 leading-relaxed max-w-xl mb-8" style="--d:160ms">
+                I&rsquo;m Savelle McThias, a senior product designer and creative director. For 18 years I&rsquo;ve
+                designed for brands like PetSmart, General Motors, and Sotheby&rsquo;s. Now you work with me
+                directly: you email me, I reply, I do the work.
+              </p>
+              <div class="rv flex flex-wrap gap-4 mb-10" style="--d:240ms">
+                <a
+                  href="#work"
+                  class="inline-flex items-center px-7 py-3 bg-ultra text-white font-medium rounded hover:bg-signal hover:text-ink transition-colors"
+                >
+                  See the work
+                </a>
+                <a
+                  href="#contact"
+                  class="inline-flex items-center px-7 py-3 border border-putty/50 text-gesso font-medium rounded hover:border-gesso hover:bg-gesso/5 transition-colors"
+                >
+                  Start a project
+                </a>
+              </div>
+              <p class="rv font-mono text-[11px] tracking-[0.18em] uppercase text-putty/80" style="--d:320ms">
+                {heroClients.join(' · ')}
+              </p>
             </div>
-            <a
-              href={`${base}/ux-health-check`}
-              class="inline-flex items-center text-zinc-600 hover:text-zinc-900 font-medium underline underline-offset-4 transition-colors"
-            >
-              Not ready yet? Get your free UX score
-            </a>
+
+            <!-- The Screening: reel poster frame -->
+            <div class="lg:col-span-5 rv" style="--d:200ms">
+              <div id="reel-frame" class="relative aspect-video bg-[#1A1E25] border border-putty/25 rounded overflow-hidden">
+                <!-- corner registration marks -->
+                <span class="absolute top-2 left-2 w-4 h-4 border-t border-l border-putty/50" aria-hidden="true"></span>
+                <span class="absolute top-2 right-2 w-4 h-4 border-t border-r border-putty/50" aria-hidden="true"></span>
+                <span class="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-putty/50" aria-hidden="true"></span>
+                <span class="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-putty/50" aria-hidden="true"></span>
+
+                <button
+                  type="button"
+                  id="reel-play"
+                  class="group absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-3 cursor-pointer"
+                  aria-label="Play the 2026 design reel (loads Vimeo player)"
+                >
+                  <span class="relative inline-flex items-center justify-center" aria-hidden="true">
+                    <svg viewBox="0 0 120 120" class="w-28 h-28 md:w-32 md:h-32">
+                      <circle cx="60" cy="60" r="54" fill="none" stroke="#2B3FDE" stroke-width="1.5" opacity="0.45"></circle>
+                      <circle
+                        class="ring-draw"
+                        cx="60"
+                        cy="60"
+                        r="54"
+                        fill="none"
+                        stroke="#E3A32F"
+                        stroke-width="2"
+                        transform="rotate(-90 60 60)"
+                        stroke-linecap="round"></circle>
+                      <line x1="60" y1="2" x2="60" y2="12" stroke="#A79F8D" stroke-width="1"></line>
+                      <line x1="60" y1="108" x2="60" y2="118" stroke="#A79F8D" stroke-width="1"></line>
+                      <line x1="2" y1="60" x2="12" y2="60" stroke="#A79F8D" stroke-width="1"></line>
+                      <line x1="108" y1="60" x2="118" y2="60" stroke="#A79F8D" stroke-width="1"></line>
+                    </svg>
+                    <span class="absolute inset-0 flex items-center justify-center wide text-3xl md:text-4xl font-extrabold text-gesso">
+                      18
+                    </span>
+                  </span>
+                  <span class="font-mono text-[11px] tracking-[0.25em] uppercase text-putty group-hover:text-signal transition-colors">
+                    The 2026 reel &middot; Play &#9654;
+                  </span>
+                </button>
+              </div>
+              <p class="mt-3 font-serifa italic text-putty text-base">
+                Eighteen years, cut down to the good parts.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Trusted by -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div class="pt-10 border-t border-zinc-200">
-          <p class="text-xs font-medium text-zinc-500 uppercase tracking-widest mb-5">Trusted by teams at</p>
-          <div class="flex flex-wrap items-center gap-x-8 gap-y-4 lg:justify-between lg:gap-x-4">
-            {logos.map(({ src, alt, h }) => (
-              <img src={src} alt={alt} class={`${h} w-auto object-contain brightness-0 opacity-40`} />
+      <!-- ============ 02 · SELECTED WORK (light) ============ -->
+      <section id="work" data-theme="light" class="bg-gesso py-24 md:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-3xl mb-16 md:mb-24">
+            <p class="rv font-mono text-xs tracking-[0.25em] uppercase text-ultra mb-4">02 &middot; Selected work</p>
+            <h2 class="rv wide text-3xl md:text-5xl font-extrabold text-ink mb-5">Five projects, told properly.</h2>
+            <p class="rv text-lg text-graphite leading-relaxed">
+              Problem, approach, outcome. Real numbers where clients let me share them.
+              No infinite grid of screenshots.
+            </p>
+          </div>
+
+          <div class="space-y-24 md:space-y-32">
+            {caseStudies.map((cs, i) => (
+              <article class="rv grid lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+                <figure class={`lg:col-span-7 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+                  <img
+                    src={`${base}/images/works/${cs.entry.data.images.hero}`}
+                    alt={`${cs.client}: ${cs.discipline} by Savelle McThias`}
+                    class="w-full aspect-[16/10] object-cover rounded border border-ink/10"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                  />
+                </figure>
+                <div class={`lg:col-span-5 ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
+                  <p class="font-mono text-xs tracking-[0.2em] uppercase text-ultra mb-2">
+                    0{i + 1} / {cs.discipline}
+                  </p>
+                  <h3 class="wide text-2xl md:text-3xl font-extrabold text-ink mb-6">{cs.client}</h3>
+
+                  <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-graphite/60 mb-1.5">Problem</p>
+                  <p class="text-graphite leading-relaxed mb-5">{cs.problem}</p>
+
+                  <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-graphite/60 mb-1.5">Approach</p>
+                  <p class="text-graphite leading-relaxed mb-6">{cs.approach}</p>
+
+                  <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-graphite/60 mb-3">Outcome</p>
+                  <dl class="flex flex-wrap gap-x-8 gap-y-3 mb-7">
+                    {cs.entry.data.results.map((r: { value: string; label: string }) => (
+                      <div>
+                        <dt class="sr-only">{r.label}</dt>
+                        <dd>
+                          <span class="wide block text-2xl font-extrabold text-ultra">{r.value}</span>
+                          <span class="block text-xs text-graphite max-w-[180px]">{r.label}</span>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <a
+                    href={`${base}/works/${cs.entry.slug}`}
+                    class="inline-flex items-center gap-2 font-medium text-ink underline underline-offset-4 decoration-ultra decoration-2 hover:text-ultra transition-colors"
+                  >
+                    Read the full case study <span aria-hidden="true">&rarr;</span>
+                  </a>
+
+                  {cs.quote && (
+                    <blockquote class="mt-8 border-l-2 border-signal pl-5">
+                      <p class="font-serifa italic text-lg text-ink leading-relaxed mb-2">&ldquo;{cs.quote.text}&rdquo;</p>
+                      <footer class="font-mono text-[11px] tracking-[0.15em] uppercase text-graphite/70">
+                        {cs.quote.name} &middot; {cs.quote.role}
+                      </footer>
+                    </blockquote>
+                  )}
+                </div>
+              </article>
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Featured Work Section -->
-    <section class="py-20 bg-zinc-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Featured Work</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredProjects.map((project) => (
-            <a href={`${base}/works/${project.slug}`} class="group block">
-              <div class="relative aspect-[4/3] rounded-lg mb-4 overflow-hidden bg-zinc-800">
-                <img
-                  src={`${base}/images/works/${project.data.thumbnail}`}
-                  alt={`${project.data.title} - ${project.data.category} project showcase`}
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                />
+      <!-- ============ 03 · UX HEALTH CHECK (ultramarine panel) ============ -->
+      <section id="check" data-theme="light" class="bg-gesso pb-24 md:pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="rv bg-ultra text-gesso rounded-lg p-8 md:p-14 lg:p-16 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div>
+              <p class="font-mono text-xs tracking-[0.25em] uppercase text-signal mb-4">03 &middot; Free diagnostic</p>
+              <h2 class="wide text-3xl md:text-4xl font-extrabold mb-5">How healthy is your website, really?</h2>
+              <p class="text-gesso/85 text-lg leading-relaxed mb-4">
+                Ten questions, about three minutes, no meeting and no pitch. You get a scored report on
+                the spot with the problems ranked by what&rsquo;s likely costing you the most.
+              </p>
+              <p class="text-gesso/85 text-lg leading-relaxed mb-8">
+                Then it&rsquo;s your call: fix things yourself, or ask me. Either way you leave knowing more
+                than you arrived with.
+              </p>
+              <a
+                href={`${base}/ux-health-check`}
+                class="inline-flex items-center px-7 py-3 bg-gesso text-ink font-medium rounded hover:bg-signal transition-colors"
+              >
+                Take the free UX Health Check
+              </a>
+              <p class="mt-6 font-mono text-[11px] tracking-[0.15em] uppercase text-gesso/60">
+                savelledesign.com/ux-health-check &middot; forward it to whoever owns the website
+              </p>
+            </div>
+
+            <!-- sample report card -->
+            <div aria-hidden="true" class="bg-ink/20 border border-gesso/20 rounded p-6 md:p-8">
+              <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-gesso/70 mb-5">Sample report</p>
+              <ul class="space-y-4">
+                {[
+                  { label: 'First impression', score: 8 },
+                  { label: 'Clarity of offer', score: 5 },
+                  { label: 'Calls to action', score: 4 },
+                  { label: 'Mobile experience', score: 7 },
+                  { label: 'Trust signals', score: 6 },
+                ].map((row) => (
+                  <li>
+                    <div class="flex justify-between font-mono text-xs text-gesso/85 mb-1.5">
+                      <span>{row.label}</span>
+                      <span>{row.score}/10</span>
+                    </div>
+                    <div class="h-1.5 bg-gesso/15 rounded-full overflow-hidden">
+                      <div class="h-full bg-signal rounded-full" style={`width: ${row.score * 10}%`}></div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <p class="mt-6 font-serifa italic text-gesso/70 text-sm">
+                If the score is ugly, at least now you know.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 04 · AGENCY CAPACITY (dark) ============ -->
+      <section id="capacity" data-theme="dark" class="bg-ink text-gesso py-24 md:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-3xl">
+            <p class="rv font-mono text-xs tracking-[0.25em] uppercase text-signal mb-4">
+              04 &middot; For agencies and marketing teams
+            </p>
+            <h2 class="rv wide text-3xl md:text-5xl font-extrabold mb-6">
+              Overflow capacity that doesn&rsquo;t need babysitting.
+            </h2>
+            <p class="rv text-lg text-gesso/80 leading-relaxed mb-4">
+              If you run an agency or a marketing team, you know the shape of this problem: more design
+              work than designers, and no time to onboard a freelancer who needs a month of context.
+            </p>
+            <p class="rv text-lg text-gesso/80 leading-relaxed mb-10">
+              I plug into your process, your Figma, your PM tool, your standup if you want, and produce
+              senior work under your flag. White label is fine. Deadlines get met. You look good to your
+              client, which is the entire point.
+            </p>
+          </div>
+
+          <div class="rv grid sm:grid-cols-3 gap-px bg-putty/20 border border-putty/20 rounded overflow-hidden mb-10 max-w-4xl">
+            {[
+              { t: 'White label welcome', d: 'Your brand on the deliverables. I’m invisible if you want me to be.' },
+              { t: 'Senior work only', d: 'No hand-offs to a junior you’ve never met. The person you brief does the work.' },
+              { t: 'Productive in days', d: '18 years of agency and in-house context means a short ramp, not a month of onboarding.' },
+            ].map((item) => (
+              <div class="bg-ink p-6">
+                <p class="font-mono text-xs tracking-[0.15em] uppercase text-signal mb-2">{item.t}</p>
+                <p class="text-sm text-gesso/70 leading-relaxed">{item.d}</p>
               </div>
-              <h3 class="text-lg font-semibold text-white group-hover:text-zinc-300 transition-colors">{project.data.title}</h3>
-              <p class="text-sm text-zinc-400">{project.data.category}</p>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- Services Preview -->
-    <section class="py-20 bg-zinc-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-3">What I Do</h2>
-        <p class="text-lg text-zinc-600 mb-12">Four ways I help you pull the pieces together.</p>
-      <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-        <a href={`${base}/services/landing-page-design`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
-          <div class="w-12 h-12 text-zinc-900 mb-4">
-            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Landing Page Design</h3>
-          <p class="text-zinc-600">
-            High-converting landing pages that turn your website visitors into customers.
-          </p>
-        </a>
-        <a href={`${base}/services/website-refresh`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
-          <div class="w-12 h-12 text-zinc-900 mb-4">
-            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Website Refresh & Redesign</h3>
-          <p class="text-zinc-600">
-            Modernize your website with a fresh design that better represents your brand.
-          </p>
-        </a>
-        <a href={`${base}/services/brand-identity`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
-          <div class="w-12 h-12 text-zinc-900 mb-4">
-            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Brand Identity Touchups</h3>
-          <p class="text-zinc-600">
-            Refine your visual identity to create a consistent, professional look.
-          </p>
-        </a>
-        <a href={`${base}/services/email-campaigns`} class="p-6 bg-white border border-zinc-200 rounded-lg hover:shadow-lg transition-shadow block">
-          <div class="w-12 h-12 text-zinc-900 mb-4">
-            <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Email Campaign Series</h3>
-          <p class="text-zinc-600">
-            Design engaging email campaigns that connect with your audience and drive results.
-          </p>
-        </a>
-      </div>
-      <div class="mt-12 flex flex-wrap gap-x-8 gap-y-4">
-        <a
-          href={`${base}/services`}
-          class="inline-flex items-center text-zinc-900 font-medium hover:text-zinc-600 transition-colors"
-        >
-          View all services
-          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </a>
-        <a
-          href={`${base}/pricing`}
-          class="inline-flex items-center text-zinc-900 font-medium hover:text-zinc-600 transition-colors"
-        >
-          View pricing
-          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </a>
-      </div>
-      </div>
-    </section>
-
-    <!-- Testimonial Section -->
-    <section class="py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionDivider class="mb-12" />
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">What Clients Say</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Testimonial 1 - Brian Fidler -->
-          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 11 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare."
-            </p>
-            <div class="pt-6 border-t border-zinc-200">
-              <p class="font-semibold text-zinc-900">Brian Fidler</p>
-              <p class="text-zinc-600">Former Head of Marketing, La Mesa RV & Van Up</p>
-            </div>
+            ))}
           </div>
 
-          <!-- Testimonial 2 - Daniel Kruger -->
-          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "Savelle is one of the most talented UX experts I've had the pleasure of working with. Within a very short period of time after his hire, he was knocking out work items and client side code. The impact of his effort and his work will be felt for a very long time. It seemed like every day, he was revealing a new talent. My favorite Savelle anecdote is the time he re-designed the product logo, and came up with something better than the marketing company effort after doodling for about 10 minutes. Simply amazing."
-            </p>
-            <div class="pt-6 border-t border-zinc-200">
-              <p class="font-semibold text-zinc-900">Daniel Kruger</p>
-              <p class="text-zinc-600">VP of Software Development, SyberSafe</p>
-            </div>
-          </div>
-        </div>
-        <div class="mt-8">
           <a
-            href={`${base}/about#testimonials`}
-            class="inline-flex items-center text-zinc-900 font-medium hover:text-zinc-600 transition-colors"
+            href="#contact"
+            class="rv inline-flex items-center px-7 py-3 border border-putty/50 text-gesso font-medium rounded hover:border-gesso hover:bg-gesso/5 transition-colors"
           >
-            Read more testimonials
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+            Ask about capacity
           </a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 bg-zinc-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl">
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-            Have all the pieces but no picture?
-          </h2>
-          <p class="text-xl text-zinc-300 mb-8">
-            Whether you're launching a new business, growing an existing one, or just need a website refresh — let's put it together.
-          </p>
-          <a
-            href={`${base}/contact`}
-            class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
-          >
-            Get in Touch
-          </a>
+      <!-- ============ 05 · ABOUT (light) ============ -->
+      <section id="about" data-theme="light" class="bg-gesso py-24 md:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+            <div class="lg:col-span-4 rv">
+              <img
+                src={`${base}/images/about/profile.jpg`}
+                alt="Savelle McThias, senior product designer and creative director, Scottsdale, Arizona"
+                class="w-full max-w-sm aspect-[4/5] object-cover rounded border border-ink/10"
+                loading="lazy"
+              />
+            </div>
+            <div class="lg:col-span-8">
+              <p class="rv font-mono text-xs tracking-[0.25em] uppercase text-ultra mb-4">05 &middot; The person</p>
+              <h2 class="rv wide text-3xl md:text-4xl font-extrabold text-ink mb-6">About Savelle McThias</h2>
+              <p class="rv text-lg text-graphite leading-relaxed mb-4 max-w-2xl">
+                I&rsquo;m a product designer and creative director in Scottsdale, Arizona, and I&rsquo;ve been
+                shipping design for 18 years: in-house, agency-side, and independent. The through-line has
+                never changed. Understand what the business actually needs, design the thing that gets it
+                there, and stay until it ships.
+              </p>
+              <p class="rv text-lg text-graphite leading-relaxed mb-10 max-w-2xl">
+                The enterprise years meant work for PetSmart, General Motors, Sotheby&rsquo;s, Universal, and
+                bareMinerals. The independent years mean that same standard is available without an agency
+                wrapped around it. Small teams get the senior designer directly. Agencies get a safe pair
+                of hands.
+              </p>
+
+              <p class="rv font-mono text-[11px] tracking-[0.2em] uppercase text-graphite/60 mb-5">
+                Brands I&rsquo;ve designed for
+              </p>
+              <div class="rv">
+                {logoRows.map((row, i) => (
+                  <div class={`flex flex-wrap items-center gap-x-8 gap-y-4 ${i < logoRows.length - 1 ? 'mb-6' : ''}`}>
+                    {row.map(({ src, alt, h }) => (
+                      <img src={`${base}${src}`} alt={alt} class={`${h} w-auto object-contain brightness-0 opacity-40`} loading="lazy" />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <!-- ============ 06 · CONTACT (light) ============ -->
+      <section id="contact" data-theme="light" class="bg-gesso pb-24 md:pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-3xl mb-14">
+            <p class="rv font-mono text-xs tracking-[0.25em] uppercase text-ultra mb-4">06 &middot; Start</p>
+            <h2 class="rv wide text-3xl md:text-5xl font-extrabold text-ink mb-5">
+              Tell me what&rsquo;s broken. I&rsquo;ll tell you how I&rsquo;d fix it.
+            </h2>
+            <p class="rv text-lg text-graphite leading-relaxed">
+              A few details is all it takes. You&rsquo;ll hear back from me personally, usually within one
+              business day.
+            </p>
+          </div>
+
+          <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
+            <!-- Form -->
+            <div class="lg:col-span-7 rv">
+              <form
+                id="pf-form"
+                data-endpoint={FORM_ENDPOINT}
+                action={FORM_ENDPOINT}
+                method="POST"
+                class="bg-white border border-ink/10 rounded-lg p-7 md:p-9"
+                novalidate
+              >
+                <input type="hidden" name="form_type" value="contact" />
+                <input type="hidden" name="site" value="savelledesign.com" />
+                <input type="hidden" name="utm_source" />
+                <input type="hidden" name="utm_medium" />
+                <input type="hidden" name="utm_campaign" />
+                <input type="hidden" name="utm_content" />
+                <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+                <div class="space-y-6">
+                  <div>
+                    <label for="pf-name" class="block font-mono text-[11px] tracking-[0.15em] uppercase text-graphite mb-2">Name</label>
+                    <input
+                      id="pf-name"
+                      name="name"
+                      type="text"
+                      required
+                      autocomplete="name"
+                      class="w-full bg-white border border-graphite/30 rounded px-4 py-3 text-ink placeholder-graphite/40 focus:outline-none focus:border-ultra transition-colors"
+                    />
+                    <p data-error-for="pf-name" class="text-sm text-red-700 mt-1.5 hidden" role="alert">Please enter your name.</p>
+                  </div>
+
+                  <div>
+                    <label for="pf-email" class="block font-mono text-[11px] tracking-[0.15em] uppercase text-graphite mb-2">Work email</label>
+                    <input
+                      id="pf-email"
+                      name="email"
+                      type="email"
+                      required
+                      autocomplete="email"
+                      placeholder="you@company.com"
+                      class="w-full bg-white border border-graphite/30 rounded px-4 py-3 text-ink placeholder-graphite/40 focus:outline-none focus:border-ultra transition-colors"
+                    />
+                    <p data-error-for="pf-email" class="text-sm text-red-700 mt-1.5 hidden" role="alert">Please enter a valid email address.</p>
+                  </div>
+
+                  <fieldset>
+                    <legend class="block font-mono text-[11px] tracking-[0.15em] uppercase text-graphite mb-2">
+                      What do you need? <span class="normal-case text-graphite/50">(optional)</span>
+                    </legend>
+                    <div class="flex flex-wrap gap-2">
+                      {projectTypes.map((t) => (
+                        <label class="cursor-pointer">
+                          <input type="radio" name="project_type" value={t} class="peer sr-only" />
+                          <span class="inline-flex px-4 py-2 rounded border border-graphite/30 text-sm text-graphite transition-colors hover:border-graphite/60 peer-checked:bg-ink peer-checked:text-gesso peer-checked:border-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ultra">
+                            {t}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+
+                  <fieldset>
+                    <legend class="block font-mono text-[11px] tracking-[0.15em] uppercase text-graphite mb-2">
+                      Budget range <span class="normal-case text-graphite/50">(optional)</span>
+                    </legend>
+                    <div class="flex flex-wrap gap-2">
+                      {budgets.map((b) => (
+                        <label class="cursor-pointer">
+                          <input type="radio" name="budget" value={b} class="peer sr-only" />
+                          <span class="inline-flex px-4 py-2 rounded border border-graphite/30 text-sm text-graphite transition-colors hover:border-graphite/60 peer-checked:bg-ink peer-checked:text-gesso peer-checked:border-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ultra">
+                            {b}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+
+                  <div>
+                    <label for="pf-message" class="block font-mono text-[11px] tracking-[0.15em] uppercase text-graphite mb-2">The project</label>
+                    <textarea
+                      id="pf-message"
+                      name="message"
+                      rows="5"
+                      required
+                      class="w-full bg-white border border-graphite/30 rounded px-4 py-3 text-ink placeholder-graphite/40 focus:outline-none focus:border-ultra transition-colors resize-y"
+                      placeholder="What are you building, what&rsquo;s not working, and what would success look like?"></textarea>
+                    <p data-error-for="pf-message" class="text-sm text-red-700 mt-1.5 hidden" role="alert">Please add a few details.</p>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  id="pf-submit"
+                  class="mt-8 w-full inline-flex items-center justify-center px-6 py-3 bg-ultra text-white font-medium rounded hover:bg-ink transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <span id="pf-submit-label">Send project inquiry</span>
+                  <svg id="pf-spinner" class="hidden ml-2 w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                  </svg>
+                </button>
+
+                <p id="pf-form-error" class="text-sm text-red-700 mt-4 hidden" role="alert"></p>
+                <p class="text-xs text-graphite/70 mt-4">
+                  No newsletter. This goes straight to my inbox and I reply personally within one business day.
+                </p>
+              </form>
+
+              <div id="pf-success" class="bg-white border border-ink/10 rounded-lg p-10 text-center" hidden>
+                <p class="font-mono text-xs tracking-[0.25em] uppercase text-ultra mb-4">Received</p>
+                <h3 class="wide text-2xl font-extrabold text-ink mb-2">Got it<span id="pf-success-name"></span>. Your inquiry is in.</h3>
+                <p class="text-graphite max-w-md mx-auto">I read every message personally and reply within one business day. Talk soon.</p>
+              </div>
+
+              <p class="text-sm text-graphite/80 mt-6">
+                Prefer email?
+                <a href="mailto:savellem@gmail.com" class="text-ink underline underline-offset-4 decoration-ultra hover:text-ultra transition-colors">savellem@gmail.com</a>
+                &middot;
+                <a href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer" class="text-ink underline underline-offset-4 decoration-ultra hover:text-ultra transition-colors">LinkedIn</a>
+              </p>
+            </div>
+
+            <!-- What happens next -->
+            <div class="lg:col-span-5 rv">
+              <p class="font-mono text-[11px] tracking-[0.2em] uppercase text-graphite/60 mb-6">What happens next</p>
+              <ol class="space-y-6 mb-12">
+                {[
+                  { t: 'You send a few details', d: 'The form takes about a minute. Vague is fine, we can sharpen it together.' },
+                  { t: 'We talk for 30 minutes', d: 'I learn your product, your users, and what success looks like.' },
+                  { t: 'You get a proposal', d: 'Clear scope, timeline, and price. No surprises, no pressure.' },
+                ].map((step, i) => (
+                  <li class="flex gap-4">
+                    <div class="shrink-0 w-9 h-9 rounded bg-ink text-gesso wide font-extrabold flex items-center justify-center text-sm">
+                      {i + 1}
+                    </div>
+                    <div>
+                      <p class="text-ink font-semibold">{step.t}</p>
+                      <p class="text-sm text-graphite">{step.d}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              <blockquote class="border-l-2 border-signal pl-5 mb-10">
+                <p class="font-serifa italic text-lg text-ink leading-relaxed mb-2">
+                  You&rsquo;ll work directly with me. No account managers, no junior hand-off. Senior, hands-on
+                  design from first call to final delivery.
+                </p>
+                <footer class="font-mono text-[11px] tracking-[0.15em] uppercase text-graphite/70">Savelle McThias</footer>
+              </blockquote>
+
+              <p class="font-mono text-[11px] tracking-[0.15em] uppercase text-graphite/60">
+                NDAs welcome &middot; Based in Scottsdale, AZ &middot; Working with teams anywhere
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-ink text-gesso py-14">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-10">
+          <div>
+            <p class="font-mono text-sm tracking-widest uppercase mb-3">Savelle Design</p>
+            <p class="text-sm text-putty max-w-xs leading-relaxed">
+              Senior product design and creative direction, direct from the person doing the work.
+            </p>
+          </div>
+          <nav aria-label="Footer" class="grid grid-cols-2 gap-x-12 gap-y-2.5">
+            {[
+              { href: `${base}/works`, label: 'Case studies' },
+              { href: `${base}/blog`, label: 'Blog' },
+              { href: `${base}/pricing`, label: 'Pricing' },
+              { href: `${base}/ux-audit`, label: '48-hour UX audit' },
+              { href: `${base}/ux-health-check`, label: 'UX Health Check' },
+              { href: 'https://www.linkedin.com/in/savelle/', label: 'LinkedIn' },
+              { href: `${base}/privacy`, label: 'Privacy' },
+              { href: `${base}/terms`, label: 'Terms' },
+            ].map((l) => (
+              <a href={l.href} class="font-mono text-xs tracking-[0.15em] uppercase text-putty hover:text-gesso transition-colors">
+                {l.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+        <p class="mt-12 pt-6 border-t border-putty/20 font-mono text-[11px] tracking-[0.15em] uppercase text-putty/70">
+          &copy; {new Date().getFullYear()} Savelle Design &middot; Designed and built by Savelle in Scottsdale, AZ
+        </p>
       </div>
-    </section>
+    </footer>
 
+    <style is:global>
+      html {
+        scroll-padding-top: 4.5rem;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        html {
+          scroll-behavior: smooth;
+        }
+      }
 
-</Layout>
+      /* Wide display setting for Archivo's width axis */
+      .wide {
+        font-stretch: 125%;
+        letter-spacing: -0.01em;
+      }
+
+      /* Visible keyboard focus, site-wide */
+      :focus-visible {
+        outline: 3px solid #2b3fde;
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+      [data-theme='dark'] :focus-visible,
+      header :focus-visible,
+      footer :focus-visible {
+        outline-color: #e3a32f;
+      }
+
+      /* Chapter rail states (JS toggles .on-dark as sections scroll past) */
+      .rail-link {
+        color: rgba(69, 78, 88, 0.55);
+      }
+      .rail-link:hover {
+        color: #14171c;
+      }
+      .rail-link[aria-current='true'] {
+        color: #2b3fde;
+      }
+      #rail.on-dark .rail-link {
+        color: rgba(167, 159, 141, 0.65);
+      }
+      #rail.on-dark .rail-link:hover {
+        color: #f2efe6;
+      }
+      #rail.on-dark .rail-link[aria-current='true'] {
+        color: #e3a32f;
+      }
+
+      /* Orchestrated reveals: only when JS is present AND motion is allowed.
+         No-JS and reduced-motion users see everything immediately. */
+      @media (prefers-reduced-motion: no-preference) {
+        html.js .rv {
+          opacity: 0;
+          transform: translateY(16px);
+          transition:
+            opacity 0.7s ease,
+            transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+          transition-delay: var(--d, 0ms);
+        }
+        html.js .rv.in {
+          opacity: 1;
+          transform: none;
+        }
+        html.js .ring-draw {
+          stroke-dasharray: 339.3;
+          stroke-dashoffset: 339.3;
+          animation: ring-draw 1.5s cubic-bezier(0.65, 0, 0.35, 1) 0.4s forwards;
+        }
+        @keyframes ring-draw {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+      }
+    </style>
+
+    <script define:vars={{ vimeoId: VIMEO_ID }}>
+      // ── Scroll reveals ──
+      const revealEls = Array.from(document.querySelectorAll('.rv'));
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const en of entries) {
+              if (en.isIntersecting) {
+                en.target.classList.add('in');
+                io.unobserve(en.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+        );
+        revealEls.forEach((el) => io.observe(el));
+      } else {
+        revealEls.forEach((el) => el.classList.add('in'));
+      }
+
+      // ── Chapter rail: active section + dark/light adaptation ──
+      const rail = document.getElementById('rail');
+      if (rail) {
+        const links = Array.from(rail.querySelectorAll('[data-rail]'));
+        const sections = Array.from(document.querySelectorAll('main section[id]'));
+        const railObserver = new IntersectionObserver(
+          (entries) => {
+            for (const en of entries) {
+              if (!en.isIntersecting) continue;
+              const id = en.target.id;
+              links.forEach((l) => {
+                if (l.getAttribute('data-rail') === id) l.setAttribute('aria-current', 'true');
+                else l.removeAttribute('aria-current');
+              });
+              rail.classList.toggle('on-dark', en.target.getAttribute('data-theme') === 'dark');
+            }
+          },
+          { rootMargin: '-45% 0px -45% 0px' }
+        );
+        sections.forEach((s) => railObserver.observe(s));
+      }
+
+      // ── The Screening: swap poster frame for the Vimeo player on demand ──
+      const playBtn = document.getElementById('reel-play');
+      const frame = document.getElementById('reel-frame');
+      if (playBtn && frame) {
+        playBtn.addEventListener('click', () => {
+          const iframe = document.createElement('iframe');
+          iframe.src =
+            'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&title=0&byline=0&portrait=0';
+          iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+          iframe.allowFullscreen = true;
+          iframe.title = 'Savelle Design 2026 reel';
+          iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+          frame.innerHTML = '';
+          frame.appendChild(iframe);
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'reel_play', { location: 'hero' });
+          }
+        });
+      }
+    </script>
+
+    <script>
+      // ── Contact form (same endpoint + payload shape as the old /contact page) ──
+      const formEl = document.getElementById('pf-form') as HTMLFormElement | null;
+      if (formEl) {
+        // Re-alias after the guard: TS doesn't carry the null-narrowing into
+        // the nested function closures below.
+        const form: HTMLFormElement = formEl;
+        const endpoint = (form.dataset.endpoint || '').trim();
+        const submitBtn = document.getElementById('pf-submit') as HTMLButtonElement;
+        const submitLabel = document.getElementById('pf-submit-label')!;
+        const spinner = document.getElementById('pf-spinner')!;
+        const formError = document.getElementById('pf-form-error')!;
+        const successEl = document.getElementById('pf-success')!;
+        const successName = document.getElementById('pf-success-name')!;
+
+        const params = new URLSearchParams(window.location.search);
+        (['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'] as const).forEach((k) => {
+          const input = form.querySelector(`input[name="${k}"]`) as HTMLInputElement | null;
+          if (input) input.value = params.get(k) || '';
+        });
+
+        const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+        function showFieldError(id: string, show: boolean) {
+          const el = form.querySelector(`[data-error-for="${id}"]`);
+          el?.classList.toggle('hidden', !show);
+        }
+
+        function validate() {
+          const name = (form.querySelector('#pf-name') as HTMLInputElement).value.trim();
+          const email = (form.querySelector('#pf-email') as HTMLInputElement).value;
+          const message = (form.querySelector('#pf-message') as HTMLTextAreaElement).value.trim();
+          showFieldError('pf-name', !name);
+          showFieldError('pf-email', !emailOk(email));
+          showFieldError('pf-message', !message);
+          return !!name && emailOk(email) && !!message;
+        }
+
+        ['pf-name', 'pf-email', 'pf-message'].forEach((id) => {
+          form.querySelector(`#${id}`)?.addEventListener('input', () => showFieldError(id, false));
+        });
+
+        function setLoading(on: boolean) {
+          submitBtn.disabled = on;
+          spinner.classList.toggle('hidden', !on);
+          submitLabel.textContent = on ? 'Sending…' : 'Send project inquiry';
+        }
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          formError.classList.add('hidden');
+          if ((form.querySelector('input[name="_gotcha"]') as HTMLInputElement).value) return;
+          if (!validate()) {
+            (form.querySelector('[data-error-for]:not(.hidden)') as HTMLElement | null)
+              ?.previousElementSibling?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          }
+
+          const data = Object.fromEntries(new FormData(form).entries());
+          delete (data as Record<string, unknown>)._gotcha;
+          setLoading(true);
+
+          try {
+            if (endpoint) {
+              // Google Apps Script doesn't return CORS headers; a resolved
+              // no-cors POST means the request was delivered.
+              await fetch(endpoint, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(data),
+              });
+            }
+
+            if (typeof (window as any).gtag === 'function') {
+              (window as any).gtag('event', 'generate_lead', {
+                method: 'contact_form',
+                project_type: data.project_type || 'unspecified',
+              });
+            }
+
+            successName.textContent = data.name ? `, ${String(data.name).split(' ')[0]}` : '';
+            form.hidden = true;
+            successEl.hidden = false;
+            successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } catch (_) {
+            setLoading(false);
+            formError.innerHTML =
+              'Something went wrong sending that. Please try again, or email <a class="underline" href="mailto:savellem@gmail.com">savellem@gmail.com</a> directly.';
+            formError.classList.remove('hidden');
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

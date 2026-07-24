@@ -22,39 +22,61 @@ covers conventions and history that aren't obvious from reading the code.
 
 ## Design conventions
 
-The site is light-themed throughout. When adding pages, match the existing
-pattern rather than introducing new tokens:
+**The site is mid-migration between two design systems (as of 2026-07-24).**
+The homepage was rebuilt as a one-page portfolio in a new design language
+("screening room to studio floor"); the rest of the pages still use the older
+zinc light theme via `Layout.astro`. When touching a page, match whichever
+system that page is in — and prefer migrating pages toward the new system if
+asked to restyle them.
 
-- Container: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`, wrapped in a `py-20`
-  (or `pb-20`) section.
-- Headings: `text-4xl md:text-5xl font-bold text-zinc-900` for page `<h1>`,
-  `text-3xl md:text-4xl font-bold` for section `<h2>`.
-- Body copy: `text-zinc-600` (or `text-xl text-zinc-600` for hero intros).
-- Cards: `bg-white border border-zinc-200 rounded-lg`, or `bg-zinc-50` for a
-  subtly recessed variant.
-- Buttons: solid `bg-zinc-900 text-white rounded-lg hover:bg-zinc-800`;
-  outline `border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50`.
-  Corners are `rounded-lg` site-wide — no pill/`rounded-full` buttons.
-- Nav items live in `src/layouts/Layout.astro` in **two** places (desktop
-  `<div class="hidden md:flex ...">` and the mobile menu `<div id="mobile-menu">`)
-  — both must be updated together when adding/removing a page from nav.
-- No custom fonts beyond Plus Jakarta Sans (`font-sans`); there's no
-  `font-display` token like the old uxblog site had.
+### New system (homepage `index.astro`, `/ux-health-check`)
 
-### Scanline theme & motion policy
+- Tokens live in `tailwind.config.mjs`: `ink` #14171C (dark bands), `gesso`
+  #F2EFE6 (warm light bg), `ultra` #2B3FDE (primary action/links/focus),
+  `signal` #E3A32F (secondary accent, active states), `graphite` #454E58
+  (body on light), `putty` #A79F8D (meta on dark).
+- Fonts (Google): Archivo (`font-sans`, with a `.wide` / `[font-stretch:125%]`
+  treatment for display headings at 700-900), Newsreader Italic
+  (`font-serifa`, editorial asides only — keep it scarce), Spline Sans Mono
+  (`font-mono`, labels/indices/stats/form labels, usually uppercase +
+  `tracking-[0.15em]`-ish).
+- Corners are `rounded` (4px) in the new system, not `rounded-lg`.
+- `index.astro` is **self-contained** (own `<html>/<head>`, GTM snippet,
+  JSON-LD, fonts) — it does NOT use `Layout.astro`. Anchors: #reel #work
+  #check #capacity #about #contact; a fixed "chapter rail" (xl+) tracks
+  sections via IntersectionObserver and adapts to each section's
+  `data-theme="dark|light"`.
+- Copy rule for the new pages: **no em dashes** (user requirement). Plain,
+  direct, occasionally witty; both audiences (small business owners and
+  agency/marketing overflow buyers) are addressed separately.
+- The homepage contact form posts to the same Google Apps Script
+  `FORM_ENDPOINT` as `/contact` and `/ux-health-check` (`form_type`
+  distinguishes rows in the shared sheet).
 
-**All canvas/JS motion has been removed (2026-07-24) — the user found it
-glitchy.** The homepage hero canvas weave (`#hero-weave`), the hover shred
-pulse (`src/scripts/scanline-cards.ts`, `initScanlineHover()`, wired via
-`data-sl-hover` on the homepage Featured Work grid, `/works`, case-study
-visuals, blog cards, and gallery thumbs), the gallery hover zoom/shimmer
-loading effect, and the 404 page's ambient drift canvas (`#nf-weave`) were
-all deleted. `scanline-cards.ts` no longer exists. Images sitewide are now
-plain static `<img>` tags with zero animation — no hover zoom, no fade-in,
-no shred/glitch effects. **Do not reintroduce any of this** without
-explicit user request; the old implementation is in git history
-(pre-2026-07-24) if it's ever wanted again. `SectionDivider.astro` (a few
-ragged offset strips) is unaffected — it was always static CSS, no motion.
+### Legacy system (all other pages via `Layout.astro`)
+
+- Zinc light theme: containers `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8` in
+  `py-20` sections; headings `text-zinc-900`, body `text-zinc-600`; cards
+  `bg-white border border-zinc-200 rounded-lg`; solid buttons `bg-zinc-900`.
+- Nav items live in `Layout.astro` in **two** places (desktop and
+  `#mobile-menu`) — update both together.
+- `Layout.astro` now loads the new fonts (Archivo/Newsreader/Spline Sans
+  Mono) and `font-sans` is Archivo globally, so legacy pages share the new
+  typography even though their colors are still zinc. Plus Jakarta Sans is
+  gone.
+
+### Motion policy
+
+The old canvas/scanline/glitch animation system was removed entirely on
+2026-07-24 (user found it glitchy) — `scanline-cards.ts`, `#hero-weave`, the
+404 drift canvas, gallery shimmer, and all hover zooms are gone (git history
+pre-2026-07-24 if ever needed). The 2026 redesign reintroduced **deliberate,
+limited** motion on the homepage only: a one-time staggered hero reveal, an
+SVG ring draw in the reel poster, and IntersectionObserver scroll reveals
+(`.rv` class). All of it is gated behind `prefers-reduced-motion:
+no-preference` AND an `html.js` class (no-JS users see everything
+immediately). Keep it that way: no scattered hover effects, no autoplaying
+canvas loops. The hero Vimeo reel (id 1193063245) loads only on click.
 
 ### Known Tailwind gotcha
 
