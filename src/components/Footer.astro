@@ -35,17 +35,17 @@ const columns = [
 ];
 ---
 
-<footer class="relative z-10 border-t border-line">
+<footer class="relative z-10 rule-tick">
   <div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-16 md:py-20">
-    <!-- Closing line -->
+    <!-- Closing line — the site's second (and last) static bracket use -->
     <div class="max-w-3xl mb-16">
       <p class="text-huge font-display text-paper leading-[1.02]">
         <span class="block">Got the pieces?</span>
-        <span class="block text-muted">Let's build the picture.</span>
+        <span class="block text-muted">Let's build the <span class="bracketed text-paper">picture</span></span>
       </p>
       <a
         href={`${base}/contact`}
-        class="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
+        class="reg-snap mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
       >
         Start a project
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -65,7 +65,7 @@ const columns = [
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Savelle McThias on LinkedIn"
-          class="mt-6 inline-flex items-center justify-center w-9 h-9 rounded-md border border-line text-muted hover:text-accent hover:border-accent transition-colors"
+          class="mt-6 inline-flex items-center justify-center w-9 h-9 rounded-[2px] border border-line text-muted hover:text-accent hover:border-accent transition-colors"
         >
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
         </a>
@@ -83,10 +83,10 @@ const columns = [
       ))}
     </div>
 
-    <div class="mt-14 pt-8 border-t border-line flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-sm text-faint">
-      <p>&copy; {year} Savelle Design. Built by hand in Scottsdale.</p>
+    <div class="mt-14 pt-8 border-t border-line flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint">
+      <p>&copy; {year} Savelle Design · Built by hand in Scottsdale · 33.49°N 111.92°W</p>
       <div class="flex items-center gap-6">
-        <a href="mailto:savellem@gmail.com" class="hover:text-paper transition-colors">savellem@gmail.com</a>
+        <a href="mailto:savellem@gmail.com" class="normal-case hover:text-paper transition-colors">savellem@gmail.com</a>
         <a href={`${base}/privacy`} class="hover:text-paper transition-colors">Privacy</a>
         <a href={`${base}/terms`} class="hover:text-paper transition-colors">Terms</a>
       </div>

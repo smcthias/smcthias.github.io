@@ -3,7 +3,6 @@ import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import BackgroundHex from '../components/BackgroundHex.astro';
 
 interface Props {
   title: string;
@@ -91,18 +90,9 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
 
     <ClientRouter />
     <script is:inline>
-      // Flip no-js -> js as early as possible. reveal-ready arms the scroll
-      // reveals (content is hidden only while this class is set); a failsafe
-      // force-shows everything if the reveal init never runs, so a JS failure
-      // can never leave content invisible.
-      (function () {
-        var d = document.documentElement;
-        d.classList.remove('no-js');
-        d.classList.add('reveal-ready');
-        setTimeout(function () {
-          if (!d.dataset.revealsInit) d.classList.add('reveal-failsafe');
-        }, 3000);
-      })();
+      // Flip no-js -> js as early as possible. (The scroll-reveal system is
+      // gone — content always renders; motion is CSS/hover only.)
+      document.documentElement.classList.remove('no-js');
     </script>
   </head>
 
@@ -115,7 +105,9 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
 
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-md focus:bg-accent focus:text-ink focus:font-medium">Skip to content</a>
 
-    <BackgroundHex />
+    <!-- The artboard: static measured surface (column rules + registration
+         crosshairs) behind every page. Replaces the old canvas backgrounds. -->
+    <div class="artboard" aria-hidden="true"></div>
 
     <Nav />
 

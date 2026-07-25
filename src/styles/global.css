@@ -49,6 +49,8 @@
 @theme {
   --font-sans: 'General Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Clash Display', 'General Sans', system-ui, sans-serif;
+  /* Annotation voice — the spec-sheet mono layer. System stack, zero bytes. */
+  --font-tech: ui-monospace, 'SF Mono', 'SFMono-Regular', Menlo, 'Cascadia Mono', monospace;
 
   /* Foundation */
   --color-ink: #0a0a0b;        /* base background — near-black, faintly cool */
@@ -118,9 +120,19 @@ h1, h2, h3, h4 {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Signature: registration brackets. Thin framing marks derived from the reel
-   title card (▌Savelle Design▐). Used sparingly around headlines, the work
-   index, and key CTAs — a designer's crop/alignment mark.
+   THE IDEA: "IN REGISTER". The wordmark's bars are registration marks — the
+   marks printers use to bring separate layers into perfect alignment. The
+   whole site is a designer's measured working surface: crop marks, spec
+   labels, ruler edges. The rest state is quiet and precise; the act of
+   touching something snaps it INTO register. Motion is hover-first — the one
+   load-time moment is the hero headline registering itself.
+
+   Grammar rules (so it stays special):
+   · Brackets always HOLD content — never empty ornament.
+   · Bracketed display words are paper; only the bars are lime.
+   · Two static bracket uses per page max (H1 word + footer sign-off);
+     everything else earns its brackets via hover/focus.
+   · Corner radius ≤ 2px site-wide. Print is sharp.
    ────────────────────────────────────────────────────────────────────────── */
 .bracketed {
   position: relative;
@@ -140,12 +152,216 @@ h1, h2, h3, h4 {
 .bracketed::before { left: 0; }
 .bracketed::after { right: 0; }
 
+/* Bracket clamp — the hover form of the mark. Bars scale in from nothing and
+   the word makes room: the row "clamps into register" under the cursor. */
+.bracket-clamp {
+  position: relative;
+  display: inline-block;
+  transition: padding 0.3s var(--ease-out-expo);
+}
+.bracket-clamp::before,
+.bracket-clamp::after {
+  content: '';
+  position: absolute;
+  top: 0.1em;
+  bottom: 0.1em;
+  width: 0.08em;
+  min-width: 3px;
+  background: var(--color-accent);
+  opacity: 0;
+  transform: scaleY(0.3);
+  transition: opacity 0.3s, transform 0.3s var(--ease-out-expo);
+}
+.bracket-clamp::before { left: 0; }
+.bracket-clamp::after { right: 0; }
+.group:hover .bracket-clamp,
+a:focus-visible .bracket-clamp { padding-inline: 0.45em; }
+.group:hover .bracket-clamp::before,
+.group:hover .bracket-clamp::after,
+a:focus-visible .bracket-clamp::before,
+a:focus-visible .bracket-clamp::after { opacity: 1; transform: scaleY(1); }
+
+/* ── The artboard. Static CSS working surface behind every page: container
+   column rules + a faint registration-crosshair grid. Zero JS, no motion. ── */
+.artboard {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.artboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100% - 2.5rem, 1400px);
+  border-inline: 1px solid rgba(244, 244, 241, 0.05);
+}
+.artboard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cpath d='M90 83v14M83 90h14' stroke='%23f4f4f1' stroke-opacity='0.06' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ── Spec labels. The mono annotation voice replaces the tracked-caps
+   eyebrow. Auto-indexed per page via CSS counters: "SELECTED WORK / 03". ── */
+main { counter-reset: spec; }
+.spec-label {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
+  font-family: var(--font-tech);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.spec-label::before {
+  content: '';
+  width: 3px;
+  height: 0.85em;
+  background: var(--color-accent);
+  flex: none;
+}
+.spec-label::after {
+  counter-increment: spec;
+  content: '/ ' counter(spec, decimal-leading-zero);
+  color: var(--color-faint);
+}
+
+/* ── Ruler edge. A section-dividing hairline with measuring ticks. ── */
+.rule-tick {
+  position: relative;
+  border-top: 1px solid var(--color-line);
+}
+.rule-tick::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(to right, var(--color-line) 0 1px, transparent 1px 56px);
+  pointer-events: none;
+}
+
+/* ── Crop marks. Four corner ticks — the marks on a mounted proof. Rest
+   state hairline grey; snaps lime (and nudges outward) on group hover. ── */
+.crop-frame {
+  --crop: var(--color-line-2);
+  position: relative;
+}
+.crop-frame::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--crop), var(--crop)) left 0 top 0 / 13px 2px,
+    linear-gradient(var(--crop), var(--crop)) left 0 top 0 / 2px 13px,
+    linear-gradient(var(--crop), var(--crop)) right 0 top 0 / 13px 2px,
+    linear-gradient(var(--crop), var(--crop)) right 0 top 0 / 2px 13px,
+    linear-gradient(var(--crop), var(--crop)) left 0 bottom 0 / 13px 2px,
+    linear-gradient(var(--crop), var(--crop)) left 0 bottom 0 / 2px 13px,
+    linear-gradient(var(--crop), var(--crop)) right 0 bottom 0 / 13px 2px,
+    linear-gradient(var(--crop), var(--crop)) right 0 bottom 0 / 2px 13px;
+  background-repeat: no-repeat;
+  transition: inset 0.25s var(--ease-out-expo);
+}
+.group:hover .crop-frame::before,
+.crop-frame:hover::before {
+  --crop: var(--color-accent);
+  inset: -6px;
+}
+
+/* ── Registration snap. A lime frame sits out of register behind the CTA;
+   hover snaps it flush — where, perfectly aligned, it disappears. ── */
+.reg-snap { position: relative; }
+.reg-snap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--color-accent);
+  border-radius: inherit;
+  opacity: 0;
+  transform: translate(6px, 6px);
+  pointer-events: none;
+  transition: transform 0.22s var(--ease-out-expo), opacity 0.22s;
+}
+.reg-snap:hover::after,
+.reg-snap:focus-visible::after,
+.group:hover .reg-snap::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+@media (hover: hover) {
+  .reg-snap:not(:hover):not(:focus-visible)::after { opacity: 0; }
+}
+
+/* ── Register glyph. The only icon the brand needs: two offset squares that
+   slide into exact register on hover. Replaces arrows and clipart. ── */
+.reg-glyph {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.reg-glyph::before,
+.reg-glyph::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--color-line-2);
+}
+.reg-glyph::after {
+  border-color: var(--color-accent);
+  transform: translate(6px, 6px);
+  transition: transform 0.28s var(--ease-out-expo);
+}
+.group:hover .reg-glyph::after,
+a:focus-visible .reg-glyph::after { transform: translate(0, 0); }
+
+/* ── Ghost numerals. Huge hollow Clash figures behind the work index —
+   plate numbers on a print sheet. Stroke warms toward lime on row hover. ── */
+.ghost-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(4.5rem, 10vw, 9.5rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-line-2);
+  user-select: none;
+  transition: -webkit-text-stroke-color 0.3s;
+}
+.group:hover .ghost-num { -webkit-text-stroke-color: rgba(180, 255, 61, 0.45); }
+
+/* ── Bar bullets. The wordmark's bar as list marker — kills checkmarks. ── */
+.bar-list li {
+  position: relative;
+  padding-left: 1rem;
+}
+.bar-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 3px;
+  height: 0.8em;
+  background: var(--color-accent);
+}
+
 /* Hero line-rise. Masked lines slide up on load — pure CSS so the H1 is never
    dependent on JS to be visible. No-JS still animates; reduced-motion (below)
    and the global animation kill-switch both resolve it to the visible end state. */
 .line-mask { display: block; overflow: hidden; }
 .line-rise {
   display: block;
+  position: relative;
   transform: translateY(110%);
   animation: lineRise 0.9s var(--ease-out-expo) forwards;
 }
@@ -154,33 +370,35 @@ h1, h2, h3, h4 {
 .line-rise-3 { animation-delay: 0.27s; }
 @keyframes lineRise { to { transform: translateY(0); } }
 
-/* Scroll reveals are a progressive enhancement, engineered so content can never
-   be trapped invisible. Content is visible by default; it's only hidden once JS
-   confirms it's running (html.reveal-ready) AND the item hasn't entered yet. If
-   motion.ts never loads, reveal-ready is never set and nothing hides. A 3s
-   failsafe (html.reveal-failsafe, set from the head) force-shows everything if
-   the reveal init never ran. */
-[data-reveal] {
-  transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
-}
-html.reveal-ready [data-reveal]:not(.is-in) {
+/* The signature load moment: each headline line carries a lime misprint of
+   itself (data-ghost), offset like a proof that slipped — and slides INTO
+   register, vanishing exactly where it aligns. Runs once; base state is
+   invisible, so reduced-motion and the kill-switch simply never show it. */
+.line-rise::after {
+  content: attr(data-ghost);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: var(--color-accent);
   opacity: 0;
-  transform: translateY(24px);
+  transform: translate(0.13em, 0.08em);
+  pointer-events: none;
+  animation: regGhost 1s var(--ease-out-expo) forwards;
 }
-html.reveal-failsafe [data-reveal] {
-  opacity: 1 !important;
-  transform: none !important;
-  transition: none !important;
+.line-rise-1::after { animation-delay: 0.5s; }
+.line-rise-2::after { animation-delay: 0.62s; }
+.line-rise-3::after { animation-delay: 0.74s; }
+@keyframes regGhost {
+  0% { opacity: 0; transform: translate(0.13em, 0.08em); }
+  30% { opacity: 0.32; }
+  80% { opacity: 0.14; }
+  100% { opacity: 0; transform: translate(0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
   .line-rise { transform: none !important; animation: none !important; }
+  .line-rise::after { animation: none !important; opacity: 0 !important; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;

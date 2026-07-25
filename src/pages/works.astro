@@ -1,19 +1,24 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import { FEATURED } from '../data/featured';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-// Get all projects from content collections and sort by date (newest first)
+// Same editorial order as the homepage (strongest first), then anything not
+// featured, newest first. Hooks/stats come from the shared featured data so
+// home and /works tell the same story.
 const allProjects = await getCollection('projects');
-const sortedProjects = allProjects.sort((a, b) =>
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+const byId = Object.fromEntries(allProjects.map((p) => [p.id, p]));
+const featuredIds = new Set(FEATURED.map((f) => f.slug));
+const rest = allProjects
+  .filter((p) => !featuredIds.has(p.id))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-const work = sortedProjects.map((p, i) => ({
-  ...p,
-  n: String(i + 1).padStart(2, '0'),
-}));
+const work = [
+  ...FEATURED.map((f) => ({ ...byId[f.slug], stat: f.stat, statLabel: f.statLabel, hook: f.hook })),
+  ...rest.map((p) => ({ ...p, stat: '', statLabel: '', hook: p.data.description })),
+].map((p, i) => ({ ...p, n: String(i + 1).padStart(2, '0') }));
 
 const capabilities = [
   {
@@ -38,9 +43,9 @@ const capabilities = [
   <!-- ── Hero ─────────────────────────────────────────────────────────── -->
   <section class="pt-14 md:pt-20 pb-12 md:pb-16">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">Selected work</p>
+      <p class="spec-label mb-4">Selected work</p>
       <h1 class="font-display font-semibold text-mega text-paper max-w-4xl">
-        Real problems, <span class="bracketed text-accent">real</span> results.
+        Real problems, <span class="bracketed">real</span> results.
       </h1>
       <p class="mt-8 max-w-3xl text-lg md:text-xl text-muted leading-relaxed">
         Over 18+ years I've worked with companies ranging from small startups to major
@@ -53,19 +58,34 @@ const capabilities = [
   <!-- ── Work index ───────────────────────────────────────────────────── -->
   <section class="pb-24 md:pb-32">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <ul class="divide-y divide-line border-t border-line">
+      <ul class="border-t border-line">
         {work.map((p) => (
-          <li data-reveal>
-            <a href={`${base}/works/${p.id}`} class="work-row group grid grid-cols-12 items-center gap-4 py-7 md:py-8">
-              <span class="col-span-2 md:col-span-1 font-display text-lg text-faint group-hover:text-accent transition-colors">{p.n}</span>
-              <div class="min-w-0 col-span-10 md:col-span-5">
-                <h2 class="text-big font-display text-paper group-hover:text-accent transition-colors">{p.data.title}</h2>
-                <p class="text-sm text-faint mt-1">{p.data.category}</p>
+          <li class="border-b border-line">
+            <a href={`${base}/works/${p.id}`} class="work-row group relative grid grid-cols-12 items-center gap-x-4 gap-y-5 py-9 md:py-10 overflow-hidden">
+              <span aria-hidden="true" class="ghost-num absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-0">{p.n}</span>
+
+              <div class="relative z-10 min-w-0 col-span-12 md:col-span-5 md:pl-16 lg:pl-24">
+                <h2 class="text-big font-display text-paper transition-colors"><span class="bracket-clamp">{p.data.title}</span></h2>
+                <p class="font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint mt-2">{p.data.category}</p>
               </div>
-              <p class="hidden md:block min-w-0 col-span-4 text-muted leading-snug">{p.data.description}</p>
-              <div class="col-span-12 md:col-span-2 mt-4 md:mt-0">
-                <div class="work-thumb relative aspect-[16/10] md:aspect-[4/3] rounded-md overflow-hidden bg-surface border border-line">
-                  <img src={`${base}/images/works/${p.data.thumbnail}`} alt={`${p.data.title} — ${p.data.category}`} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+
+              <div class="relative z-10 min-w-0 col-span-12 md:col-span-4">
+                {p.stat ? (
+                  <>
+                    <p class="font-display text-3xl md:text-4xl text-accent leading-none">{p.stat}</p>
+                    <p class="font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint mt-1.5">{p.statLabel}</p>
+                    <p class="text-sm text-muted leading-snug mt-3 max-w-xs">{p.hook}</p>
+                  </>
+                ) : (
+                  <p class="text-sm text-muted leading-snug max-w-xs">{p.hook}</p>
+                )}
+              </div>
+
+              <div class="relative z-10 col-span-12 md:col-span-3">
+                <div class="crop-frame">
+                  <div class="relative aspect-[16/10] overflow-hidden bg-surface border border-line">
+                    <img src={`${base}/images/works/${p.data.thumbnail}`} alt={`${p.data.title} — ${p.data.category}`} class="w-full h-full object-cover" loading="lazy" />
+                  </div>
                 </div>
               </div>
             </a>
@@ -79,12 +99,12 @@ const capabilities = [
   <section class="py-24 md:py-28 bg-surface border-y border-line">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="max-w-2xl mb-16" data-reveal>
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">What I bring</p>
+        <p class="spec-label mb-4">What I bring</p>
         <h2 class="text-huge font-display text-paper">Core capabilities.</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         {capabilities.map((c, i) => (
-          <div class="rounded-lg border border-line bg-ink p-8" data-reveal data-reveal-delay={i * 60}>
+          <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay={i * 60}>
             <h3 class="text-2xl font-display text-paper mb-5">{c.title}</h3>
             <ul class="space-y-2.5 text-muted">
               {c.items.map((item) => (
@@ -103,7 +123,7 @@ const capabilities = [
   <!-- ── CTA ──────────────────────────────────────────────────────────── -->
   <section class="py-24 md:py-28">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="rounded-lg border border-line bg-surface p-8 md:p-14 grid grid-cols-1 md:grid-cols-12 gap-8 items-center" data-reveal>
+      <div class="rounded-[2px] border border-line bg-surface p-8 md:p-14 grid grid-cols-1 md:grid-cols-12 gap-8 items-center" data-reveal>
         <div class="min-w-0 md:col-span-8">
           <h2 class="text-big font-display text-paper mb-4">Want similar results?</h2>
           <p class="text-muted max-w-2xl leading-relaxed">
@@ -112,7 +132,7 @@ const capabilities = [
           </p>
         </div>
         <div class="md:col-span-4 md:text-right">
-          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
+          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
             Start a conversation
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>

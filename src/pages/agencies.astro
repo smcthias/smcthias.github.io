@@ -79,12 +79,9 @@ const benefits = [
     <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full opacity-60" style="background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 60%)"></div>
 
     <div class="relative max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="flex items-center gap-3 text-sm text-muted uppercase tracking-[0.2em] mb-7">
-        <span class="inline-block w-8 h-px bg-accent"></span>
-        For agencies &amp; in-house teams
-      </p>
+      <p class="spec-label mb-7">For agencies &amp; in-house teams</p>
       <h1 class="font-display font-semibold text-mega text-paper max-w-5xl">
-        The senior <span class="bracketed text-accent">overflow</span> you don&rsquo;t have to manage.
+        The senior <span class="bracketed">overflow</span> you don&rsquo;t have to manage.
       </h1>
 
       <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
@@ -95,7 +92,7 @@ const benefits = [
           No account managers. No juniors. No hand-off. Your client never knows I&rsquo;m not on staff.
         </p>
         <div class="min-w-0 lg:col-span-5 flex flex-wrap items-center gap-4 lg:justify-end">
-          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
+          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
             Talk about your overflow
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
@@ -110,7 +107,7 @@ const benefits = [
   <!-- ── Trusted by ───────────────────────────────────────────────────── -->
   <section class="border-y border-line">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-10">
-      <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-6">Work already delivered for teams at</p>
+      <p class="spec-label mb-6">Work already delivered for teams at</p>
       <div class="flex flex-wrap items-center gap-x-10 gap-y-5 lg:justify-between">
         {logos.map(({ src, alt, h }) => (
           <img src={`${base}${src}`} alt={alt} class={`${h} w-auto object-contain brightness-0 invert opacity-65 hover:opacity-100 transition-opacity`} loading="lazy" />
@@ -123,12 +120,12 @@ const benefits = [
   <section class="py-24 md:py-32">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="max-w-2xl mb-16" data-reveal>
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">How overflow works</p>
+        <p class="spec-label mb-4">How overflow works</p>
         <h2 class="text-huge font-display text-paper">Four steps, zero surprises.</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {steps.map((s, i) => (
-          <div class="rounded-lg border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay={i * 60}>
+          <div class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay={i * 60}>
             <span class="font-display text-lg text-accent">{s.n}</span>
             <h3 class="text-2xl font-display text-paper mt-3 mb-3">{s.title}</h3>
             <p class="min-w-0 text-muted leading-relaxed">{s.line}</p>
@@ -142,10 +139,10 @@ const benefits = [
   <section class="py-24 md:py-28 bg-surface border-y border-line">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="max-w-2xl mb-16" data-reveal>
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">What you get</p>
+        <p class="spec-label mb-4">What you get</p>
         <h2 class="text-huge font-display text-paper">Low-risk by design.</h2>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line border border-line rounded-lg overflow-hidden">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line border border-line rounded-[2px] overflow-hidden">
         {benefits.map((b, i) => (
           <div class="bg-ink p-8 md:p-10" data-reveal data-reveal-delay={i * 50}>
             <h3 class="text-xl font-display text-paper mb-3">{b.title}</h3>
@@ -159,8 +156,8 @@ const benefits = [
   <!-- ── Testimonial ──────────────────────────────────────────────────── -->
   <section class="py-24 md:py-28">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-12" data-reveal>What it&rsquo;s like to work with me</p>
-      <figure class="rounded-lg border border-line bg-surface p-8 md:p-12 max-w-4xl" data-reveal>
+      <p class="spec-label mb-12" data-reveal>What it&rsquo;s like to work with me</p>
+      <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-12 max-w-4xl" data-reveal>
         <blockquote class="text-xl md:text-2xl text-paper font-display leading-snug">
           &ldquo;Working with Savelle wasn&rsquo;t like working with a typical designer — it felt more like
           having a co-founder who happened to be insanely talented at UX. We were drowning in the
@@ -184,7 +181,7 @@ const benefits = [
           <h2 class="text-big font-display text-paper mb-3">Got a project you can&rsquo;t staff this week?</h2>
           <p class="text-muted leading-relaxed">Tell me the deadline and what&rsquo;s in scope. I&rsquo;ll tell you straight whether I can take it and what it costs — no pitch, no account manager, no hand-off.</p>
         </div>
-        <a href={`${base}/contact`} class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
+        <a href={`${base}/contact`} class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
           Start a conversation
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>

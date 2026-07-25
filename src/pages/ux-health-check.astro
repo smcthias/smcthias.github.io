@@ -125,9 +125,9 @@ const questions: Question[] = [
   <section class="py-20">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="max-w-3xl">
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">Free Interactive Tool</p>
+        <p class="spec-label mb-4">Free Interactive Tool</p>
         <h1 class="font-display text-huge text-paper mb-6 leading-tight">
-          How <span class="bracketed text-accent">healthy</span> is your business website?
+          How <span class="bracketed">healthy</span> is your business website?
         </h1>
         <p class="text-xl text-muted leading-relaxed">
           Built for real estate agents, auto shops, dental practices, and other local businesses —
@@ -144,7 +144,7 @@ const questions: Question[] = [
       <div
         id="uxhc"
         data-endpoint={FORM_ENDPOINT}
-        class="max-w-3xl mx-auto bg-surface border border-line rounded-lg p-6 sm:p-10"
+        class="max-w-3xl mx-auto bg-surface border border-line rounded-[2px] p-6 sm:p-10"
       >
         <!-- Progress -->
         <div id="uxhc-progress-wrap" class="mb-8">
@@ -161,11 +161,11 @@ const questions: Question[] = [
         <form id="uxhc-form">
           {questions.map((q, i) => (
             <fieldset class="uxhc-step" data-step={i} data-category={q.category} hidden={i !== 0}>
-              <legend class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-3">{q.category}</legend>
+              <legend class="spec-label mb-3">{q.category}</legend>
               <p class="text-2xl text-paper leading-snug mb-8">{q.text}</p>
               <div class="space-y-3">
                 {q.options.map((opt) => (
-                  <label class="uxhc-option flex items-center gap-4 p-4 rounded-md border border-line bg-surface-2 cursor-pointer hover:border-line-2 transition-colors">
+                  <label class="uxhc-option flex items-center gap-4 p-4 rounded-[2px] border border-line bg-surface-2 cursor-pointer hover:border-line-2 transition-colors">
                     <input type="radio" name={q.id} value={opt.value} class="sr-only" />
                     <span class="uxhc-dot w-5 h-5 rounded-full border-2 border-line-2 shrink-0 flex items-center justify-center"></span>
                     <span class="text-muted">{opt.label}</span>
@@ -177,7 +177,7 @@ const questions: Question[] = [
 
           <!-- Email gate step -->
           <fieldset class="uxhc-step" data-step={questions.length} hidden>
-            <legend class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-3">Almost there</legend>
+            <legend class="spec-label mb-3">Almost there</legend>
             <p class="text-2xl text-paper leading-snug mb-3">Enter your email to unlock your results</p>
             <p class="text-muted mb-6">Your UX score and personalized recommendations appear right here on this page.</p>
             <input
@@ -187,7 +187,7 @@ const questions: Question[] = [
               required
               placeholder="you@yourbusiness.com"
               autocomplete="email"
-              class="w-full px-5 py-4 rounded-md bg-surface-2 border border-line text-base text-paper placeholder-faint focus:outline-hidden focus:border-accent mb-2"
+              class="w-full px-5 py-4 rounded-[2px] bg-surface-2 border border-line text-base text-paper placeholder-faint focus:outline-hidden focus:border-accent mb-2"
             />
             <p id="uxhc-email-error" class="text-sm text-red-400 mb-4 hidden">Please enter a valid email address.</p>
             <p class="text-xs text-faint">No spam, no newsletter. I may follow up personally with a thought or two about your score — that's it.</p>
@@ -200,7 +200,7 @@ const questions: Question[] = [
             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             Back
           </button>
-          <button id="uxhc-next" type="button" class="inline-flex items-center px-6 py-3 bg-accent text-ink text-sm font-medium rounded-md hover:bg-accent-dim transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+          <button id="uxhc-next" type="button" class="inline-flex items-center px-6 py-3 bg-accent text-ink text-sm font-medium rounded-[2px] hover:bg-accent-dim transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
             Next
             <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
           </button>
@@ -216,7 +216,7 @@ const questions: Question[] = [
   <section class="pb-20">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
       <div class="max-w-3xl mx-auto border-t border-line pt-16">
-        <h2 class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-6">What it measures</h2>
+        <h2 class="spec-label mb-6">What it measures</h2>
         <p class="text-muted leading-relaxed mb-8 max-w-2xl">
           Your website has one job: turn the people who find you into customers who call, book, or
           walk in the door. The UX Health Check looks at the five things that most often get in the
@@ -399,14 +399,14 @@ const questions: Question[] = [
         const recos = weakest
           .map((c, i) => (
             '<div class="border-t border-line pt-5">' +
-              '<p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-2">Priority ' + (i + 1) + ' &middot; ' + esc(c.category) + '</p>' +
+              '<p class="spec-label mb-2">Priority ' + (i + 1) + ' &middot; ' + esc(c.category) + '</p>' +
               '<p class="text-muted leading-relaxed">' + esc(RECOS[c.category]) + '</p>' +
             '</div>'
           )).join('');
 
         resultsEl.innerHTML =
           '<div class="text-center mb-10">' +
-            '<p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-3">Your Website\'s UX Score</p>' +
+            '<p class="spec-label mb-3">Your Website\'s UX Score</p>' +
             '<p class="text-7xl font-display text-accent leading-none mb-3">' + data.overall + '<span class="text-3xl text-faint">/100</span></p>' +
             '<p class="text-xl text-paper font-semibold">' + esc(b.label) + '</p>' +
             '<p class="text-muted max-w-xl mx-auto mt-2">' + esc(b.note) + '</p>' +
@@ -425,22 +425,22 @@ const questions: Question[] = [
       function buildCta(score) {
         if (score < 80) {
           return (
-            '<div class="bg-surface-2 border border-line rounded-lg p-8 text-center">' +
+            '<div class="bg-surface-2 border border-line rounded-[2px] p-8 text-center">' +
               '<p class="text-xl text-paper font-semibold mb-2">Want the real score?</p>' +
               '<p class="text-muted max-w-xl mx-auto mb-6">This score is based on your own answers. In the 48-Hour UX Audit, I score your actual site: a recorded video walkthrough, a prioritized list of fixes, and a 60-minute strategy call — delivered in two business days for $997.</p>' +
               '<div class="flex flex-wrap gap-3 justify-center">' +
-                '<a href="/ux-audit?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-accent text-ink text-sm font-medium rounded-md hover:bg-accent-dim transition-colors">Get the 48-Hour UX Audit</a>' +
-                '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 border border-line text-paper text-sm font-medium rounded-md hover:border-accent hover:text-accent transition-colors">Ask about your results</a>' +
+                '<a href="/ux-audit?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-accent text-ink text-sm font-medium rounded-[2px] hover:bg-accent-dim transition-colors">Get the 48-Hour UX Audit</a>' +
+                '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 border border-line text-paper text-sm font-medium rounded-[2px] hover:border-accent hover:text-accent transition-colors">Ask about your results</a>' +
               '</div>' +
             '</div>'
           );
         }
         return (
-          '<div class="bg-surface-2 border border-line rounded-lg p-8 text-center">' +
+          '<div class="bg-surface-2 border border-line rounded-[2px] p-8 text-center">' +
             '<p class="text-xl text-paper font-semibold mb-2">Want help turning this into more calls and bookings?</p>' +
             '<p class="text-muted max-w-xl mx-auto mb-6">This score is based on your own answers. Ask me about your results and I\'ll walk you through what\'s really going on with your site — no obligation.</p>' +
             '<div class="flex flex-wrap gap-3 justify-center">' +
-              '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-accent text-ink text-sm font-medium rounded-md hover:bg-accent-dim transition-colors">Ask about your results</a>' +
+              '<a href="/contact?ref=uxhc-results" class="inline-flex items-center px-6 py-3 bg-accent text-ink text-sm font-medium rounded-[2px] hover:bg-accent-dim transition-colors">Ask about your results</a>' +
             '</div>' +
           '</div>'
         );

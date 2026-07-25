@@ -65,9 +65,9 @@ const pageSchema = [
         </svg>
         Back to services
       </a>
-      <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4" data-reveal>Landing pages</p>
+      <p class="spec-label mb-4" data-reveal>Landing pages</p>
       <h1 class="font-display text-mega text-paper max-w-4xl" data-reveal>
-        One page, one job: turn a click into a <span class="bracketed text-accent">customer</span>.
+        One page, one job: turn a click into a <span class="bracketed">customer</span>.
       </h1>
       <p class="mt-8 text-lg md:text-xl text-muted max-w-3xl leading-relaxed" data-reveal>
         A landing page has a single thing to do. I design pages that make your value obvious in seconds and give visitors one clear reason to act.
@@ -94,7 +94,7 @@ const pageSchema = [
             Launching a product, running an ad campaign, or growing an email list — you get a page built around that one goal, and nothing that gets in its way.
           </p>
         </div>
-        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-line" data-reveal data-reveal-delay="80">
+        <div class="aspect-[4/3] rounded-[2px] overflow-hidden border border-line" data-reveal data-reveal-delay="80">
           <img src={`${base}/images/works/yoli-detail2.png`} alt="Landing Page Design Example" class="w-full h-full object-cover" loading="lazy" />
         </div>
       </div>
@@ -104,7 +104,7 @@ const pageSchema = [
     <!-- What's Included -->
     <section class="py-24 md:py-32">
       <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4" data-reveal>What's included</p>
+        <p class="spec-label mb-4" data-reveal>What's included</p>
         <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>Everything the page needs to convert.</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
@@ -115,7 +115,7 @@ const pageSchema = [
           { title: 'SEO-ready', body: 'Built on search-friendly structure and clean code so the page can be found.' },
           { title: 'Analytics ready', body: 'Tracking set up from day one, so you can measure what works and improve it.' },
         ].map((item, i) => (
-          <div class="rounded-lg border border-line bg-surface p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
+          <div class="rounded-[2px] border border-line bg-surface p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
             <h3 class="text-xl font-display text-paper mb-3">{item.title}</h3>
             <p class="text-muted leading-relaxed">{item.body}</p>
           </div>
@@ -127,7 +127,7 @@ const pageSchema = [
     <!-- Process -->
     <section class="py-24 md:py-28 bg-surface border-y border-line">
       <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4" data-reveal>How it works</p>
+        <p class="spec-label mb-4" data-reveal>How it works</p>
         <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>From first call to launch.</h2>
       <div class="space-y-4">
         {[
@@ -136,8 +136,8 @@ const pageSchema = [
           { n: '3', title: 'Development', body: 'Once approved, I build the page with clean code and tune it for performance.' },
           { n: '4', title: 'Launch & support', body: 'Your page goes live, and I stay available to adjust as you learn what works.' },
         ].map((step, i) => (
-          <div class="flex gap-6 rounded-lg border border-line bg-ink p-6 md:p-8" data-reveal data-reveal-delay={i * 60}>
-            <div class="w-11 h-11 bg-accent text-ink rounded-md flex items-center justify-center font-display text-lg shrink-0">
+          <div class="flex gap-6 rounded-[2px] border border-line bg-ink p-6 md:p-8" data-reveal data-reveal-delay={i * 60}>
+            <div class="w-11 h-11 bg-accent text-ink rounded-[2px] flex items-center justify-center font-display text-lg shrink-0">
               {step.n}
             </div>
             <div class="min-w-0">
@@ -153,11 +153,11 @@ const pageSchema = [
     <!-- FAQ -->
     <section class="py-24 md:py-32">
       <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4 text-center" data-reveal>FAQ</p>
+        <p class="spec-label mb-4 text-center" data-reveal>FAQ</p>
         <h2 class="text-huge font-display text-paper mb-12 text-center" data-reveal>Frequently asked questions</h2>
         <div class="max-w-3xl mx-auto space-y-4">
           {faqs.map((f, i) => (
-            <details class="group rounded-lg border border-line bg-surface p-6 md:p-8 open:border-line-2" data-reveal data-reveal-delay={i * 40}>
+            <details class="group rounded-[2px] border border-line bg-surface p-6 md:p-8 open:border-line-2" data-reveal data-reveal-delay={i * 40}>
               <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
                 <h3 class="text-lg font-display text-paper group-hover:text-accent transition-colors">{f.question}</h3>
                 <svg class="w-5 h-5 shrink-0 text-faint group-open:rotate-45 group-hover:text-accent transition-all mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
@@ -181,7 +181,7 @@ const pageSchema = [
           </p>
           <a
             href={`${base}/contact`}
-            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
+            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
           >
             Get started
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

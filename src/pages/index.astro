@@ -3,46 +3,51 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Reel from '../components/Reel.astro';
 import ReelLightbox from '../components/ReelLightbox.astro';
+import { FEATURED } from '../data/featured';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-
-// Curated five — quality over quantity. Order is editorial (strongest first),
-// each paired with a plain-language hook grounded in the project's real results.
-const FEATURED = [
-  { slug: 'young-living', hook: 'A global wellness brand’s site, built to move 6M+ partners and 100+ products.' },
-  { slug: 'lamesa', hook: '11 RV dealerships pulled into one inventory customers could actually search.' },
-  { slug: 'nikkl', hook: 'A fintech brand and website designed, built, and launched in five days.' },
-  { slug: 'omegas411', hook: 'A scattered pile of media turned into a hub doing 2,000 visits a month.' },
-  { slug: 'yoli', hook: '100+ emails that reached 10K subscribers across four countries.' },
-];
 
 const projects = await getCollection('projects');
 const byId = Object.fromEntries(projects.map((p) => [p.id, p]));
 const work = FEATURED.map((f, i) => ({
   ...byId[f.slug],
+  stat: f.stat,
+  statLabel: f.statLabel,
   hook: f.hook,
   n: String(i + 1).padStart(2, '0'),
 }));
 
+// Tight logo strip — eight strongest marks, one row. (Full set lives on /about.)
 const logos = [
   { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart', h: 'h-[24px]' },
   { src: '/images/logos/logo-gm.svg', alt: 'General Motors', h: 'h-[32px]' },
-  { src: '/images/logos/logo-plexus.svg', alt: 'Plexus Worldwide', h: 'h-[28px]' },
   { src: '/images/logos/logo-sothebys.svg', alt: "Sotheby's", h: 'h-[18px]' },
-  { src: '/images/logos/logo-lamesa.svg', alt: 'La Mesa RV', h: 'h-[24px]' },
   { src: '/images/logos/logo-universal.svg', alt: 'Universal', h: 'h-[32px]' },
-  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 'h-[32px]' },
-  { src: '/images/logos/logo-thebeachboys.svg', alt: 'The Beach Boys', h: 'h-[32px]' },
-  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals', h: 'h-[13px]' },
-  { src: '/images/logos/logo-richdad.svg', alt: 'Rich Dad', h: 'h-[13px]' },
-  { src: '/images/logos/logo-sanity.svg', alt: 'Sanity', h: 'h-[19px]' },
+  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 'h-[32px]', tail: true },
+  { src: '/images/logos/logo-lamesa.svg', alt: 'La Mesa RV', h: 'h-[24px]', tail: true },
+  { src: '/images/logos/logo-plexus.svg', alt: 'Plexus Worldwide', h: 'h-[28px]', tail: true },
+  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals', h: 'h-[13px]', tail: true },
 ];
 
 const services = [
-  { href: '/services/landing-page-design', title: 'Landing Pages', line: 'One page, one job: turn a click into a customer.' },
-  { href: '/services/website-refresh', title: 'Website Refresh', line: 'Keep what works, fix what doesn’t, ship a site that sells.' },
-  { href: '/services/brand-identity', title: 'Brand Identity', line: 'A consistent look that’s easy to keep consistent.' },
-  { href: '/services/email-campaigns', title: 'Email Campaigns', line: 'Emails people actually open — designed and built to convert.' },
+  { href: '/services/landing-page-design', n: '01', title: 'Landing Pages', line: 'One page, one job: turn a click into a customer.' },
+  { href: '/services/website-refresh', n: '02', title: 'Website Refresh', line: 'Keep what works, fix what doesn’t, ship a site that sells.' },
+  { href: '/services/brand-identity', n: '03', title: 'Brand Identity', line: 'A consistent look that’s easy to keep consistent.' },
+  { href: '/services/email-campaigns', n: '04', title: 'Email Campaigns', line: 'Emails people actually open — designed and built to convert.' },
+];
+
+// Aggregate proof — every figure already lives in the site's own copy.
+const proof = [
+  { stat: '18+', label: 'years of design & build' },
+  { stat: '6M+', label: 'wellness partners served' },
+  { stat: '11', label: 'dealerships, one inventory' },
+  { stat: '10K', label: 'subscribers, four countries' },
+];
+
+const steps = [
+  { n: '01', t: 'You send a few details', d: 'The contact form takes about a minute.' },
+  { n: '02', t: 'We talk for 30 minutes', d: 'I learn your product, users, and goals.' },
+  { n: '03', t: 'You get a proposal', d: 'Clear scope, timeline, and investment. No surprises.' },
 ];
 ---
 
@@ -51,19 +56,13 @@ const services = [
   description="UX and web design that turns visitors into customers. Landing pages, website refreshes, brand identity, and email campaigns — plus dependable overflow and white-label help for agencies. 18+ years, Scottsdale, AZ."
 >
   <!-- ── Hero ─────────────────────────────────────────────────────────── -->
-  <section class="relative overflow-hidden pt-14 md:pt-20 pb-10 md:pb-14">
-    <!-- faint depth glow, grey not neon — keeps the stage from reading flat -->
-    <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full opacity-60" style="background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 60%)"></div>
-
+  <section class="relative pt-14 md:pt-20 pb-20 md:pb-28">
     <div class="relative max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="flex items-center gap-3 text-sm text-muted uppercase tracking-[0.2em] mb-7">
-        <span class="inline-block w-8 h-px bg-accent"></span>
-        UX &amp; Web Design · Scottsdale, AZ
-      </p>
+      <p class="spec-label mb-7">UX &amp; Web Design · Scottsdale, AZ</p>
       <h1 class="font-display font-semibold text-mega text-paper max-w-5xl">
-        <span class="line-mask"><span class="line-rise line-rise-1">Websites that turn</span></span>
-        <span class="line-mask"><span class="line-rise line-rise-2">visitors into</span></span>
-        <span class="line-mask"><span class="line-rise line-rise-3"><span class="bracketed text-accent">customers</span></span></span>
+        <span class="line-mask"><span class="line-rise line-rise-1" data-ghost="Websites that turn">Websites that turn</span></span>
+        <span class="line-mask"><span class="line-rise line-rise-2" data-ghost="visitors into">visitors into</span></span>
+        <span class="line-mask"><span class="line-rise line-rise-3" data-ghost="customers"><span class="bracketed">customers</span></span></span>
       </h1>
 
       <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
@@ -74,11 +73,14 @@ const services = [
           start to finish.
         </p>
         <div class="min-w-0 lg:col-span-6 flex flex-wrap items-center gap-4 lg:justify-end">
-          <a href={`${base}/works`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
-            See the work
+          <a href={`${base}/contact`} class="reg-snap inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
+            Start a project
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a href={`${base}/ux-health-check`} class="text-sm text-muted hover:text-accent underline underline-offset-4 decoration-line hover:decoration-accent transition-colors">
+          <a href={`${base}/works`} class="reg-snap inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] border border-line text-paper hover:border-accent hover:text-accent transition-colors">
+            See the work
+          </a>
+          <a href={`${base}/ux-health-check`} class="w-full lg:w-auto text-sm text-muted hover:text-accent underline underline-offset-4 decoration-line hover:decoration-accent transition-colors lg:text-right">
             Or get your free UX score
           </a>
         </div>
@@ -86,38 +88,13 @@ const services = [
     </div>
   </section>
 
-  <!-- ── Featured showreel ────────────────────────────────────────────── -->
-  <section class="pb-24 md:pb-32">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <button
-        data-reel-play
-        class="reel-panel group relative block w-full aspect-video rounded-xl overflow-hidden border border-line bg-surface cursor-pointer"
-        aria-label="Play the 2026 portfolio showreel with sound"
-      >
-        <Reel />
-        <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/20"></div>
-        <!-- centered play affordance -->
-        <span class="absolute inset-0 flex items-center justify-center">
-          <span class="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-accent text-ink shadow-2xl shadow-black/40 transition-transform duration-300 group-hover:scale-110">
-            <svg class="w-8 h-8 md:w-9 md:h-9 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </span>
-        </span>
-        <!-- corner labels -->
-        <span class="absolute left-5 bottom-5 flex items-center gap-2 text-sm text-paper">
-          <span aria-hidden="true" class="w-[3px] h-[13px] bg-accent"></span> Showreel 2026
-        </span>
-        <span class="absolute right-5 bottom-5 text-sm text-muted group-hover:text-paper transition-colors">Play with sound</span>
-      </button>
-    </div>
-  </section>
-
   <!-- ── Trusted by ───────────────────────────────────────────────────── -->
-  <section class="border-y border-line">
+  <section class="rule-tick border-b border-line">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-10">
-      <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-6">Trusted by teams at</p>
+      <p class="spec-label mb-6">Trusted by teams at</p>
       <div class="flex flex-wrap items-center gap-x-10 gap-y-5 lg:justify-between">
-        {logos.map(({ src, alt, h }) => (
-          <img src={`${base}${src}`} alt={alt} class={`${h} w-auto object-contain brightness-0 invert opacity-65 hover:opacity-100 transition-opacity`} loading="lazy" />
+        {logos.map(({ src, alt, h, tail }) => (
+          <img src={`${base}${src}`} alt={alt} class={`${h} w-auto object-contain brightness-0 invert opacity-60 hover:opacity-100 transition-opacity ${tail ? 'hidden sm:block' : ''}`} loading="lazy" />
         ))}
       </div>
     </div>
@@ -126,9 +103,9 @@ const services = [
   <!-- ── Selected work ────────────────────────────────────────────────── -->
   <section class="py-24 md:py-32">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="flex items-end justify-between flex-wrap gap-6 mb-16" data-reveal>
+      <div class="flex items-end justify-between flex-wrap gap-6 mb-14">
         <div>
-          <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">Selected work</p>
+          <p class="spec-label mb-4">Selected work</p>
           <h2 class="text-huge font-display text-paper max-w-2xl">Five projects. Real problems, real results.</h2>
         </div>
         <a href={`${base}/works`} class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors">
@@ -137,19 +114,29 @@ const services = [
         </a>
       </div>
 
-      <ul class="divide-y divide-line border-t border-line">
+      <ul class="border-t border-line">
         {work.map((p) => (
-          <li data-reveal>
-            <a href={`${base}/works/${p.id}`} class="work-row group grid grid-cols-12 items-center gap-4 py-7 md:py-8">
-              <span class="col-span-2 md:col-span-1 font-display text-lg text-faint group-hover:text-accent transition-colors">{p.n}</span>
-              <div class="min-w-0 col-span-10 md:col-span-5">
-                <h3 class="text-big font-display text-paper group-hover:text-accent transition-colors">{p.data.title}</h3>
-                <p class="text-sm text-faint mt-1">{p.data.category}</p>
+          <li class="border-b border-line">
+            <a href={`${base}/works/${p.id}`} class="work-row group relative grid grid-cols-12 items-center gap-x-4 gap-y-5 py-9 md:py-10 overflow-hidden">
+              <!-- plate number, hollow, bleeding past the left rule -->
+              <span aria-hidden="true" class="ghost-num absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-0">{p.n}</span>
+
+              <div class="relative z-10 min-w-0 col-span-12 md:col-span-5 md:pl-16 lg:pl-24">
+                <h3 class="text-big font-display text-paper transition-colors"><span class="bracket-clamp">{p.data.title}</span></h3>
+                <p class="font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint mt-2">{p.data.category}</p>
               </div>
-              <p class="hidden md:block col-span-4 text-muted leading-snug">{p.hook}</p>
-              <div class="col-span-12 md:col-span-2 mt-4 md:mt-0">
-                <div class="work-thumb relative aspect-[16/10] md:aspect-[4/3] rounded-md overflow-hidden bg-surface border border-line">
-                  <img src={`${base}/images/works/${p.data.thumbnail}`} alt={`${p.data.title} — ${p.data.category}`} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+
+              <div class="relative z-10 min-w-0 col-span-12 md:col-span-4">
+                <p class="font-display text-3xl md:text-4xl text-accent leading-none">{p.stat}</p>
+                <p class="font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint mt-1.5">{p.statLabel}</p>
+                <p class="text-sm text-muted leading-snug mt-3 max-w-xs">{p.hook}</p>
+              </div>
+
+              <div class="relative z-10 col-span-12 md:col-span-3">
+                <div class="crop-frame">
+                  <div class="relative aspect-[16/10] overflow-hidden bg-surface border border-line">
+                    <img src={`${base}/images/works/${p.data.thumbnail}`} alt={`${p.data.title} — ${p.data.category}`} class="w-full h-full object-cover" loading="lazy" />
+                  </div>
                 </div>
               </div>
             </a>
@@ -159,98 +146,189 @@ const services = [
     </div>
   </section>
 
-  <!-- ── What I do ────────────────────────────────────────────────────── -->
-  <section class="py-24 md:py-28 bg-surface border-y border-line">
+  <!-- ── Proof band ───────────────────────────────────────────────────── -->
+  <section class="rule-tick border-b border-line">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-16 md:py-20">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+        {proof.map((x) => (
+          <div class="group min-w-0">
+            <p class="font-display font-semibold text-accent leading-none text-[clamp(3rem,6vw,5.5rem)]">{x.stat}</p>
+            <p class="font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-muted mt-3 group-hover:text-paper transition-colors">{x.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Two doors ────────────────────────────────────────────────────── -->
+  <section class="py-24 md:py-28">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mb-16" data-reveal>
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">What I do</p>
+      <div class="max-w-2xl mb-14">
+        <p class="spec-label mb-4">Who I work with</p>
+        <h2 class="text-huge font-display text-paper">Two kinds of clients. One standard.</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a href={`${base}/services`} class="group crop-frame block bg-surface p-8 md:p-12 transition-colors hover:bg-surface-2">
+          <div class="flex items-start justify-between gap-6 mb-6">
+            <h3 class="text-big font-display text-paper">Growing a business?</h3>
+            <span class="reg-glyph mt-2" aria-hidden="true"></span>
+          </div>
+          <ul class="bar-list space-y-2.5 text-muted mb-8">
+            <li>Landing pages, refreshes, brand identity, email</li>
+            <li>Flat pricing you can see before we ever talk</li>
+            <li>You work with me directly, start to finish</li>
+          </ul>
+          <span class="inline-flex items-center gap-2 text-sm text-paper group-hover:text-accent transition-colors">See the services <span aria-hidden="true">→</span></span>
+        </a>
+        <a href={`${base}/agencies`} class="group crop-frame block bg-surface p-8 md:p-12 transition-colors hover:bg-surface-2">
+          <div class="flex items-start justify-between gap-6 mb-6">
+            <h3 class="text-big font-display text-paper">Running an agency?</h3>
+            <span class="reg-glyph mt-2" aria-hidden="true"></span>
+          </div>
+          <ul class="bar-list space-y-2.5 text-muted mb-8">
+            <li>White-label UX and build, senior from day one</li>
+            <li>No account managers, no juniors, no hand-off</li>
+            <li>Your client never knows I’m not on staff</li>
+          </ul>
+          <span class="inline-flex items-center gap-2 text-sm text-paper group-hover:text-accent transition-colors">How overflow works <span aria-hidden="true">→</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── What I do ────────────────────────────────────────────────────── -->
+  <section class="py-24 md:py-28 bg-surface/60 rule-tick border-b border-line">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
+      <div class="max-w-2xl mb-14">
+        <p class="spec-label mb-4">What I do</p>
         <h2 class="text-huge font-display text-paper">Four ways to pull the pieces together.</h2>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-line border border-line rounded-lg overflow-hidden">
-        {services.map((s, i) => (
-          <a href={`${base}${s.href}`} class="service-cell group bg-ink p-8 md:p-10 hover:bg-surface-2 transition-colors" data-reveal data-reveal-delay={i * 60}>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-line border border-line">
+        {services.map((s) => (
+          <a href={`${base}${s.href}`} class="service-cell group bg-ink p-8 md:p-10 hover:bg-surface-2 transition-colors">
             <div class="flex items-start justify-between gap-6">
-              <div>
+              <div class="min-w-0">
+                <p class="font-tech text-[0.6875rem] text-faint tracking-[0.12em] mb-3">{s.n}</p>
                 <h3 class="text-2xl font-display text-paper mb-2 group-hover:text-accent transition-colors">{s.title}</h3>
                 <p class="text-muted max-w-sm leading-relaxed">{s.line}</p>
               </div>
-              <svg class="w-5 h-5 shrink-0 text-faint group-hover:text-accent group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M7 7h10v10"/></svg>
+              <span class="reg-glyph mt-1" aria-hidden="true"></span>
             </div>
           </a>
         ))}
       </div>
-      <div class="mt-8 flex flex-wrap gap-x-8 gap-y-3" data-reveal>
-        <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-paper hover:text-accent transition-colors">All services <span aria-hidden="true">→</span></a>
-        <a href={`${base}/pricing`} class="inline-flex items-center gap-2 text-sm text-paper hover:text-accent transition-colors">Pricing <span aria-hidden="true">→</span></a>
+      <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
+        <p class="font-tech text-xs text-muted tracking-[0.06em]">Landing pages from $1,500 · Full sites from $6,000 · Retainers from $650/mo</p>
+        <a href={`${base}/pricing`} class="inline-flex items-center gap-2 text-sm text-paper hover:text-accent transition-colors">Full pricing <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
 
-  <!-- ── For agencies ─────────────────────────────────────────────────── -->
-  <section class="py-24 md:py-28">
+  <!-- ── Process strip ────────────────────────────────────────────────── -->
+  <section class="py-20 md:py-24">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="rounded-lg border border-line bg-surface p-8 md:p-14 grid grid-cols-1 md:grid-cols-12 gap-8 items-center" data-reveal>
-        <div class="md:col-span-8">
-          <p class="text-xs font-medium text-accent uppercase tracking-[0.2em] mb-4">For agencies &amp; marketing teams</p>
-          <h2 class="text-big font-display text-paper mb-4">Need a senior pair of hands? I’m the overflow you don’t have to manage.</h2>
-          <p class="text-muted max-w-2xl leading-relaxed">
-            White-label UX and build for agencies and in-house teams — no account managers, no juniors, no hand-off. I plug into your process, hit your deadlines, and your client never knows I’m not on staff.
-          </p>
-        </div>
-        <div class="md:col-span-4 md:text-right">
-          <a href={`${base}/agencies`} class="inline-flex items-center gap-2 px-6 py-3 rounded-md border border-line text-paper hover:border-accent hover:text-accent transition-colors">
-            How overflow works
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
+      <p class="spec-label mb-10">What happens when you reach out</p>
+      <ol class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-10">
+        {steps.map((s) => (
+          <li class="group relative border-t border-line-2 pt-6">
+            <p class="font-tech text-[0.6875rem] text-faint tracking-[0.12em] mb-3">{s.n}</p>
+            <p class="text-xl font-display text-paper mb-1.5">{s.t}</p>
+            <p class="text-sm text-muted leading-relaxed">{s.d}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
   <!-- ── Testimonials ─────────────────────────────────────────────────── -->
-  <section class="py-24 md:py-28 border-t border-line">
+  <section class="py-24 md:py-28 rule-tick">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-12" data-reveal>What clients say</p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <figure class="rounded-lg border border-line bg-surface p-8 md:p-10" data-reveal>
-          <blockquote class="text-lg text-paper leading-relaxed">
-            “Working with Savelle wasn’t like working with a typical designer — it felt more like having a co-founder who happened to be insanely talented at UX. We were drowning in the complexity of 11 RV dealership locations, and he didn’t just design a filter system. He got in the weeds, understood our sales team’s pain points, and built something that made everyone’s life easier. That’s rare.”
-          </blockquote>
-          <figcaption class="mt-6 pt-6 border-t border-line text-sm">
-            <span class="text-paper font-medium">Brian Fidler</span>
-            <span class="text-faint"> · Former Head of Marketing, La Mesa RV &amp; Van Up</span>
-          </figcaption>
-        </figure>
-        <figure class="rounded-lg border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay="80">
-          <blockquote class="text-lg text-paper leading-relaxed">
-            “Savelle is one of the most talented UX experts I’ve worked with. Shortly after his hire he was knocking out work items and client-side code, and it seemed like every day he revealed a new talent. He once redesigned our product logo — something better than the marketing company’s effort — after doodling for about ten minutes. Simply amazing.”
-          </blockquote>
-          <figcaption class="mt-6 pt-6 border-t border-line text-sm">
-            <span class="text-paper font-medium">Daniel Kruger</span>
-            <span class="text-faint"> · VP of Software Development, SyberSafe</span>
-          </figcaption>
-        </figure>
-      </div>
-      <div class="mt-8" data-reveal>
-        <a href={`${base}/about#testimonials`} class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors">
+      <p class="spec-label mb-12">What clients say</p>
+      <figure class="relative max-w-4xl pl-6 md:pl-10">
+        <span aria-hidden="true" class="absolute left-0 top-1 bottom-1 w-[4px] bg-accent"></span>
+        <blockquote class="font-display text-[clamp(1.35rem,2.6vw,2rem)] leading-snug text-paper">
+          “It felt more like having a co-founder who happened to be insanely talented at UX.
+          We were drowning in the complexity of 11 RV dealership locations, and he didn’t
+          just design a filter system — he got in the weeds, understood our sales team’s
+          pain points, and built something that made everyone’s life easier. That’s rare.”
+        </blockquote>
+        <figcaption class="mt-6 font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint">
+          — Brian Fidler · Former Head of Marketing, La Mesa RV &amp; Van Up
+        </figcaption>
+      </figure>
+      <div class="mt-14 max-w-2xl border-t border-line pt-8">
+        <blockquote class="text-muted leading-relaxed">
+          “Shortly after his hire he was knocking out work items and client-side code, and
+          it seemed like every day he revealed a new talent. Simply amazing.”
+        </blockquote>
+        <p class="mt-4 font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint">
+          — Daniel Kruger · VP of Software Development, SyberSafe
+        </p>
+        <a href={`${base}/about#testimonials`} class="mt-6 inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors">
           More testimonials <span aria-hidden="true">→</span>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ── UX Health Check nudge ────────────────────────────────────────── -->
-  <section class="py-20 md:py-24 bg-surface border-t border-line">
+  <!-- ── Showreel ─────────────────────────────────────────────────────── -->
+  <section class="pb-24 md:pb-32">
     <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-8" data-reveal>
-        <div class="max-w-2xl">
-          <h2 class="text-big font-display text-paper mb-3">Not ready to talk? Score your site first.</h2>
-          <p class="text-muted leading-relaxed">Answer ten quick questions and get an instant UX score across five dimensions, plus three fixes you can act on this week. Free, about two minutes.</p>
+      <p class="spec-label mb-6">The work in motion</p>
+      <div class="crop-frame group">
+        <button
+          data-reel-play
+          class="reel-panel relative block w-full aspect-video overflow-hidden border border-line bg-surface cursor-pointer"
+          aria-label="Play the 2026 portfolio showreel with sound"
+        >
+          <Reel />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/20"></div>
+          <span class="absolute inset-0 flex items-center justify-center">
+            <span class="reg-snap inline-flex items-center justify-center w-14 h-14 md:w-20 md:h-20 rounded-[2px] bg-accent text-ink shadow-2xl shadow-black/40 transition-colors group-hover:bg-accent-dim">
+              <svg class="w-6 h-6 md:w-8 md:h-8 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </span>
+          <span class="absolute left-5 bottom-4 font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-paper flex items-center gap-2">
+            <span aria-hidden="true" class="w-[3px] h-[11px] bg-accent"></span> Showreel 2026
+          </span>
+          <span class="absolute right-5 bottom-4 font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-muted group-hover:text-paper transition-colors">Sound on</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── UX Health Check — the one inverted panel ─────────────────────── -->
+  <section class="bg-accent text-ink">
+    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-16 md:py-20">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+        <div class="min-w-0 md:col-span-7">
+          <p class="font-tech text-[0.6875rem] uppercase tracking-[0.12em] mb-4 flex items-center gap-2.5">
+            <span aria-hidden="true" class="w-[3px] h-[11px] bg-ink"></span> Free · About two minutes
+          </p>
+          <h2 class="text-huge font-display text-ink mb-4">Not ready to talk? Score your site first.</h2>
+          <p class="text-ink/80 leading-relaxed max-w-xl">
+            Answer ten quick questions and get an instant UX score across five dimensions,
+            plus three fixes you can act on this week.
+          </p>
         </div>
-        <a href={`${base}/ux-health-check`} class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
-          Get your UX score
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
+        <div class="min-w-0 md:col-span-5">
+          <!-- static score meter — a ruler, measured -->
+          <div aria-hidden="true" class="mb-8">
+            <div class="relative h-10">
+              <div class="absolute inset-x-0 top-1/2 h-[2px] bg-ink/25"></div>
+              <div class="absolute inset-x-0 top-1/2 h-[10px] -translate-y-1/2" style="background: repeating-linear-gradient(to right, rgba(10,10,11,0.35) 0 1px, transparent 1px 10%);"></div>
+              <div class="absolute top-0 bottom-0 left-[62%] w-[3px] bg-ink"></div>
+              <p class="absolute left-[62%] -translate-x-1/2 top-full mt-2 font-tech text-[0.6875rem] tracking-[0.12em] whitespace-nowrap">WHERE DOES YOURS LAND?</p>
+            </div>
+            <div class="mt-9 flex justify-between font-tech text-[0.6875rem] tracking-[0.12em] text-ink/60">
+              <span>0</span><span>50</span><span>100</span>
+            </div>
+          </div>
+          <a href={`${base}/ux-health-check`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-ink text-accent font-medium hover:bg-ink/85 transition-colors">
+            Get your UX score
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>

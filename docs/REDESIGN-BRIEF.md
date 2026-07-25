@@ -1,5 +1,46 @@
 # Redesign migration brief (dark theme)
 
+## THE ORGANIZING IDEA: "IN REGISTER" (added 2026-07-24)
+
+The wordmark's bars (`▌Savelle Design▐`) are **registration marks** — the
+marks printers use to bring separate layers into perfect alignment. That is
+the site's whole story made visual: "a business is a thousand moving pieces;
+Savelle pulls them into register." Every page is a designer's measured
+working surface; the act of touching something snaps it into alignment.
+
+The grammar (all defined in `global.css` — use these, don't invent new ones):
+
+- `.artboard` — static column-rules + crosshair grid behind every page
+  (mounted once in `Layout.astro`). The old canvas backgrounds
+  (`BackgroundHex`/`BackgroundField`) are **unmounted** — do not re-add.
+- `.spec-label` — mono annotation eyebrow, auto-numbered per page via CSS
+  counter ("SELECTED WORK / 03"). Replaces all tracked-caps eyebrows.
+- `.bracketed` — static bracket pair. **Word is paper, bars are lime.** Max
+  two per page: the H1 word + the footer "picture" sign-off. No trailing
+  period after a bracketed word.
+- `.bracket-clamp` — hover form: bars scale in and clamp the title (work rows).
+- `.crop-frame` — corner crop marks on images/panels; snap lime + nudge
+  outward on group hover.
+- `.reg-snap` — CTA hover: an out-of-register lime frame snaps flush.
+- `.reg-glyph` — the icon system: two offset squares that align on hover.
+  Replaces ↗ arrows and clipart icons.
+- `.rule-tick` — ruler-edge section divider (hairline + measuring ticks).
+- `.ghost-num` — huge hollow Clash numerals behind work-index rows.
+- `.bar-list` — lime bar bullets (replaces checkmarks/dots).
+- `font-tech` — system-mono annotation voice for captions/meta/legal.
+- Corner radius is **≤ 2px site-wide** (`rounded-[2px]`); never `rounded-lg`.
+- Lime is withdrawn from decoration and spent big: at most ONE inverted
+  full-lime panel per page (homepage: the UX Health Check band).
+- Motion: hover-triggered only, plus ONE load moment (the hero headline's
+  lime misprint ghost sliding into register — `data-ghost` attr on
+  `.line-rise` spans). The scroll-reveal system was removed; `data-reveal`
+  attributes are inert. No canvas, no ambient scroll animation.
+- Featured-work hooks/stats live in `src/data/featured.ts` — single source
+  for the homepage and `/works`.
+
+Test for any new element: *does it look measured, and does something come
+into register when touched?* If it's decoration that aligns nothing, cut it.
+
 The homepage (`src/pages/index.astro`) is the approved reference. Match its
 look and conventions exactly. Read it, `src/styles/global.css`,
 `src/layouts/Layout.astro`, and `src/components/*` before editing.

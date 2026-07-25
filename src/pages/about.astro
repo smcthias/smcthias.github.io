@@ -7,7 +7,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <!-- Hero Section -->
     <section class="py-20 md:py-24">
       <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">About me</p>
+      <p class="spec-label mb-4">About me</p>
       <h1 class="text-huge font-display text-paper mb-10">Savelle McThias, designer &amp; developer.</h1>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
         <div class="min-w-0">
@@ -21,12 +21,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             Today, I focus on helping small to medium-sized businesses with landing pages, website refreshes, brand touchups, and email campaigns. My goal is simple: create design that looks professional, works smoothly, and helps your business grow.
           </p>
         </div>
-        <div class="aspect-square rounded-lg overflow-hidden border border-line bg-surface">
-          <img
-            src={`${base}/images/about/profile.jpg`}
-            alt="Savelle McThias - Designer and Developer"
-            class="w-full h-full object-cover"
-          />
+        <div class="crop-frame group">
+          <div class="relative aspect-square overflow-hidden border border-line bg-surface">
+            <!-- duotone treatment pulls the light studio backdrop into the dark
+                 theme; hover snaps it back to full color — into register -->
+            <img
+              src={`${base}/images/about/profile.jpg`}
+              alt="Savelle McThias - Designer and Developer"
+              class="w-full h-full object-cover grayscale contrast-[1.05] brightness-[0.82] transition-[filter] duration-500 group-hover:grayscale-0 group-hover:brightness-100"
+            />
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-ink/25 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-0"></div>
+          </div>
         </div>
       </div>
       </div>
@@ -91,7 +96,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <section class="py-24 md:py-28">
       <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
         <h2 class="text-huge font-display text-paper mb-12" data-reveal>Tools &amp; technologies</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-line border border-line rounded-lg overflow-hidden">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-line border border-line rounded-[2px] overflow-hidden">
         <div class="bg-surface p-8 md:p-10" data-reveal>
           <h3 class="text-xl font-display text-paper mb-4">Design tools</h3>
           <ul class="space-y-2 text-muted">
@@ -128,25 +133,25 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
         <h2 class="text-huge font-display text-paper mb-12" data-reveal>How the pieces come together</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="rounded-lg border border-line bg-ink p-8" data-reveal>
+        <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal>
           <h3 class="text-xl font-display text-paper mb-3">Data-driven</h3>
           <p class="text-muted leading-relaxed">
             Every design decision is informed by research, testing, and real user data.
           </p>
         </div>
-        <div class="rounded-lg border border-line bg-ink p-8" data-reveal data-reveal-delay="60">
+        <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay="60">
           <h3 class="text-xl font-display text-paper mb-3">Transparent</h3>
           <p class="text-muted leading-relaxed">
             Clear communication and collaboration throughout the entire process.
           </p>
         </div>
-        <div class="rounded-lg border border-line bg-ink p-8" data-reveal data-reveal-delay="120">
+        <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay="120">
           <h3 class="text-xl font-display text-paper mb-3">Business-focused</h3>
           <p class="text-muted leading-relaxed">
             Beautiful design that delivers measurable results and ROI.
           </p>
         </div>
-        <div class="rounded-lg border border-line bg-ink p-8" data-reveal data-reveal-delay="180">
+        <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay="180">
           <h3 class="text-xl font-display text-paper mb-3">Accessible</h3>
           <p class="text-muted leading-relaxed">
             Making high-quality design and development accessible to growing businesses.
@@ -159,11 +164,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-24 md:py-28 border-t border-line">
       <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4" data-reveal>What clients say</p>
+        <p class="spec-label mb-4" data-reveal>What clients say</p>
         <h2 class="text-huge font-display text-paper mb-12" data-reveal>In their words.</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Testimonial 1 - Heather Jablow -->
-          <figure class="rounded-lg border border-line bg-surface p-8 md:p-10" data-reveal>
+          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal>
             <div class="mb-6">
               <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
@@ -187,7 +192,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </figure>
 
           <!-- Testimonial 2 - Brian Fidler -->
-          <figure class="rounded-lg border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay="80">
+          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay="80">
             <div class="mb-6">
               <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
@@ -214,7 +219,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </figure>
 
           <!-- Testimonial 3 - Daniel Kruger -->
-          <figure class="rounded-lg border border-line bg-surface p-8 md:p-10" data-reveal>
+          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal>
             <div class="mb-6">
               <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
@@ -241,7 +246,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </figure>
 
           <!-- Testimonial 4 - Caitlin Kelly -->
-          <figure class="rounded-lg border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay="80">
+          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay="80">
             <div class="mb-6">
               <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
@@ -259,7 +264,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </figure>
 
           <!-- Testimonial 5 - Roxana Epps -->
-          <figure class="rounded-lg border border-line bg-surface p-8 md:p-10" data-reveal>
+          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal>
             <div class="mb-6">
               <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
@@ -305,7 +310,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </div>
           <a
             href={`${base}/contact`}
-            class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
+            class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
           >
             Get in touch
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>

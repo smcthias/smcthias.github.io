@@ -18,7 +18,7 @@ const sortedPosts = allPosts.sort((a, b) =>
     <!-- Hero Section -->
     <section class="py-20 md:py-24">
       <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4">Insights</p>
+        <p class="spec-label mb-4">Insights</p>
         <h1 class="text-huge font-display text-paper mb-6">Blog</h1>
         <p class="text-lg md:text-xl text-muted max-w-3xl leading-relaxed">
           Insights from real projects: what works, what doesn't, and what I've learned building solutions for clients across industries.
@@ -41,7 +41,7 @@ const sortedPosts = allPosts.sort((a, b) =>
 
           return (
           <a href={`${base}/blog/${post.id}`} class="group block min-w-0" data-reveal>
-            <div class="relative aspect-[16/9] rounded-lg mb-6 overflow-hidden bg-surface border border-line">
+            <div class="relative aspect-[16/9] rounded-[2px] mb-6 overflow-hidden bg-surface border border-line">
               <img
                 src={`${base}/images/${post.data.image}`}
                 alt={post.data.imageAlt}
@@ -62,7 +62,7 @@ const sortedPosts = allPosts.sort((a, b) =>
             </p>
             <div class="flex flex-wrap gap-2">
               {post.data.tags.map((tag: string) => (
-                <span class="px-3 py-1 bg-surface-2 border border-line text-muted rounded-md text-sm">
+                <span class="px-3 py-1 bg-surface-2 border border-line text-muted rounded-[2px] text-sm">
                   {tag}
                 </span>
               ))}
@@ -86,7 +86,7 @@ const sortedPosts = allPosts.sort((a, b) =>
           </p>
           <a
             href={`${base}/contact`}
-            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-md bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
+            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
           >
             Get in Touch
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
