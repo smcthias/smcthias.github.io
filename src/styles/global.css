@@ -2,406 +2,179 @@
 @plugin "@tailwindcss/typography";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Self-hosted type — Clash Display (oversized headlines) + General Sans (body).
-   WOFF2 only, swap so text paints immediately. ~96KB total across 5 weights.
+   Self-hosted type — Switzer (Fontshare), a Swiss-style neo-grotesque.
+   One family, weight does the work. WOFF2 only, swap so text paints fast.
    ────────────────────────────────────────────────────────────────────────── */
 @font-face {
-  font-family: 'Clash Display';
-  src: url('/fonts/clash-display-600.woff2') format('woff2');
-  font-weight: 600;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Clash Display';
-  src: url('/fonts/clash-display-700.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans-400.woff2') format('woff2');
+  font-family: 'Switzer';
+  src: url('/fonts/switzer-400.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
   font-style: normal;
 }
 @font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans-500.woff2') format('woff2');
+  font-family: 'Switzer';
+  src: url('/fonts/switzer-500.woff2') format('woff2');
   font-weight: 500;
   font-display: swap;
   font-style: normal;
 }
 @font-face {
-  font-family: 'General Sans';
-  src: url('/fonts/general-sans-600.woff2') format('woff2');
+  font-family: 'Switzer';
+  src: url('/fonts/switzer-600.woff2') format('woff2');
   font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer-700.woff2') format('woff2');
+  font-weight: 700;
   font-display: swap;
   font-style: normal;
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Design tokens. Dark foundation, warm white for contrast, neon lime as spice.
-   Green is only ever used on dark (it fails contrast on white) — as UI accent,
-   large text, or a fill with ink text on top. Never green body copy on light.
+   Design tokens. Swiss modern: monochrome, light-first, dark where the work
+   is shown. No accent color — the portfolio imagery carries the color; type
+   and space carry the design. Light ground for reading, ink for galleries.
    ────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --font-sans: 'General Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Clash Display', 'General Sans', system-ui, sans-serif;
-  /* Annotation voice — the spec-sheet mono layer. System stack, zero bytes. */
-  --font-tech: ui-monospace, 'SF Mono', 'SFMono-Regular', Menlo, 'Cascadia Mono', monospace;
+  --font-sans: 'Switzer', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: 'Switzer', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-  /* Foundation */
-  --color-ink: #0a0a0b;        /* base background — near-black, faintly cool */
-  --color-surface: #141417;    /* cards / recessed panels */
-  --color-surface-2: #1d1d21;  /* raised panels, inputs */
-  --color-line: #2a2a30;       /* hairline borders */
-  --color-line-2: #3a3a42;     /* hover / stronger borders */
+  /* Light ground (default) */
+  --color-paper: #f6f6f4;     /* page base — cool off-white */
+  --color-card: #ffffff;      /* raised panels on light */
+  --color-ink: #0e0e10;       /* near-black — text on light, dark ground */
+  --color-slate: #4c4c54;     /* secondary text on light */
+  --color-mist: #86868d;      /* captions / labels on light */
+  --color-hairline: #e2e2de;  /* rules on light */
 
-  /* Text — tuned for comfortable reading on the near-black base */
-  --color-paper: #f4f4f1;      /* primary text — warm white, not pure #fff */
-  --color-muted: #bcbcc4;      /* secondary / body copy (raised for contrast) */
-  --color-faint: #8a8a92;      /* tertiary / captions / eyebrows */
+  /* Dark ground (gallery bands, hero video) */
+  --color-ink-soft: #17171a;  /* dark surface / cards on ink */
+  --color-fog: #b8b8be;       /* secondary text on dark */
+  --color-dusk: #7d7d85;      /* captions on dark */
+  --color-seam: #26262b;      /* rules on dark */
 
-  /* Accent — neon lime-green. Spice only. */
-  --color-accent: #b4ff3d;
-  --color-accent-dim: #95e01c; /* hover / pressed */
-
-  /* Oversized display scale — fluid, clamps so a 3-line headline fits one
-     viewport on desktop and never overflows on mobile */
-  --text-mega: clamp(2.6rem, 7.5vw, 6.25rem);
-  --text-mega--line-height: 0.95;
+  /* Display scale — fluid, tight, confident */
+  --text-mega: clamp(2.75rem, 7vw, 6rem);
+  --text-mega--line-height: 1.02;
   --text-mega--letter-spacing: -0.03em;
-  --text-huge: clamp(2.25rem, 6vw, 4.5rem);
-  --text-huge--line-height: 0.98;
-  --text-huge--letter-spacing: -0.02em;
-  --text-big: clamp(1.75rem, 3.5vw, 2.75rem);
-  --text-big--line-height: 1.05;
-  --text-big--letter-spacing: -0.015em;
+  --text-huge: clamp(2.1rem, 5vw, 4rem);
+  --text-huge--line-height: 1.05;
+  --text-huge--letter-spacing: -0.025em;
+  --text-big: clamp(1.6rem, 3vw, 2.5rem);
+  --text-big--line-height: 1.1;
+  --text-big--letter-spacing: -0.02em;
 
-  /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Base
+   Base. Native scroll only — nothing takes over the user's device.
    ────────────────────────────────────────────────────────────────────────── */
 html {
   font-family: var(--font-sans);
-  background-color: var(--color-ink);
-  color: var(--color-paper);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--color-ink);
-  color: var(--color-paper);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   overflow-x: hidden;
 }
 
 ::selection {
-  background: var(--color-accent);
-  color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
-/* Keyboard focus — visible neon ring everywhere */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid currentColor;
   outline-offset: 3px;
-  border-radius: 2px;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 600;
+  text-wrap: balance;
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   THE IDEA: "IN REGISTER". The wordmark's bars are registration marks — the
-   marks printers use to bring separate layers into perfect alignment. The
-   whole site is a designer's measured working surface: crop marks, spec
-   labels, ruler edges. The rest state is quiet and precise; the act of
-   touching something snaps it INTO register. Motion is hover-first — the one
-   load-time moment is the hero headline registering itself.
-
-   Grammar rules (so it stays special):
-   · Brackets always HOLD content — never empty ornament.
-   · Bracketed display words are paper; only the bars are lime.
-   · Two static bracket uses per page max (H1 word + footer sign-off);
-     everything else earns its brackets via hover/focus.
-   · Corner radius ≤ 2px site-wide. Print is sharp.
+   Section labels. One quiet convention: small, medium-weight, tracked caps.
+   No counters, no ticks, no ornament — a label, nothing more.
    ────────────────────────────────────────────────────────────────────────── */
-.bracketed {
-  position: relative;
-  display: inline-block;
-  padding-inline: 0.5em;
-  /* outer breathing room so adjacent words don't hug the bars — the word
-     space alone reads too tight next to the 0.5em interior padding */
-  margin-inline: 0.14em;
+.label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-mist);
 }
-.bracketed::before,
-.bracketed::after {
-  content: '';
-  position: absolute;
-  top: 0.08em;
-  bottom: 0.08em;
-  width: 0.09em;
-  min-width: 3px;
-  background: var(--color-accent);
-}
-.bracketed::before { left: 0; }
-.bracketed::after { right: 0; }
+.on-dark .label, .label-dark { color: var(--color-dusk); }
 
-/* Bracket clamp — the hover form of the mark. Bars scale in from nothing and
-   the word makes room: the row "clamps into register" under the cursor. */
-.bracket-clamp {
-  position: relative;
-  display: inline-block;
-  transition: padding 0.3s var(--ease-out-expo);
-}
-.bracket-clamp::before,
-.bracket-clamp::after {
-  content: '';
-  position: absolute;
-  top: 0.1em;
-  bottom: 0.1em;
-  width: 0.08em;
-  min-width: 3px;
-  background: var(--color-accent);
-  opacity: 0;
-  transform: scaleY(0.3);
-  transition: opacity 0.3s, transform 0.3s var(--ease-out-expo);
-}
-.bracket-clamp::before { left: 0; }
-.bracket-clamp::after { right: 0; }
-.group:hover .bracket-clamp,
-a:focus-visible .bracket-clamp { padding-inline: 0.45em; }
-.group:hover .bracket-clamp::before,
-.group:hover .bracket-clamp::after,
-a:focus-visible .bracket-clamp::before,
-a:focus-visible .bracket-clamp::after { opacity: 1; transform: scaleY(1); }
-
-/* ── The artboard. Static CSS working surface behind every page: container
-   column rules + a faint registration-crosshair grid. Zero JS, no motion. ── */
-.artboard {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-.artboard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(100% - 2.5rem, 1400px);
-  border-inline: 1px solid rgba(244, 244, 241, 0.05);
-}
-.artboard::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cpath d='M90 83v14M83 90h14' stroke='%23f4f4f1' stroke-opacity='0.06' stroke-width='1'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
+/* Vertical edge label — a headline demoted to marginalia (hero). */
+.edge-label {
+  writing-mode: vertical-rl;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-mist);
 }
 
-/* ── Spec labels. The mono annotation voice replaces the tracked-caps
-   eyebrow. Auto-indexed per page via CSS counters: "SELECTED WORK / 03". ── */
-main { counter-reset: spec; }
-.spec-label {
+/* ──────────────────────────────────────────────────────────────────────────
+   Logo marquee — the one requested ambient motion. Pauses on hover,
+   disabled under reduced motion (falls back to a static wrapped row).
+   ────────────────────────────────────────────────────────────────────────── */
+.marquee {
+  overflow: hidden;
+  display: flex;
+}
+.marquee-track {
   display: flex;
   align-items: center;
-  gap: 0.65em;
-  font-family: var(--font-tech);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-muted);
+  flex-shrink: 0;
+  min-width: 100%;
+  gap: clamp(3rem, 6vw, 6rem);
+  padding-right: clamp(3rem, 6vw, 6rem);
+  animation: marquee 36s linear infinite;
 }
-.spec-label::before {
-  content: '';
-  width: 3px;
-  height: 0.85em;
-  background: var(--color-accent);
-  flex: none;
-}
-.spec-label::after {
-  counter-increment: spec;
-  content: '/ ' counter(spec, decimal-leading-zero);
-  color: var(--color-faint);
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  to { transform: translateX(-100%); }
 }
 
-/* ── Ruler edge. A section-dividing hairline with measuring ticks. ── */
-.rule-tick {
-  position: relative;
-  border-top: 1px solid var(--color-line);
+/* ──────────────────────────────────────────────────────────────────────────
+   Horizontal case-study strip — native scroll, snap, no hijack.
+   ────────────────────────────────────────────────────────────────────────── */
+.hstrip {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 0.75rem;
 }
-.rule-tick::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: repeating-linear-gradient(to right, var(--color-line) 0 1px, transparent 1px 56px);
-  pointer-events: none;
-}
-
-/* ── Crop marks. Four corner ticks — the marks on a mounted proof. Rest
-   state hairline grey; snaps lime (and nudges outward) on group hover. ── */
-.crop-frame {
-  --crop: var(--color-line-2);
-  position: relative;
-}
-.crop-frame::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  pointer-events: none;
-  background:
-    linear-gradient(var(--crop), var(--crop)) left 0 top 0 / 13px 2px,
-    linear-gradient(var(--crop), var(--crop)) left 0 top 0 / 2px 13px,
-    linear-gradient(var(--crop), var(--crop)) right 0 top 0 / 13px 2px,
-    linear-gradient(var(--crop), var(--crop)) right 0 top 0 / 2px 13px,
-    linear-gradient(var(--crop), var(--crop)) left 0 bottom 0 / 13px 2px,
-    linear-gradient(var(--crop), var(--crop)) left 0 bottom 0 / 2px 13px,
-    linear-gradient(var(--crop), var(--crop)) right 0 bottom 0 / 13px 2px,
-    linear-gradient(var(--crop), var(--crop)) right 0 bottom 0 / 2px 13px;
-  background-repeat: no-repeat;
-  transition: inset 0.25s var(--ease-out-expo);
-}
-.group:hover .crop-frame::before,
-.crop-frame:hover::before {
-  --crop: var(--color-accent);
-  inset: -6px;
-}
-
-/* ── Registration snap. A lime frame sits out of register behind the CTA;
-   hover snaps it flush — where, perfectly aligned, it disappears. ── */
-.reg-snap { position: relative; }
-.reg-snap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--color-accent);
-  border-radius: inherit;
-  opacity: 0;
-  transform: translate(6px, 6px);
-  pointer-events: none;
-  transition: transform 0.22s var(--ease-out-expo), opacity 0.22s;
-}
-.reg-snap:hover::after,
-.reg-snap:focus-visible::after,
-.group:hover .reg-snap::after {
-  opacity: 1;
-  transform: translate(0, 0);
-}
-@media (hover: hover) {
-  .reg-snap:not(:hover):not(:focus-visible)::after { opacity: 0; }
-}
-
-/* ── Register glyph. The only icon the brand needs: two offset squares that
-   slide into exact register on hover. Replaces arrows and clipart. ── */
-.reg-glyph {
-  position: relative;
-  width: 22px;
-  height: 22px;
-  flex: none;
-}
-.reg-glyph::before,
-.reg-glyph::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 1.5px solid var(--color-line-2);
-}
-.reg-glyph::after {
-  border-color: var(--color-accent);
-  transform: translate(6px, 6px);
-  transition: transform 0.28s var(--ease-out-expo);
-}
-.group:hover .reg-glyph::after,
-a:focus-visible .reg-glyph::after { transform: translate(0, 0); }
-
-/* ── Ghost numerals. Huge hollow Clash figures behind the work index —
-   plate numbers on a print sheet. Stroke warms toward lime on row hover. ── */
-.ghost-num {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(4.5rem, 10vw, 9.5rem);
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--color-line-2);
-  user-select: none;
-  transition: -webkit-text-stroke-color 0.3s;
-}
-.group:hover .ghost-num { -webkit-text-stroke-color: rgba(180, 255, 61, 0.45); }
-
-/* ── Bar bullets. The wordmark's bar as list marker — kills checkmarks. ── */
-.bar-list li {
-  position: relative;
-  padding-left: 1rem;
-}
-.bar-list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.42em;
-  width: 3px;
-  height: 0.8em;
-  background: var(--color-accent);
-}
-
-/* Hero line-rise. Masked lines slide up on load — pure CSS so the H1 is never
-   dependent on JS to be visible. No-JS still animates; reduced-motion (below)
-   and the global animation kill-switch both resolve it to the visible end state. */
-.line-mask { display: block; overflow: hidden; }
-.line-rise {
-  display: block;
-  position: relative;
-  transform: translateY(110%);
-  animation: lineRise 0.9s var(--ease-out-expo) forwards;
-}
-.line-rise-1 { animation-delay: 0.05s; }
-.line-rise-2 { animation-delay: 0.16s; }
-.line-rise-3 { animation-delay: 0.27s; }
-@keyframes lineRise { to { transform: translateY(0); } }
-
-/* The signature load moment: each headline line carries a lime misprint of
-   itself (data-ghost), offset like a proof that slipped — and slides INTO
-   register, vanishing exactly where it aligns. Runs once; base state is
-   invisible, so reduced-motion and the kill-switch simply never show it. */
-.line-rise::after {
-  content: attr(data-ghost);
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  color: var(--color-accent);
-  opacity: 0;
-  transform: translate(0.13em, 0.08em);
-  pointer-events: none;
-  animation: regGhost 1s var(--ease-out-expo) forwards;
-}
-.line-rise-1::after { animation-delay: 0.5s; }
-.line-rise-2::after { animation-delay: 0.62s; }
-.line-rise-3::after { animation-delay: 0.74s; }
-@keyframes regGhost {
-  0% { opacity: 0; transform: translate(0.13em, 0.08em); }
-  30% { opacity: 0.32; }
-  80% { opacity: 0.14; }
-  100% { opacity: 0; transform: translate(0, 0); }
+.hstrip > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .line-rise { transform: none !important; animation: none !important; }
-  .line-rise::after { animation: none !important; opacity: 0 !important; }
+  .marquee { display: block; }
+  .marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-width: 0;
+  }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;

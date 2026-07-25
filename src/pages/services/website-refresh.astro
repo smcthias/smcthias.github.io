@@ -3,27 +3,27 @@ import Layout from '../../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
 
-// FAQ schema is derived from the on-page Q&As below — keep the two in sync.
+// FAQ schema is derived from the on-page Q&As below. Keep the two in sync.
 const faqs = [
   {
     question: "What's the difference between a refresh and a full rebuild?",
     answer:
-      "A refresh keeps what's working — your structure, content, and platform — and modernizes the look, the layout, and the parts that frustrate visitors. A rebuild starts over. Most businesses need a refresh, not a teardown; we'll figure out which on the first call.",
+      'A refresh keeps what is working: your structure, your content, your platform. It modernizes the look, the layout, and the parts that frustrate visitors. A rebuild starts over. Most businesses need a refresh, not a teardown, and we will figure out which on the first call.',
   },
   {
     question: 'Will a redesign hurt my Google rankings?',
     answer:
-      'Not when it is done carefully. I preserve your URLs, keep your content intact, and set up redirects for anything that moves, so the search equity you have built comes with you. A good redesign helps findability — it does not reset it.',
+      'Not when it is done carefully. I preserve your URLs, keep your content intact, and set up redirects for anything that moves, so the search equity you have built comes with you. A good redesign helps findability. It does not reset it.',
   },
   {
     question: 'Can you work with my existing website platform?',
     answer:
-      "Usually, yes — WordPress, Squarespace, Webflow, Shopify, and most common setups. If your current platform is holding you back, I'll tell you plainly and lay out the tradeoffs before you commit to a move.",
+      "Usually, yes: WordPress, Squarespace, Webflow, Shopify, and most common setups. If your current platform is holding you back, I'll tell you plainly and lay out the tradeoffs before you commit to a move.",
   },
   {
     question: 'How do I know my site actually needs work?',
     answer:
-      'Take the free UX Health Check — ten questions, an instant score, and your three highest-priority fixes. If you want a hands-on review of a live site, the 48-Hour UX Audit pinpoints what is costing you conversions.',
+      'Take the Website Score. Ten questions, an instant read on how well your site turns visitors into paying customers, and your three highest-priority fixes. For a hands-on review of a live site, the 48-Hour UX Audit pinpoints what is costing you conversions.',
   },
   {
     question: 'How much does a website refresh cost?',
@@ -53,138 +53,150 @@ const pageSchema = [
     })),
   },
 ];
+
+const included = [
+  { title: 'Website audit', body: 'A review of your current site to pin down what is working and what is quietly costing you.' },
+  { title: 'Modern design', body: 'A current look that fits your brand instead of chasing a trend.' },
+  { title: 'Improved navigation', body: 'A simpler structure so visitors find what they need without hunting for it.' },
+  { title: 'Mobile optimization', body: 'Looks right and works right on phones and tablets, where most people arrive.' },
+  { title: 'Performance boost', body: 'Faster load times that keep visitors engaged and help your search rankings.' },
+  { title: 'Content strategy', body: 'Guidance on sharpening your messaging so it connects with your audience.' },
+];
+
+const fits = [
+  { title: 'The business has outgrown the site', body: 'What you sell has evolved, and the site should reflect where you are now.' },
+  { title: 'The design shows its age', body: 'It was built years ago and looks it, especially next to your competitors.' },
+  { title: 'The site works against visitors', body: 'It is slow, hard to use, or falls apart on a phone.' },
+];
 ---
 
 <Layout title="Website Refresh & Redesign - Savelle Design" description="Modernize your website with a fresh design that better represents your brand and engages your audience.">
-    <!-- Hero Section -->
-    <section class="py-20 md:py-28">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors mb-10">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-mist hover:text-ink transition-colors mb-10">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         Back to services
       </a>
-      <p class="spec-label mb-4" data-reveal>Website refresh</p>
-      <h1 class="font-display text-mega text-paper max-w-4xl" data-reveal>
-        Keep what works, fix what doesn't, ship a site that <span class="bracketed">sells</span>.
+      <p class="label mb-5">Website refresh</p>
+      <h1 class="font-semibold text-mega text-ink max-w-[20ch]">
+        Keep what works, fix what fails, ship a site that sells.
       </h1>
-      <p class="mt-8 text-lg md:text-xl text-muted max-w-3xl leading-relaxed" data-reveal>
-        A refresh gives your site a modern look, a cleaner path through it, and better results — without tearing everything down and starting over.
+      <p class="mt-10 max-w-2xl text-lg md:text-xl text-slate leading-relaxed">
+        A refresh gives your site a modern look, a cleaner path through it, and
+        better results, without tearing everything down and starting over.
       </p>
-      <a href={`${base}/pricing`} class="mt-8 inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors" data-reveal>
+      <a href={`${base}/pricing`} class="mt-8 inline-block text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
         View pricing
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
       </a>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Service Overview -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div class="min-w-0" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">Why refresh your site?</h2>
-          <p class="text-lg text-muted mb-6 leading-relaxed">
-            Your website is often the first place a potential customer meets your business. If it looks dated, is hard to use, or falls apart on a phone, you are losing people who would have bought.
+  <!-- ── The case for a refresh ───────────────────────────────────────── -->
+  <section class="border-y border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div class="min-w-0 lg:col-span-6">
+          <h2 class="text-huge font-semibold text-ink">The case for a refresh</h2>
+          <p class="mt-6 text-lg text-slate leading-relaxed max-w-xl">
+            Your website is often the first place a potential customer meets your
+            business. If it looks dated, is hard to use, or falls apart on a
+            phone, you are losing people who would have bought.
           </p>
-          <p class="text-lg text-muted leading-relaxed">
-            A refresh sharpens how your brand reads, makes it easier for customers to find what they came for, and moves the number that matters — all without starting from scratch.
+          <p class="mt-6 text-lg text-slate leading-relaxed max-w-xl">
+            A refresh sharpens how your brand reads, makes it easier for customers
+            to find what they came for, and moves the number that matters, all
+            without starting from scratch. AI-integrated workflows keep the whole
+            thing fast, with one senior designer accountable for the result.
           </p>
         </div>
-        <div class="aspect-[4/3] rounded-[2px] overflow-hidden border border-line" data-reveal data-reveal-delay="80">
-          <img src={`${base}/images/works/nikkl-detail3.png`} alt="Website Refresh and Redesign Example" class="w-full h-full object-cover" loading="lazy" />
+        <div class="min-w-0 lg:col-span-6">
+          <div class="overflow-hidden bg-card border border-hairline">
+            <img src={`${base}/images/works/nikkl-detail3.png`} alt="Website refresh and redesign example" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          </div>
         </div>
       </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- What's Included -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>What's included</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>A tune-up, not a teardown.</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          { title: 'Website audit', body: 'I review your current site to pin down what is working and what is quietly costing you.' },
-          { title: 'Modern design', body: 'A fresh, current look that fits your brand instead of chasing a trend.' },
-          { title: 'Improved navigation', body: 'A simpler structure so visitors find what they need without hunting for it.' },
-          { title: 'Mobile optimization', body: 'Looks right and works right on phones and tablets, where most people arrive.' },
-          { title: 'Performance boost', body: 'Faster load times to keep visitors engaged and help your search rankings.' },
-          { title: 'Content strategy', body: 'Guidance on sharpening your messaging so it actually connects with your audience.' },
-        ].map((item, i) => (
-          <div class="rounded-[2px] border border-line bg-surface p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
-            <h3 class="text-xl font-display text-paper mb-3">{item.title}</h3>
-            <p class="text-muted leading-relaxed">{item.body}</p>
+  <!-- ── What's included ──────────────────────────────────────────────── -->
+  <section class="py-24 md:py-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">What's included</p>
+      <h2 class="text-huge font-semibold text-ink max-w-3xl mb-14 md:mb-20">A tune-up, not a teardown.</h2>
+      <div>
+        {included.map((item) => (
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-8 border-t border-hairline py-6">
+            <h3 class="min-w-0 md:col-span-4 text-lg font-semibold text-ink">{item.title}</h3>
+            <p class="min-w-0 md:col-span-8 text-slate leading-relaxed max-w-2xl">{item.body}</p>
           </div>
         ))}
       </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Perfect For -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>Perfect for</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>If any of these sound like you.</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          { title: 'Growing businesses', body: 'Your business has evolved, and your site should reflect where you are now and what you sell.' },
-          { title: 'Dated websites', body: 'Your site was built years ago and looks it, especially next to your competitors.' },
-          { title: 'Poor performance', body: "Your current site is slow, hard to use, or doesn't hold up on a phone." },
-        ].map((item, i) => (
-          <div class="rounded-[2px] border border-line bg-ink p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
-            <h3 class="text-xl font-display text-paper mb-3">{item.title}</h3>
-            <p class="text-muted leading-relaxed">{item.body}</p>
+  <!-- ── When a refresh is the right call ─────────────────────────────── -->
+  <section class="border-y border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">A good fit when</p>
+      <h2 class="text-huge font-semibold text-ink max-w-3xl mb-14 md:mb-16">When a refresh is the right call.</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-10">
+        {fits.map((item) => (
+          <div class="min-w-0 border-t border-hairline pt-6">
+            <h3 class="text-xl font-semibold text-ink mb-2">{item.title}</h3>
+            <p class="text-slate leading-relaxed">{item.body}</p>
           </div>
         ))}
       </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- FAQ -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4 text-center" data-reveal>FAQ</p>
-        <h2 class="text-huge font-display text-paper mb-12 text-center" data-reveal>Frequently asked questions</h2>
-        <div class="max-w-3xl mx-auto space-y-4">
-          {faqs.map((f, i) => (
-            <details class="group rounded-[2px] border border-line bg-surface p-6 md:p-8 open:border-line-2" data-reveal data-reveal-delay={i * 40}>
-              <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
-                <h3 class="text-lg font-display text-paper group-hover:text-accent transition-colors">{f.question}</h3>
-                <svg class="w-5 h-5 shrink-0 text-faint group-open:rotate-45 group-hover:text-accent transition-all mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
-              </summary>
-              <p class="text-muted leading-relaxed mt-4">{f.answer}</p>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
+  <!-- ── See it in practice ───────────────────────────────────────────── -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">See it in practice</p>
+      <a href={`${base}/works/lamesa`} class="group block border border-hairline bg-card p-10 md:p-12 hover:border-ink transition-colors">
+        <h3 class="text-2xl font-semibold text-ink mb-2">La Mesa RV &amp; Van Up</h3>
+        <p class="text-slate leading-relaxed max-w-2xl">
+          11 RV dealerships pulled into one inventory customers could actually
+          search, without throwing out the platform underneath.
+        </p>
+        <span class="mt-6 inline-flex items-center gap-2 font-medium text-ink">View the project <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span></span>
+      </a>
+    </div>
+  </section>
 
-    <!-- CTA Section -->
-    <section class="py-24 md:py-28 bg-surface border-t border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <div class="max-w-3xl mx-auto text-center" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">
-            Ready for a fresh look?
-          </h2>
-          <p class="text-lg md:text-xl text-muted mb-8 leading-relaxed">
-            Tell me where your site stands and I'll show you what a refresh could do for it.
-          </p>
-          <a
-            href={`${base}/contact`}
-            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
-          >
-            Let's talk
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </a>
-        </div>
+  <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">FAQ</p>
+      <h2 class="text-huge font-semibold text-ink max-w-3xl mb-14">Questions, answered.</h2>
+      <div class="max-w-3xl space-y-4">
+        {faqs.map((f) => (
+          <details class="group border border-hairline bg-card p-6 md:p-8">
+            <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
+              <h3 class="text-lg font-semibold text-ink">{f.question}</h3>
+              <svg class="w-5 h-5 shrink-0 text-mist group-open:rotate-45 transition-transform mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
+            </summary>
+            <p class="text-slate leading-relaxed mt-4">{f.answer}</p>
+          </details>
+        ))}
       </div>
-    </section>
+    </div>
+  </section>
+
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your project.</h2>
+      <div class="mt-10">
+        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+          Start your project
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- Structured Data -->
   {pageSchema.map((schema) => (

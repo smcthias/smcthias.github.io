@@ -15,7 +15,7 @@ const GTM_ID = 'GTM-5CKC7W8X';
 
 const {
   title,
-  description = 'UX and web design that turns visitors into customers — landing pages, website refreshes, brand identity, and email campaigns. 18+ years, Scottsdale, AZ. Overflow and white-label help for agencies.',
+  description = 'Design and development that turns visitors into customers. Two decades of experience, AI-integrated workflows, and senior execution for startups, agencies, and enterprise marketing teams.',
   image = '/images/og-default.jpg',
   noindex = false,
 } = Astro.props;
@@ -63,13 +63,13 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#0a0a0b" />
+    <meta name="theme-color" content="#f6f6f4" />
     {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
     <meta name="author" content="Savelle McThias" />
 
     <!-- Self-hosted fonts — preload the two above-the-fold weights -->
-    <link rel="preload" href="/fonts/clash-display-700.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/general-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/switzer-600.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/switzer-400.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -103,11 +103,7 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-md focus:bg-accent focus:text-ink focus:font-medium">Skip to content</a>
-
-    <!-- The artboard: static measured surface (column rules + registration
-         crosshairs) behind every page. Replaces the old canvas backgrounds. -->
-    <div class="artboard" aria-hidden="true"></div>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-paper focus:font-medium">Skip to content</a>
 
     <Nav />
 
@@ -144,8 +140,5 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
       sameAs: ['https://www.linkedin.com/in/savelle/'],
     })} />
 
-    <script>
-      import '../scripts/motion.ts';
-    </script>
   </body>
 </html>

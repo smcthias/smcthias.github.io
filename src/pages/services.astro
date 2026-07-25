@@ -4,192 +4,166 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const services = [
   {
+    href: '/services/landing-page-design',
     title: 'Landing Page Design',
-    description: 'Create high-converting landing pages that turn visitors into customers.',
-    icon: '<svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>',
-    details: [
-      'Custom design tailored to your campaign goals',
-      'Mobile-first responsive design',
-      'Clear call-to-action placement',
-      'Fast loading speed optimization',
-      'SEO-friendly code and structure',
-      'Analytics integration and tracking'
-    ],
-    slug: 'landing-page-design'
+    line: 'One page built around one goal: the signup, the demo, the sale. Designed mobile-first, built fast, measured from day one.',
+    art: 'browser',
   },
   {
+    href: '/services/website-refresh',
     title: 'Website Refresh & Redesign',
-    description: 'Modernize your website with a fresh design that better represents your brand.',
-    icon: '<svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>',
-    details: [
-      'Website audit and recommendations',
-      'Modern, contemporary design',
-      'Improved navigation and structure',
-      'Mobile optimization',
-      'Performance improvements',
-      'Content strategy guidance'
-    ],
-    slug: 'website-refresh'
+    line: 'A modern look and a cleaner path through your site. Keep what works, fix what fails, without starting over.',
+    art: 'layers',
   },
   {
+    href: '/services/brand-identity',
     title: 'Brand Identity Touchups',
-    description: 'Refine your brand identity to create a consistent, professional look.',
-    icon: '<svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>',
-    details: [
-      'Logo refinement and variations',
-      'Color palette optimization',
-      'Typography selection',
-      'Simple brand guidelines',
-      'Marketing templates',
-      'File delivery for print and digital'
-    ],
-    slug: 'brand-identity'
+    line: 'Logo, color, and type refined into a look your whole team can keep consistent, in print and on screen.',
+    art: 'mark',
   },
   {
+    href: '/services/email-campaigns',
     title: 'Email Campaign Design',
-    description: 'Design engaging email campaigns that connect with your audience and drive results.',
-    icon: '<svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>',
-    details: [
-      'Custom email template design',
-      'Campaign strategy and planning',
-      'Mobile-responsive layouts',
-      'Series design (welcome, nurture, promotional)',
-      'Clear call-to-actions',
-      'Platform integration support'
-    ],
-    slug: 'email-campaigns'
-  }
+    line: 'Campaigns and templates people open, read, and act on, designed for the inbox and ready for your platform.',
+    art: 'cards',
+  },
+];
+
+const steps = [
+  { title: 'Discovery', body: 'We get clear on your goals, your audience, and what the project has to accomplish.' },
+  { title: 'Design', body: 'Mockups and prototypes grounded in research and what works for real visitors.' },
+  { title: 'Development', body: 'Clean, fast code on modern tooling, so the site performs as well as it looks.' },
+  { title: 'Launch', body: 'Testing, refining, and shipping, with support once it goes live.' },
 ];
 ---
 
-<Layout title="Services - Savelle Design" description="Design services including landing pages, website refresh, brand identity, and email campaigns for growing businesses.">
-    <!-- Hero Section -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>What I do</p>
-        <h1 class="font-display text-mega text-paper max-w-4xl" data-reveal>
-          Four ways to pull the <span class="bracketed">pieces</span> together.
-        </h1>
-        <p class="mt-8 text-lg md:text-xl text-muted max-w-3xl leading-relaxed" data-reveal>
-          I help growing businesses — and the agencies behind them — build design that connects with customers and moves the number that matters. From landing pages to brand touchups, the work is practical and made to earn its keep.
-        </p>
-        <a
-          href={`${base}/pricing`}
-          class="mt-8 inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors"
-          data-reveal
-        >
-          View pricing
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </a>
-      </div>
-    </section>
+<Layout
+  title="Services - Savelle Design"
+  description="Landing pages, website refreshes, brand identity, and email campaigns. Senior design and development for startups, agencies, and enterprise marketing teams."
+>
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">What I do</p>
+      <h1 class="font-semibold text-mega text-ink max-w-[15ch]">
+        The work I take on.
+      </h1>
+      <p class="mt-10 max-w-2xl text-lg md:text-xl text-slate leading-relaxed">
+        Landing pages, website refreshes, brand identity, and email. Practical
+        design that moves the number that matters, for startups, agencies, and
+        enterprise marketing teams.
+      </p>
+    </div>
+  </section>
 
-    <!-- Services List -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <div class="space-y-16">
-        {services.map((service, index) => (
-          <div class="border-t border-line pt-16 first:border-t-0 first:pt-0" data-reveal>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div class="min-w-0">
-                <div class="flex items-center gap-4 mb-6">
-                  <div class="w-12 h-12 text-accent" set:html={service.icon}></div>
-                  <div class="font-display text-sm text-faint">
-                    0{index + 1}
-                  </div>
-                </div>
-                <h2 class="text-big font-display text-paper mb-4">
-                  <a href={`${base}/services/${service.slug}`} class="hover:text-accent transition-colors">
-                    {service.title}
-                  </a>
-                </h2>
-                <p class="text-lg text-muted mb-6 leading-relaxed">
-                  {service.description}
-                </p>
-                <a
-                  href={`${base}/services/${service.slug}`}
-                  class="inline-flex items-center gap-2 text-sm text-paper font-medium hover:text-accent transition-colors"
-                >
-                  Learn more
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </a>
-              </div>
-              <div class="min-w-0">
-                <h3 class="spec-label mb-5">What's included</h3>
-                <ul class="space-y-3">
-                  {service.details.map(detail => (
-                    <li class="flex items-start">
-                      <svg class="w-5 h-5 text-accent mr-3 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span class="text-muted">{detail}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+  <!-- ── The four services: two per row, room to breathe ──────────────── -->
+  <section class="pb-24 md:pb-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-20 md:gap-y-28">
+        {services.map((s) => (
+          <a href={`${base}${s.href}`} class="group block min-w-0">
+            <div class="aspect-[16/9] bg-card border border-hairline flex items-center justify-center mb-8 overflow-hidden">
+              <svg class="w-40 h-40 text-mist transition-transform duration-500 group-hover:scale-105" viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                {s.art === 'browser' && (
+                  <g transform="translate(80 84) scale(1 0.55) rotate(-30)">
+                    <rect x="-44" y="-44" width="88" height="88" />
+                    <line x1="-44" y1="-26" x2="44" y2="-26" />
+                    <rect x="-32" y="-12" width="40" height="10" />
+                    <rect x="-32" y="6" width="64" height="6" />
+                    <rect x="-32" y="18" width="52" height="6" />
+                    <rect x="-32" y="32" width="24" height="10" />
+                  </g>
+                )}
+                {s.art === 'layers' && (
+                  <g transform="translate(80 80)">
+                    <g transform="scale(1 0.55) rotate(-30)"><rect x="-40" y="-40" width="80" height="80" /></g>
+                    <g transform="translate(0 -22) scale(1 0.55) rotate(-30)"><rect x="-40" y="-40" width="80" height="80" /></g>
+                    <g transform="translate(0 -44) scale(1 0.55) rotate(-30)"><rect x="-40" y="-40" width="80" height="80" /></g>
+                  </g>
+                )}
+                {s.art === 'mark' && (
+                  <g transform="translate(80 80)">
+                    <circle cx="0" cy="0" r="44" />
+                    <circle cx="0" cy="0" r="24" />
+                    <line x1="-56" y1="0" x2="56" y2="0" />
+                    <line x1="0" y1="-56" x2="0" y2="56" />
+                  </g>
+                )}
+                {s.art === 'cards' && (
+                  <g transform="translate(80 88) scale(1 0.55) rotate(-30)">
+                    <rect x="-48" y="-32" width="64" height="44" />
+                    <g transform="translate(14 -14)"><rect x="-48" y="-32" width="64" height="44" /></g>
+                    <g transform="translate(28 -28)">
+                      <rect x="-48" y="-32" width="64" height="44" />
+                      <line x1="-48" y1="-32" x2="-16" y2="-6" />
+                      <line x1="16" y1="-32" x2="-16" y2="-6" />
+                    </g>
+                  </g>
+                )}
+              </svg>
             </div>
+            <h2 class="text-big font-semibold text-ink group-hover:underline underline-offset-8 decoration-hairline">{s.title}</h2>
+            <p class="mt-3 text-lg text-slate leading-relaxed max-w-md">{s.line}</p>
+            <span class="mt-5 inline-flex items-center gap-2 font-medium text-ink">View the service <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How it works ─────────────────────────────────────────────────── -->
+  <section class="border-y border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">How it works</p>
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">A straight line from brief to launch.</h2>
+      <p class="mt-6 text-lg text-slate leading-relaxed max-w-2xl">
+        Every project runs the same way, with AI integrated at each step. You get
+        the speed of a full team and the judgment of one accountable senior designer.
+      </p>
+      <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
+        {steps.map((step) => (
+          <div class="min-w-0 border-t border-hairline pt-6">
+            <h3 class="text-xl font-semibold text-ink mb-2">{step.title}</h3>
+            <p class="text-slate leading-relaxed">{step.body}</p>
           </div>
         ))}
-        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Process Section -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>How it works</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>How the pieces come together.</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { n: '1', title: 'Discovery', body: 'We get clear on your goals, your audience, and what the project actually has to accomplish.' },
-            { n: '2', title: 'Design', body: 'Mockups and prototypes grounded in research and what tends to work for real visitors.' },
-            { n: '3', title: 'Development', body: 'Clean, fast code built on modern tooling — so the site performs as well as it looks.' },
-            { n: '4', title: 'Launch', body: 'Testing, refining, and shipping your project, with support once it goes live.' },
-          ].map((step, i) => (
-            <div class="rounded-[2px] border border-line bg-surface p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
-              <div class="w-11 h-11 bg-accent text-ink rounded-[2px] flex items-center justify-center font-display text-lg mb-5">
-                {step.n}
-              </div>
-              <h3 class="text-xl font-display text-paper mb-2">{step.title}</h3>
-              <p class="text-muted leading-relaxed">{step.body}</p>
-            </div>
-          ))}
+  <!-- ── Pricing ──────────────────────────────────────────────────────── -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="border border-hairline bg-card p-10 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+        <div class="min-w-0 lg:col-span-7">
+          <p class="label mb-5">Pricing</p>
+          <h2 class="text-huge font-semibold text-ink max-w-[16ch]">Real numbers, published up front.</h2>
         </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-24 md:py-28 bg-surface border-t border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <div class="max-w-3xl" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">
-            Ready to get started?
-          </h2>
-          <p class="text-lg md:text-xl text-muted mb-8 leading-relaxed">
-            Tell me what you're working on and I'll show you how I'd approach it.
+        <div class="min-w-0 lg:col-span-5 flex flex-col gap-8">
+          <p class="text-lg text-slate leading-relaxed">
+            Every service has a published range you can plan around, and we agree
+            on a fixed price before any work starts. Scope flexes to fit your
+            budget. No hourly surprises.
           </p>
-          <div class="flex flex-wrap gap-4">
-            <a
-              href={`${base}/contact`}
-              class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
-            >
-              Contact me
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </a>
-            <a
-              href={`${base}/pricing`}
-              class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] border border-line text-paper hover:border-accent hover:text-accent transition-colors"
-            >
-              View pricing
-            </a>
-          </div>
+          <a href={`${base}/pricing`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors self-start">
+            See pricing
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your project.</h2>
+      <div class="mt-10">
+        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+          Start your project
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
 </Layout>

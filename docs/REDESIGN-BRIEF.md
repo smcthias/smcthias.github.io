@@ -1,104 +1,108 @@
-# Redesign migration brief (dark theme)
+# Redesign brief v3 — Swiss modern, light-first (2026-07-24)
 
-## THE ORGANIZING IDEA: "IN REGISTER" (added 2026-07-24)
-
-The wordmark's bars (`▌Savelle Design▐`) are **registration marks** — the
-marks printers use to bring separate layers into perfect alignment. That is
-the site's whole story made visual: "a business is a thousand moving pieces;
-Savelle pulls them into register." Every page is a designer's measured
-working surface; the act of touching something snaps it into alignment.
-
-The grammar (all defined in `global.css` — use these, don't invent new ones):
-
-- `.artboard` — static column-rules + crosshair grid behind every page
-  (mounted once in `Layout.astro`). The old canvas backgrounds
-  (`BackgroundHex`/`BackgroundField`) are **unmounted** — do not re-add.
-- `.spec-label` — mono annotation eyebrow, auto-numbered per page via CSS
-  counter ("SELECTED WORK / 03"). Replaces all tracked-caps eyebrows.
-- `.bracketed` — static bracket pair. **Word is paper, bars are lime.** Max
-  two per page: the H1 word + the footer "picture" sign-off. No trailing
-  period after a bracketed word.
-- `.bracket-clamp` — hover form: bars scale in and clamp the title (work rows).
-- `.crop-frame` — corner crop marks on images/panels; snap lime + nudge
-  outward on group hover.
-- `.reg-snap` — CTA hover: an out-of-register lime frame snaps flush.
-- `.reg-glyph` — the icon system: two offset squares that align on hover.
-  Replaces ↗ arrows and clipart icons.
-- `.rule-tick` — ruler-edge section divider (hairline + measuring ticks).
-- `.ghost-num` — huge hollow Clash numerals behind work-index rows.
-- `.bar-list` — lime bar bullets (replaces checkmarks/dots).
-- `font-tech` — system-mono annotation voice for captions/meta/legal.
-- Corner radius is **≤ 2px site-wide** (`rounded-[2px]`); never `rounded-lg`.
-- Lime is withdrawn from decoration and spent big: at most ONE inverted
-  full-lime panel per page (homepage: the UX Health Check band).
-- Motion: hover-triggered only, plus ONE load moment (the hero headline's
-  lime misprint ghost sliding into register — `data-ghost` attr on
-  `.line-rise` spans). The scroll-reveal system was removed; `data-reveal`
-  attributes are inert. No canvas, no ambient scroll animation.
-- Featured-work hooks/stats live in `src/data/featured.ts` — single source
-  for the homepage and `/works`.
-
-Test for any new element: *does it look measured, and does something come
-into register when touched?* If it's decoration that aligns nothing, cut it.
-
-The homepage (`src/pages/index.astro`) is the approved reference. Match its
-look and conventions exactly. Read it, `src/styles/global.css`,
-`src/layouts/Layout.astro`, and `src/components/*` before editing.
+Client feedback killed the previous dark neon "In Register" system. This brief
+replaces it entirely. The homepage (`src/pages/index.astro`), `works.astro`,
+`Layout.astro`, `Nav.astro`, `Footer.astro`, and `global.css` are the approved
+v3 reference. Read them before editing. Match their look and conventions.
 
 **Do NOT edit** shared files: `global.css`, `Layout.astro`, `Nav/Footer/Reel/
-ReelLightbox/BackgroundHex/motion.ts`, `astro.config.mjs`. Only edit the page(s)
-you are assigned. Do NOT run `git`. Do NOT change the `<Layout>` import.
+ReelLightbox`, `astro.config.mjs`, `src/data/featured.ts`. Only edit the
+page(s) you are assigned. Do NOT run `git` or builds. Do NOT change the
+`<Layout>` import or page URLs.
 
-## Design tokens (Tailwind v4, defined in global.css @theme)
-- Background: page base is `bg-ink` (near-black) — **leave full-bleed sections
-  transparent** so the honeycomb shows through; use `bg-surface` only for
-  distinct bands/cards, `bg-surface-2` for inputs/raised.
-- Text: `text-paper` (primary/near-white), `text-muted` (body copy),
-  `text-faint` (captions/eyebrows). NEVER `text-zinc-*`/`text-gray-*`.
-- Borders: `border-line` (hairline), `border-line-2` (hover).
-- Accent (neon lime): `text-accent`, `bg-accent`, `border-accent`,
-  `hover:bg-accent-dim`. Accent is a SPICE — hovers, links, small highlights,
-  primary CTA fills. Never neon body text. Ink text on accent fills.
-- Fonts: headings use `font-display` (Clash Display); body is default
-  (General Sans). Oversized display sizes: `text-mega`, `text-huge`, `text-big`.
+## The design idea
 
-## Layout & structure conventions
-- Container: `max-w-[1400px] mx-auto px-5 sm:px-8`.
-- Section rhythm: `py-24 md:py-32` (or `py-20`), alternate transparent vs
-  `bg-surface border-y border-line` bands.
-- Eyebrow label: `text-xs font-medium text-faint uppercase tracking-[0.2em] mb-4`.
-- Section heading: `text-huge font-display text-paper`.
-- Buttons — primary: `inline-flex items-center gap-2 px-7 py-3.5 rounded-md
-  bg-accent text-ink font-medium hover:bg-accent-dim transition-colors`;
-  secondary: `... rounded-md border border-line text-paper hover:border-accent
-  hover:text-accent transition-colors`. Corners are `rounded-md` (no pills).
-- Cards: `rounded-lg border border-line bg-surface p-8`.
-- Grids: ALWAYS give an explicit base column count (`grid grid-cols-1
-  md:grid-cols-2`) and `min-w-0` on flex/grid children holding long text —
-  otherwise mobile overflows (lesson learned on the homepage).
-- Scroll reveal: add `data-reveal` to sections/items you want to fade up on
-  scroll; optional `data-reveal-delay={n}` (ms) for stagger. It degrades safe.
-- The bracket motif: `<span class="bracketed text-accent">word</span>` frames a
-  key word in neon brackets — use sparingly on one hero word per page.
-- External links: `target="_blank" rel="noopener noreferrer"`. Internal: plain.
+Swiss modernism. Monochrome, light-first, full-width, the work as the hero.
+No accent color, no decorative systems, no ornament. Type, space, and imagery
+carry everything. Light ground for reading; near-black bands ONLY for
+galleries, media, and the footer. Every section gets room to breathe.
 
-## Copy voice
-Direct, plain-spoken, personality, outcomes-first. Ban buzzwords (synergy,
-leverage, cutting-edge, solutions, elevate, seamless, delightful). Speak to
-BOTH business owners and agencies. No fabricated stats/clients — keep all facts
-that exist in the current page copy; you may rewrite tone but not invent.
+## Tokens (Tailwind v4, in global.css @theme) — the ONLY colors allowed
 
-## MUST PRESERVE (do not alter logic — restyle classes only)
-- Any `<script>` logic, form field `name`s, `action`/`data-endpoint` URLs,
-  the Google Apps Script endpoint, honeypot, UTM hidden inputs.
-- All `gtag('event', ...)` / `window.gtag` calls exactly as-is.
-- The Stripe link on `/ux-audit` (`buy.stripe.com/...`).
-- JSON-LD `<script type="application/ld+json">` blocks (keep/ः extend, don't drop).
-- `Astro.props`/`getCollection` data usage and frontmatter schema.
-- Keep existing page URLs and the `<Layout title/description>` props.
+Light (default): `bg-paper` page ground, `bg-card` white panels,
+`text-ink` headings/primary, `text-slate` body copy, `text-mist` captions,
+`border-hairline` rules.
+Dark bands (galleries/media only): `bg-ink` ground, `bg-ink-soft` panels,
+`text-paper` primary, `text-fog` secondary, `text-dusk` captions,
+`border-seam` rules. Add class `on-dark` to the dark section root.
 
-## Verify
-Your page must render on the dark theme with readable contrast and no leftover
-light-theme classes (`bg-white`, `text-zinc-900`, `bg-zinc-50`, etc.). Do a
-final grep of your file for `zinc-`, `gray-`, `bg-white`, `text-black` and
-replace every one. Do not run the build (the orchestrator builds at the end).
+DEAD — remove every occurrence: `accent`, `accent-dim`, `surface`,
+`surface-2`, `line`, `line-2`, `muted`, `faint`, `spec-label`, `bracketed`,
+`bracket-clamp`, `crop-frame`, `reg-snap`, `reg-glyph`, `rule-tick`,
+`ghost-num`, `bar-list`, `font-tech`, `font-display`, `data-reveal`,
+`line-mask`, `line-rise`, `data-ghost`. Grep your file for each before done.
+
+## Layout & structure
+
+- Wide container: `max-w-[1600px] mx-auto px-5 sm:px-8`. Full-bleed media may
+  skip the container. Prose blocks cap at `max-w-2xl`/`max-w-3xl`.
+- Generous rhythm: `py-24 md:py-36` feature sections, `py-20 md:py-28`
+  supporting. One idea per section; give each section its moment.
+- NO rounded corners anywhere (no `rounded-*`). No pills. Sharp edges.
+- Section label: `<p class="label mb-5">` (small tracked caps, defined
+  globally). Never numbered, never decorated.
+- Headings: `text-mega` (page h1 only), `text-huge` (section h2),
+  `text-big` (h3). All `font-semibold`. No `font-display` (one family now:
+  Switzer via `font-sans` default).
+- Buttons: primary `inline-flex items-center gap-2 px-7 py-3.5 bg-ink
+  text-paper font-medium hover:bg-ink/85 transition-colors` (on dark bands:
+  `bg-paper text-ink hover:bg-fog`). Secondary: underlined text link
+  `text-ink font-medium underline underline-offset-8 decoration-hairline
+  hover:decoration-ink transition-colors`.
+- Lists: plain text with normal spacing. NO checkmark icons, NO icon bullets.
+  If a list must be a list, keep it short; prefer prose statements.
+- Motion: transitions on hover only (colors, small translate, image
+  `scale-[1.02]`). No entrance animations, no parallax, no ambient effects.
+  Horizontal image strips use `.hstrip` (native scroll-snap, no hijack).
+- Numbered counts of projects/sections are banned.
+
+## Copy voice (apply to your page's copy)
+
+- Statements, not questions. ("Need a senior pair of hands?" becomes
+  "Senior hands when you need them.") The ONLY sanctioned question is the
+  conversion prompt "Is your website losing you customers?"
+- NO em-dashes anywhere. Rewrite around them (periods, commas).
+- Short. If words are on screen they are meant to be read; cut fluff,
+  walls of bullets, and anything that explains what a warm lead already
+  knows. Simple statements beat paragraphs.
+- Audience is a RANGE: startups, agencies, enterprise marketing teams. Never
+  call out company size ("small to medium businesses" is banned).
+- Weave in the AI positioning where natural, plainly: AI-integrated
+  workflows, speed of a full team, senior judgment, flexible budgets. Once
+  per page maximum; a sentence, not a section.
+- "UX Health Check" surfaces as **Website Score** in navigation/labels, and
+  the language around it is plain conversion talk: how well the site turns
+  visitors into paying customers. Never "free", never unexplained "UX".
+  (Page URL /ux-health-check stays.)
+- Never "Got the pieces?" / "pieces" metaphor. Page-closing sections are a
+  plain final statement that asks for the project ("Let's talk about your
+  project.") with a Start your project button. The footer already closes the
+  page ("You've seen the work. Let's talk about yours."), so a page-level
+  closing CTA can be shorter or omitted where the footer suffices.
+- Experience framing: "two decades" (not "18+ years").
+
+## MUST PRESERVE (restyle only, never alter logic)
+
+- All `<script>` logic, form field `name`s, `action`/endpoint URLs, honeypot,
+  UTM hidden inputs, the Google Apps Script endpoint.
+- All `gtag('event', ...)` calls exactly as-is.
+- The Stripe link on `/ux-audit`.
+- JSON-LD blocks (update wording inside descriptions to match new copy where
+  it references dead concepts; keep structure).
+- `Astro.props`/`getCollection` usage and frontmatter schemas.
+
+## Nielsen usability heuristics to honor
+
+Visibility of status (loading/success states stay), match to real language
+(plain words, no jargon), user control (no scroll hijack, no autoplay with
+sound), consistency (tokens above), error prevention/recovery on forms
+(keep validation + messages), recognition over recall (clear labels),
+minimalist design (this whole brief).
+
+## Verify before you finish
+
+Grep your file for: `accent`, `surface`, `text-muted`, `text-faint`,
+`border-line`, `rounded-`, `font-display`, `spec-label`, `bracketed`,
+`data-reveal`, `—` (em-dash), `free`, `18+`. Every hit must be gone or
+justified. The page must read light-ground with dark reserved for
+media/gallery bands only.

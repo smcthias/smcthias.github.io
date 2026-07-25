@@ -70,116 +70,85 @@ const articleData = {
   description={post.data.description}
   image={`/images/${post.data.image}`}
 >
-  <!-- Hero Section -->
-  <section class="py-12 md:py-16">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <a href={`${base}/blog`} class="inline-flex items-center text-muted hover:text-accent transition-colors mb-8">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <!-- ── Article header ───────────────────────────────────────────────── -->
+  <section class="pt-12 md:pt-16 pb-10 md:pb-14">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <a href={`${base}/blog`} class="group inline-flex items-center gap-2 text-sm text-mist hover:text-ink transition-colors mb-10">
+        <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
-        Back to Blog
+        All posts
       </a>
-      <div class="mb-4 flex items-center gap-3">
-        <span class="text-sm font-medium text-faint">{post.data.category}</span>
-        <span class="text-sm text-line-2">•</span>
-        <span class="text-sm text-faint">{formattedDate}</span>
-      </div>
-      <h1 class="text-huge font-display text-paper mb-6 max-w-4xl">{post.data.title}</h1>
-      <p class="text-lg md:text-2xl text-muted max-w-3xl leading-relaxed">
+      <p class="text-sm text-mist mb-5">{post.data.category} · {formattedDate}</p>
+      <h1 class="text-huge font-semibold text-ink max-w-4xl">{post.data.title}</h1>
+      <p class="mt-6 max-w-3xl text-lg md:text-xl text-slate leading-relaxed">
         {post.data.description}
       </p>
     </div>
   </section>
 
-  <!-- Full-width border -->
-  <div class="border-t border-line"></div>
-
-  <!-- Featured Image -->
-  <section class="py-12">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="aspect-[16/9] rounded-[2px] overflow-hidden bg-surface border border-line">
-        <img
-          src={`${base}/images/${post.data.image}`}
-          alt={post.data.imageAlt}
-          class="w-full h-full object-cover"
-          loading="lazy"
-        />
-      </div>
+  <!-- ── Featured image ───────────────────────────────────────────────── -->
+  <section class="pb-14 md:pb-20">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <img
+        src={`${base}/images/${post.data.image}`}
+        alt={post.data.imageAlt}
+        class="w-full aspect-[16/9] object-cover"
+        loading="eager"
+      />
     </div>
   </section>
 
-  <!-- Blog Content -->
-  <section class="pb-12">
-    <div class="max-w-4xl mx-auto px-5 sm:px-8">
-      <div class="prose prose-lg prose-invert max-w-none
-        prose-headings:font-display prose-headings:font-semibold prose-headings:text-paper
+  <!-- ── Article body ─────────────────────────────────────────────────── -->
+  <section class="pb-20 md:pb-28">
+    <div class="max-w-3xl mx-auto px-5 sm:px-8">
+      <div class="prose prose-lg max-w-none
+        prose-headings:font-semibold prose-headings:text-ink
         prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
         prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-        prose-p:text-muted prose-p:leading-relaxed prose-p:mb-6
-        prose-strong:text-paper prose-strong:font-semibold
-        prose-ul:my-6 prose-li:text-muted prose-ol:text-muted
-        prose-blockquote:border-l-accent prose-blockquote:text-muted
-        prose-img:rounded-[2px] prose-img:border prose-img:border-line
-        prose-code:text-accent prose-hr:border-line
-        prose-a:text-accent prose-a:no-underline hover:prose-a:underline hover:prose-a:decoration-accent">
+        prose-p:text-slate prose-p:leading-relaxed prose-p:mb-6
+        prose-strong:text-ink prose-strong:font-semibold
+        prose-ul:my-6 prose-li:text-slate prose-ol:text-slate
+        prose-blockquote:border-l-ink prose-blockquote:text-slate
+        prose-img:border prose-img:border-hairline
+        prose-code:text-ink prose-hr:border-hairline
+        prose-a:text-ink prose-a:underline prose-a:underline-offset-4 prose-a:decoration-hairline hover:prose-a:decoration-ink">
         <Content />
       </div>
     </div>
   </section>
 
-  <!-- Full-width border -->
-  <div class="border-t border-line"></div>
-
-  <!-- Post Navigation -->
-  <section class="py-12">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div class="flex-1 w-full sm:w-auto min-w-0">
+  <!-- ── Post navigation ──────────────────────────────────────────────── -->
+  <section class="border-t border-hairline">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-14 md:py-16">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="min-w-0">
           {prev && (
-            <a href={`${base}/blog/${prev.id}`} class="group inline-flex items-center text-muted hover:text-accent transition-colors">
-              <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`${base}/blog/${prev.id}`} class="group flex items-center gap-3 text-slate hover:text-ink transition-colors">
+              <svg class="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
-              <div>
-                <div class="text-sm text-faint">Previous Post</div>
-                <div class="font-medium text-paper group-hover:text-accent transition-colors">{prev.data.title}</div>
-              </div>
+              <span class="min-w-0">
+                <span class="block text-sm text-mist">Previous post</span>
+                <span class="block font-medium text-ink truncate">{prev.data.title}</span>
+              </span>
             </a>
           )}
         </div>
-        <div class="flex-1 w-full sm:w-auto text-left sm:text-right min-w-0">
+        <div class="min-w-0 sm:text-right">
           {next && (
-            <a href={`${base}/blog/${next.id}`} class="group inline-flex items-center text-muted hover:text-accent transition-colors">
-              <div>
-                <div class="text-sm text-faint">Next Post</div>
-                <div class="font-medium text-paper group-hover:text-accent transition-colors">{next.data.title}</div>
-              </div>
-              <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`${base}/blog/${next.id}`} class="group flex items-center gap-3 sm:justify-end text-slate hover:text-ink transition-colors">
+              <span class="min-w-0 sm:order-1">
+                <span class="block text-sm text-mist">Next post</span>
+                <span class="block font-medium text-ink truncate">{next.data.title}</span>
+              </span>
+              <svg class="w-5 h-5 shrink-0 sm:order-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
             </a>
           )}
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="py-20 md:py-24 bg-surface border-y border-line">
-    <div class="max-w-3xl mx-auto px-5 sm:px-8 text-center" data-reveal>
-      <h2 class="text-big font-display text-paper mb-6">
-        Interested in working together?
-      </h2>
-      <p class="text-lg md:text-xl text-muted mb-8 leading-relaxed">
-        Let's discuss how I can help bring your project to life with the same approach and attention to detail.
-      </p>
-      <a
-        href={`${base}/contact`}
-        class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
-      >
-        Start a Conversation
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
     </div>
   </section>
 

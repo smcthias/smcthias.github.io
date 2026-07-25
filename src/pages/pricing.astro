@@ -36,9 +36,9 @@ const categories = [
 ];
 
 const retainerTiers = [
-  { hours: '10 hours/month', price: '$650' },
-  { hours: '20 hours/month', price: '$1,200' },
-  { hours: '40 hours/month', price: '$2,200' },
+  { hours: '10 hours/month', price: '$650', line: 'A steady hand for ongoing design needs.', featured: false },
+  { hours: '20 hours/month', price: '$1,200', line: 'Room for a real project every month.', featured: true },
+  { hours: '40 hours/month', price: '$2,200', line: 'Senior design woven into your team.', featured: false },
 ];
 ---
 
@@ -46,40 +46,44 @@ const retainerTiers = [
   title="Pricing - Savelle Design"
   description="Transparent pricing for brand identity, UX and product design, web design and build, design systems, and ongoing retainer support."
 >
-  <!-- Hero -->
-  <section class="py-20 md:py-24">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="max-w-3xl">
-        <p class="spec-label mb-4">Pricing</p>
-        <h1 class="text-huge font-display text-paper mb-6">Straight rates, scoped honestly.</h1>
-        <p class="text-lg md:text-xl text-muted leading-relaxed">
-          General starting rates for the way I most often work with clients. Every project is
-          scoped individually — flat rates depend on complexity, and these ranges are a starting
-          point for that conversation, not a final quote.
-        </p>
-      </div>
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">Pricing</p>
+      <h1 class="font-semibold text-mega text-ink max-w-[15ch]">
+        Straight rates, scoped honestly.
+      </h1>
+      <p class="mt-10 max-w-2xl text-lg md:text-xl text-slate leading-relaxed">
+        General starting rates for the way I most often work with clients. Every project
+        is scoped individually. Flat rates depend on complexity, and these ranges are a
+        starting point for that conversation, not a final quote.
+      </p>
+      <p class="mt-6 max-w-2xl text-lg text-slate leading-relaxed">
+        AI-integrated workflows keep my delivery lean, which is why these rates can flex
+        to fit real budgets.
+      </p>
     </div>
   </section>
 
-  <!-- Rate Card -->
-  <section class="pb-24 md:pb-32">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {categories.map((category, i) => (
-          <div class="rounded-[2px] border border-line bg-surface p-8" data-reveal data-reveal-delay={i * 60}>
-            <h2 class="text-xl font-display text-paper mb-2">{category.title}</h2>
-            <div>
+  <!-- ── Rate card ────────────────────────────────────────────────────── -->
+  <section class="pb-24 md:pb-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="space-y-16 md:space-y-20">
+        {categories.map((category) => (
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 border-t border-hairline pt-8 md:pt-10">
+            <h2 class="min-w-0 md:col-span-4 text-big font-semibold text-ink">{category.title}</h2>
+            <div class="min-w-0 md:col-span-8">
               {category.items.map((item) => (
-                <div class="py-4 border-b border-line last:border-0 first:pt-4">
+                <div class="py-5 border-b border-hairline last:border-0 first:pt-0">
                   <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                    <span class="min-w-0 text-paper font-medium">{item.name}</span>
-                    <span class="text-muted sm:text-right sm:pl-6">{item.price}</span>
+                    <span class="min-w-0 text-ink font-medium">{item.name}</span>
+                    <span class="text-slate sm:text-right sm:pl-6 shrink-0">{item.price}</span>
                   </div>
                   {item.note && (
-                    <p class="text-sm text-faint mt-1.5">
+                    <p class="text-sm text-mist mt-2">
                       {item.note}{' '}
                       {item.noteHref && (
-                        <a href={item.noteHref} class="text-paper underline underline-offset-2 hover:text-accent transition-colors">
+                        <a href={item.noteHref} class="text-ink underline underline-offset-4 decoration-hairline hover:decoration-ink transition-colors">
                           View details
                         </a>
                       )}
@@ -94,48 +98,58 @@ const retainerTiers = [
     </div>
   </section>
 
-  <!-- Ongoing Retainer -->
-  <section class="py-24 md:py-28 bg-surface border-y border-line">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mb-16" data-reveal>
-        <p class="spec-label mb-4">Ongoing Retainer</p>
-        <h2 class="text-huge font-display text-paper mb-4">Consistent support, month to month.</h2>
-        <p class="text-lg text-muted leading-relaxed">
-          For businesses that need consistent design support month to month — priority turnaround, no re-onboarding, unused hours don't roll over.
+  <!-- ── Ongoing retainer ─────────────────────────────────────────────── -->
+  <section class="border-y border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="max-w-2xl mb-14 md:mb-16">
+        <p class="label mb-5">Ongoing retainer</p>
+        <h2 class="text-huge font-semibold text-ink mb-6">Consistent support, month to month.</h2>
+        <p class="text-lg text-slate leading-relaxed">
+          For businesses that need design support they can count on. Priority turnaround,
+          no re-onboarding, and unused hours don't roll over.
         </p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        {retainerTiers.map((tier, i) => (
-          <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay={i * 60}>
-            <div class="text-big font-display text-accent mb-1">{tier.price}</div>
-            <div class="text-faint mb-6">per month</div>
-            <div class="text-paper font-medium">{tier.hours}</div>
-          </div>
+        {retainerTiers.map((tier) => (
+          tier.featured ? (
+            <div class="bg-ink text-paper on-dark p-8 md:p-10 flex flex-col min-w-0">
+              <p class="label mb-6">Most clients start here</p>
+              <div class="text-big font-semibold text-paper">{tier.price}</div>
+              <div class="text-dusk mb-6">per month</div>
+              <div class="text-paper font-medium">{tier.hours}</div>
+              <p class="mt-3 text-fog leading-relaxed">{tier.line}</p>
+              <a href={`${base}/contact`} class="mt-8 inline-flex items-center gap-2 text-sm text-paper font-medium underline underline-offset-8 decoration-seam hover:decoration-paper transition-colors self-start">
+                Start a retainer
+              </a>
+            </div>
+          ) : (
+            <div class="bg-card border border-hairline p-8 md:p-10 flex flex-col min-w-0">
+              <div class="text-big font-semibold text-ink">{tier.price}</div>
+              <div class="text-mist mb-6">per month</div>
+              <div class="text-ink font-medium">{tier.hours}</div>
+              <p class="mt-3 text-slate leading-relaxed">{tier.line}</p>
+              <a href={`${base}/contact`} class="mt-8 inline-flex items-center gap-2 text-sm text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors self-start">
+                Start a retainer
+              </a>
+            </div>
+          )
         ))}
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="py-20 md:py-24">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="rounded-[2px] border border-line bg-surface p-8 md:p-14" data-reveal>
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div class="max-w-2xl">
-            <h2 class="text-big font-display text-paper mb-3">Not sure what you need?</h2>
-            <p class="text-muted leading-relaxed">
-              Every project is different. Tell me what you're trying to build and I'll recommend the right scope and a firm quote.
-            </p>
-          </div>
-          <a
-            href={`${base}/contact`}
-            class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
-          >
-            Get a custom quote
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Start with a conversation.</h2>
+      <p class="mt-6 text-lg text-slate leading-relaxed max-w-2xl">
+        Every project is different. Tell me what you're trying to build and I'll
+        recommend the right scope and a firm quote.
+      </p>
+      <a href={`${base}/contact`} class="mt-10 inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+        Get a custom quote
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
   </section>
 </Layout>

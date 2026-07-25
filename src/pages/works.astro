@@ -5,9 +5,9 @@ import { FEATURED } from '../data/featured';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-// Same editorial order as the homepage (strongest first), then anything not
-// featured, newest first. Hooks/stats come from the shared featured data so
-// home and /works tell the same story.
+// Same editorial order as the homepage, then anything not featured, newest
+// first. Hooks and results come from the shared featured data so both pages
+// tell the same story.
 const allProjects = await getCollection('projects');
 const byId = Object.fromEntries(allProjects.map((p) => [p.id, p]));
 const featuredIds = new Set(FEATURED.map((f) => f.slug));
@@ -18,125 +18,139 @@ const rest = allProjects
 const work = [
   ...FEATURED.map((f) => ({ ...byId[f.slug], stat: f.stat, statLabel: f.statLabel, hook: f.hook })),
   ...rest.map((p) => ({ ...p, stat: '', statLabel: '', hook: p.data.description })),
-].map((p, i) => ({ ...p, n: String(i + 1).padStart(2, '0') }));
+];
 
-const capabilities = [
+const brings = [
   {
     title: 'Design',
-    items: ['User interface design', 'User experience design', 'Brand identity', 'Visual design systems', 'Prototyping'],
+    line: 'Interfaces, identities, and systems people understand at a glance. Design here is not decoration. It is the argument for why a visitor should stay.',
+    art: 'wireframe',
   },
   {
     title: 'Development',
-    items: ['HTML / CSS / JavaScript', 'React & modern frameworks', 'Responsive development', 'Performance optimization', 'CMS integration'],
+    line: 'The designs ship. Clean, fast, responsive builds in modern frameworks, done by the same person who designed them, so nothing is lost in translation.',
+    art: 'layers',
   },
   {
     title: 'Strategy',
-    items: ['User research', 'Conversion optimization', 'SEO best practices', 'Analytics & testing', 'Digital marketing'],
+    line: 'Every screen has a job: more calls, more bookings, more sales. Research, conversion thinking, and AI-assisted analysis decide what gets built and why.',
+    art: 'mark',
   },
 ];
 ---
 
 <Layout
-  title="Works - Savelle Design"
-  description="Explore my portfolio of web design and development projects."
+  title="Work - Savelle Design"
+  description="Selected design and development projects with real results. Two decades of work for startups, agencies, and enterprise teams."
 >
-  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
-  <section class="pt-14 md:pt-20 pb-12 md:pb-16">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="spec-label mb-4">Selected work</p>
-      <h1 class="font-display font-semibold text-mega text-paper max-w-4xl">
-        Real problems, <span class="bracketed">real</span> results.
+  <!-- ── Intro ────────────────────────────────────────────────────────── -->
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h1 class="font-semibold text-mega text-ink max-w-[15ch]">
+        The work speaks first.
       </h1>
-      <p class="mt-8 max-w-3xl text-lg md:text-xl text-muted leading-relaxed">
-        Over 18+ years I've worked with companies ranging from small startups to major
-        brands. Here's a selection of projects that show how I pull a thousand moving
-        pieces into websites that bring in more calls, bookings, and sales.
+      <p class="mt-10 max-w-2xl text-lg md:text-xl text-slate leading-relaxed">
+        Two decades of projects for startups, agencies, and enterprise teams.
+        Each one started as a business problem and ended as a measurable result.
       </p>
     </div>
   </section>
 
-  <!-- ── Work index ───────────────────────────────────────────────────── -->
-  <section class="pb-24 md:pb-32">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <ul class="border-t border-line">
-        {work.map((p) => (
-          <li class="border-b border-line">
-            <a href={`${base}/works/${p.id}`} class="work-row group relative grid grid-cols-12 items-center gap-x-4 gap-y-5 py-9 md:py-10 overflow-hidden">
-              <span aria-hidden="true" class="ghost-num absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-0">{p.n}</span>
-
-              <div class="relative z-10 min-w-0 col-span-12 md:col-span-5 md:pl-16 lg:pl-24">
-                <h2 class="text-big font-display text-paper transition-colors"><span class="bracket-clamp">{p.data.title}</span></h2>
-                <p class="font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint mt-2">{p.data.category}</p>
+  <!-- ── Work gallery: dark, each project gets its moment ─────────────── -->
+  <section class="bg-ink text-paper on-dark">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-24 md:py-36">
+      <div class="space-y-24 md:space-y-36">
+        {work.map((p, i) => (
+          <a href={`${base}/works/${p.id}`} class="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+            <div class={`min-w-0 lg:col-span-8 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+              <div class="overflow-hidden bg-ink-soft">
+                <img
+                  src={`${base}/images/works/${p.data.thumbnail}`}
+                  alt={`${p.data.title}, ${p.data.category}`}
+                  class="w-full aspect-[16/10] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                  loading={i < 1 ? 'eager' : 'lazy'}
+                />
               </div>
-
-              <div class="relative z-10 min-w-0 col-span-12 md:col-span-4">
-                {p.stat ? (
-                  <>
-                    <p class="font-display text-3xl md:text-4xl text-accent leading-none">{p.stat}</p>
-                    <p class="font-tech text-[0.6875rem] uppercase tracking-[0.12em] text-faint mt-1.5">{p.statLabel}</p>
-                    <p class="text-sm text-muted leading-snug mt-3 max-w-xs">{p.hook}</p>
-                  </>
-                ) : (
-                  <p class="text-sm text-muted leading-snug max-w-xs">{p.hook}</p>
-                )}
-              </div>
-
-              <div class="relative z-10 col-span-12 md:col-span-3">
-                <div class="crop-frame">
-                  <div class="relative aspect-[16/10] overflow-hidden bg-surface border border-line">
-                    <img src={`${base}/images/works/${p.data.thumbnail}`} alt={`${p.data.title} — ${p.data.category}`} class="w-full h-full object-cover" loading="lazy" />
-                  </div>
-                </div>
-              </div>
-            </a>
-          </li>
+            </div>
+            <div class={`min-w-0 lg:col-span-4 ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
+              {p.stat ? (
+                <>
+                  <p class="text-mega font-semibold text-paper leading-none">{p.stat}</p>
+                  <p class="text-fog mt-2">{p.statLabel}</p>
+                </>
+              ) : null}
+              <p class="mt-8 text-lg text-paper leading-snug max-w-sm">{p.hook}</p>
+              <p class="mt-6 text-sm text-dusk">{p.data.title} · {p.data.category}</p>
+              <span class="mt-6 inline-flex items-center gap-2 text-sm text-paper underline underline-offset-8 decoration-seam group-hover:decoration-paper transition-colors">
+                View project
+              </span>
+            </div>
+          </a>
         ))}
-      </ul>
+      </div>
     </div>
   </section>
 
-  <!-- ── Core capabilities ────────────────────────────────────────────── -->
-  <section class="py-24 md:py-28 bg-surface border-y border-line">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mb-16" data-reveal>
-        <p class="spec-label mb-4">What I bring</p>
-        <h2 class="text-huge font-display text-paper">Core capabilities.</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {capabilities.map((c, i) => (
-          <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay={i * 60}>
-            <h3 class="text-2xl font-display text-paper mb-5">{c.title}</h3>
-            <ul class="space-y-2.5 text-muted">
-              {c.items.map((item) => (
-                <li class="flex items-start gap-3">
-                  <span aria-hidden="true" class="mt-2 w-1.5 h-1.5 shrink-0 rounded-full bg-accent"></span>
-                  <span class="min-w-0">{item}</span>
-                </li>
-              ))}
-            </ul>
+  <!-- ── What I bring: three disciplines, each with room ──────────────── -->
+  <section class="py-24 md:py-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-16 md:mb-24">What I bring</p>
+      <div class="space-y-20 md:space-y-32">
+        {brings.map((b, i) => (
+          <div class={`grid grid-cols-1 lg:grid-cols-12 gap-10 items-center`}>
+            <div class={`min-w-0 lg:col-span-5 ${i % 2 === 1 ? 'lg:order-2 lg:col-start-8' : ''}`}>
+              <div class="aspect-[4/3] bg-card border border-hairline flex items-center justify-center">
+                <svg class="w-44 h-44 text-mist" viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+                  {b.art === 'wireframe' && (
+                    <g transform="translate(80 88) scale(1 0.55) rotate(-30)">
+                      <rect x="-48" y="-48" width="96" height="96" />
+                      <line x1="-48" y1="-28" x2="48" y2="-28" />
+                      <rect x="-36" y="-14" width="44" height="12" />
+                      <rect x="-36" y="6" width="72" height="7" />
+                      <rect x="-36" y="20" width="58" height="7" />
+                      <circle cx="26" cy="-8" r="9" />
+                    </g>
+                  )}
+                  {b.art === 'layers' && (
+                    <g transform="translate(80 84)">
+                      <g transform="scale(1 0.55) rotate(-30)"><rect x="-42" y="-42" width="84" height="84" /></g>
+                      <g transform="translate(0 -24) scale(1 0.55) rotate(-30)"><rect x="-42" y="-42" width="84" height="84" /></g>
+                      <g transform="translate(0 -48) scale(1 0.55) rotate(-30)"><rect x="-42" y="-42" width="84" height="84" /></g>
+                    </g>
+                  )}
+                  {b.art === 'mark' && (
+                    <g transform="translate(80 80)">
+                      <circle cx="0" cy="0" r="46" />
+                      <circle cx="0" cy="0" r="25" />
+                      <line x1="-58" y1="0" x2="58" y2="0" />
+                      <line x1="0" y1="-58" x2="0" y2="58" />
+                    </g>
+                  )}
+                </svg>
+              </div>
+            </div>
+            <div class={`min-w-0 lg:col-span-6 ${i % 2 === 1 ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-7'}`}>
+              <h2 class="text-huge font-semibold text-ink">{b.title}</h2>
+              <p class="mt-6 text-lg md:text-xl text-slate leading-relaxed max-w-xl">{b.line}</p>
+            </div>
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- ── CTA ──────────────────────────────────────────────────────────── -->
-  <section class="py-24 md:py-28">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="rounded-[2px] border border-line bg-surface p-8 md:p-14 grid grid-cols-1 md:grid-cols-12 gap-8 items-center" data-reveal>
-        <div class="min-w-0 md:col-span-8">
-          <h2 class="text-big font-display text-paper mb-4">Want similar results?</h2>
-          <p class="text-muted max-w-2xl leading-relaxed">
-            Whether you need a new landing page, a website refresh, or help with your brand
-            identity, I can help you get there. Let's talk about your project.
-          </p>
-        </div>
-        <div class="md:col-span-4 md:text-right">
-          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
-            Start a conversation
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your project.</h2>
+      <div class="mt-10 flex flex-wrap items-center gap-6">
+        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+          Start your project
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="mailto:savellem@gmail.com" class="text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
+          Or just email me
+        </a>
       </div>
     </div>
   </section>

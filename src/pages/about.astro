@@ -1,321 +1,146 @@
 ---
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Testimonials: real names and quotes, verbatim except dash-as-punctuation
+// rewritten to periods/commas per the redesign brief. Each opens with a bold
+// pull-line lifted from its strongest sentence.
+const testimonials = [
+  {
+    pull: 'He communicated clearly, responded quickly, and reliably turned high-level or ambiguous requests into work that needed very little refinement.',
+    paras: [
+      `"Savelle played a central role in elevating Atana's digital presence during a period when we were juggling a lot of moving parts. He contributed to nearly every area of our front-end experience, including navigation, blog structure, email templates, landing pages, and even the training portal. He handled all of it while working within the constraints of our existing Salesforce and Magento systems, which required both creativity and patience.`,
+      `What stood out to me was his ability to maintain a high standard of design while staying grounded in the practical needs of the business and the realities of our audience. He understood that our workplace training users needed clarity above all else, and he consistently delivered solutions that balanced usability, brand consistency, and visual quality.`,
+      `He was also an excellent remote collaborator. He communicated clearly, responded quickly, and reliably turned high-level or ambiguous requests into work that needed very little refinement. That kind of partnership made my job significantly easier. If you are looking for someone who can work across a wide variety of digital projects, adapt to your existing platforms, and bring a thoughtful balance of design intuition and business sense, don't hesitate to hire Savelle."`,
+    ],
+    name: 'Heather Jablow',
+    role: 'Vice President of Marketing, Atana Inc',
+  },
+  {
+    pull: 'It felt more like having a co-founder who just happened to be insanely talented at UX.',
+    paras: [
+      `"Working with Savelle wasn't like working with a typical designer. It felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 11 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare.`,
+      `Then we threw him the Van Up curveball: a completely new brand, e-commerce platform, service tracker, and lifestyle blog all rolled into one. Most designers would've buckled under that scope. Savelle thrived. He helped us figure out who we were as a brand while simultaneously building the entire digital experience from scratch.`,
+      `What I appreciated most was that he never made us feel like 'the client'. He made us feel like collaborators. He'd push back when our ideas were overcomplicated, suggest things we hadn't thought of, and move fast without cutting corners. When you're launching something new, that kind of partnership is everything.`,
+      `If you need someone who can think strategically, move quickly, and actually give a damn about whether your business succeeds, not just whether the design looks pretty, call Savelle. Just be ready to keep up, because he doesn't mess around."`,
+    ],
+    name: 'Brian Fidler',
+    role: 'Former Head of Marketing, La Mesa RV & Van Up',
+  },
+  {
+    pull: `His ability to quickly turn "programmer UI" into something awesome is a super power.`,
+    paras: [
+      `"Savelle is one of the most talented UX experts I've had the pleasure of working with. Within a very short period of time after his hire, he was knocking out work items and client side code. The impact of his effort and his work will be felt for a very long time. It seemed like every day, he was revealing a new talent. My favorite Savelle anecdote is the time he re-designed the product logo, and came up with something better than the marketing company effort after doodling for about 10 minutes. Simply amazing.`,
+      `On the team he was the go-to "finisher" for his development-side colleagues. His ability to quickly turn "programmer UI" into something awesome is a super power. Savelle is patient and has a pretty solid understanding of that middle ground between development and the desired outcome of an elegant design. His communication skills are second to none in this area.`,
+      `His grasp of design processes around UI/UX is clear in his work. Savelle was a frequent collaborator within the dev process and is a key reason the application has been received with praise universally by customers and investors.`,
+      `I could always count on Savelle to be positive, solution oriented, and supportive of his fellow teammates at any given time of the journey. Savelle is one of the most creative guys I've had the pleasure to work with, and cannot stress enough how much his presence, sense of humor, talents and foodie opinions adds to the team dynamic. I would hire/work with Savelle again without hesitation. I can't wait to see what he does next!"`,
+    ],
+    name: 'Daniel Kruger',
+    role: 'VP of Software Development, SyberSafe',
+  },
+  {
+    pull: `If you're looking for innovation, imagination, and magic, he's your guy.`,
+    paras: [
+      `"It was an honor to work with Savelle and be mentored in the art of weaving storytelling through design. He is full of incredible ideas and his depth of knowledge in design and development was critical to the success of many projects we worked on together. Don't come to Savelle if you're looking for cookie-cutter work. But if you're looking for innovation, imagination, and magic, he's your guy!"`,
+    ],
+    name: 'Caitlin Kelly',
+    role: 'Design Lead, RedSky Engineering',
+  },
+  {
+    pull: 'Savelle is a capable, all-in-one designer with a strong grasp of brand, systems, and execution.',
+    paras: [
+      `"I've worked with Savelle across multiple organizations, including Young Living, LifeWave, and Green Compass. Across those experiences, he consistently demonstrated strong design capability, a solid understanding of brand, and an ability to bring complex ideas to life in a clear, approachable way.`,
+      `Savelle's strength is his versatility. He brings a broad range of skills across UI/UX design, front- and back-end development, email design and systems, and full website creation. This allows him to contribute across many stages of a project and reduces dependency on multiple resources. He is able to take company goals and translate them into tangible outputs, often moving quickly from concept to execution.`,
+      `At LifeWave, he supported large-scale digital initiatives that required coordination across markets, timelines, and localization needs. That work required speed, adaptability, and the ability to build repeatable structures rather than one-off solutions.`,
+      `Savelle is able to create a clearly defined scopes, timelines, and ownership models. In those environments, he executes efficiently, meets deadlines, and delivers work that aligns with brand standards and business objectives. His technical skill set allows him to understand constraints and implement solutions without unnecessary handoffs.`,
+      `Overall, Savelle is a capable, all-in-one designer with a strong grasp of brand, systems, and execution. He is a valuable contributor to digital and design initiatives and leadership."`,
+    ],
+    name: 'Roxana Epps',
+    role: 'SVP of Marketing, Young Living / LifeWave / Green Compass',
+  },
+];
 ---
 
-<Layout title="About - Savelle Design" description="Learn more about my background, experience, and approach to design for growing businesses.">
-    <!-- Hero Section -->
-    <section class="py-20 md:py-24">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="spec-label mb-4">About me</p>
-      <h1 class="text-huge font-display text-paper mb-10">Savelle McThias, designer &amp; developer.</h1>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        <div class="min-w-0">
-          <p class="text-lg md:text-xl text-muted mb-6 leading-relaxed">
-            I'm Savelle McThias, a designer and developer based in Scottsdale, Arizona. I help growing businesses create beautiful, effective websites that connect with customers and drive real results.
+<Layout
+  title="About - Savelle Design"
+  description="Two decades of design and development for startups, agencies, and enterprise teams. Savelle McThias, designer and developer in Scottsdale, Arizona."
+>
+  <!-- ── Hero: who this is, in plain statements ───────────────────────── -->
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">About</p>
+      <h1 class="text-mega font-semibold text-ink max-w-[16ch]">
+        Two decades of design that ships.
+      </h1>
+      <div class="mt-12 md:mt-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <div class="min-w-0 lg:col-span-7 max-w-2xl">
+          <p class="text-lg md:text-xl text-slate leading-relaxed">
+            I'm Savelle McThias, a designer and developer in Scottsdale, Arizona.
+            I design and build websites that turn visitors into customers.
           </p>
-          <p class="text-lg text-muted mb-6 leading-relaxed">
-            With 18+ years of experience, I've had the privilege of working with companies ranging from small startups to major brands. Along the way, I've learned what really matters: clear communication, thoughtful design, and solutions that work for your business and your customers.
+          <p class="mt-6 text-lg text-slate leading-relaxed">
+            Two decades of work for startups, agencies, and enterprise teams taught me
+            what matters: clear communication, design decisions grounded in real data,
+            and work that serves the business as well as it serves the customer.
           </p>
-          <p class="text-lg text-muted leading-relaxed">
-            Today, I focus on helping small to medium-sized businesses with landing pages, website refreshes, brand touchups, and email campaigns. My goal is simple: create design that looks professional, works smoothly, and helps your business grow.
+          <p class="mt-6 text-lg text-slate leading-relaxed">
+            I carry a project from Figma to production code in modern frameworks,
+            with AI integrated into my workflow at every step. One accountable
+            person, with the speed of a full team.
           </p>
         </div>
-        <div class="crop-frame group">
-          <div class="relative aspect-square overflow-hidden border border-line bg-surface">
-            <!-- duotone treatment pulls the light studio backdrop into the dark
-                 theme; hover snaps it back to full color — into register -->
+        <div class="min-w-0 lg:col-span-5">
+          <div class="border border-hairline bg-card p-3">
             <img
               src={`${base}/images/about/profile.jpg`}
-              alt="Savelle McThias - Designer and Developer"
-              class="w-full h-full object-cover grayscale contrast-[1.05] brightness-[0.82] transition-[filter] duration-500 group-hover:grayscale-0 group-hover:brightness-100"
+              alt="Savelle McThias, designer and developer"
+              class="w-full aspect-square object-cover"
             />
-            <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-ink/25 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-0"></div>
           </div>
         </div>
       </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Experience Section -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <h2 class="text-huge font-display text-paper mb-12" data-reveal>Experience &amp; expertise</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div data-reveal>
-          <h3 class="text-2xl font-display text-paper mb-6">Design &amp; strategy</h3>
-          <div class="space-y-6">
-            <div>
-              <h4 class="font-medium text-paper mb-2">User-centered design</h4>
-              <p class="text-muted leading-relaxed">
-                Creating designs that are intuitive, accessible, and focused on helping your customers accomplish their goals easily.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-medium text-paper mb-2">Brand consistency</h4>
-              <p class="text-muted leading-relaxed">
-                Ensuring your visual identity is cohesive across all touchpoints, from your website to emails to social media.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-medium text-paper mb-2">Practical solutions</h4>
-              <p class="text-muted leading-relaxed">
-                Delivering designs that look great but are also practical, maintainable, and aligned with your business goals.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div data-reveal data-reveal-delay="80">
-          <h3 class="text-2xl font-display text-paper mb-6">Development &amp; tools</h3>
-          <div class="space-y-6">
-            <div>
-              <h4 class="font-medium text-paper mb-2">Modern development</h4>
-              <p class="text-muted leading-relaxed">
-                Building with React, Tailwind CSS, and modern frameworks to create fast, responsive websites.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-medium text-paper mb-2">AI-enhanced workflows</h4>
-              <p class="text-muted leading-relaxed">
-                Leveraging AI-powered tools to accelerate design workflows and enhance quality while maintaining the human touch.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-medium text-paper mb-2">Performance-focused</h4>
-              <p class="text-muted leading-relaxed">
-                Creating websites that load quickly and work smoothly, providing better experiences for your visitors.
-              </p>
-            </div>
-          </div>
-        </div>
+  <!-- ── Testimonials ─────────────────────────────────────────────────── -->
+  <section id="testimonials" class="border-t border-hairline py-24 md:py-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="mb-16 md:mb-20">
+        <p class="label mb-5">What clients say</p>
+        <h2 class="text-huge font-semibold text-ink max-w-3xl">In their words.</h2>
       </div>
-      </div>
-    </section>
-
-    <!-- Tools & Technologies -->
-    <section class="py-24 md:py-28">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <h2 class="text-huge font-display text-paper mb-12" data-reveal>Tools &amp; technologies</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-line border border-line rounded-[2px] overflow-hidden">
-        <div class="bg-surface p-8 md:p-10" data-reveal>
-          <h3 class="text-xl font-display text-paper mb-4">Design tools</h3>
-          <ul class="space-y-2 text-muted">
-            <li>• Figma</li>
-            <li>• Adobe Creative Suite</li>
-            <li>• AI-enhanced design tools</li>
-            <li>• Prototyping tools</li>
-          </ul>
-        </div>
-        <div class="bg-surface p-8 md:p-10" data-reveal data-reveal-delay="60">
-          <h3 class="text-xl font-display text-paper mb-4">Development</h3>
-          <ul class="space-y-2 text-muted">
-            <li>• React &amp; Next.js</li>
-            <li>• HTML/CSS/JavaScript</li>
-            <li>• Tailwind CSS</li>
-            <li>• WordPress &amp; Webflow</li>
-          </ul>
-        </div>
-        <div class="bg-surface p-8 md:p-10" data-reveal data-reveal-delay="120">
-          <h3 class="text-xl font-display text-paper mb-4">Research &amp; testing</h3>
-          <ul class="space-y-2 text-muted">
-            <li>• A/B Testing &amp; Analytics</li>
-            <li>• User Interviews</li>
-            <li>• Heat Mapping</li>
-            <li>• Cognitive Walkthroughs</li>
-          </ul>
-        </div>
-      </div>
-      </div>
-    </section>
-
-    <!-- Values Section -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <h2 class="text-huge font-display text-paper mb-12" data-reveal>How the pieces come together</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal>
-          <h3 class="text-xl font-display text-paper mb-3">Data-driven</h3>
-          <p class="text-muted leading-relaxed">
-            Every design decision is informed by research, testing, and real user data.
-          </p>
-        </div>
-        <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay="60">
-          <h3 class="text-xl font-display text-paper mb-3">Transparent</h3>
-          <p class="text-muted leading-relaxed">
-            Clear communication and collaboration throughout the entire process.
-          </p>
-        </div>
-        <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay="120">
-          <h3 class="text-xl font-display text-paper mb-3">Business-focused</h3>
-          <p class="text-muted leading-relaxed">
-            Beautiful design that delivers measurable results and ROI.
-          </p>
-        </div>
-        <div class="rounded-[2px] border border-line bg-ink p-8" data-reveal data-reveal-delay="180">
-          <h3 class="text-xl font-display text-paper mb-3">Accessible</h3>
-          <p class="text-muted leading-relaxed">
-            Making high-quality design and development accessible to growing businesses.
-          </p>
-        </div>
-      </div>
-      </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="py-24 md:py-28 border-t border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>What clients say</p>
-        <h2 class="text-huge font-display text-paper mb-12" data-reveal>In their words.</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Testimonial 1 - Heather Jablow -->
-          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal>
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {testimonials.map((t) => (
+          <figure class="bg-card border border-hairline p-8 md:p-10">
             <blockquote>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                "Savelle played a central role in elevating Atana's digital presence during a period when we were juggling a lot of moving parts. He contributed to nearly every area of our front-end experience, including navigation, blog structure, email templates, landing pages, and even the training portal. He handled all of it while working within the constraints of our existing Salesforce and Magento systems, which required both creativity and patience.
-              </p>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                What stood out to me was his ability to maintain a high standard of design while staying grounded in the practical needs of the business and the realities of our audience. He understood that our workplace training users needed clarity above all else, and he consistently delivered solutions that balanced usability, brand consistency, and visual quality.
-              </p>
-              <p class="text-lg text-paper leading-relaxed">
-                He was also an excellent remote collaborator. He communicated clearly, responded quickly, and reliably turned high-level or ambiguous requests into work that needed very little refinement. That kind of partnership made my job significantly easier. If you are looking for someone who can work across a wide variety of digital projects, adapt to your existing platforms, and bring a thoughtful balance of design intuition and business sense, don't hesitate to hire Savelle."
-              </p>
+              <p class="text-xl md:text-2xl font-semibold text-ink leading-snug mb-6">{t.pull}</p>
+              {t.paras.map((para) => (
+                <p class="text-slate leading-relaxed mb-5">{para}</p>
+              ))}
             </blockquote>
-            <figcaption class="mt-6 pt-6 border-t border-line">
-              <p class="font-medium text-paper">Heather Jablow</p>
-              <p class="text-faint">Vice President of Marketing, Atana Inc</p>
+            <figcaption class="mt-2 pt-6 border-t border-hairline">
+              <p class="font-medium text-ink">{t.name}</p>
+              <p class="text-mist">{t.role}</p>
             </figcaption>
           </figure>
-
-          <!-- Testimonial 2 - Brian Fidler -->
-          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay="80">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <blockquote>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 11 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare.
-              </p>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                Then we threw him the Van Up curveball - a completely new brand, e-commerce platform, service tracker, and lifestyle blog all rolled into one. Most designers would've buckled under that scope. Savelle thrived. He helped us figure out who we were as a brand while simultaneously building the entire digital experience from scratch.
-              </p>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                What I appreciated most was that he never made us feel like 'the client' - he made us feel like collaborators. He'd push back when our ideas were overcomplicated, suggest things we hadn't thought of, and move fast without cutting corners. When you're launching something new, that kind of partnership is everything.
-              </p>
-              <p class="text-lg text-paper leading-relaxed">
-                If you need someone who can think strategically, move quickly, and actually give a damn about whether your business succeeds - not just whether the design looks pretty - call Savelle. Just be ready to keep up, because he doesn't mess around."
-              </p>
-            </blockquote>
-            <figcaption class="mt-6 pt-6 border-t border-line">
-              <p class="font-medium text-paper">Brian Fidler</p>
-              <p class="text-faint">Former Head of Marketing, La Mesa RV &amp; Van Up</p>
-            </figcaption>
-          </figure>
-
-          <!-- Testimonial 3 - Daniel Kruger -->
-          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal>
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <blockquote>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                "Savelle is one of the most talented UX experts I've had the pleasure of working with. Within a very short period of time after his hire, he was knocking out work items and client side code. The impact of his effort and his work will be felt for a very long time. It seemed like every day, he was revealing a new talent. My favorite Savelle anecdote is the time he re-designed the product logo, and came up with something better than the marketing company effort after doodling for about 10 minutes. Simply amazing.
-              </p>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                On the team he was the go-to "finisher" for his development-side colleagues. His ability to quickly turn "programmer UI" into something awesome is a super power. Savelle is patient and has a pretty solid understanding of that middle ground between development and the desired outcome of an elegant design. His communication skills are second to none in this area.
-              </p>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                His grasp of design processes around UI/UX is clear in his work. Savelle was a frequent collaborator within the dev process and is a key reason the application has been received with praise universally by customers and investors.
-              </p>
-              <p class="text-lg text-paper leading-relaxed">
-                I could always count on Savelle to be positive, solution oriented, and supportive of his fellow teammates at any given time of the journey. Savelle is one of the most creative guys I've had the pleasure to work with, and cannot stress enough how much his presence, sense of humor, talents and foodie opinions adds to the team dynamic. I would hire/work with Savelle again without hesitation. I can't wait to see what he does next!"
-              </p>
-            </blockquote>
-            <figcaption class="mt-6 pt-6 border-t border-line">
-              <p class="font-medium text-paper">Daniel Kruger</p>
-              <p class="text-faint">VP of Software Development, SyberSafe</p>
-            </figcaption>
-          </figure>
-
-          <!-- Testimonial 4 - Caitlin Kelly -->
-          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay="80">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <blockquote>
-              <p class="text-lg text-paper leading-relaxed">
-                "It was an honor to work with Savelle and be mentored in the art of weaving storytelling through design. He is full of incredible ideas and his depth of knowledge in design and development was critical to the success of many projects we worked on together. Don't come to Savelle if you're looking for cookie-cutter work - but if you're looking for innovation, imagination, and magic, he's your guy!"
-              </p>
-            </blockquote>
-            <figcaption class="mt-6 pt-6 border-t border-line">
-              <p class="font-medium text-paper">Caitlin Kelly</p>
-              <p class="text-faint">Design Lead, RedSky Engineering</p>
-            </figcaption>
-          </figure>
-
-          <!-- Testimonial 5 - Roxana Epps -->
-          <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal>
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-line-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <blockquote>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                "I've worked with Savelle across multiple organizations, including Young Living, LifeWave, and Green Compass. Across those experiences, he consistently demonstrated strong design capability, a solid understanding of brand, and an ability to bring complex ideas to life in a clear, approachable way.
-              </p>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                Savelle's strength is his versatility. He brings a broad range of skills across UI/UX design, front- and back-end development, email design and systems, and full website creation. This allows him to contribute across many stages of a project and reduces dependency on multiple resources. He is able to take company goals and translate them into tangible outputs, often moving quickly from concept to execution.
-              </p>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                At LifeWave, he supported large-scale digital initiatives that required coordination across markets, timelines, and localization needs. That work required speed, adaptability, and the ability to build repeatable structures rather than one-off solutions.
-              </p>
-              <p class="text-lg text-paper mb-6 leading-relaxed">
-                Savelle is able to create a clearly defined scopes, timelines, and ownership models. In those environments, he executes efficiently, meets deadlines, and delivers work that aligns with brand standards and business objectives. His technical skill set allows him to understand constraints and implement solutions without unnecessary handoffs.
-              </p>
-              <p class="text-lg text-paper leading-relaxed">
-                Overall, Savelle is a capable, all-in-one designer with a strong grasp of brand, systems, and execution. He is a valuable contributor to digital and design initiatives and leadership."
-              </p>
-            </blockquote>
-            <figcaption class="mt-6 pt-6 border-t border-line">
-              <p class="font-medium text-paper">Roxana Epps</p>
-              <p class="text-faint">SVP of Marketing, Young Living / LifeWave / Green Compass</p>
-            </figcaption>
-          </figure>
-        </div>
+        ))}
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 md:py-24 bg-surface border-t border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-8" data-reveal>
-          <div class="max-w-2xl">
-            <h2 class="text-big font-display text-paper mb-3">
-              Let's work together
-            </h2>
-            <p class="text-muted leading-relaxed">
-              I'm currently available for select projects and would love to hear about yours. Whether you need a full product build or strategic design guidance, let's discuss how I can help your business grow.
-            </p>
-          </div>
-          <a
-            href={`${base}/contact`}
-            class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
-          >
-            Get in touch
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your project.</h2>
+      <div class="mt-10 flex flex-wrap items-center gap-6">
+        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+          Start your project
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="mailto:savellem@gmail.com" class="text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
+          Or just email me
+        </a>
       </div>
-    </section>
+    </div>
+  </section>
 </Layout>

@@ -3,12 +3,12 @@ import Layout from '../../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
 
-// FAQ schema is derived from the on-page Q&As below — keep the two in sync.
+// FAQ schema is derived from the on-page Q&As below. Keep the two in sync.
 const faqs = [
   {
     question: 'What do I need to provide to get started?',
     answer:
-      "The offer, your goal for the page — a signup, a demo, a purchase — and any brand assets you have: logo, colors, product photos, and copy if it exists. If the copy isn't written yet, I can work from a clear brief. The sharper the goal, the sharper the page.",
+      "The offer, your goal for the page, whether that's a signup, a demo, or a purchase, and any brand assets you have: logo, colors, product photos, and copy if it exists. If the copy isn't written yet, I can work from a clear brief. The sharper the goal, the sharper the page.",
   },
   {
     question: 'Do you write the copy, or just design it?',
@@ -23,12 +23,12 @@ const faqs = [
   {
     question: 'How do I know a new page will convert better than my current one?',
     answer:
-      'Start with the free UX Health Check — it scores your current page across the five things that decide whether a visitor acts. For a deeper read on a live page, the 48-Hour UX Audit shows exactly where you are losing people before we redesign anything.',
+      'Start with the Website Score. Ten quick questions give you a read on how well your current page turns visitors into paying customers, plus your highest-priority fixes. For a hands-on review of a live page, the 48-Hour UX Audit shows exactly where you are losing people before we redesign anything.',
   },
   {
     question: 'What does a landing page cost?',
     answer:
-      'It depends on scope — the number of sections, whether copy and photography are ready, and any integrations. You will find ranges on the pricing page, and we settle on a fixed number before any work starts. No hourly surprises.',
+      'It depends on scope: the number of sections, whether copy and photography are ready, and any integrations. You will find ranges on the pricing page, and we settle on a fixed number before any work starts. No hourly surprises.',
   },
 ];
 
@@ -53,144 +53,154 @@ const pageSchema = [
     })),
   },
 ];
+
+const included = [
+  { title: 'Custom design', body: 'Built for your brand and your campaign goal, not a template dressed up.' },
+  { title: 'Mobile-first build', body: 'Designed for the phone first, because that is where most of your traffic lives.' },
+  { title: 'Clear call to action', body: 'Buttons and forms placed to guide visitors toward the one action that matters.' },
+  { title: 'Fast loading', body: 'Tuned for speed, so you lose fewer visitors to a slow page.' },
+  { title: 'Search-ready structure', body: 'Clean code and search-friendly structure so the page can be found.' },
+  { title: 'Analytics from day one', body: 'Tracking set up at launch, so you can measure what works and improve it.' },
+];
+
+const steps = [
+  { title: 'Discovery call', body: 'We get clear on your goals, your audience, and the one action you want visitors to take.' },
+  { title: 'Design and review', body: 'A custom design, shared for your feedback and refined until it is right.' },
+  { title: 'Development', body: 'The approved design built with clean code and tuned for performance.' },
+  { title: 'Launch and support', body: 'The page goes live, and I stay available to adjust as you learn what works.' },
+];
 ---
 
 <Layout title="Landing Page Design - Savelle Design" description="Create high-converting landing pages that turn visitors into customers.">
-    <!-- Hero Section -->
-    <section class="py-20 md:py-28">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors mb-10">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-mist hover:text-ink transition-colors mb-10">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         Back to services
       </a>
-      <p class="spec-label mb-4" data-reveal>Landing pages</p>
-      <h1 class="font-display text-mega text-paper max-w-4xl" data-reveal>
-        One page, one job: turn a click into a <span class="bracketed">customer</span>.
+      <p class="label mb-5">Landing pages</p>
+      <h1 class="font-semibold text-mega text-ink max-w-[17ch]">
+        One page, one job: turn a click into a customer.
       </h1>
-      <p class="mt-8 text-lg md:text-xl text-muted max-w-3xl leading-relaxed" data-reveal>
-        A landing page has a single thing to do. I design pages that make your value obvious in seconds and give visitors one clear reason to act.
+      <p class="mt-10 max-w-2xl text-lg md:text-xl text-slate leading-relaxed">
+        A landing page has a single thing to do. I design pages that make your
+        value obvious in seconds and give visitors one clear reason to act.
       </p>
-      <a href={`${base}/pricing`} class="mt-8 inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors" data-reveal>
+      <a href={`${base}/pricing`} class="mt-8 inline-block text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
         View pricing
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
       </a>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Service Overview -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div class="min-w-0" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">What you get</h2>
-          <p class="text-lg text-muted mb-6 leading-relaxed">
-            A landing page is often the first impression a potential customer gets. I design pages that are clear, easy to read, and built to move visitors toward a lead or a sale — not just look good.
+  <!-- ── What you get ─────────────────────────────────────────────────── -->
+  <section class="border-y border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div class="min-w-0 lg:col-span-6">
+          <h2 class="text-huge font-semibold text-ink">What you get</h2>
+          <p class="mt-6 text-lg text-slate leading-relaxed max-w-xl">
+            A landing page is often the first impression a potential customer gets.
+            I design pages that are clear, easy to read, and built to move visitors
+            toward a lead or a sale, not just look good.
           </p>
-          <p class="text-lg text-muted leading-relaxed">
-            Launching a product, running an ad campaign, or growing an email list — you get a page built around that one goal, and nothing that gets in its way.
+          <p class="mt-6 text-lg text-slate leading-relaxed max-w-xl">
+            Launching a product, running an ad campaign, or growing an email list,
+            you get a page built around that one goal, and nothing that gets in
+            its way.
           </p>
         </div>
-        <div class="aspect-[4/3] rounded-[2px] overflow-hidden border border-line" data-reveal data-reveal-delay="80">
-          <img src={`${base}/images/works/yoli-detail2.png`} alt="Landing Page Design Example" class="w-full h-full object-cover" loading="lazy" />
+        <div class="min-w-0 lg:col-span-6">
+          <div class="overflow-hidden bg-card border border-hairline">
+            <img src={`${base}/images/works/yoli-detail2.png`} alt="Landing page design example" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          </div>
         </div>
       </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- What's Included -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>What's included</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>Everything the page needs to convert.</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          { title: 'Custom design', body: 'A design built for your brand and campaign goal — not a generic template dressed up.' },
-          { title: 'Mobile-first', body: 'Fully responsive, built for the phone first, because that is where most of your traffic lives.' },
-          { title: 'Clear call-to-action', body: 'Buttons and forms placed to guide visitors toward the one action that matters.' },
-          { title: 'Fast loading', body: 'Tuned for speed, so visitors stay engaged and you lose fewer of them to a slow page.' },
-          { title: 'SEO-ready', body: 'Built on search-friendly structure and clean code so the page can be found.' },
-          { title: 'Analytics ready', body: 'Tracking set up from day one, so you can measure what works and improve it.' },
-        ].map((item, i) => (
-          <div class="rounded-[2px] border border-line bg-surface p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
-            <h3 class="text-xl font-display text-paper mb-3">{item.title}</h3>
-            <p class="text-muted leading-relaxed">{item.body}</p>
+  <!-- ── What's included ──────────────────────────────────────────────── -->
+  <section class="py-24 md:py-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">What's included</p>
+      <h2 class="text-huge font-semibold text-ink max-w-3xl mb-14 md:mb-20">Everything the page needs to convert.</h2>
+      <div>
+        {included.map((item) => (
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-8 border-t border-hairline py-6">
+            <h3 class="min-w-0 md:col-span-4 text-lg font-semibold text-ink">{item.title}</h3>
+            <p class="min-w-0 md:col-span-8 text-slate leading-relaxed max-w-2xl">{item.body}</p>
           </div>
         ))}
       </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Process -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>How it works</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>From first call to launch.</h2>
-      <div class="space-y-4">
-        {[
-          { n: '1', title: 'Discovery call', body: 'We get clear on your goals, your audience, and the one action you want visitors to take.' },
-          { n: '2', title: 'Design & review', body: 'I create a custom design and share it for your feedback, then refine until it is right.' },
-          { n: '3', title: 'Development', body: 'Once approved, I build the page with clean code and tune it for performance.' },
-          { n: '4', title: 'Launch & support', body: 'Your page goes live, and I stay available to adjust as you learn what works.' },
-        ].map((step, i) => (
-          <div class="flex gap-6 rounded-[2px] border border-line bg-ink p-6 md:p-8" data-reveal data-reveal-delay={i * 60}>
-            <div class="w-11 h-11 bg-accent text-ink rounded-[2px] flex items-center justify-center font-display text-lg shrink-0">
-              {step.n}
-            </div>
-            <div class="min-w-0">
-              <h3 class="text-xl font-display text-paper mb-2">{step.title}</h3>
-              <p class="text-muted leading-relaxed">{step.body}</p>
-            </div>
+  <!-- ── How it works ─────────────────────────────────────────────────── -->
+  <section class="border-y border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">How it works</p>
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">From first call to launch.</h2>
+      <p class="mt-6 text-lg text-slate leading-relaxed max-w-2xl">
+        AI-integrated workflows keep the build moving at the speed of a full team,
+        with one senior designer accountable for every call.
+      </p>
+      <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-10">
+        {steps.map((step) => (
+          <div class="min-w-0 border-t border-hairline pt-6">
+            <h3 class="text-xl font-semibold text-ink mb-2">{step.title}</h3>
+            <p class="text-slate leading-relaxed">{step.body}</p>
           </div>
         ))}
       </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- FAQ -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4 text-center" data-reveal>FAQ</p>
-        <h2 class="text-huge font-display text-paper mb-12 text-center" data-reveal>Frequently asked questions</h2>
-        <div class="max-w-3xl mx-auto space-y-4">
-          {faqs.map((f, i) => (
-            <details class="group rounded-[2px] border border-line bg-surface p-6 md:p-8 open:border-line-2" data-reveal data-reveal-delay={i * 40}>
-              <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
-                <h3 class="text-lg font-display text-paper group-hover:text-accent transition-colors">{f.question}</h3>
-                <svg class="w-5 h-5 shrink-0 text-faint group-open:rotate-45 group-hover:text-accent transition-all mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
-              </summary>
-              <p class="text-muted leading-relaxed mt-4">{f.answer}</p>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
+  <!-- ── See it in practice ───────────────────────────────────────────── -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">See it in practice</p>
+      <a href={`${base}/works/omegas411`} class="group block border border-hairline bg-card p-10 md:p-12 hover:border-ink transition-colors">
+        <h3 class="text-2xl font-semibold text-ink mb-2">Omegas411</h3>
+        <p class="text-slate leading-relaxed max-w-2xl">
+          A brand and landing page for an Omega-3 resource guide, now doing 2,000
+          visits a month.
+        </p>
+        <span class="mt-6 inline-flex items-center gap-2 font-medium text-ink">View the project <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span></span>
+      </a>
+    </div>
+  </section>
 
-    <!-- CTA Section -->
-    <section class="py-24 md:py-28 bg-surface border-t border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <div class="max-w-3xl mx-auto text-center" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">
-            Ready for a page that converts?
-          </h2>
-          <p class="text-lg md:text-xl text-muted mb-8 leading-relaxed">
-            Tell me about your offer and your goal, and I'll build a landing page around it.
-          </p>
-          <a
-            href={`${base}/contact`}
-            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
-          >
-            Get started
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </a>
-        </div>
+  <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">FAQ</p>
+      <h2 class="text-huge font-semibold text-ink max-w-3xl mb-14">Questions, answered.</h2>
+      <div class="max-w-3xl space-y-4">
+        {faqs.map((f) => (
+          <details class="group border border-hairline bg-card p-6 md:p-8">
+            <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
+              <h3 class="text-lg font-semibold text-ink">{f.question}</h3>
+              <svg class="w-5 h-5 shrink-0 text-mist group-open:rotate-45 transition-transform mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
+            </summary>
+            <p class="text-slate leading-relaxed mt-4">{f.answer}</p>
+          </details>
+        ))}
       </div>
-    </section>
+    </div>
+  </section>
+
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your project.</h2>
+      <div class="mt-10">
+        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+          Start your project
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- Structured Data -->
   {pageSchema.map((schema) => (

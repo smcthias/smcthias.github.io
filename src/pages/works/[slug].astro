@@ -28,10 +28,16 @@ const currentIndex = allProjects.findIndex((p) => p.id === project.id);
 const prev = currentIndex > 0 ? allProjects[currentIndex - 1] : null;
 const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
 
-// The markdown bodies are intentionally empty — the mini case study is built
-// from frontmatter: brief[] carries the problem → approach narrative, results[]
-// carries the outcome. Nothing here is invented beyond connective framing.
+// The markdown bodies are intentionally empty. The case study is built from
+// frontmatter: brief[] carries the problem and the work, results[] carries
+// the outcome. Nothing here is invented beyond connective framing.
 const [lead, ...restBrief] = project.data.brief;
+
+const detailImages = [
+  project.data.images.detail1,
+  project.data.images.detail2,
+  project.data.images.detail3,
+];
 
 // CreativeWork JSON-LD (extends the base ProfessionalService schema in Layout).
 const creativeWorkLd = {
@@ -54,153 +60,153 @@ const creativeWorkLd = {
 <Layout title={`${project.data.title} - Savelle Design`} description={project.data.description}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(creativeWorkLd)} />
 
-  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
-  <section class="pt-10 md:pt-14 pb-12 md:pb-16">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <a href={`${base}/works`} class="group inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors mb-10">
+  <!-- ── Hero: dark band, full-bleed image ────────────────────────────── -->
+  <section class="bg-ink text-paper on-dark">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 pt-12 md:pt-16 pb-14 md:pb-20">
+      <a href={`${base}/works`} class="group inline-flex items-center gap-2 text-sm text-fog hover:text-paper transition-colors mb-12">
         <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         All work
       </a>
-      <p class="spec-label mb-4">{project.data.category}</p>
-      <h1 class="font-display font-semibold text-mega text-paper max-w-4xl">{project.data.title}</h1>
-      <p class="mt-8 max-w-3xl text-lg md:text-2xl text-muted leading-relaxed">
+      <p class="label mb-5">{project.data.category}</p>
+      <h1 class="text-mega font-semibold text-paper max-w-4xl">{project.data.title}</h1>
+      <p class="mt-8 max-w-3xl text-lg md:text-xl text-fog leading-relaxed">
         {project.data.description}
       </p>
     </div>
+    <img
+      src={`${base}/images/works/${project.data.images.hero}`}
+      alt={`${project.data.title} hero image`}
+      class="w-full aspect-[16/9] max-h-[80vh] object-cover"
+      loading="eager"
+    />
   </section>
 
-  <!-- ── Hero visual ──────────────────────────────────────────────────── -->
-  <section class="pb-16 md:pb-24">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="relative aspect-[16/9] rounded-[2px] overflow-hidden bg-surface border border-line" data-reveal>
-        <img
-          src={`${base}/images/works/${project.data.images.hero}`}
-          alt={`${project.data.title} — hero`}
-          class="w-full h-full object-cover"
-          loading="lazy"
-        />
+  <!-- ── Results strip: the outcome, visible early ────────────────────── -->
+  {project.data.results.length > 0 && (
+    <section class="border-b border-hairline">
+      <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-14 md:py-16">
+        <p class="label mb-8">Results</p>
+        <div class="flex flex-wrap gap-x-16 gap-y-10">
+          {project.data.results.map((result) => (
+            <div class="min-w-0">
+              <p class="text-big font-semibold text-ink leading-none">{result.value}</p>
+              <p class="mt-3 text-slate max-w-[28ch] leading-snug">{result.label}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
-  <!-- ── Overview + meta ──────────────────────────────────────────────── -->
-  <section class="py-16 md:py-20 bg-surface border-y border-line">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+  <!-- ── Narrative: light reading layer ───────────────────────────────── -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <!-- Meta rail -->
-        <aside class="min-w-0 lg:col-span-4" data-reveal>
-          <p class="spec-label mb-6">The brief</p>
+        <aside class="min-w-0 lg:col-span-4">
+          <p class="label mb-6">Project details</p>
           <dl class="space-y-6">
             <div>
-              <dt class="text-sm text-faint mb-1">Role</dt>
-              <dd class="text-paper">{project.data.role}</dd>
+              <dt class="text-sm text-mist mb-1">Role</dt>
+              <dd class="text-ink">{project.data.role}</dd>
             </div>
             <div>
-              <dt class="text-sm text-faint mb-1">Timeline</dt>
-              <dd class="text-paper">{project.data.timeline}</dd>
+              <dt class="text-sm text-mist mb-1">Timeline</dt>
+              <dd class="text-ink">{project.data.timeline}</dd>
             </div>
             <div>
-              <dt class="text-sm text-faint mb-1">Services</dt>
-              <dd class="text-paper">{project.data.services}</dd>
+              <dt class="text-sm text-mist mb-1">Services</dt>
+              <dd class="text-ink">{project.data.services}</dd>
             </div>
             <div>
-              <dt class="text-sm text-faint mb-1">Tags</dt>
-              <dd class="flex flex-wrap gap-2 mt-2">
-                {project.data.tags.map((tag) => (
-                  <span class="px-3 py-1 rounded-[2px] border border-line text-sm text-muted">{tag}</span>
-                ))}
-              </dd>
+              <dt class="text-sm text-mist mb-1">Tags</dt>
+              <dd class="text-slate">{project.data.tags.join(', ')}</dd>
             </div>
           </dl>
         </aside>
 
         <!-- Narrative -->
-        <div class="min-w-0 lg:col-span-8">
-          <h2 class="text-huge font-display text-paper mb-8" data-reveal>The work.</h2>
-          <p class="text-xl md:text-2xl text-paper leading-relaxed mb-8" data-reveal>{lead}</p>
-          {restBrief.map((paragraph, i) => (
-            <p class="text-lg text-muted leading-relaxed mb-6" data-reveal data-reveal-delay={i * 60}>
-              {paragraph}
-            </p>
-          ))}
+        <div class="min-w-0 lg:col-span-8 max-w-3xl">
+          <h2 class="text-big font-semibold text-ink mb-6">The project.</h2>
+          <p class="text-xl md:text-2xl text-ink leading-relaxed">{lead}</p>
+          {restBrief.length > 0 && (
+            <>
+              <h2 class="text-big font-semibold text-ink mt-16 mb-6">The work.</h2>
+              {restBrief.map((paragraph) => (
+                <p class="text-lg text-slate leading-relaxed mb-6">{paragraph}</p>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── Visuals ──────────────────────────────────────────────────────── -->
-  <section class="py-16 md:py-24">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-reveal>
-        <div class="relative aspect-[4/3] rounded-[2px] overflow-hidden bg-surface border border-line">
+  <!-- ── Detail gallery: dark band, horizontal strip ──────────────────── -->
+  <section class="bg-ink text-paper on-dark">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-20 md:py-28">
+      <p class="label mb-10">In detail</p>
+      <div
+        class="hstrip"
+        role="region"
+        aria-label={`${project.data.title} detail image gallery, scrolls horizontally`}
+        tabindex="0"
+      >
+        {detailImages.map((image, i) => (
           <img
-            src={`${base}/images/works/${project.data.images.detail1}`}
-            alt={`${project.data.title} — detail 1`}
-            class="w-full h-full object-cover"
+            src={`${base}/images/works/${image}`}
+            alt={`${project.data.title} detail image ${i + 1}`}
+            class="h-[55vh] min-h-[320px] max-h-[680px] w-auto object-cover bg-ink-soft"
             loading="lazy"
           />
-        </div>
-        <div class="relative aspect-[4/3] rounded-[2px] overflow-hidden bg-surface border border-line">
-          <img
-            src={`${base}/images/works/${project.data.images.detail2}`}
-            alt={`${project.data.title} — detail 2`}
-            class="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
-      </div>
-      <div class="relative aspect-[16/9] rounded-[2px] overflow-hidden bg-surface border border-line mt-6" data-reveal>
-        <img
-          src={`${base}/images/works/${project.data.images.detail3}`}
-          alt={`${project.data.title} — detail 3`}
-          class="w-full h-full object-cover"
-          loading="lazy"
-        />
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Results ──────────────────────────────────────────────────────── -->
-  <section class="py-20 md:py-24 bg-surface border-y border-line">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="spec-label mb-4" data-reveal>The outcome</p>
-      <h2 class="text-huge font-display text-paper mb-14" data-reveal>By the numbers.</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-line border border-line rounded-[2px] overflow-hidden">
-        {project.data.results.map((result, i) => (
-          <div class="min-w-0 bg-ink p-8 md:p-10" data-reveal data-reveal-delay={i * 60}>
-            <div class="text-mega font-display text-accent leading-none mb-3">{result.value}</div>
-            <p class="text-muted leading-snug">{result.label}</p>
-          </div>
         ))}
       </div>
     </div>
   </section>
 
+  <!-- ── By the numbers ───────────────────────────────────────────────── -->
+  {project.data.results.length > 0 && (
+    <section class="py-20 md:py-28">
+      <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+        <p class="label mb-5">The outcome</p>
+        <h2 class="text-huge font-semibold text-ink mb-14">By the numbers.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {project.data.results.map((result) => (
+            <div class="min-w-0 border-t border-hairline pt-8">
+              <p class="text-mega font-semibold text-ink leading-none">{result.value}</p>
+              <p class="mt-4 text-slate leading-snug">{result.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- ── Project navigation ───────────────────────────────────────────── -->
-  <section class="py-16 md:py-20">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
+  <section class="border-t border-hairline">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-14 md:py-16">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="min-w-0">
           {prev && (
-            <a href={`${base}/works/${prev.id}`} class="group flex items-center gap-3 text-muted hover:text-accent transition-colors">
+            <a href={`${base}/works/${prev.id}`} class="group flex items-center gap-3 text-slate hover:text-ink transition-colors">
               <svg class="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
               <span class="min-w-0">
-                <span class="block text-sm text-faint">Previous</span>
-                <span class="block font-display text-paper group-hover:text-accent transition-colors truncate">{prev.data.title}</span>
+                <span class="block text-sm text-mist">Previous</span>
+                <span class="block font-medium text-ink truncate">{prev.data.title}</span>
               </span>
             </a>
           )}
         </div>
         <div class="min-w-0 sm:text-right">
           {next && (
-            <a href={`${base}/works/${next.id}`} class="group flex items-center gap-3 sm:justify-end text-muted hover:text-accent transition-colors">
+            <a href={`${base}/works/${next.id}`} class="group flex items-center gap-3 sm:justify-end text-slate hover:text-ink transition-colors">
               <span class="min-w-0 sm:order-1">
-                <span class="block text-sm text-faint">Next</span>
-                <span class="block font-display text-paper group-hover:text-accent transition-colors truncate">{next.data.title}</span>
+                <span class="block text-sm text-mist">Next</span>
+                <span class="block font-medium text-ink truncate">{next.data.title}</span>
               </span>
               <svg class="w-5 h-5 shrink-0 sm:order-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -212,14 +218,13 @@ const creativeWorkLd = {
     </div>
   </section>
 
-  <!-- ── CTA ──────────────────────────────────────────────────────────── -->
-  <section class="py-24 md:py-28 bg-surface border-t border-line">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="max-w-3xl mx-auto text-center" data-reveal>
-        <h2 class="text-huge font-display text-paper mb-5">{project.data.ctaHeading}</h2>
-        <p class="text-lg text-muted leading-relaxed mb-10">{project.data.ctaDescription}</p>
-        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
-          Start a conversation
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your project.</h2>
+      <div class="mt-10">
+        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+          Start your project
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
       </div>

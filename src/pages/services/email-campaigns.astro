@@ -3,33 +3,42 @@ import Layout from '../../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
 
-// FAQ schema is derived from the on-page Q&As below — keep the two in sync.
+// FAQ schema is derived from the on-page entries below. Keep the two in sync.
 const faqs = [
   {
-    question: 'Do you design the emails, or also send them?',
+    question: 'I design and build. Your platform sends.',
     answer:
-      'I design and build the templates — layout, structure, and responsive HTML that renders across clients. Sending, lists, and automation live in your email platform; I build to work cleanly with it and hand off files you can reuse.',
+      'I design and build the templates: layout, structure, and responsive HTML that renders across clients. Sending, lists, and automation live in your email platform; I build to work cleanly with it and hand off files you can reuse.',
   },
   {
-    question: 'Which email platforms do you work with?',
+    question: 'Built for the platform you already use.',
     answer:
-      "The common ones — Mailchimp, Klaviyo, ActiveCampaign, HubSpot, and similar. Tell me what you're on and I'll build templates that drop in without breaking on the way to the inbox.",
+      "Mailchimp, Klaviyo, ActiveCampaign, HubSpot, and similar. Tell me what you're on and I'll build templates that drop in without breaking on the way to the inbox.",
   },
   {
-    question: 'Will the emails look right on phones and in dark mode?',
+    question: 'Tested on phones and in dark mode.',
     answer:
-      "Yes. Most email gets opened on a phone, so I design mobile-first and test across major clients, including dark mode, before handing anything off. Email that only works in one inbox isn't finished.",
+      "Most email gets opened on a phone, so I design mobile-first and test across major clients, including dark mode, before handing anything off. Email that only works in one inbox isn't finished.",
   },
   {
-    question: 'Can you match my brand?',
+    question: 'Your email reads as your brand.',
     answer:
-      "That's the point. Your email should read as the same company as your website — same voice, same look. If your brand identity is inconsistent, this is a good moment to tighten it.",
+      'Your email should read as the same company as your website: same voice, same look. If your brand identity is inconsistent, this is a good moment to tighten it.',
   },
   {
-    question: 'How much does an email campaign cost?',
+    question: 'Cost depends on scope.',
     answer:
       'It depends on how many templates you need and how much design and copy is involved. You will find ranges on the pricing page; we set a fixed scope and price before starting.',
   },
+];
+
+const included = [
+  { title: 'Custom templates', body: 'Branded designs that hold together across every email client and device.' },
+  { title: 'Campaign strategy', body: 'Guidance on frequency, content, and what works for your audience.' },
+  { title: 'Mobile-first build', body: 'Email that looks right on a phone, a tablet, or a laptop.' },
+  { title: 'Series design', body: 'Welcome sequences, nurture flows, and promo series with one cohesive look.' },
+  { title: 'Clear calls to action', body: 'Buttons and links that move the reader toward a single next step.' },
+  { title: 'Platform integration', body: 'Templates that drop cleanly into Mailchimp, Klaviyo, ConvertKit, and the rest.' },
 ];
 
 const pageSchema = [
@@ -55,136 +64,151 @@ const pageSchema = [
 ];
 ---
 
-<Layout title="Email Campaign Design - Savelle Design" description="Design engaging email campaigns that connect with your audience and drive action.">
-    <!-- Hero Section -->
-    <section class="py-20 md:py-28">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors mb-10">
+<Layout title="Email Campaign Design - Savelle Design" description="Email campaigns designed to match your brand, render in every inbox, and move readers to act.">
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-slate hover:text-ink transition-colors mb-10">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         Back to services
       </a>
-      <p class="spec-label mb-4" data-reveal>Email campaigns</p>
-      <h1 class="font-display text-mega text-paper max-w-4xl" data-reveal>
-        Emails people actually <span class="bracketed">open</span> — designed to convert.
+      <p class="label mb-5">Email campaigns</p>
+      <h1 class="font-semibold text-mega text-ink max-w-[16ch]">
+        Email people open, read, and act on.
       </h1>
-      <p class="mt-8 text-lg md:text-xl text-muted max-w-3xl leading-relaxed" data-reveal>
-        Templates built to look like your brand, render cleanly in every inbox, and give readers one clear reason to act.
-      </p>
-      <a href={`${base}/pricing`} class="mt-8 inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors" data-reveal>
-        View pricing
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </a>
-      </div>
-    </section>
-
-    <!-- Service Overview -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div class="min-w-0" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">Why email still matters</h2>
-          <p class="text-lg text-muted mb-6 leading-relaxed">
-            Email is still one of the few channels where you reach your audience directly, on your terms. A well-built campaign nurtures leads, drives sales, and keeps customers coming back.
-          </p>
-          <p class="text-lg text-muted leading-relaxed">
-            You get email that looks professional, renders across every device, and guides the reader toward the action you care about.
-          </p>
-        </div>
-        <div class="aspect-[4/3] rounded-[2px] overflow-hidden border border-line" data-reveal data-reveal-delay="80">
-          <img src={`${base}/images/works/yoli-detail3.png`} alt="Email Campaign Design Example" class="w-full h-full object-cover" loading="lazy" />
-        </div>
-      </div>
-      </div>
-    </section>
-
-    <!-- What's Included -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>What's included</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>Built to land in the inbox.</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          { title: 'Custom templates', body: 'Branded email designs that hold together across every email client and device.' },
-          { title: 'Campaign strategy', body: 'Guidance on frequency, content, and what tends to work for your audience.' },
-          { title: 'Mobile-responsive', body: 'Email that looks right whether it opens on a phone, a tablet, or a laptop.' },
-          { title: 'Series design', body: 'Welcome sequences, nurture flows, and promo series with one cohesive look.' },
-          { title: 'Clear call-to-actions', body: 'Buttons and links designed to move the reader toward a single next step.' },
-          { title: 'Platform integration', body: 'Templates that drop cleanly into Mailchimp, Klaviyo, ConvertKit, and the rest.' },
-        ].map((item, i) => (
-          <div class="rounded-[2px] border border-line bg-surface p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
-            <h3 class="text-xl font-display text-paper mb-3">{item.title}</h3>
-            <p class="text-muted leading-relaxed">{item.body}</p>
-          </div>
-        ))}
-      </div>
-      </div>
-    </section>
-
-    <!-- Use Cases -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>Perfect for</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>Where email earns its keep.</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          { title: 'Product launches', body: 'Build anticipation and drive sales with a launch sequence that looks the part.' },
-          { title: 'Newsletters', body: 'Keep your audience close with regular updates, tips, and content worth opening.' },
-          { title: 'Welcome series', body: 'Make a strong first impression with new subscribers and guide them to engage.' },
-        ].map((item, i) => (
-          <div class="rounded-[2px] border border-line bg-ink p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
-            <h3 class="text-xl font-display text-paper mb-3">{item.title}</h3>
-            <p class="text-muted leading-relaxed">{item.body}</p>
-          </div>
-        ))}
-      </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4 text-center" data-reveal>FAQ</p>
-        <h2 class="text-huge font-display text-paper mb-12 text-center" data-reveal>Frequently asked questions</h2>
-        <div class="max-w-3xl mx-auto space-y-4">
-          {faqs.map((f, i) => (
-            <details class="group rounded-[2px] border border-line bg-surface p-6 md:p-8 open:border-line-2" data-reveal data-reveal-delay={i * 40}>
-              <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
-                <h3 class="text-lg font-display text-paper group-hover:text-accent transition-colors">{f.question}</h3>
-                <svg class="w-5 h-5 shrink-0 text-faint group-open:rotate-45 group-hover:text-accent transition-all mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
-              </summary>
-              <p class="text-muted leading-relaxed mt-4">{f.answer}</p>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-24 md:py-28 bg-surface border-t border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <div class="max-w-3xl mx-auto text-center" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">
-            Ready for email that gets results?
-          </h2>
-          <p class="text-lg md:text-xl text-muted mb-8 leading-relaxed">
-            Tell me what you're sending and I'll build templates your audience looks forward to.
-          </p>
-          <a
-            href={`${base}/contact`}
-            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
-          >
+      <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+        <p class="min-w-0 lg:col-span-6 text-lg md:text-xl text-slate leading-relaxed max-w-2xl">
+          Templates built to look like your brand, render cleanly in every inbox,
+          and give readers one clear reason to act.
+        </p>
+        <div class="min-w-0 lg:col-span-6 flex flex-wrap items-center gap-6 lg:justify-end">
+          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
             Start a project
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href={`${base}/pricing`} class="text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
+            View pricing
           </a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+
+  <!-- ── Why email ────────────────────────────────────────────────────── -->
+  <section class="border-y border-hairline">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-20 md:py-28">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="min-w-0 lg:col-span-6">
+          <p class="label mb-5">The channel</p>
+          <h2 class="text-huge font-semibold text-ink max-w-[16ch]">Email still earns its keep.</h2>
+        </div>
+        <div class="min-w-0 lg:col-span-6 flex flex-col justify-end gap-6">
+          <p class="text-lg text-slate leading-relaxed max-w-2xl">
+            Email is one of the few channels where you reach your audience directly, on
+            your terms. A well-built campaign nurtures leads, drives sales, and keeps
+            customers coming back.
+          </p>
+          <p class="text-lg text-slate leading-relaxed max-w-2xl">
+            You get email that looks professional, renders across every device, and guides
+            the reader toward the action you care about. AI-integrated workflows mean more
+            variations designed and tested in less time, with a senior designer making the calls.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── What's included ──────────────────────────────────────────────── -->
+  <section class="py-24 md:py-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="mb-16 md:mb-20">
+        <p class="label mb-5">What's included</p>
+        <h2 class="text-huge font-semibold text-ink max-w-3xl">Built to land in the inbox.</h2>
+      </div>
+      <div>
+        {included.map((item) => (
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-10 py-6 border-t border-hairline">
+            <h3 class="min-w-0 md:col-span-4 text-lg font-medium text-ink">{item.title}</h3>
+            <p class="min-w-0 md:col-span-8 text-slate leading-relaxed max-w-2xl">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── See it in practice: dark media band ──────────────────────────── -->
+  <section class="bg-ink text-paper on-dark">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-24 md:py-36">
+      <p class="label mb-12 md:mb-16">See it in practice</p>
+      <a href={`${base}/works/yoli`} class="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+        <div class="min-w-0 lg:col-span-8">
+          <div class="overflow-hidden bg-ink-soft">
+            <img
+              src={`${base}/images/works/yoli-hero.png`}
+              alt="Yoli email design system"
+              class="w-full aspect-[16/10] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              loading="lazy"
+            />
+          </div>
+        </div>
+        <div class="min-w-0 lg:col-span-4">
+          <p class="text-lg text-paper leading-snug max-w-sm">
+            An email design system and marketing campaigns for a global wellness brand, built in Klaviyo.
+          </p>
+          <p class="mt-6 text-sm text-dusk">Yoli · Email Design &amp; Development</p>
+          <span class="mt-6 inline-flex items-center gap-2 text-sm text-paper underline underline-offset-8 decoration-seam group-hover:decoration-paper transition-colors">
+            View project
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Where it fits ────────────────────────────────────────────────── -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="max-w-3xl">
+        <p class="label mb-5">Where it fits</p>
+        <h2 class="text-huge font-semibold text-ink">Launches, newsletters, welcomes.</h2>
+        <p class="mt-6 text-lg text-slate leading-relaxed max-w-2xl">
+          Product launches that build anticipation and drive sales. Newsletters your
+          audience finds worth opening. Welcome series that make a strong first
+          impression and guide new subscribers to engage.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-12 md:mb-16">Common questions, answered</p>
+      <div class="max-w-3xl">
+        {faqs.map((f) => (
+          <details class="group border-b border-hairline py-6">
+            <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
+              <h3 class="text-lg md:text-xl font-medium text-ink">{f.question}</h3>
+              <svg class="w-5 h-5 shrink-0 text-mist group-open:rotate-45 transition-transform mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
+            </summary>
+            <p class="text-slate leading-relaxed mt-4 max-w-2xl">{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your email.</h2>
+      <a href={`${base}/contact`} class="mt-10 inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+        Start your project
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </section>
 
   <!-- Structured Data -->
   {pageSchema.map((schema) => (

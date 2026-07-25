@@ -17,12 +17,12 @@ const logos = [
   { src: '/images/logos/logo-sanity.svg', alt: 'Sanity', h: 'h-[19px]' },
 ];
 
-// How overflow works — the process, plain-spoken.
+// How overflow works. The process, plain-spoken.
 const steps = [
   {
     n: '01',
     title: 'You send the brief',
-    line: 'A Figma file, a Loom, a messy doc — whatever you have. I read it, ask the questions that matter, and come back with a scope and a date you can hold me to.',
+    line: 'A Figma file, a Loom, a messy doc. Whatever you have. I read it, ask the questions that matter, and come back with a scope and a date you can hold me to.',
   },
   {
     n: '02',
@@ -32,7 +32,7 @@ const steps = [
   {
     n: '03',
     title: 'You review, I revise',
-    line: 'You get work that needs little refinement, delivered on the date we set. I take feedback like a teammate, not a vendor — direct is faster, and I move fast.',
+    line: 'You get work that needs little refinement, delivered on the date we set. I take feedback like a teammate, not a vendor. Direct is faster, and I move fast.',
   },
   {
     n: '04',
@@ -41,7 +41,7 @@ const steps = [
   },
 ];
 
-// Why it's low-risk — what you actually get.
+// Why it's low-risk. What you actually get.
 const benefits = [
   {
     title: 'You work with me directly',
@@ -49,11 +49,11 @@ const benefits = [
   },
   {
     title: 'Senior design and build',
-    line: '18+ years across UX, UI, and front-end. I can take a project from wireframe to shipped code without a hand-off in the middle.',
+    line: 'Two decades across UX, UI, and front-end, sharpened by AI-integrated workflows. I can take a project from wireframe to shipped code without a hand-off in the middle.',
   },
   {
     title: 'No hand-off, no gaps',
-    line: 'Design that ignores build reality creates rework. I do both, so what I hand you is buildable — or already built.',
+    line: 'Design that ignores build reality creates rework. I do both, so what I hand you is buildable, or already built.',
   },
   {
     title: 'Deadlines I actually hit',
@@ -61,7 +61,7 @@ const benefits = [
   },
   {
     title: 'White-label by default',
-    line: 'Everything is built to live under your brand. Your client never knows I am not on staff — that is the whole point.',
+    line: 'Everything is built to live under your brand. Your client never knows I am not on staff. That is the whole point.',
   },
   {
     title: 'Scale up or down',
@@ -71,33 +71,31 @@ const benefits = [
 ---
 
 <Layout
-  title="White-Label & Overflow Design for Agencies — Savelle Design"
-  description="A dependable senior designer and front-end developer for agencies and in-house marketing teams. White-label overflow — no account managers, no juniors, no hand-off. I plug into your process, hit your deadlines, and your client never knows I'm not on staff."
+  title="White-Label & Overflow Design for Agencies - Savelle Design"
+  description="A senior designer and front-end developer for agencies of all sizes and for in-house and enterprise marketing teams. White-label overflow with no account managers, no juniors, and no hand-off. I plug into your process, hit your deadlines, and the work ships under your name."
 >
   <!-- ── Hero ─────────────────────────────────────────────────────────── -->
-  <section class="relative overflow-hidden pt-14 md:pt-20 pb-10 md:pb-14">
-    <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full opacity-60" style="background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 60%)"></div>
-
-    <div class="relative max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="spec-label mb-7">For agencies &amp; in-house teams</p>
-      <h1 class="font-display font-semibold text-mega text-paper max-w-5xl">
-        The senior <span class="bracketed">overflow</span> you don&rsquo;t have to manage.
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">For agencies and marketing teams</p>
+      <h1 class="text-mega font-semibold text-ink max-w-[17ch]">
+        The senior overflow you don't have to manage.
       </h1>
-
-      <div class="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-        <p class="min-w-0 lg:col-span-7 text-lg md:text-xl text-muted leading-relaxed">
-          When the pipeline is full and the deadline isn&rsquo;t moving, you need a dependable pair of
-          senior hands — not another account to babysit. I&rsquo;m a designer and front-end developer
-          who plugs into your process, hits your dates, and hands back work that ships under your name.
-          No account managers. No juniors. No hand-off. Your client never knows I&rsquo;m not on staff.
+      <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+        <p class="min-w-0 lg:col-span-7 text-lg md:text-xl text-slate leading-relaxed max-w-2xl">
+          When the pipeline is full and the deadline isn't moving, you need a dependable
+          pair of senior hands, not another account to babysit. I'm a designer and
+          front-end developer who plugs into your process, hits your dates, and hands
+          back work that ships under your name. For agencies of all sizes, in-house
+          teams, and enterprise marketing teams.
         </p>
-        <div class="min-w-0 lg:col-span-5 flex flex-wrap items-center gap-4 lg:justify-end">
-          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
+        <div class="min-w-0 lg:col-span-5 flex flex-wrap items-center gap-6 lg:justify-end">
+          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
             Talk about your overflow
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a href={`${base}/works`} class="text-sm text-muted hover:text-accent underline underline-offset-4 decoration-line hover:decoration-accent transition-colors">
-            Or see the work first
+          <a href={`${base}/works`} class="text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
+            See the work first
           </a>
         </div>
       </div>
@@ -105,30 +103,30 @@ const benefits = [
   </section>
 
   <!-- ── Trusted by ───────────────────────────────────────────────────── -->
-  <section class="border-y border-line">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8 py-10">
-      <p class="spec-label mb-6">Work already delivered for teams at</p>
-      <div class="flex flex-wrap items-center gap-x-10 gap-y-5 lg:justify-between">
+  <section class="border-y border-hairline py-14 md:py-16">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-8">Work already delivered for teams at</p>
+      <div class="flex flex-wrap items-center gap-x-10 gap-y-6 lg:justify-between">
         {logos.map(({ src, alt, h }) => (
-          <img src={`${base}${src}`} alt={alt} class={`${h} w-auto object-contain brightness-0 invert opacity-65 hover:opacity-100 transition-opacity`} loading="lazy" />
+          <img src={`${base}${src}`} alt={alt} class={`${h} w-auto object-contain brightness-0 opacity-60 hover:opacity-100 transition-opacity`} loading="lazy" />
         ))}
       </div>
     </div>
   </section>
 
   <!-- ── How overflow works ───────────────────────────────────────────── -->
-  <section class="py-24 md:py-32">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mb-16" data-reveal>
-        <p class="spec-label mb-4">How overflow works</p>
-        <h2 class="text-huge font-display text-paper">Four steps, zero surprises.</h2>
+  <section class="py-24 md:py-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="mb-16 md:mb-20">
+        <p class="label mb-5">How overflow works</p>
+        <h2 class="text-huge font-semibold text-ink max-w-3xl">Four steps, zero surprises.</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {steps.map((s, i) => (
-          <div class="rounded-[2px] border border-line bg-surface p-8 md:p-10" data-reveal data-reveal-delay={i * 60}>
-            <span class="font-display text-lg text-accent">{s.n}</span>
-            <h3 class="text-2xl font-display text-paper mt-3 mb-3">{s.title}</h3>
-            <p class="min-w-0 text-muted leading-relaxed">{s.line}</p>
+        {steps.map((s) => (
+          <div class="bg-card border border-hairline p-8 md:p-10">
+            <p class="text-sm font-medium text-mist">{s.n}</p>
+            <h3 class="text-2xl font-semibold text-ink mt-3 mb-3">{s.title}</h3>
+            <p class="min-w-0 text-slate leading-relaxed">{s.line}</p>
           </div>
         ))}
       </div>
@@ -136,17 +134,17 @@ const benefits = [
   </section>
 
   <!-- ── Why it's low-risk ────────────────────────────────────────────── -->
-  <section class="py-24 md:py-28 bg-surface border-y border-line">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mb-16" data-reveal>
-        <p class="spec-label mb-4">What you get</p>
-        <h2 class="text-huge font-display text-paper">Low-risk by design.</h2>
+  <section class="border-y border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="mb-16 md:mb-20">
+        <p class="label mb-5">What you get</p>
+        <h2 class="text-huge font-semibold text-ink max-w-3xl">Low-risk by design.</h2>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-line border border-line rounded-[2px] overflow-hidden">
-        {benefits.map((b, i) => (
-          <div class="bg-ink p-8 md:p-10" data-reveal data-reveal-delay={i * 50}>
-            <h3 class="text-xl font-display text-paper mb-3">{b.title}</h3>
-            <p class="min-w-0 text-muted leading-relaxed">{b.line}</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-hairline border border-hairline">
+        {benefits.map((b) => (
+          <div class="bg-card p-8 md:p-10">
+            <h3 class="text-xl font-semibold text-ink mb-3">{b.title}</h3>
+            <p class="min-w-0 text-slate leading-relaxed">{b.line}</p>
           </div>
         ))}
       </div>
@@ -154,38 +152,38 @@ const benefits = [
   </section>
 
   <!-- ── Testimonial ──────────────────────────────────────────────────── -->
-  <section class="py-24 md:py-28">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <p class="spec-label mb-12" data-reveal>What it&rsquo;s like to work with me</p>
-      <figure class="rounded-[2px] border border-line bg-surface p-8 md:p-12 max-w-4xl" data-reveal>
-        <blockquote class="text-xl md:text-2xl text-paper font-display leading-snug">
-          &ldquo;Working with Savelle wasn&rsquo;t like working with a typical designer — it felt more like
-          having a co-founder who happened to be insanely talented at UX. We were drowning in the
-          complexity of 11 RV dealership locations, and he didn&rsquo;t just design a filter system. He
-          got in the weeds, understood our sales team&rsquo;s pain points, and built something that made
-          everyone&rsquo;s life easier. That&rsquo;s rare.&rdquo;
+  <section class="py-24 md:py-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-10">What it's like to work with me</p>
+      <figure class="max-w-4xl">
+        <blockquote class="text-2xl md:text-3xl font-semibold text-ink leading-snug">
+          "Working with Savelle wasn't like working with a typical designer. It felt
+          more like having a co-founder who happened to be insanely talented at UX.
+          We were drowning in the complexity of 11 RV dealership locations, and he
+          didn't just design a filter system. He got in the weeds, understood our
+          sales team's pain points, and built something that made everyone's life
+          easier. That's rare."
         </blockquote>
-        <figcaption class="mt-8 pt-6 border-t border-line text-sm">
-          <span class="text-paper font-medium">Brian Fidler</span>
-          <span class="text-faint"> · Former Head of Marketing, La Mesa RV &amp; Van Up</span>
+        <figcaption class="mt-8 pt-6 border-t border-hairline text-sm">
+          <span class="text-ink font-medium">Brian Fidler</span>
+          <span class="text-mist"> · Former Head of Marketing, La Mesa RV &amp; Van Up</span>
         </figcaption>
       </figure>
     </div>
   </section>
 
-  <!-- ── Closing CTA ──────────────────────────────────────────────────── -->
-  <section class="py-20 md:py-24 bg-surface border-t border-line">
-    <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-8" data-reveal>
-        <div class="max-w-2xl">
-          <h2 class="text-big font-display text-paper mb-3">Got a project you can&rsquo;t staff this week?</h2>
-          <p class="text-muted leading-relaxed">Tell me the deadline and what&rsquo;s in scope. I&rsquo;ll tell you straight whether I can take it and what it costs — no pitch, no account manager, no hand-off.</p>
-        </div>
-        <a href={`${base}/contact`} class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors">
-          Start a conversation
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Senior hands when you need them.</h2>
+      <p class="mt-6 text-lg text-slate leading-relaxed max-w-2xl">
+        Tell me the deadline and what's in scope. I'll tell you straight whether I can
+        take it and what it costs. No pitch, no account manager, no hand-off.
+      </p>
+      <a href={`${base}/contact`} class="mt-10 inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+        Start a conversation
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
   </section>
 </Layout>

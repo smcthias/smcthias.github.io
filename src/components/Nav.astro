@@ -1,7 +1,7 @@
 ---
-// Top navigation. Dark, minimal, becomes a blurred bar once you scroll past the
-// hero. Services + About open on hover (and keyboard focus) on desktop; the full
-// list lives in the mobile drawer. Active state derived from the current path.
+// Top navigation. Light, minimal, plain-text wordmark. Services + About open
+// on hover (and keyboard focus) on desktop; the full list lives in the mobile
+// drawer. The hamburger morphs into a close mark. Active state from the path.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname;
 const on = (frag: string) => path.includes(frag);
@@ -18,17 +18,15 @@ const services = [
   id="site-nav"
   class="fixed top-0 inset-x-0 z-50 transition-colors duration-300 border-b border-transparent"
 >
-  <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
+  <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
     <div class="flex items-center justify-between h-16 md:h-20">
-      <!-- Wordmark -->
+      <!-- Wordmark: plain text, nothing else -->
       <a
         href={`${base}/`}
-        class="group inline-flex items-center gap-1.5 text-lg font-display font-semibold tracking-tight text-paper"
-        aria-label="Savelle Design — home"
+        class="text-lg font-semibold tracking-tight text-ink"
+        aria-label="Savelle Design home"
       >
-        <span aria-hidden="true" class="w-[3px] h-[17px] bg-accent transition-transform duration-300 group-hover:-translate-x-0.5"></span>
-        <span>Savelle Design</span>
-        <span aria-hidden="true" class="w-[3px] h-[17px] bg-accent transition-transform duration-300 group-hover:translate-x-0.5"></span>
+        Savelle Design
       </a>
 
       <!-- Desktop nav -->
@@ -44,15 +42,15 @@ const services = [
             <svg class="w-3.5 h-3.5 mt-0.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </a>
           <div class="absolute left-1/2 -translate-x-1/2 top-full pt-4 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-200">
-            <div class="w-64 bg-surface border border-line rounded-[2px] p-2 shadow-2xl shadow-black/40">
+            <div class="w-64 bg-card border border-hairline p-2 shadow-xl shadow-black/10">
               <a href={`${base}/services`} class="menu-item font-medium">All Services</a>
               {services.map((s) => (
-                <a href={`${base}${s.href}`} class={`menu-item pl-5 text-muted ${on(s.href) ? 'text-accent' : ''}`}>{s.label}</a>
+                <a href={`${base}${s.href}`} class={`menu-item pl-5 text-slate ${on(s.href) ? 'font-medium text-ink' : ''}`}>{s.label}</a>
               ))}
-              <div class="my-2 border-t border-line"></div>
+              <div class="my-2 border-t border-hairline"></div>
               <a href={`${base}/pricing`} class="menu-item">Pricing</a>
-              <a href={`${base}/ux-health-check`} class="menu-item">UX Health Check <span class="text-accent text-xs">· free</span></a>
-              <a href={`${base}/ux-audit`} class="menu-item">UX Audit</a>
+              <a href={`${base}/ux-health-check`} class="menu-item">Website Score</a>
+              <a href={`${base}/ux-audit`} class="menu-item">Website Audit</a>
             </div>
           </div>
         </div>
@@ -68,7 +66,7 @@ const services = [
             <svg class="w-3.5 h-3.5 mt-0.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </a>
           <div class="absolute left-1/2 -translate-x-1/2 top-full pt-4 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-200">
-            <div class="w-44 bg-surface border border-line rounded-[2px] p-2 shadow-2xl shadow-black/40">
+            <div class="w-44 bg-card border border-hairline p-2 shadow-xl shadow-black/10">
               <a href={`${base}/about`} class="menu-item">About Savelle</a>
               <a href={`${base}/blog`} class="menu-item">Blog</a>
             </div>
@@ -77,22 +75,22 @@ const services = [
 
         <a
           href={`${base}/contact`}
-          class="inline-flex items-center px-5 py-2.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
+          class="inline-flex items-center px-5 py-2.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors"
         >
           Start a project
         </a>
       </nav>
 
-      <!-- Mobile toggle -->
+      <!-- Mobile toggle: two bars that morph into a close mark -->
       <button
         id="nav-toggle"
-        class="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 text-paper"
+        class="nav-burger md:hidden relative inline-flex items-center justify-center w-10 h-10 -mr-2 text-ink"
         aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-drawer"
       >
-        <svg id="nav-open-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.75" d="M4 8h16M4 16h16"/></svg>
-        <svg id="nav-close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.75" d="M6 6l12 12M18 6L6 18"/></svg>
+        <span class="burger-bar burger-top" aria-hidden="true"></span>
+        <span class="burger-bar burger-bottom" aria-hidden="true"></span>
       </button>
     </div>
   </div>
@@ -100,24 +98,25 @@ const services = [
   <!-- Mobile drawer -->
   <div
     id="mobile-drawer"
-    class="md:hidden hidden fixed inset-x-0 top-16 bottom-0 bg-ink/98 backdrop-blur-sm border-t border-line overflow-y-auto"
+    class="drawer md:hidden fixed inset-x-0 top-16 bottom-0 bg-paper border-t border-hairline overflow-y-auto"
+    hidden
   >
-    <nav class="px-5 py-8 flex flex-col gap-1 text-2xl font-display">
+    <nav class="px-5 py-8 flex flex-col gap-1 text-2xl font-semibold tracking-tight">
       <a href={`${base}/works`} class="drawer-link">Work</a>
       <a href={`${base}/services`} class="drawer-link">Services</a>
-      <div class="pl-4 flex flex-col gap-1 text-base text-muted font-sans py-1">
+      <div class="pl-4 flex flex-col gap-1 text-base text-slate font-normal py-1">
         {services.map((s) => (
-          <a href={`${base}${s.href}`} class="py-1.5 hover:text-accent transition-colors">{s.label}</a>
+          <a href={`${base}${s.href}`} class="py-1.5 hover:text-ink transition-colors">{s.label}</a>
         ))}
-        <a href={`${base}/pricing`} class="py-1.5 hover:text-accent transition-colors">Pricing</a>
+        <a href={`${base}/pricing`} class="py-1.5 hover:text-ink transition-colors">Pricing</a>
       </div>
       <a href={`${base}/agencies`} class="drawer-link">Agencies</a>
-      <a href={`${base}/ux-health-check`} class="drawer-link">UX Health Check <span class="text-accent text-base align-middle">· free</span></a>
+      <a href={`${base}/ux-health-check`} class="drawer-link">Website Score</a>
       <a href={`${base}/about`} class="drawer-link">About</a>
       <a href={`${base}/blog`} class="drawer-link">Blog</a>
       <a
         href={`${base}/contact`}
-        class="mt-6 inline-flex items-center justify-center px-6 py-4 rounded-[2px] bg-accent text-ink text-lg font-sans font-medium"
+        class="mt-6 inline-flex items-center justify-center px-6 py-4 bg-ink text-paper text-lg font-medium"
       >
         Start a project
       </a>
@@ -128,18 +127,18 @@ const services = [
 <style>
   .nav-link {
     position: relative;
-    color: var(--color-muted);
+    color: var(--color-slate);
     transition: color 0.2s;
     padding-bottom: 2px;
   }
   .nav-link:hover,
-  .nav-link.is-active { color: var(--color-paper); }
+  .nav-link.is-active { color: var(--color-ink); }
   .nav-link::after {
     content: '';
     position: absolute;
     left: 0; bottom: -2px;
     height: 1.5px; width: 0;
-    background: var(--color-accent);
+    background: var(--color-ink);
     transition: width 0.25s var(--ease-out-expo);
   }
   .nav-link:hover::after,
@@ -147,69 +146,79 @@ const services = [
 
   .menu-item {
     display: block;
-    position: relative;
     padding: 0.5rem 0.75rem;
-    border-radius: 2px;
     font-size: 0.875rem;
-    color: var(--color-paper);
-    transition: background 0.15s, color 0.15s;
+    color: var(--color-ink);
+    transition: background 0.15s;
   }
-  .menu-item:hover { background: var(--color-surface-2); color: var(--color-accent); }
-  /* registration bar slides in on the left — same mark as the wordmark */
-  .menu-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    translate: 0 -50%;
-    width: 3px;
-    height: 0;
-    background: var(--color-accent);
-    transition: height 0.18s var(--ease-out-expo);
-  }
-  .menu-item:hover::before { height: 0.9em; }
+  .menu-item:hover { background: var(--color-paper); }
 
   .drawer-link {
     padding: 0.6rem 0;
-    color: var(--color-paper);
-    border-bottom: 1px solid var(--color-line);
-    transition: color 0.2s;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-hairline);
   }
-  .drawer-link:hover { color: var(--color-accent); }
+
+  /* Hamburger morph: two bars rotate into an X. Quick and smooth. */
+  .burger-bar {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.25s var(--ease-out-expo);
+  }
+  .burger-top { transform: translate(-50%, calc(-50% - 4px)); }
+  .burger-bottom { transform: translate(-50%, calc(-50% + 4px)); }
+  .nav-burger[aria-expanded='true'] .burger-top { transform: translate(-50%, -50%) rotate(45deg); }
+  .nav-burger[aria-expanded='true'] .burger-bottom { transform: translate(-50%, -50%) rotate(-45deg); }
+
+  /* Drawer reveal: quick fade + short slide. */
+  .drawer {
+    transition: opacity 0.22s var(--ease-out-expo), transform 0.22s var(--ease-out-expo);
+  }
+  .drawer[hidden] { display: none; }
+  .drawer.is-closed {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+  }
 </style>
 
 <script>
-  // Nav interactions: scrolled-bar background + mobile drawer.
-  // Wrapped in astro:page-load so it re-binds after every View Transition.
+  // Nav interactions: scrolled-bar background + mobile drawer with morph.
+  // Re-binds after every View Transition via astro:page-load.
   function initNav() {
     const nav = document.getElementById('site-nav');
     const toggle = document.getElementById('nav-toggle');
     const drawer = document.getElementById('mobile-drawer');
-    const openIcon = document.getElementById('nav-open-icon');
-    const closeIcon = document.getElementById('nav-close-icon');
     if (!nav || !toggle || !drawer) return;
 
     const solid = () => {
       const scrolled = window.scrollY > 24;
-      nav.classList.toggle('bg-ink/85', scrolled);
+      nav.classList.toggle('bg-paper/90', scrolled);
       nav.classList.toggle('backdrop-blur-md', scrolled);
-      nav.classList.toggle('border-line', scrolled);
+      nav.classList.toggle('border-hairline', scrolled);
       nav.classList.toggle('border-transparent', !scrolled);
     };
     solid();
     window.addEventListener('scroll', solid, { passive: true });
 
     const setDrawer = (open: boolean) => {
-      drawer.classList.toggle('hidden', !open);
-      openIcon?.classList.toggle('hidden', open);
-      closeIcon?.classList.toggle('hidden', !open);
+      if (open) {
+        drawer.hidden = false;
+        drawer.classList.add('is-closed');
+        requestAnimationFrame(() => requestAnimationFrame(() => drawer.classList.remove('is-closed')));
+      } else {
+        drawer.classList.add('is-closed');
+        window.setTimeout(() => { drawer.hidden = true; }, 220);
+      }
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       document.body.style.overflow = open ? 'hidden' : '';
     };
-    toggle.addEventListener('click', () =>
-      setDrawer(drawer.classList.contains('hidden'))
-    );
+    toggle.addEventListener('click', () => setDrawer(Boolean(drawer.hidden)));
     drawer.querySelectorAll('a').forEach((a) =>
       a.addEventListener('click', () => setDrawer(false))
     );

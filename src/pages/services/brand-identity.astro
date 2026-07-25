@@ -3,33 +3,42 @@ import Layout from '../../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
 
-// FAQ schema is derived from the on-page Q&As below — keep the two in sync.
+// FAQ schema is derived from the on-page entries below. Keep the two in sync.
 const faqs = [
   {
-    question: 'Do I need a full rebrand, or just a touch-up?',
+    question: 'A touch-up is usually enough.',
     answer:
-      "Most businesses don't need to start over — they need consistency. If your logo, colors, and type work but show up differently everywhere, a touch-up pulls them into one coherent system. If the identity itself is off, we can talk about something bigger.",
+      "Most businesses don't need to start over. They need consistency. If your logo, colors, and type work but show up differently everywhere, a touch-up pulls them into one coherent system. If the identity itself is off, we can talk about something bigger.",
   },
   {
-    question: 'What do I get at the end?',
+    question: 'You get a system, not a folder of files.',
     answer:
-      'A tightened visual system you can actually use — logo files, a defined color palette, type choices, and simple guidelines so your brand looks the same on your site, in email, and on social. Anyone on your team should be able to apply it without guessing.',
+      'A tightened visual system you can actually use: logo files, a defined color palette, type choices, and simple guidelines so your brand looks the same on your site, in email, and on social. Anyone on your team can apply it without guessing.',
   },
   {
-    question: 'Can you keep my existing logo?',
+    question: 'Your existing logo can stay.',
     answer:
-      "Yes, if it's serving you. Plenty of brands have a solid logo surrounded by inconsistent everything-else. I'll be straight with you about whether the logo is worth keeping or quietly working against you.",
+      "If it's serving you, it stays. Plenty of brands have a solid logo surrounded by inconsistent everything else. I'll be straight with you about whether the logo is worth keeping or quietly working against you.",
   },
   {
-    question: 'How does brand identity connect to my website?',
+    question: 'Your brand and your website are the same job.',
     answer:
-      "They're the same job. A brand system is only real when it shows up where customers actually look — most of all your site. If you're refreshing your identity, it's often worth aligning your website at the same time.",
+      "A brand system is only real when it shows up where customers actually look, most of all your site. If you're refreshing your identity, it's often worth aligning your website at the same time.",
   },
   {
-    question: 'What does this cost?',
+    question: "Cost depends on where you're starting.",
     answer:
-      "It depends on how much you already have and how far it needs to go. Rates are on the pricing page, and we'll agree on scope and a fixed price up front.",
+      'It depends on how much you already have and how far it needs to go. Rates are on the pricing page, and we agree on scope and a fixed price up front.',
   },
+];
+
+const included = [
+  { title: 'Logo refinement', body: 'Polish your existing logo, or build variations that hold up in different sizes and contexts.' },
+  { title: 'Color palette', body: 'Brand colors that work together and read right across every material.' },
+  { title: 'Typography', body: 'Type choices that match your brand personality and stay readable everywhere.' },
+  { title: 'Brand guidelines', body: 'A simple guide anyone on your team can follow without guessing.' },
+  { title: 'Marketing templates', body: 'Social graphics, business cards, and the templates you need to keep it consistent.' },
+  { title: 'File delivery', body: 'Every asset handed off in the right formats for print and digital.' },
 ];
 
 const pageSchema = [
@@ -55,136 +64,151 @@ const pageSchema = [
 ];
 ---
 
-<Layout title="Brand Identity Touchups - Savelle Design" description="Refine and elevate your brand identity to create a consistent, professional look across all touchpoints.">
-    <!-- Hero Section -->
-    <section class="py-20 md:py-28">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors mb-10">
+<Layout title="Brand Identity - Savelle Design" description="Refinement of your logo, color, and type into one consistent visual system your whole team can keep consistent.">
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <a href={`${base}/services`} class="inline-flex items-center gap-2 text-sm text-slate hover:text-ink transition-colors mb-10">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         Back to services
       </a>
-      <p class="spec-label mb-4" data-reveal>Brand identity</p>
-      <h1 class="font-display text-mega text-paper max-w-4xl" data-reveal>
-        A consistent look that's easy to keep <span class="bracketed">consistent</span>.
+      <p class="label mb-5">Brand identity</p>
+      <h1 class="font-semibold text-mega text-ink max-w-[18ch]">
+        A consistent look that's easy to keep consistent.
       </h1>
-      <p class="mt-8 text-lg md:text-xl text-muted max-w-3xl leading-relaxed" data-reveal>
-        Refine the logo, color, and type you already have into one coherent system — so your brand reads the same everywhere a customer sees it.
-      </p>
-      <a href={`${base}/pricing`} class="mt-8 inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors" data-reveal>
-        View pricing
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </a>
-      </div>
-    </section>
-
-    <!-- Service Overview -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div class="min-w-0" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">What's a brand touchup?</h2>
-          <p class="text-lg text-muted mb-6 leading-relaxed">
-            You already have a brand — it just needs polish. Maybe the logo feels dated, the colors fight each other, or nobody's sure how to use any of it the same way twice.
-          </p>
-          <p class="text-lg text-muted leading-relaxed">
-            A touchup refines what you have into one coherent visual system, so your business reads as professional and put-together across every place it shows up.
-          </p>
-        </div>
-        <div class="aspect-[4/3] rounded-[2px] overflow-hidden border border-line" data-reveal data-reveal-delay="80">
-          <img src={`${base}/images/works/adorned-hero.png`} alt="Brand Identity Touchups Example" class="w-full h-full object-cover" loading="lazy" />
-        </div>
-      </div>
-      </div>
-    </section>
-
-    <!-- What's Included -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>What's included</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>One system, ready to use.</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          { title: 'Logo refinement', body: 'Polish your existing logo, or build variations that hold up in different sizes and contexts.' },
-          { title: 'Color palette', body: 'Refine your brand colors so they work together and read right across every material.' },
-          { title: 'Typography', body: 'Type choices that match your brand personality and stay readable everywhere.' },
-          { title: 'Brand guidelines', body: 'A simple guide anyone on your team can follow to apply the brand without guessing.' },
-          { title: 'Marketing templates', body: 'Social graphics, business cards, or whatever templates you need to keep it consistent.' },
-          { title: 'File delivery', body: 'Every asset handed off in the right formats for both print and digital use.' },
-        ].map((item, i) => (
-          <div class="rounded-[2px] border border-line bg-surface p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
-            <h3 class="text-xl font-display text-paper mb-3">{item.title}</h3>
-            <p class="text-muted leading-relaxed">{item.body}</p>
-          </div>
-        ))}
-      </div>
-      </div>
-    </section>
-
-    <!-- Why It Matters -->
-    <section class="py-24 md:py-28 bg-surface border-y border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4" data-reveal>Why it matters</p>
-        <h2 class="text-huge font-display text-paper mb-16 max-w-2xl" data-reveal>Consistency does real work.</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          { title: 'Build trust', body: 'A consistent, professional brand makes your business look more credible and established.' },
-          { title: 'Stand out', body: 'A strong, distinct visual identity helps you stand apart from competitors and stick in memory.' },
-          { title: 'Save time', body: 'Clear guidelines and templates make it faster to produce marketing that stays on-brand.' },
-        ].map((item, i) => (
-          <div class="rounded-[2px] border border-line bg-ink p-8 min-w-0" data-reveal data-reveal-delay={i * 60}>
-            <h3 class="text-xl font-display text-paper mb-3">{item.title}</h3>
-            <p class="text-muted leading-relaxed">{item.body}</p>
-          </div>
-        ))}
-      </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="py-24 md:py-32">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <p class="spec-label mb-4 text-center" data-reveal>FAQ</p>
-        <h2 class="text-huge font-display text-paper mb-12 text-center" data-reveal>Frequently asked questions</h2>
-        <div class="max-w-3xl mx-auto space-y-4">
-          {faqs.map((f, i) => (
-            <details class="group rounded-[2px] border border-line bg-surface p-6 md:p-8 open:border-line-2" data-reveal data-reveal-delay={i * 40}>
-              <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
-                <h3 class="text-lg font-display text-paper group-hover:text-accent transition-colors">{f.question}</h3>
-                <svg class="w-5 h-5 shrink-0 text-faint group-open:rotate-45 group-hover:text-accent transition-all mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
-              </summary>
-              <p class="text-muted leading-relaxed mt-4">{f.answer}</p>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-24 md:py-28 bg-surface border-t border-line">
-      <div class="max-w-[1400px] mx-auto px-5 sm:px-8">
-        <div class="max-w-3xl mx-auto text-center" data-reveal>
-          <h2 class="text-huge font-display text-paper mb-6">
-            Ready to tighten your brand?
-          </h2>
-          <p class="text-lg md:text-xl text-muted mb-8 leading-relaxed">
-            Show me what you've got and I'll pull it into one identity that looks the part everywhere.
-          </p>
-          <a
-            href={`${base}/contact`}
-            class="inline-flex items-center gap-2 px-7 py-3.5 rounded-[2px] bg-accent text-ink font-medium hover:bg-accent-dim transition-colors"
-          >
-            Get in touch
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
+      <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+        <p class="min-w-0 lg:col-span-6 text-lg md:text-xl text-slate leading-relaxed max-w-2xl">
+          Refine the logo, color, and type you already have into one coherent system.
+          Your brand reads the same everywhere a customer sees it.
+        </p>
+        <div class="min-w-0 lg:col-span-6 flex flex-wrap items-center gap-6 lg:justify-end">
+          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+            Start a project
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href={`${base}/pricing`} class="text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
+            View pricing
           </a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+
+  <!-- ── The touch-up, explained ──────────────────────────────────────── -->
+  <section class="border-y border-hairline">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-20 md:py-28">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="min-w-0 lg:col-span-6">
+          <p class="label mb-5">The work</p>
+          <h2 class="text-huge font-semibold text-ink max-w-[16ch]">A touch-up, not a rebrand.</h2>
+        </div>
+        <div class="min-w-0 lg:col-span-6 flex flex-col justify-end gap-6">
+          <p class="text-lg text-slate leading-relaxed max-w-2xl">
+            You already have a brand. It needs polish, not a restart. Maybe the logo feels
+            dated, the colors fight each other, or nobody applies them the same way twice.
+          </p>
+          <p class="text-lg text-slate leading-relaxed max-w-2xl">
+            A touch-up refines what you have into one coherent visual system, so your
+            business reads as professional and put-together everywhere it shows up.
+            AI-integrated workflows handle the production volume, so senior judgment goes
+            into the decisions that matter.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── What's included ──────────────────────────────────────────────── -->
+  <section class="py-24 md:py-36">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="mb-16 md:mb-20">
+        <p class="label mb-5">What's included</p>
+        <h2 class="text-huge font-semibold text-ink max-w-3xl">One system, ready to use.</h2>
+      </div>
+      <div>
+        {included.map((item) => (
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-10 py-6 border-t border-hairline">
+            <h3 class="min-w-0 md:col-span-4 text-lg font-medium text-ink">{item.title}</h3>
+            <p class="min-w-0 md:col-span-8 text-slate leading-relaxed max-w-2xl">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── See it in practice: dark media band ──────────────────────────── -->
+  <section class="bg-ink text-paper on-dark">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-24 md:py-36">
+      <p class="label mb-12 md:mb-16">See it in practice</p>
+      <a href={`${base}/works/nikkl`} class="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+        <div class="min-w-0 lg:col-span-8">
+          <div class="overflow-hidden bg-ink-soft">
+            <img
+              src={`${base}/images/works/nikkl-hero.png`}
+              alt="Nikkl brand identity and website"
+              class="w-full aspect-[16/10] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              loading="lazy"
+            />
+          </div>
+        </div>
+        <div class="min-w-0 lg:col-span-4">
+          <p class="text-lg text-paper leading-snug max-w-sm">
+            A fintech startup's logo, color, and website revamped as one system, shipped in five days.
+          </p>
+          <p class="mt-6 text-sm text-dusk">Nikkl · Branding &amp; Web Development</p>
+          <span class="mt-6 inline-flex items-center gap-2 text-sm text-paper underline underline-offset-8 decoration-seam group-hover:decoration-paper transition-colors">
+            View project
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Why it matters ───────────────────────────────────────────────── -->
+  <section class="py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <div class="max-w-3xl">
+        <p class="label mb-5">Why it matters</p>
+        <h2 class="text-huge font-semibold text-ink">Consistency does real work.</h2>
+        <p class="mt-6 text-lg text-slate leading-relaxed max-w-2xl">
+          A brand that shows up the same way everywhere reads as credible and established.
+          It stands apart from competitors and sticks in memory. And with clear guidelines
+          and templates, your team produces on-brand marketing faster.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-12 md:mb-16">Common questions, answered</p>
+      <div class="max-w-3xl">
+        {faqs.map((f) => (
+          <details class="group border-b border-hairline py-6">
+            <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
+              <h3 class="text-lg md:text-xl font-medium text-ink">{f.question}</h3>
+              <svg class="w-5 h-5 shrink-0 text-mist group-open:rotate-45 transition-transform mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
+            </summary>
+            <p class="text-slate leading-relaxed mt-4 max-w-2xl">{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Closing ──────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-32">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your brand.</h2>
+      <a href={`${base}/contact`} class="mt-10 inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+        Start your project
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </section>
 
   <!-- Structured Data -->
   {pageSchema.map((schema) => (
