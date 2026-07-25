@@ -138,6 +138,9 @@ h1, h2, h3, h4 {
   position: relative;
   display: inline-block;
   padding-inline: 0.5em;
+  /* outer breathing room so adjacent words don't hug the bars — the word
+     space alone reads too tight next to the 0.5em interior padding */
+  margin-inline: 0.14em;
 }
 .bracketed::before,
 .bracketed::after {

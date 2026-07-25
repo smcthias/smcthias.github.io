@@ -198,7 +198,7 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
                 { t: 'You get a proposal', d: 'Clear scope, timeline, and investment. No surprises.' },
               ].map((step, i) => (
                 <li class="flex gap-4">
-                  <div class="shrink-0 w-9 h-9 rounded-full bg-accent text-ink font-bold flex items-center justify-center text-sm">{i + 1}</div>
+                  <div class="shrink-0 w-9 h-9 rounded-[2px] bg-accent text-ink font-bold flex items-center justify-center text-sm">{i + 1}</div>
                   <div>
                     <p class="text-paper font-medium">{step.t}</p>
                     <p class="text-sm text-muted">{step.d}</p>
