@@ -1,11 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import WebsiteScoreChat from '../components/WebsiteScoreChat.astro';
 
 // ──────────────────────────────────────────────────────────────────────────
 // DEFERRED ACTIVATION (same pattern as the Website Score tool)
 // FORM_ENDPOINT: static-friendly form endpoint the form POSTs JSON to:
-//   { name, email, project_type, budget, message, ...utm }. Currently wired
-//   to the same Google Apps Script sheet as the Website Score leads.
+//   { name, email, message, ...utm }. Currently wired to the same Google
+//   Apps Script sheet as the Website Score leads.
 // BOOKING_URL: set to a Cal.com / Calendly link to enable the "Book a call"
 //   path (the secondary CTA appears only when this is set).
 const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
@@ -18,19 +19,6 @@ const testimonial = {
   title: 'VP of Software Development',
   company: 'SyberSafe',
 };
-
-// One quiet row of proof. Solid-black marks on the light ground.
-const logos = [
-  { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart', h: 'h-[30px]' },
-  { src: '/images/logos/logo-gm.svg', alt: 'General Motors', h: 'h-[40px]' },
-  { src: '/images/logos/logo-sothebys.svg', alt: "Sotheby's", h: 'h-[24px]' },
-  { src: '/images/logos/logo-universal.svg', alt: 'Universal', h: 'h-[40px]' },
-  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 'h-[40px]' },
-  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals', h: 'h-[16px]' },
-];
-
-const projectTypes = ['Project', 'Retainer / fractional', 'White-label / overflow', 'Not sure yet'];
-const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 ---
 
 <Layout
@@ -40,14 +28,9 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
   <!-- Hero -->
   <section class="pt-16 md:pt-28 pb-16 md:pb-20">
     <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
-      <p class="label mb-5">Start a project</p>
       <h1 class="text-mega font-semibold text-ink max-w-[18ch]">
         Tell me what's broken. I'll tell you how I'll fix it.
       </h1>
-      <p class="mt-8 text-lg md:text-xl text-slate leading-relaxed max-w-2xl">
-        Share a few details about your site and goals. You'll hear back from me personally,
-        usually within one business day. If you're not ready for a project yet, <a href="/ux-health-check" class="text-ink font-medium underline underline-offset-4 decoration-hairline hover:decoration-ink transition-colors">start with the Website Score</a>.
-      </p>
     </div>
   </section>
 
@@ -93,30 +76,6 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
                 <p data-error-for="cf-email" class="text-sm text-red-600 mt-1.5 hidden" role="alert">Please enter a valid email address.</p>
               </div>
 
-              <fieldset>
-                <legend class="block text-sm text-slate mb-2">What you need <span class="text-mist">(optional)</span></legend>
-                <div class="flex flex-wrap gap-2">
-                  {projectTypes.map((t) => (
-                    <label class="cursor-pointer">
-                      <input type="radio" name="project_type" value={t} class="peer sr-only" />
-                      <span class="inline-flex px-4 py-2 border border-hairline text-sm text-slate transition-colors hover:border-ink peer-checked:bg-ink peer-checked:text-paper peer-checked:border-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ink">{t}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-
-              <fieldset>
-                <legend class="block text-sm text-slate mb-2">Budget range <span class="text-mist">(optional)</span></legend>
-                <div class="flex flex-wrap gap-2">
-                  {budgets.map((b) => (
-                    <label class="cursor-pointer">
-                      <input type="radio" name="budget" value={b} class="peer sr-only" />
-                      <span class="inline-flex px-4 py-2 border border-hairline text-sm text-slate transition-colors hover:border-ink peer-checked:bg-ink peer-checked:text-paper peer-checked:border-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ink">{b}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-
               <div>
                 <label for="cf-message" class="block text-sm text-slate mb-2">Tell me about the project</label>
                 <textarea id="cf-message" name="message" rows="5" required
@@ -152,24 +111,12 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
 
           <!-- Secondary contact method -->
           <p class="text-sm text-mist mt-6">
-            Email works too:
-            <a href="mailto:savellem@gmail.com" class="text-slate underline underline-offset-4 decoration-hairline hover:decoration-ink transition-colors">savellem@gmail.com</a>
-            &middot;
             <a href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer" class="text-slate underline underline-offset-4 decoration-hairline hover:decoration-ink transition-colors">Connect on LinkedIn</a>
           </p>
         </div>
 
         <!-- Trust rail -->
         <div class="order-2 lg:order-1 min-w-0">
-          <!-- You work with me directly -->
-          <div class="border-l-2 border-ink pl-6 mb-14">
-            <p class="text-lg text-slate leading-relaxed mb-3">
-              You'll work directly with me. No account managers, no junior hand-off. Senior,
-              hands-on design from first call to final delivery.
-            </p>
-            <p class="text-mist">Savelle McThias</p>
-          </div>
-
           {BOOKING_URL && (
             <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer"
               class="inline-flex items-center gap-2 px-6 py-3 mb-14 border border-ink text-ink font-medium hover:bg-ink hover:text-paper transition-colors">
@@ -177,36 +124,6 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
               Book a 30-minute intro call
             </a>
           )}
-
-          <!-- What happens next -->
-          <div class="mb-14">
-            <h2 class="label mb-6">What happens next</h2>
-            <ol class="space-y-6">
-              {[
-                { t: 'You send a few details', d: 'The form on this page, about a minute of your time.' },
-                { t: 'We do a 30-minute discovery call', d: 'I learn your product, users, and goals.' },
-                { t: 'You get a proposal', d: 'Clear scope, timeline, and investment. No surprises.' },
-              ].map((step, i) => (
-                <li class="flex gap-4">
-                  <div class="shrink-0 w-9 h-9 bg-ink text-paper font-semibold flex items-center justify-center text-sm">{i + 1}</div>
-                  <div>
-                    <p class="text-ink font-medium">{step.t}</p>
-                    <p class="text-sm text-slate">{step.d}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          <!-- Proof: logos -->
-          <div class="mb-12">
-            <p class="label mb-6">Trusted by teams at</p>
-            <div class="flex flex-wrap items-center gap-x-10 gap-y-6">
-              {logos.map(({ src, alt, h }) => (
-                <img src={src} alt={alt} class={`${h} w-auto object-contain brightness-0 opacity-70`} loading="lazy" />
-              ))}
-            </div>
-          </div>
 
           <!-- Proof: testimonial -->
           {testimonial && (
@@ -300,10 +217,7 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
           }
 
           if (typeof (window as any).gtag === 'function') {
-            (window as any).gtag('event', 'generate_lead', {
-              method: 'contact_form',
-              project_type: data.project_type || 'unspecified',
-            });
+            (window as any).gtag('event', 'generate_lead', { method: 'contact_form' });
           }
 
           successName.textContent = data.name ? `, ${String(data.name).split(' ')[0]}` : '';
@@ -313,10 +227,12 @@ const budgets = ['< $10k', '$10–25k', '$25k+', 'Not sure'];
         } catch (_) {
           setLoading(false);
           formError.innerHTML =
-            'Something went wrong sending that. Please try again, or email <a class="underline" href="mailto:savellem@gmail.com">savellem@gmail.com</a> directly.';
+            'Something went wrong sending that. Please try again, or reach out on <a class="underline" href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.';
           formError.classList.remove('hidden');
         }
       });
     }
   </script>
+
+  <WebsiteScoreChat page="contact" />
 </Layout>

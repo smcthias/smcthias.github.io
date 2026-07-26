@@ -1,6 +1,12 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const allPosts = await getCollection('blog');
+const featuredPosts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
 
 // Testimonials: real names and quotes, verbatim except dash-as-punctuation
 // rewritten to periods/commas per the redesign brief. Each opens with a bold
@@ -68,7 +74,6 @@ const testimonials = [
   <!-- ── Hero: who this is, in plain statements ───────────────────────── -->
   <section class="pt-16 md:pt-28 pb-16 md:pb-24">
     <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
-      <p class="label mb-5">About</p>
       <h1 class="text-mega font-semibold text-ink max-w-[16ch]">
         Two decades of design that ships.
       </h1>
@@ -106,7 +111,6 @@ const testimonials = [
   <section id="testimonials" class="border-t border-hairline py-24 md:py-36">
     <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
       <div class="mb-16 md:mb-20">
-        <p class="label mb-5">What clients say</p>
         <h2 class="text-huge font-semibold text-ink max-w-3xl">In their words.</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -128,18 +132,45 @@ const testimonials = [
     </div>
   </section>
 
-  <!-- ── Closing ──────────────────────────────────────────────────────── -->
-  <section class="border-t border-hairline py-24 md:py-32">
+  <!-- ── From the blog ────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-24 md:py-36">
     <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
-      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your project.</h2>
-      <div class="mt-10 flex flex-wrap items-center gap-6">
-        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
-          Start your project
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-16 md:mb-20">
+        <div>
+          <h2 class="text-huge font-semibold text-ink max-w-3xl">Notes from real projects.</h2>
+        </div>
+        <a href={`${base}/blog`} class="inline-flex items-center gap-2 font-medium text-ink underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
+          View all articles
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a href="mailto:savellem@gmail.com" class="text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
-          Or just email me
-        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {featuredPosts.map((post) => {
+          const formattedDate = new Date(post.data.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          });
+          return (
+            <a href={`${base}/blog/${post.id}`} class="group block border border-hairline bg-card hover:border-ink transition-colors">
+              <div class="overflow-hidden">
+                <img
+                  src={`${base}/images/${post.data.image}`}
+                  alt={post.data.imageAlt}
+                  class="w-full aspect-[16/10] object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-6">
+                <p class="text-xs text-mist mb-3">{formattedDate}</p>
+                <h3 class="text-lg font-semibold text-ink mb-2 group-hover:underline underline-offset-4 decoration-hairline">
+                  {post.data.title}
+                </h3>
+                <p class="text-sm text-slate leading-relaxed">{post.data.description}</p>
+              </div>
+            </a>
+          );
+        })}
       </div>
     </div>
   </section>

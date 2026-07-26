@@ -26,10 +26,6 @@ ${link('Home', '/', 'Overview of services, selected work, and client results')}
 ${link('About', '/about', 'Savelle McThias’s background, approach, and client testimonials')}
 ${link('Contact', '/contact', 'Project inquiry form — project type, budget range, and details')}
 
-## Services
-
-${link('All Services', '/services', 'Landing page design, website refresh, brand identity, and email campaigns, all covered on one page')}
-
 ## Products
 
 ${link('UX Health Check', '/ux-health-check', 'Free 10-question self-assessment that scores your site’s UX and returns prioritized findings')}

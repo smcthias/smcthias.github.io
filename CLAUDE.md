@@ -182,6 +182,23 @@ and from the `telephone` field of the `Person` JSON-LD in `Layout.astro` at
 the user's request (2026-07-20). Don't re-add one without checking with the
 user first.
 
+**No email address anywhere on this site either**, as of 2026-07-25 —
+`savellem@gmail.com` was removed at the user's request from every mailto
+link and the `email` field of the `Person` JSON-LD in `Layout.astro`.
+Removed from: the footer's bottom bar (was next to the copyright line),
+the "Or just email me" secondary CTA on `about.astro` and `works.astro`
+(link deleted outright, not replaced — the primary "Start your project"
+button covers that), `contact.astro`'s "Email works too:" line under the
+form (now just "Connect on LinkedIn", same LinkedIn URL as elsewhere on
+the site) and its form-submission-failure fallback message (now points to
+LinkedIn instead of a mailto link), and `privacy.astro`/`terms.astro`'s
+"Contact" sections (both now link to `/contact` via "Get in touch" instead
+of a mailto link; `privacy.astro`'s "Your choices" paragraph was reworded
+from "emailing the address below" to "getting in touch below" to match).
+The contact form (`contact.astro`, POSTs to a Google Apps Script endpoint)
+and the LinkedIn profile link remain the only ways to reach out from the
+site. Don't re-add the address without checking with the user first.
+
 **Never ported, and now unrecoverable from the filesystem** (only visible via
 `git log -- uxblog` on commits before the deletion, e.g. `git show
 <commit>:uxblog/path/to/file`): uxblog's separate case-studies content
@@ -210,9 +227,9 @@ it'll need to be recovered from git history rather than the working tree.
   main nav (desktop + mobile) and the footer's "Start here" column as "For
   Agencies". **Removed at the user's request on 2026-07-25.** Both nav links
   were deleted outright (not redirected); the site's copy still mentions
-  agencies generically as a client type (homepage, services, works, about,
-  contact, `Layout.astro`'s default meta description) — those are unaffected
-  since they were never links to the page. Recoverable from git history
+  agencies generically as a client type (homepage, works, about, contact,
+  `Layout.astro`'s default meta description) — those are unaffected since
+  they were never links to the page. Recoverable from git history
   (pre-2026-07-25) if the page is ever brought back.
 - **Privacy** (`src/pages/privacy.astro`) and **Terms**
   (`src/pages/terms.astro`) — adapted from uxblog's starter policies but
@@ -221,13 +238,28 @@ it'll need to be recovered from git history rather than the working tree.
   on-site checkout was the now-removed `/ux-audit` page, see above), and
   business model (no direct on-site checkout anywhere on the site). Linked
   from the footer.
-- **Nav dropdowns and footer sitemap** — `Layout.astro`'s desktop nav groups
-  About into a hover dropdown (About/Blog); the footer was expanded from a
-  bare copyright line into a full sitemap with LinkedIn link. None of this
-  came from uxblog; it was requested independently. Services used to be a
-  hover dropdown too (linking to each service anchor plus Website
-  Score/Audit) but **was flattened to a single link on 2026-07-25** — see
-  the `services.astro` restructure note below.
+- **Nav dropdowns and footer sitemap** — the footer was expanded from a bare
+  copyright line into a full sitemap with LinkedIn link; that came from an
+  independent request, not uxblog. `Nav.astro`'s desktop nav used to group
+  both Services (into each service anchor plus Website Score/Audit) and
+  About (into About/Blog) as hover dropdowns. **Both were flattened to
+  plain links on 2026-07-25** — Services first (see the `services.astro`
+  restructure note below), About in a later pass the same day: `Nav.astro`
+  now renders `About` as a single flat link straight to `/about`, and
+  **Blog was dropped from the top nav entirely** (desktop and mobile
+  drawer) rather than promoted to its own item — it's reachable from the
+  footer's "Explore" column (unchanged) and is now also featured directly
+  on `/about` (see below). The `on('/about') || on('/blog')` active-state
+  check on the About link was kept as-is even though Blog no longer nests
+  under it visually, so reading a blog post still highlights "About" in
+  the nav.
+- **`about.astro` "From the blog" section (2026-07-25)** — added between
+  the testimonials and closing CTA: the 3 most recent posts
+  (`getCollection('blog')`, sorted by `date` desc, `.slice(0, 3)`), each
+  as an image/date/title/description card linking to `/blog/<id>`, plus a
+  "View all articles" link to `/blog`. Added when Blog was dropped from
+  the top nav, so the site's most prominent surface for the writing
+  besides `/blog` itself is now the About page rather than a nav item.
 - **`services.astro` restructure (2026-07-25)** — the page used to open with
   a redundant intro grid (icon + headline card per service) that just
   repeated the detailed anchor sections below it; that grid was deleted, so
@@ -244,15 +276,127 @@ it'll need to be recovered from git history rather than the working tree.
   was removed in the same pass — `Nav.astro` now renders a single flat
   `Services` link (desktop and mobile), since the sub-anchors it used to
   expose are one scroll away on `/services` itself.
-  `src/components/WebsiteScoreChat.astro` is a new, `/services`-only
-  component: a fixed bottom-right chat widget that reruns the same 10
-  questions/scoring/lead-capture endpoint as the full-page
-  `/ux-health-check` quiz, but presented as chat bubbles with quick-reply
-  chips instead of a step wizard. The two questions/scoring implementations
-  are intentionally duplicated (not shared) since one renders a full-page
-  form and the other injects chat bubbles via `innerHTML` — keep both in
-  sync by hand if the question set or scoring logic ever changes. Its
-  results CTA and the full-page quiz's results CTA both used to branch to
-  `/ux-audit` for lower scores; both now always point to `/contact` since
-  that page is gone. The standalone `/ux-health-check` page is unchanged
-  and still linked from the footer and the mobile drawer.
+  `src/components/WebsiteScoreChat.astro` is a fixed bottom-right chat
+  widget that reruns the same 10 questions/scoring/lead-capture endpoint as
+  the full-page `/ux-health-check` quiz, but presented as chat bubbles with
+  quick-reply chips instead of a step wizard. The two questions/scoring
+  implementations are intentionally duplicated (not shared) since one
+  renders a full-page form and the other injects chat bubbles via
+  `innerHTML` — keep both in sync by hand if the question set or scoring
+  logic ever changes. Its results CTA and the full-page quiz's results CTA
+  both used to branch to `/ux-audit` for lower scores; both now always
+  point to `/contact` since that page is gone. The standalone
+  `/ux-health-check` page is unchanged and still linked from the footer
+  and the mobile drawer.
+  **Originally `/services`-only, the widget was moved to `/contact` and
+  `/works` instead on 2026-07-25** (not duplicated — `services.astro` no
+  longer renders it, and its FAQ answer about the Website Score was
+  reworded to point at "the contact and work pages"). The component now
+  takes a required `page` prop (`<WebsiteScoreChat page="contact" />` /
+  `page="works"`) threaded through as `data-page` into the client script,
+  used for two things: the lead payload sent to the Apps Script endpoint
+  now includes `page`, and the results CTA is page-aware — on `/contact`
+  it scrolls to `#contact-form` (the id on that page's form) instead of
+  navigating, since linking to `/contact` from a widget already on
+  `/contact` would go nowhere useful; everywhere else it links to
+  `/contact?ref=<page>-chat`.
+- **Services page deleted entirely (2026-07-25)** — `src/pages/services.astro`
+  is gone, along with every link to it. This is the last step in a string of
+  changes that same day (see the `services.astro` restructure and
+  `WebsiteScoreChat` entries above for the page's fuller history — five
+  services down to four, the audit added then removed, the widget moved
+  out) — the page itself was never re-expanded back out after being
+  trimmed down, and the user asked to drop it outright rather than keep
+  maintaining it. What changed as a result:
+  - `Nav.astro` — the `Services` link is gone (desktop nav and mobile
+    drawer); desktop nav is now just `Work` / `About` / `Start a project`.
+  - `Footer.astro` — the whole "Services" sitemap column (5 links, all
+    pointing at the dead page or its anchors) is gone; the footer grid went
+    from `md:grid-cols-5` to `md:grid-cols-4` to match (brand block
+    `col-span-2` + `Explore` + `Start here`).
+  - `index.astro`'s "What I do" section — the 4 service tiles used to be
+    `<a href="/services#...">` cards; they're now plain non-interactive
+    `<div>`s (dropped `group`/hover/underline classes along with the link,
+    since a card that looks clickable but isn't is worse than one that
+    doesn't). The two-card CTA row below them ("All services" → `/services`
+    + "Get a quote" → `/contact`) lost its now-pointless first card, leaving
+    a single full-width "Get a quote" band — **that band was itself removed
+    entirely in a later pass the same day**, see the content-simplification
+    entry below.
+  - `llms.txt.ts` — the `## Services` section (one line, linking
+    `/services`) is gone.
+  - `ux-health-check.astro` — the results CTA's secondary link was "See all
+    services" → `/services`; it's now "See the work" → `/works`.
+  - `README.md` — removed the `/services` page bullet and the
+    `services.astro` / `services/` entries from the project-structure tree
+    (that tree was already stale in other ways — e.g. still listed the
+    long-deleted `ux-audit.astro`/`agencies.astro` — this pass only touched
+    the services-related lines, not a full audit of the file).
+  Recoverable from git history (pre-2026-07-25) if a services page is ever
+  wanted again — full content (five services' worth of copy, FAQs, "how it
+  works", pricing band) is in the commit before this one.
+- **Sitewide content stripping (2026-07-25)** — a large, itemized cleanup
+  pass, all in one sitting, at the user's explicit request per-page. Net
+  effect: shorter pages, fewer competing CTAs, one CTA per page instead of
+  several. Broken down by page:
+  - **`index.astro`** — hero lost its subheadline and both CTA buttons
+    (`Start a project` / `See the work`); now just the H1. `work` (the
+    homepage's featured-project list) changed from `FEATURED.map(...)` to
+    `FEATURED.slice(0, 3).map(...)` — 3 case studies instead of 5. The
+    "Get a quote" band (added earlier the same day, see the services-page
+    deletion entry above) is gone. The "Is your website losing you
+    customers?" conversion-check section (linking to `/ux-health-check`) is
+    gone. `FEATURED` itself (`src/data/featured.ts`) was **not** touched —
+    still 5 entries — since `works.astro` also depends on it to order the
+    full grid; only the homepage's rendered slice changed.
+  - **`works.astro`** — hero lost its subheadline. The "What I bring"
+    section (3 disciplines: Design/Development/Strategy, `brings` array)
+    is gone entirely — `brings` was removed from the frontmatter as dead
+    code. The closing "Let's talk about your project" section is gone.
+  - **`about.astro`** — the closing "Let's talk about your project" section
+    is gone (the page now ends after "From the blog").
+  - **`contact.astro`** — hero lost its subheadline (which also carried the
+    only on-page link to `/ux-health-check` — that link is gone, not moved
+    elsewhere). The trust-rail self-quote ("You'll work directly with
+    me...") is gone. "What happens next" (3-step numbered list) is gone.
+    "Trusted by teams at" (the logo row, separate from the identical-looking
+    row on `/contact`'s old hero) is gone — `logos` removed from
+    frontmatter. The Daniel Kruger testimonial figure was **kept**. Form
+    simplified from 5 fields to 3: the "What you need" (`project_type`) and
+    "Budget range" (`budget`) fieldsets are gone — `projectTypes` and
+    `budgets` removed from frontmatter, the `FORM_ENDPOINT` comment updated
+    to drop those two from its payload shape, and the success handler's
+    `gtag('generate_lead', ...)` call no longer sends `project_type` (it
+    would always have been `'unspecified'` post-removal). Name, work email,
+    and the project textarea are the only fields left.
+  - **`works/[slug].astro`** (case study template) — the "Outcome" section
+    (`<p class="label">The outcome</p>` / "By the numbers.", the *second*
+    results display further down the page) is gone; the **first** one (the
+    "Results" strip inside the dark hero band, shown immediately) was
+    intentionally left alone — different section, not named "Outcome," and
+    not requested. The closing "Let's talk about your project" section is
+    gone.
+  - **Eyebrow labels removed sitewide** — every `<p>`/`<h2>`/`<legend
+    class="label">` micro-heading (the small tracked-caps "About," "What
+    clients say," "Selected work," "How I work," "Trusted by brands you
+    know," "What I do," "Insights," "404," etc. — the convention documented
+    in `global.css` right above the `.label` rule) was deleted across
+    `index.astro`, `works.astro`, `about.astro`, `contact.astro`,
+    `works/[slug].astro`, `blog.astro`, and `404.astro`. The section
+    heading (`h1`/`h2`) directly below each one was kept — only the small
+    eyebrow above it went. **`ux-health-check.astro` was deliberately left
+    untouched** — most of its `.label` usages aren't decorative eyebrows
+    but functional UI inside the interactive quiz (each question's
+    category legend, the results screen's "Priority N" and score labels),
+    and that page/tool wasn't named in the request; touching its
+    JS-rendered result strings risked breaking the quiz's visual hierarchy
+    for a page nobody asked to change. If the user wants that page brought
+    in line too, ask before touching the quiz-step legends specifically —
+    those double as functional labels, not just style.
+  - **Footer.astro, Nav.astro, `edge-label` (hero marginalia)** — not part
+    of this pass, left as-is. The footer's column headings
+    (`text-xs uppercase ... text-dusk`) are a different, unstyled-by-`.label`
+    pattern and serve real navigational grouping, not decoration — judgment
+    call to leave them; revisit if the user calls them out specifically.
+  Recoverable from git history (pre-2026-07-25) if any of this is wanted
+  back — nothing here deleted data, only presentation.

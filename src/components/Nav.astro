@@ -1,8 +1,10 @@
 ---
-// Top navigation. Light, minimal, plain-text wordmark. Services is a single
-// flat link; About still opens a small dropdown (About/Blog) on hover and
-// keyboard focus on desktop. The full list lives in the mobile drawer. The
-// hamburger morphs into a close mark. Active state from the path.
+// Top navigation. Light, minimal, plain-text wordmark. Work and About are
+// both single flat links (no dropdowns) — there is no Services page or nav
+// item. Blog isn't in the top nav either, it's reachable from the footer
+// and featured on the About page. The full list lives in the mobile
+// drawer. The hamburger morphs into a close mark. Active state from the
+// path.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname;
 const on = (frag: string) => path.includes(frag);
@@ -27,23 +29,7 @@ const on = (frag: string) => path.includes(frag);
       <nav class="hidden md:flex items-center gap-8 text-sm">
         <a href={`${base}/works`} class={`nav-link ${on('/works') ? 'is-active' : ''}`}>Work</a>
 
-        <a href={`${base}/services`} class={`nav-link ${on('/services') || on('/ux-') ? 'is-active' : ''}`}>Services</a>
-
-        <div class="relative group">
-          <a
-            href={`${base}/about`}
-            class={`nav-link inline-flex items-center gap-1 ${on('/about') || on('/blog') ? 'is-active' : ''}`}
-          >
-            About
-            <svg class="w-3.5 h-3.5 mt-0.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </a>
-          <div class="absolute left-1/2 -translate-x-1/2 top-full pt-4 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-200">
-            <div class="w-44 bg-card border border-hairline p-2 shadow-xl shadow-black/10">
-              <a href={`${base}/about`} class="menu-item">About Savelle</a>
-              <a href={`${base}/blog`} class="menu-item">Blog</a>
-            </div>
-          </div>
-        </div>
+        <a href={`${base}/about`} class={`nav-link ${on('/about') || on('/blog') ? 'is-active' : ''}`}>About</a>
 
         <a
           href={`${base}/contact`}
@@ -75,10 +61,8 @@ const on = (frag: string) => path.includes(frag);
   >
     <nav class="px-5 py-8 flex flex-col gap-1 text-2xl font-semibold tracking-tight">
       <a href={`${base}/works`} class="drawer-link">Work</a>
-      <a href={`${base}/services`} class="drawer-link">Services</a>
       <a href={`${base}/ux-health-check`} class="drawer-link">Website Score</a>
       <a href={`${base}/about`} class="drawer-link">About</a>
-      <a href={`${base}/blog`} class="drawer-link">Blog</a>
       <a
         href={`${base}/contact`}
         class="mt-6 inline-flex items-center justify-center px-6 py-4 bg-ink text-paper text-lg font-medium"

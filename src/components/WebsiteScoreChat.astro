@@ -1,9 +1,10 @@
 ---
-// Floating chat-style Website Score tool for the services page. A condensed,
-// conversational version of the full /ux-health-check quiz: same ten
-// questions, same scoring, same lead-capture endpoint, presented as a
-// bottom-right chat widget instead of a full page. See ux-health-check.astro
-// for the full-page version and the FORM_ENDPOINT note.
+// Floating chat-style Website Score tool, embedded on the contact and work
+// pages. A condensed, conversational version of the full /ux-health-check
+// quiz: same ten questions, same scoring, same lead-capture endpoint,
+// presented as a bottom-right chat widget instead of a full page. See
+// ux-health-check.astro for the full-page version and the FORM_ENDPOINT note.
+const { page = 'site' } = Astro.props as { page?: string };
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
 
@@ -136,6 +137,7 @@ const questions: Question[] = [
   aria-hidden="true"
   data-endpoint={FORM_ENDPOINT}
   data-base={base}
+  data-page={page}
   class="wsc-panel fixed bottom-5 right-5 z-40 w-[min(24rem,calc(100vw-2.5rem))] max-h-[min(38rem,calc(100vh-2.5rem))] bg-paper border border-hairline shadow-2xl shadow-black/20 flex flex-col"
   hidden
 >
@@ -176,6 +178,7 @@ const questions: Question[] = [
     const progressEl = document.getElementById('wsc-progress');
     const endpoint = panel.dataset.endpoint || '';
     const base = panel.dataset.base || '';
+    const page = panel.dataset.page || 'site';
 
     const TOTAL = questions.length + 1; // + email step
     let step = 0; // 0..questions.length-1 = quiz, questions.length = email, then results
@@ -307,6 +310,7 @@ const questions: Question[] = [
           body: JSON.stringify({
             form_type: 'website-score-chat',
             site: 'savelledesign.com',
+            page: page,
             email: email,
             score: data.overall,
             details: details,
@@ -339,7 +343,9 @@ const questions: Question[] = [
       const ctaWrap = document.createElement('div');
       ctaWrap.className = 'space-y-2';
       const contactLink = document.createElement('a');
-      contactLink.href = base + '/contact?ref=services-chat';
+      contactLink.href = page === 'contact'
+        ? '#contact-form'
+        : base + '/contact?ref=' + page + '-chat';
       contactLink.className = 'wsc-cta-primary';
       contactLink.textContent = 'Ask about your results';
       ctaWrap.appendChild(contactLink);

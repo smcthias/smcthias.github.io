@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import WebsiteScoreChat from '../components/WebsiteScoreChat.astro';
 import { FEATURED } from '../data/featured';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -19,24 +20,6 @@ const work = [
   ...FEATURED.map((f) => ({ ...byId[f.slug], stat: f.stat, statLabel: f.statLabel, hook: f.hook })),
   ...rest.map((p) => ({ ...p, stat: '', statLabel: '', hook: p.data.description })),
 ];
-
-const brings = [
-  {
-    title: 'Design',
-    line: 'Interfaces, identities, and systems people understand at a glance. Design here is not decoration. It is the argument for why a visitor should stay.',
-    art: 'wireframe',
-  },
-  {
-    title: 'Development',
-    line: 'The designs ship. Clean, fast, responsive builds in modern frameworks, done by the same person who designed them, so nothing is lost in translation.',
-    art: 'layers',
-  },
-  {
-    title: 'Strategy',
-    line: 'Every screen has a job: more calls, more bookings, more sales. Research, conversion thinking, and AI-assisted analysis decide what gets built and why.',
-    art: 'mark',
-  },
-];
 ---
 
 <Layout
@@ -49,10 +32,6 @@ const brings = [
       <h1 class="font-semibold text-mega text-ink max-w-[15ch]">
         The work speaks first.
       </h1>
-      <p class="mt-10 max-w-2xl text-lg md:text-xl text-slate leading-relaxed">
-        Two decades of projects for startups, agencies, and enterprise teams.
-        Each one started as a business problem and ended as a measurable result.
-      </p>
     </div>
   </section>
 
@@ -91,67 +70,5 @@ const brings = [
     </div>
   </section>
 
-  <!-- ── What I bring: three disciplines, each with room ──────────────── -->
-  <section class="py-24 md:py-36">
-    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
-      <p class="label mb-16 md:mb-24">What I bring</p>
-      <div class="space-y-20 md:space-y-32">
-        {brings.map((b, i) => (
-          <div class={`grid grid-cols-1 lg:grid-cols-12 gap-10 items-center`}>
-            <div class={`min-w-0 lg:col-span-5 ${i % 2 === 1 ? 'lg:order-2 lg:col-start-8' : ''}`}>
-              <div class="aspect-[4/3] bg-card border border-hairline flex items-center justify-center">
-                <svg class="w-44 h-44 text-mist" viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-                  {b.art === 'wireframe' && (
-                    <g transform="translate(80 88) scale(1 0.55) rotate(-30)">
-                      <rect x="-48" y="-48" width="96" height="96" />
-                      <line x1="-48" y1="-28" x2="48" y2="-28" />
-                      <rect x="-36" y="-14" width="44" height="12" />
-                      <rect x="-36" y="6" width="72" height="7" />
-                      <rect x="-36" y="20" width="58" height="7" />
-                      <circle cx="26" cy="-8" r="9" />
-                    </g>
-                  )}
-                  {b.art === 'layers' && (
-                    <g transform="translate(80 84)">
-                      <g transform="scale(1 0.55) rotate(-30)"><rect x="-42" y="-42" width="84" height="84" /></g>
-                      <g transform="translate(0 -24) scale(1 0.55) rotate(-30)"><rect x="-42" y="-42" width="84" height="84" /></g>
-                      <g transform="translate(0 -48) scale(1 0.55) rotate(-30)"><rect x="-42" y="-42" width="84" height="84" /></g>
-                    </g>
-                  )}
-                  {b.art === 'mark' && (
-                    <g transform="translate(80 80)">
-                      <circle cx="0" cy="0" r="46" />
-                      <circle cx="0" cy="0" r="25" />
-                      <line x1="-58" y1="0" x2="58" y2="0" />
-                      <line x1="0" y1="-58" x2="0" y2="58" />
-                    </g>
-                  )}
-                </svg>
-              </div>
-            </div>
-            <div class={`min-w-0 lg:col-span-6 ${i % 2 === 1 ? 'lg:order-1 lg:col-start-1' : 'lg:col-start-7'}`}>
-              <h2 class="text-huge font-semibold text-ink">{b.title}</h2>
-              <p class="mt-6 text-lg md:text-xl text-slate leading-relaxed max-w-xl">{b.line}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Closing ──────────────────────────────────────────────────────── -->
-  <section class="border-t border-hairline py-24 md:py-32">
-    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
-      <h2 class="text-huge font-semibold text-ink max-w-3xl">Let's talk about your project.</h2>
-      <div class="mt-10 flex flex-wrap items-center gap-6">
-        <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
-          Start your project
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a href="mailto:savellem@gmail.com" class="text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
-          Or just email me
-        </a>
-      </div>
-    </div>
-  </section>
+  <WebsiteScoreChat page="works" />
 </Layout>

@@ -13,16 +13,6 @@ const columns = [
     ],
   },
   {
-    heading: 'Services',
-    links: [
-      { href: '/services', label: 'All Services' },
-      { href: '/services#landing-page-design', label: 'Landing Pages' },
-      { href: '/services#website-refresh', label: 'Website Refresh' },
-      { href: '/services#brand-identity', label: 'Brand Identity' },
-      { href: '/services#email-campaigns', label: 'Email Campaigns' },
-    ],
-  },
-  {
     heading: 'Start here',
     links: [
       { href: '/ux-health-check', label: 'Website Score' },
@@ -48,7 +38,7 @@ const columns = [
       </a>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-10 border-t border-seam pt-12">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 border-t border-seam pt-12">
       <div class="col-span-2">
         <a href={`${base}/`} class="text-lg font-semibold tracking-tight text-paper">Savelle Design</a>
         <p class="mt-4 text-sm text-fog max-w-xs leading-relaxed">
@@ -80,7 +70,6 @@ const columns = [
     <div class="mt-14 pt-8 border-t border-seam flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-sm text-dusk">
       <p>&copy; {year} Savelle Design. Built by hand in Scottsdale.</p>
       <div class="flex items-center gap-6">
-        <a href="mailto:savellem@gmail.com" class="hover:text-paper transition-colors">savellem@gmail.com</a>
         <a href={`${base}/privacy`} class="hover:text-paper transition-colors">Privacy</a>
         <a href={`${base}/terms`} class="hover:text-paper transition-colors">Terms</a>
       </div>
