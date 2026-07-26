@@ -18,11 +18,9 @@ A modern, responsive portfolio website built with Astro, Tailwind CSS, and Astro
 ### Pages
 
 - **Home** (`/`) - Landing page with hero section, featured work, services preview, and testimonials
-- **Services** (`/services`) - Service overview with detailed service pages
-  - Landing Page Design (`/services/landing-page-design`)
-  - Website Refresh (`/services/website-refresh`)
-  - Brand Identity (`/services/brand-identity`)
-  - Email Campaigns (`/services/email-campaigns`)
+- **Services** (`/services`) - Single page covering all four service offerings
+  (landing page design, website refresh, brand identity, email campaigns),
+  each with its own anchored section
 - **Works** (`/works`) - Portfolio showcase with project grid
   - Individual project pages (`/works/[slug]`) - Dynamic routes from content collections
 - **About** (`/about`) - Background, expertise, and client testimonials

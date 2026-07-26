@@ -153,13 +153,16 @@ Features ported from it into the main site before deletion:
   `post.data.image` against a generic `/images/` root instead of a
   hardcoded `/images/works/`, so old posts use `works/<file>` and migrated
   posts use `blog/<file>` in their frontmatter.
-- **UX Audit** (`src/pages/ux-audit.astro`) — the $997 "48-Hour UX Audit"
-  productized service page, rebuilt in this site's light theme rather than
-  ported verbatim (uxblog's version used its dark `BaseLayout`). Both
-  "Buy Now" buttons keep the real Stripe payment link
-  (`buy.stripe.com/9B614nadB2L82Aw01c7wA00`) — that's live commerce
-  functionality, not placeholder content. Linked from the Services nav
-  dropdown, mobile menu, and footer.
+- **UX Audit** — the $997 "48-Hour UX Audit" productized service page
+  (`src/pages/ux-audit.astro`) was ported from uxblog and rebuilt in this
+  site's light theme, with its "Buy Now" buttons keeping the real Stripe
+  payment link (`buy.stripe.com/9B614nadB2L82Aw01c7wA00`) as live commerce.
+  It was later added as a 5th `/services` anchor section too. **Both the
+  page and the offering were removed at the user's request on 2026-07-25**
+  — see the entry under "Pages and content added independently" below for
+  the full list of what changed. There is no longer any on-site checkout
+  anywhere on the site. Recoverable from git history (pre-2026-07-25) if
+  the audit product is ever brought back.
 - **Testimonial** — Roxana Epps (SVP of Marketing, Young Living / LifeWave /
   Green Compass) was added to `about.astro` as a 5th testimonial card; her
   quote existed only in uxblog's `src/data/testimonials.ts` with no
@@ -191,22 +194,65 @@ it'll need to be recovered from git history rather than the working tree.
 
 ## Pages and content added independently of `uxblog/` (not migrations)
 
-- **Pricing** (`src/pages/pricing.astro`) — rate card built from figures the
-  user supplied directly in chat, not sourced from uxblog. Linked from the
-  Services nav dropdown, footer, homepage, `services.astro`, and all four
-  service subpages. By design, dollar figures live **only** on this page
-  (plus the unrelated fixed-price `/ux-audit` product and the contact form's
-  budget-range qualification buttons, which are intentionally out of scope —
-  confirmed with the user) so pricing can be managed/removed from one place.
+- **Pricing** — a rate-card page (`src/pages/pricing.astro`) built from
+  figures the user supplied in chat existed briefly, linked from the Services
+  nav dropdown, footer, homepage, and `services.astro`. **Removed at the
+  user's request on 2026-07-25** — no more published dollar figures or rate
+  card anywhere on the site. All former `/pricing` links and CTAs now point
+  to `/contact` with generic "get a quote" / "fixed price after a
+  conversation" copy instead. (At the time, the only dollar amount left on
+  the site was the unrelated fixed-price `/ux-audit` product — that product
+  was itself removed shortly after, see below — plus the contact form's
+  budget-range qualification buttons, always out of scope of the rate
+  card.) Recoverable from git history (pre-2026-07-25) if pricing is ever
+  brought back.
+- **Agencies** — a `/agencies` landing page existed briefly, linked from the
+  main nav (desktop + mobile) and the footer's "Start here" column as "For
+  Agencies". **Removed at the user's request on 2026-07-25.** Both nav links
+  were deleted outright (not redirected); the site's copy still mentions
+  agencies generically as a client type (homepage, services, works, about,
+  contact, `Layout.astro`'s default meta description) — those are unaffected
+  since they were never links to the page. Recoverable from git history
+  (pre-2026-07-25) if the page is ever brought back.
 - **Privacy** (`src/pages/privacy.astro`) and **Terms**
   (`src/pages/terms.astro`) — adapted from uxblog's starter policies but
   rewritten for this site's actual domain (savelledesign.com), third parties
-  (Google Apps Script + Analytics, no Stripe/Vimeo references since those
-  don't apply here beyond the standalone `/ux-audit` checkout), and business
-  model (no direct on-site checkout outside `/ux-audit`). Linked from the
-  footer.
+  (Google Apps Script + Analytics; no Stripe/Vimeo references — the only
+  on-site checkout was the now-removed `/ux-audit` page, see above), and
+  business model (no direct on-site checkout anywhere on the site). Linked
+  from the footer.
 - **Nav dropdowns and footer sitemap** — `Layout.astro`'s desktop nav groups
-  Work/Services/About into hover dropdowns (each top-level label is itself a
-  link to its primary page, e.g. "Services" → `/services`), and the footer
-  was expanded from a bare copyright line into a full sitemap with LinkedIn
-  link. None of this came from uxblog; it was requested independently.
+  About into a hover dropdown (About/Blog); the footer was expanded from a
+  bare copyright line into a full sitemap with LinkedIn link. None of this
+  came from uxblog; it was requested independently. Services used to be a
+  hover dropdown too (linking to each service anchor plus Website
+  Score/Audit) but **was flattened to a single link on 2026-07-25** — see
+  the `services.astro` restructure note below.
+- **`services.astro` restructure (2026-07-25)** — the page used to open with
+  a redundant intro grid (icon + headline card per service) that just
+  repeated the detailed anchor sections below it; that grid was deleted, so
+  the page now goes straight from the hero into the detailed sections. Each
+  service entry's card field was renamed `project` → `card` (with
+  `eyebrow`/`name`/`line`/`href`/`cta`) so the same markup could serve both
+  a case-study link and a product link — that flexibility was added to
+  support a 5th **48-Hour Website Audit** service (id `website-audit`)
+  reusing `/ux-audit`'s copy/price, but **that service and the underlying
+  `/ux-audit` page were both removed again later the same day** at the
+  user's request (see the UX Audit entry above) — the site is back to four
+  services, though the `card` field naming/shape from this rename stuck
+  around since it's still useful generically. The nav's Services dropdown
+  was removed in the same pass — `Nav.astro` now renders a single flat
+  `Services` link (desktop and mobile), since the sub-anchors it used to
+  expose are one scroll away on `/services` itself.
+  `src/components/WebsiteScoreChat.astro` is a new, `/services`-only
+  component: a fixed bottom-right chat widget that reruns the same 10
+  questions/scoring/lead-capture endpoint as the full-page
+  `/ux-health-check` quiz, but presented as chat bubbles with quick-reply
+  chips instead of a step wizard. The two questions/scoring implementations
+  are intentionally duplicated (not shared) since one renders a full-page
+  form and the other injects chat bubbles via `innerHTML` — keep both in
+  sync by hand if the question set or scoring logic ever changes. Its
+  results CTA and the full-page quiz's results CTA both used to branch to
+  `/ux-audit` for lower scores; both now always point to `/contact` since
+  that page is gone. The standalone `/ux-health-check` page is unchanged
+  and still linked from the footer and the mobile drawer.

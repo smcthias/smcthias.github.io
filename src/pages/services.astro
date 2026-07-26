@@ -1,31 +1,109 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import WebsiteScoreChat from '../components/WebsiteScoreChat.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteUrl = (Astro.site || 'https://savelledesign.com').toString().replace(/\/$/, '');
 
 const services = [
   {
-    href: '/services/landing-page-design',
+    id: 'landing-page-design',
+    label: 'Landing pages',
     title: 'Landing Page Design',
-    line: 'One page built around one goal: the signup, the demo, the sale. Designed mobile-first, built fast, measured from day one.',
-    art: 'browser',
+    body: "A landing page is often the first impression a potential customer gets. I design pages that are clear, easy to read, and built to move visitors toward a lead or a sale, not just look good, launching a product, running an ad campaign, or growing an email list.",
+    included: [
+      { title: 'Custom design', body: 'Built for your brand and your campaign goal, not a template dressed up.' },
+      { title: 'Mobile-first build', body: 'Designed for the phone first, because that is where most of your traffic lives.' },
+      { title: 'Clear call to action', body: 'Buttons and forms placed to guide visitors toward the one action that matters.' },
+      { title: 'Fast loading, search-ready', body: 'Tuned for speed with clean, search-friendly structure, so you lose fewer visitors and stay findable.' },
+      { title: 'Analytics from day one', body: 'Tracking set up at launch, so you can measure what works and improve it.' },
+    ],
+    card: {
+      eyebrow: 'See it in practice',
+      name: 'Omegas411',
+      line: 'A brand and landing page for an Omega-3 resource guide, now doing 2,000 visits a month.',
+      href: '/works/omegas411',
+      cta: 'View the project',
+    },
+    serviceSchema: {
+      name: 'Landing Page Design',
+      serviceType: 'Landing Page Design',
+      description: 'High-converting landing page design focused on a single conversion goal, designed mobile-first and built to launch.',
+    },
   },
   {
-    href: '/services/website-refresh',
+    id: 'website-refresh',
+    label: 'Website refresh',
     title: 'Website Refresh & Redesign',
-    line: 'A modern look and a cleaner path through your site. Keep what works, fix what fails, without starting over.',
-    art: 'layers',
+    body: 'Your website is often the first place a potential customer meets your business. A refresh sharpens how your brand reads, makes it easier for customers to find what they came for, and moves the number that matters, all without starting from scratch.',
+    included: [
+      { title: 'Website audit', body: 'A review of your current site to pin down what is working and what is quietly costing you.' },
+      { title: 'Modern design', body: 'A current look that fits your brand instead of chasing a trend.' },
+      { title: 'Improved navigation', body: 'A simpler structure so visitors find what they need without hunting for it.' },
+      { title: 'Mobile optimization', body: 'Looks right and works right on phones and tablets, where most people arrive.' },
+      { title: 'Performance boost', body: 'Faster load times that keep visitors engaged and help your search rankings.' },
+    ],
+    card: {
+      eyebrow: 'See it in practice',
+      name: 'La Mesa RV & Van Up',
+      line: '11 RV dealerships pulled into one inventory customers could actually search, without throwing out the platform underneath.',
+      href: '/works/lamesa',
+      cta: 'View the project',
+    },
+    serviceSchema: {
+      name: 'Website Refresh & Redesign',
+      serviceType: 'Website Redesign',
+      description: 'A website redesign that modernizes structure, visuals, and content while preserving the search equity you have already built.',
+    },
   },
   {
-    href: '/services/brand-identity',
+    id: 'brand-identity',
+    label: 'Brand identity',
     title: 'Brand Identity Touchups',
-    line: 'Logo, color, and type refined into a look your whole team can keep consistent, in print and on screen.',
-    art: 'mark',
+    body: "You already have a brand. It usually needs polish, not a restart, maybe the logo feels dated, the colors fight each other, or nobody applies them the same way twice. A touch-up refines what you have into one coherent visual system your whole team can use.",
+    included: [
+      { title: 'Logo refinement', body: 'Polish your existing logo, or build variations that hold up in different sizes and contexts.' },
+      { title: 'Color & typography', body: 'A palette and type choices that match your brand and read right across every material.' },
+      { title: 'Brand guidelines', body: 'A simple guide anyone on your team can follow without guessing.' },
+      { title: 'Marketing templates', body: 'Social graphics, business cards, and the templates you need to keep it consistent.' },
+      { title: 'File delivery', body: 'Every asset handed off in the right formats for print and digital.' },
+    ],
+    card: {
+      eyebrow: 'See it in practice',
+      name: 'Nikkl',
+      line: "A fintech startup's logo, color, and website revamped as one system, shipped in five days.",
+      href: '/works/nikkl',
+      cta: 'View the project',
+    },
+    serviceSchema: {
+      name: 'Brand Identity',
+      serviceType: 'Brand Identity Design',
+      description: 'Refinement of your logo, color, type, and guidelines into one consistent visual system across your site, email, and social.',
+    },
   },
   {
-    href: '/services/email-campaigns',
+    id: 'email-campaigns',
+    label: 'Email campaigns',
     title: 'Email Campaign Design',
-    line: 'Campaigns and templates people open, read, and act on, designed for the inbox and ready for your platform.',
-    art: 'cards',
+    body: 'Email is one of the few channels where you reach your audience directly, on your terms. You get email that looks professional, renders across every device and client, including dark mode, and guides the reader toward the action you care about.',
+    included: [
+      { title: 'Custom templates', body: 'Branded designs that hold together across every email client and device.' },
+      { title: 'Series design', body: 'Welcome sequences, nurture flows, and promo series with one cohesive look.' },
+      { title: 'Clear calls to action', body: 'Buttons and links that move the reader toward a single next step.' },
+      { title: 'Platform integration', body: 'Templates that drop cleanly into Mailchimp, Klaviyo, ActiveCampaign, HubSpot, and the rest.' },
+      { title: 'Campaign strategy', body: 'Guidance on frequency, content, and what works for your audience.' },
+    ],
+    card: {
+      eyebrow: 'See it in practice',
+      name: 'Yoli',
+      line: 'An email design system and marketing campaigns for a global wellness brand, built in Klaviyo.',
+      href: '/works/yoli',
+      cta: 'View the project',
+    },
+    serviceSchema: {
+      name: 'Email Campaign Design',
+      serviceType: 'Email Campaign Design',
+      description: 'Designed, responsive email templates built to match your brand and render across major email clients, including dark mode.',
+    },
   },
 ];
 
@@ -34,6 +112,61 @@ const steps = [
   { title: 'Design', body: 'Mockups and prototypes grounded in research and what works for real visitors.' },
   { title: 'Development', body: 'Clean, fast code on modern tooling, so the site performs as well as it looks.' },
   { title: 'Launch', body: 'Testing, refining, and shipping, with support once it goes live.' },
+];
+
+// FAQ schema is derived from the on-page Q&As below. Keep the two in sync.
+const faqs = [
+  {
+    question: 'Do I need all four services, or can I start with just one?',
+    answer:
+      "Most projects start with one: a landing page, a refresh, a brand touch-up, or an email system. I'll tell you plainly if fixing one thing depends on another, but you never have to buy more than what the project needs.",
+  },
+  {
+    question: "What's the difference between a website refresh and a full rebuild?",
+    answer:
+      'A refresh keeps what is working: your structure, your content, your platform. It modernizes the look, the layout, and the parts that frustrate visitors. A rebuild starts over. Most businesses need a refresh, not a teardown, and we will figure out which on the first call.',
+  },
+  {
+    question: 'Will a redesign hurt my Google rankings?',
+    answer:
+      'Not when it is done carefully. I preserve your URLs, keep your content intact, and set up redirects for anything that moves, so the search equity you have built comes with you. A good redesign helps findability. It does not reset it.',
+  },
+  {
+    question: 'Can you build for the email or website platform I already use?',
+    answer:
+      "Usually, yes. For websites: WordPress, Squarespace, Webflow, Shopify, and most common setups. For email: Mailchimp, Klaviyo, ActiveCampaign, HubSpot, and similar. Tell me what you're on and I'll build to work cleanly with it.",
+  },
+  {
+    question: 'How do I know what actually needs work?',
+    answer:
+      'Try the Website Score chat in the corner of this page: ten quick questions for a read on how well your site turns visitors into customers, plus your highest-priority fixes.',
+  },
+  {
+    question: 'What does a project cost?',
+    answer:
+      "It depends on scope, how much is ready to go versus built from scratch, and how many pages, templates, or assets are involved. Tell me what you need and I'll come back with a fixed price before any work starts. No hourly surprises.",
+  },
+];
+
+const pageSchema = [
+  ...services.map((s) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.serviceSchema.name,
+    serviceType: s.serviceSchema.serviceType,
+    description: s.serviceSchema.description,
+    url: `${siteUrl}/services#${s.id}`,
+    provider: { '@type': 'Person', name: 'Savelle McThias' },
+  })),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  },
 ];
 ---
 
@@ -56,60 +189,37 @@ const steps = [
     </div>
   </section>
 
-  <!-- ── The four services: two per row, room to breathe ──────────────── -->
-  <section class="pb-24 md:pb-36">
-    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-20 md:gap-y-28">
-        {services.map((s) => (
-          <a href={`${base}${s.href}`} class="group block min-w-0">
-            <div class="aspect-[16/9] bg-card border border-hairline flex items-center justify-center mb-8 overflow-hidden">
-              <svg class="w-40 h-40 text-mist transition-transform duration-500 group-hover:scale-105" viewBox="0 0 160 160" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
-                {s.art === 'browser' && (
-                  <g transform="translate(80 84) scale(1 0.55) rotate(-30)">
-                    <rect x="-44" y="-44" width="88" height="88" />
-                    <line x1="-44" y1="-26" x2="44" y2="-26" />
-                    <rect x="-32" y="-12" width="40" height="10" />
-                    <rect x="-32" y="6" width="64" height="6" />
-                    <rect x="-32" y="18" width="52" height="6" />
-                    <rect x="-32" y="32" width="24" height="10" />
-                  </g>
-                )}
-                {s.art === 'layers' && (
-                  <g transform="translate(80 80)">
-                    <g transform="scale(1 0.55) rotate(-30)"><rect x="-40" y="-40" width="80" height="80" /></g>
-                    <g transform="translate(0 -22) scale(1 0.55) rotate(-30)"><rect x="-40" y="-40" width="80" height="80" /></g>
-                    <g transform="translate(0 -44) scale(1 0.55) rotate(-30)"><rect x="-40" y="-40" width="80" height="80" /></g>
-                  </g>
-                )}
-                {s.art === 'mark' && (
-                  <g transform="translate(80 80)">
-                    <circle cx="0" cy="0" r="44" />
-                    <circle cx="0" cy="0" r="24" />
-                    <line x1="-56" y1="0" x2="56" y2="0" />
-                    <line x1="0" y1="-56" x2="0" y2="56" />
-                  </g>
-                )}
-                {s.art === 'cards' && (
-                  <g transform="translate(80 88) scale(1 0.55) rotate(-30)">
-                    <rect x="-48" y="-32" width="64" height="44" />
-                    <g transform="translate(14 -14)"><rect x="-48" y="-32" width="64" height="44" /></g>
-                    <g transform="translate(28 -28)">
-                      <rect x="-48" y="-32" width="64" height="44" />
-                      <line x1="-48" y1="-32" x2="-16" y2="-6" />
-                      <line x1="16" y1="-32" x2="-16" y2="-6" />
-                    </g>
-                  </g>
-                )}
-              </svg>
+  <!-- ── Each service, in detail ───────────────────────────────────────── -->
+  {services.map((s) => (
+    <section id={s.id} class="scroll-mt-24 py-20 md:py-28 border-t border-hairline">
+      <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+          <div class="min-w-0 lg:col-span-5">
+            <p class="label mb-5">{s.label}</p>
+            <h2 class="text-huge font-semibold text-ink max-w-[18ch]">{s.title}</h2>
+            <p class="mt-6 text-lg text-slate leading-relaxed max-w-xl">{s.body}</p>
+            <a href={`${base}${s.card.href}`} class="group mt-10 block border border-hairline bg-card p-6 hover:border-ink transition-colors">
+              <p class="text-sm text-mist mb-1">{s.card.eyebrow}</p>
+              <h3 class="text-lg font-semibold text-ink mb-1">{s.card.name}</h3>
+              <p class="text-slate leading-relaxed">{s.card.line}</p>
+              <span class="mt-4 inline-flex items-center gap-2 font-medium text-ink">{s.card.cta} <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span></span>
+            </a>
+          </div>
+          <div class="min-w-0 lg:col-span-7">
+            <p class="label mb-5">What's included</p>
+            <div>
+              {s.included.map((item) => (
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-8 border-t border-hairline py-6">
+                  <h3 class="min-w-0 md:col-span-4 text-lg font-semibold text-ink">{item.title}</h3>
+                  <p class="min-w-0 md:col-span-8 text-slate leading-relaxed max-w-2xl">{item.body}</p>
+                </div>
+              ))}
             </div>
-            <h2 class="text-big font-semibold text-ink group-hover:underline underline-offset-8 decoration-hairline">{s.title}</h2>
-            <p class="mt-3 text-lg text-slate leading-relaxed max-w-md">{s.line}</p>
-            <span class="mt-5 inline-flex items-center gap-2 font-medium text-ink">View the service <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span></span>
-          </a>
-        ))}
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  ))}
 
   <!-- ── How it works ─────────────────────────────────────────────────── -->
   <section class="border-y border-hairline py-20 md:py-28">
@@ -137,19 +247,38 @@ const steps = [
       <div class="border border-hairline bg-card p-10 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
         <div class="min-w-0 lg:col-span-7">
           <p class="label mb-5">Pricing</p>
-          <h2 class="text-huge font-semibold text-ink max-w-[16ch]">Real numbers, published up front.</h2>
+          <h2 class="text-huge font-semibold text-ink max-w-[16ch]">A fixed price, agreed before we start.</h2>
         </div>
         <div class="min-w-0 lg:col-span-5 flex flex-col gap-8">
           <p class="text-lg text-slate leading-relaxed">
-            Every service has a published range you can plan around, and we agree
-            on a fixed price before any work starts. Scope flexes to fit your
-            budget. No hourly surprises.
+            Every project is scoped individually and quoted as a flat rate, not
+            an hourly guess. Tell me what you're building and I'll come back
+            with a firm number. No surprises once work starts.
           </p>
-          <a href={`${base}/pricing`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors self-start">
-            See pricing
+          <a href={`${base}/contact`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors self-start">
+            Get a quote
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ──────────────────────────────────────────────────────────── -->
+  <section class="border-t border-hairline py-20 md:py-28">
+    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+      <p class="label mb-5">FAQ</p>
+      <h2 class="text-huge font-semibold text-ink max-w-3xl mb-14">Questions, answered.</h2>
+      <div class="max-w-3xl space-y-4">
+        {faqs.map((f) => (
+          <details class="group border border-hairline bg-card p-6 md:p-8">
+            <summary class="flex items-start justify-between gap-4 cursor-pointer list-none">
+              <h3 class="text-lg font-semibold text-ink">{f.question}</h3>
+              <svg class="w-5 h-5 shrink-0 text-mist group-open:rotate-45 transition-transform mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
+            </summary>
+            <p class="text-slate leading-relaxed mt-4">{f.answer}</p>
+          </details>
+        ))}
       </div>
     </div>
   </section>
@@ -166,4 +295,11 @@ const steps = [
       </div>
     </div>
   </section>
+
+  <!-- Structured Data -->
+  {pageSchema.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
+
+  <WebsiteScoreChat />
 </Layout>

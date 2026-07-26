@@ -1,17 +1,11 @@
 ---
-// Top navigation. Light, minimal, plain-text wordmark. Services + About open
-// on hover (and keyboard focus) on desktop; the full list lives in the mobile
-// drawer. The hamburger morphs into a close mark. Active state from the path.
+// Top navigation. Light, minimal, plain-text wordmark. Services is a single
+// flat link; About still opens a small dropdown (About/Blog) on hover and
+// keyboard focus on desktop. The full list lives in the mobile drawer. The
+// hamburger morphs into a close mark. Active state from the path.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname;
 const on = (frag: string) => path.includes(frag);
-
-const services = [
-  { href: '/services/landing-page-design', label: 'Landing Page Design' },
-  { href: '/services/website-refresh', label: 'Website Refresh' },
-  { href: '/services/brand-identity', label: 'Brand Identity' },
-  { href: '/services/email-campaigns', label: 'Email Campaigns' },
-];
 ---
 
 <header
@@ -33,29 +27,7 @@ const services = [
       <nav class="hidden md:flex items-center gap-8 text-sm">
         <a href={`${base}/works`} class={`nav-link ${on('/works') ? 'is-active' : ''}`}>Work</a>
 
-        <div class="relative group">
-          <a
-            href={`${base}/services`}
-            class={`nav-link inline-flex items-center gap-1 ${on('/services') || on('/pricing') || on('/ux-') ? 'is-active' : ''}`}
-          >
-            Services
-            <svg class="w-3.5 h-3.5 mt-0.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </a>
-          <div class="absolute left-1/2 -translate-x-1/2 top-full pt-4 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition-all duration-200">
-            <div class="w-64 bg-card border border-hairline p-2 shadow-xl shadow-black/10">
-              <a href={`${base}/services`} class="menu-item font-medium">All Services</a>
-              {services.map((s) => (
-                <a href={`${base}${s.href}`} class={`menu-item pl-5 text-slate ${on(s.href) ? 'font-medium text-ink' : ''}`}>{s.label}</a>
-              ))}
-              <div class="my-2 border-t border-hairline"></div>
-              <a href={`${base}/pricing`} class="menu-item">Pricing</a>
-              <a href={`${base}/ux-health-check`} class="menu-item">Website Score</a>
-              <a href={`${base}/ux-audit`} class="menu-item">Website Audit</a>
-            </div>
-          </div>
-        </div>
-
-        <a href={`${base}/agencies`} class={`nav-link ${on('/agencies') ? 'is-active' : ''}`}>Agencies</a>
+        <a href={`${base}/services`} class={`nav-link ${on('/services') || on('/ux-') ? 'is-active' : ''}`}>Services</a>
 
         <div class="relative group">
           <a
@@ -104,13 +76,6 @@ const services = [
     <nav class="px-5 py-8 flex flex-col gap-1 text-2xl font-semibold tracking-tight">
       <a href={`${base}/works`} class="drawer-link">Work</a>
       <a href={`${base}/services`} class="drawer-link">Services</a>
-      <div class="pl-4 flex flex-col gap-1 text-base text-slate font-normal py-1">
-        {services.map((s) => (
-          <a href={`${base}${s.href}`} class="py-1.5 hover:text-ink transition-colors">{s.label}</a>
-        ))}
-        <a href={`${base}/pricing`} class="py-1.5 hover:text-ink transition-colors">Pricing</a>
-      </div>
-      <a href={`${base}/agencies`} class="drawer-link">Agencies</a>
       <a href={`${base}/ux-health-check`} class="drawer-link">Website Score</a>
       <a href={`${base}/about`} class="drawer-link">About</a>
       <a href={`${base}/blog`} class="drawer-link">Blog</a>
