@@ -28,8 +28,8 @@ const work = [
 >
   <!-- ── Intro ────────────────────────────────────────────────────────── -->
   <section class="pt-16 md:pt-28 pb-16 md:pb-24">
-    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
-      <h1 class="font-semibold text-mega text-ink max-w-[15ch]">
+    <div class="px-5 sm:px-8">
+      <h1 class="font-semibold text-mega text-ink">
         The work speaks first.
       </h1>
     </div>
@@ -37,7 +37,7 @@ const work = [
 
   <!-- ── Work gallery: dark, each project gets its moment ─────────────── -->
   <section class="bg-ink text-paper on-dark">
-    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-24 md:py-36">
+    <div class="px-5 sm:px-8 py-24 md:py-36">
       <div class="space-y-24 md:space-y-36">
         {work.map((p, i) => (
           <a href={`${base}/works/${p.id}`} class="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
@@ -58,7 +58,7 @@ const work = [
                   <p class="text-fog mt-2">{p.statLabel}</p>
                 </>
               ) : null}
-              <p class="mt-8 text-lg text-paper leading-snug max-w-sm">{p.hook}</p>
+              <p class="mt-8 text-lg text-paper leading-snug">{p.hook}</p>
               <p class="mt-6 text-sm text-dusk">{p.data.title} · {p.data.category}</p>
               <span class="mt-6 inline-flex items-center gap-2 text-sm text-paper underline underline-offset-8 decoration-seam group-hover:decoration-paper transition-colors">
                 View project

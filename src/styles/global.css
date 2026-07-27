@@ -2,34 +2,14 @@
 @plugin "@tailwindcss/typography";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Self-hosted type — Switzer (Fontshare), a Swiss-style neo-grotesque.
-   One family, weight does the work. WOFF2 only, swap so text paints fast.
+   Self-hosted type — Inter, variable font. One file covers the whole
+   weight axis (100–900); font-weight in CSS picks the instance. WOFF2
+   only, swap so text paints fast.
    ────────────────────────────────────────────────────────────────────────── */
 @font-face {
-  font-family: 'Switzer';
-  src: url('/fonts/switzer-400.woff2') format('woff2');
-  font-weight: 400;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Switzer';
-  src: url('/fonts/switzer-500.woff2') format('woff2');
-  font-weight: 500;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Switzer';
-  src: url('/fonts/switzer-600.woff2') format('woff2');
-  font-weight: 600;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Switzer';
-  src: url('/fonts/switzer-700.woff2') format('woff2');
-  font-weight: 700;
+  font-family: 'Inter';
+  src: url('/fonts/inter-var.woff2') format('woff2');
+  font-weight: 100 900;
   font-display: swap;
   font-style: normal;
 }
@@ -40,8 +20,8 @@
    and space carry the design. Light ground for reading, ink for galleries.
    ────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --font-sans: 'Switzer', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-display: 'Switzer', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sans: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   /* Light ground (default) */
   --color-paper: #f6f6f4;     /* page base — cool off-white */
@@ -98,10 +78,12 @@ body {
   outline-offset: 3px;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  text-wrap: balance;
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-wrap: balance;
+  }
 }
 
 /* ──────────────────────────────────────────────────────────────────────────

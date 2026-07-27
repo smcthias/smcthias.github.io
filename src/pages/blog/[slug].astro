@@ -72,7 +72,7 @@ const articleData = {
 >
   <!-- ── Article header ───────────────────────────────────────────────── -->
   <section class="pt-12 md:pt-16 pb-10 md:pb-14">
-    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+    <div class="px-5 sm:px-8">
       <a href={`${base}/blog`} class="group inline-flex items-center gap-2 text-sm text-mist hover:text-ink transition-colors mb-10">
         <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -80,8 +80,8 @@ const articleData = {
         All posts
       </a>
       <p class="text-sm text-mist mb-5">{post.data.category} · {formattedDate}</p>
-      <h1 class="text-huge font-semibold text-ink max-w-4xl">{post.data.title}</h1>
-      <p class="mt-6 max-w-3xl text-lg md:text-xl text-slate leading-relaxed">
+      <h1 class="text-huge font-semibold text-ink">{post.data.title}</h1>
+      <p class="mt-6 text-lg md:text-xl text-slate leading-relaxed">
         {post.data.description}
       </p>
     </div>
@@ -89,7 +89,7 @@ const articleData = {
 
   <!-- ── Featured image ───────────────────────────────────────────────── -->
   <section class="pb-14 md:pb-20">
-    <div class="max-w-[1600px] mx-auto px-5 sm:px-8">
+    <div class="px-5 sm:px-8">
       <img
         src={`${base}/images/${post.data.image}`}
         alt={post.data.imageAlt}
@@ -101,7 +101,7 @@ const articleData = {
 
   <!-- ── Article body ─────────────────────────────────────────────────── -->
   <section class="pb-20 md:pb-28">
-    <div class="max-w-3xl mx-auto px-5 sm:px-8">
+    <div class="px-5 sm:px-8">
       <div class="prose prose-lg max-w-none
         prose-headings:font-semibold prose-headings:text-ink
         prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
@@ -120,7 +120,7 @@ const articleData = {
 
   <!-- ── Post navigation ──────────────────────────────────────────────── -->
   <section class="border-t border-hairline">
-    <div class="max-w-[1600px] mx-auto px-5 sm:px-8 py-14 md:py-16">
+    <div class="px-5 sm:px-8 py-14 md:py-16">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="min-w-0">
           {prev && (
