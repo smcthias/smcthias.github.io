@@ -194,6 +194,9 @@ html.lenis, html.lenis body { height: auto; }
     opacity: 1 !important;
     transform: none !important;
   }
+  #dot-grid-canvas {
+    display: none !important;
+  }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;

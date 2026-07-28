@@ -14,8 +14,15 @@ const featuredPosts = allPosts
   title="About - Savelle Design"
   description="Two decades of design and development for startups, agencies, and enterprise teams. Savelle McThias, designer and developer in Scottsdale, Arizona."
 >
+  <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
+       behind the hero section below (its bg-zinc-950 is dropped so it
+       shows through; body's own bg-zinc-950 is the fallback before JS
+       draws anything). Fades out as the "From the blog" section scrolls
+       into view. pointer-events-none so it never intercepts clicks —
+       mouse position is read via a window-level listener instead. -->
+  <canvas id="dot-grid-canvas" data-fade-trigger="#about-field-notes" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
   <!-- ── Hero: headline, line-art portrait, three paragraphs ──────────── -->
-  <section class="bg-zinc-950 pt-16 md:pt-28 pb-16 md:pb-24">
+  <section class="relative pt-16 md:pt-28 pb-16 md:pb-24">
     <div class="px-5 sm:px-8 md:px-12">
       <h1 data-word-reveal class="font-head text-mega md:text-9xl font-normal text-zinc-50">
         Eighteen years in, still hands-on.
@@ -49,7 +56,7 @@ const featuredPosts = allPosts
   </section>
 
   <!-- ── From the blog: 2 posts + link to all articles ────────────────── -->
-  <section class="bg-zinc-950 border-t border-zinc-900 py-24 md:py-36">
+  <section id="about-field-notes" class="bg-zinc-950 border-t border-zinc-900 py-24 md:py-36">
     <div class="px-5 sm:px-8 md:px-12">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-16 md:mb-20">
         <div>

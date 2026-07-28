@@ -35,8 +35,30 @@ function initSmoothScroll() {
   // tracks its own virtual scroll position, so it needs to be told this
   // explicitly rather than assuming it'll pick up the browser's reset.
   if (window.location.hash) {
-    const target = document.querySelector(window.location.hash);
-    if (target) requestAnimationFrame(() => lenis.scrollTo(target as HTMLElement, { offset: -80, immediate: true }));
+    const target = document.querySelector<HTMLElement>(window.location.hash);
+    if (target) {
+      // Landing on a hash target whose position depends on something above
+      // it still settling (e.g. the homepage's pinned pillars section
+      // inflating the document height after load) is inherently racy
+      // against a single requestAnimationFrame — how long that settling
+      // actually takes varies with exactly how the navigation happened.
+      // Rather than guess a single "safe" delay, unconditionally re-land a
+      // few times over the first second, recomputing the target's position
+      // fresh each time (lenis.resize() forces Lenis's own cached
+      // scroll-height limit — normally updated async via ResizeObserver —
+      // to match the DOM as it exists right now). An earlier version of
+      // this bailed out once the scroll position stopped matching what it
+      // last set (meant to back off if the user took over manually), but
+      // that guard was tripping on Lenis's own post-"immediate" micro
+      // adjustments and stopping after a single, still-too-early attempt —
+      // worse than the small chance of this fighting a genuinely fast
+      // manual scroll in the first second after landing.
+      const attemptLand = () => {
+        lenis.resize();
+        lenis.scrollTo(target, { offset: -80, immediate: true });
+      };
+      [0, 150, 300, 500, 800].forEach((delay) => setTimeout(attemptLand, delay));
+    }
   } else {
     lenis.scrollTo(0, { immediate: true });
   }

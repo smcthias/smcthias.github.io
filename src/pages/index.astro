@@ -59,7 +59,14 @@ const pillars = [
        itself only takes another 0.6s — settles
        (data-drop-reveal-delay below). If any of these durations change,
        the dependent delays need updating too. -->
-  <section class="relative bg-zinc-950 md:-mt-[138px] md:h-screen md:flex md:flex-col">
+  <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
+       behind the hero + opener sections below (their bg-zinc-950 is
+       dropped so it shows through; body's own bg-zinc-950 is the fallback
+       before JS draws anything). Fades out as #pillars-section (Web/Brand/
+       Reach) scrolls into view. pointer-events-none so it never intercepts
+       clicks — mouse position is read via a window-level listener instead. -->
+  <canvas id="dot-grid-canvas" data-fade-trigger="#pillars-section" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+  <section class="relative md:-mt-[138px] md:h-screen md:flex md:flex-col">
     <div class="pt-24 pb-8 md:pt-12 md:pb-12 md:shrink-0 px-5 sm:px-8 md:px-12">
       <h1
         data-word-reveal
@@ -112,7 +119,7 @@ const pillars = [
        The subtext fades in only once the headline's word-reveal finishes
        (data-reveal-next chains it, see src/scripts/word-reveal.ts) rather
        than animating in alongside it. ── -->
-  <section class="bg-zinc-950 pt-20 md:pt-28 pb-14 md:pb-16 md:min-h-[560px] md:flex md:flex-col md:justify-between">
+  <section class="relative pt-20 md:pt-28 pb-14 md:pb-16 md:min-h-[560px] md:flex md:flex-col md:justify-between">
     <div class="px-5 sm:px-8 md:px-12">
       <h2
         data-word-reveal
