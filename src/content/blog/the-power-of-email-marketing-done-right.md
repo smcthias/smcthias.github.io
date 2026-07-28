@@ -31,4 +31,4 @@ Email marketing works when it's thoughtful, strategic, and beautifully executed.
 
 ---
 
-**Ready to transform your email marketing?** Let's build a design system that works across all your campaigns—onboarding, transactional, promotional, and everything in between. [Schedule a consultation](/contact) and let's discuss how strategic email design can drive real results for your business.
+**Ready to transform your email marketing?** Let's build a design system that works across all your campaigns—onboarding, transactional, promotional, and everything in between. [Schedule a consultation](#contact) and let's discuss how strategic email design can drive real results for your business.

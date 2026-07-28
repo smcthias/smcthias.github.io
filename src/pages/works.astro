@@ -1,14 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import WebsiteScoreChat from '../components/WebsiteScoreChat.astro';
 import { FEATURED } from '../data/featured';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-// Same editorial order as the homepage, then anything not featured, newest
-// first. Hooks and results come from the shared featured data so both pages
-// tell the same story.
+// Same editorial order as the homepage (FEATURED first), then anything not
+// featured, newest first. Same card visual language as the homepage grid —
+// the comp shows the archive using the identical card pattern, just with
+// the fuller project list.
 const allProjects = await getCollection('projects');
 const byId = Object.fromEntries(allProjects.map((p) => [p.id, p]));
 const featuredIds = new Set(FEATURED.map((f) => f.slug));
@@ -16,10 +16,7 @@ const rest = allProjects
   .filter((p) => !featuredIds.has(p.id))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-const work = [
-  ...FEATURED.map((f) => ({ ...byId[f.slug], stat: f.stat, statLabel: f.statLabel, hook: f.hook })),
-  ...rest.map((p) => ({ ...p, stat: '', statLabel: '', hook: p.data.description })),
-];
+const work = [...FEATURED.map((f) => byId[f.slug]), ...rest];
 ---
 
 <Layout
@@ -27,48 +24,35 @@ const work = [
   description="Selected design and development projects with real results. Two decades of work for startups, agencies, and enterprise teams."
 >
   <!-- ── Intro ────────────────────────────────────────────────────────── -->
-  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
-    <div class="px-5 sm:px-8">
-      <h1 class="font-semibold text-mega text-ink">
+  <section class="bg-zinc-950 pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="px-5 sm:px-8 md:px-12">
+      <h1 data-word-reveal class="font-head font-semibold text-mega text-white">
         The work speaks first.
       </h1>
     </div>
   </section>
 
-  <!-- ── Work gallery: dark, each project gets its moment ─────────────── -->
-  <section class="bg-ink text-paper on-dark">
-    <div class="px-5 sm:px-8 py-24 md:py-36">
-      <div class="space-y-24 md:space-y-36">
+  <!-- ── Archive grid: same card language as the homepage ─────────────── -->
+  <section class="bg-zinc-950 pb-24 md:pb-36">
+    <div class="px-5 sm:px-8 md:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
         {work.map((p, i) => (
-          <a href={`${base}/works/${p.id}`} class="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
-            <div class={`min-w-0 lg:col-span-8 ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
-              <div class="overflow-hidden bg-ink-soft">
-                <img
-                  src={`${base}/images/works/${p.data.thumbnail}`}
-                  alt={`${p.data.title}, ${p.data.category}`}
-                  class="w-full aspect-[16/10] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                  loading={i < 1 ? 'eager' : 'lazy'}
-                />
-              </div>
+          <a href={`${base}/works/${p.id}`} class="group block min-w-0">
+            <div class="overflow-hidden rounded-2xl bg-zinc-900">
+              <img
+                src={`${base}/images/works/${p.data.thumbnail}`}
+                alt={`${p.data.title}, ${p.data.category}`}
+                class="w-full aspect-[4/3] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                loading={i < 2 ? 'eager' : 'lazy'}
+              />
             </div>
-            <div class={`min-w-0 lg:col-span-4 ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-              {p.stat ? (
-                <>
-                  <p class="text-mega font-semibold text-paper leading-none">{p.stat}</p>
-                  <p class="text-fog mt-2">{p.statLabel}</p>
-                </>
-              ) : null}
-              <p class="mt-8 text-lg text-paper leading-snug">{p.hook}</p>
-              <p class="mt-6 text-sm text-dusk">{p.data.title} · {p.data.category}</p>
-              <span class="mt-6 inline-flex items-center gap-2 text-sm text-paper underline underline-offset-8 decoration-seam group-hover:decoration-paper transition-colors">
-                View project
-              </span>
-            </div>
+            <p class="mt-5 text-xs font-medium text-zinc-500 uppercase tracking-[0.14em]">
+              {p.data.tags.join(' • ')}
+            </p>
+            <h3 class="mt-2 font-head text-2xl font-semibold text-white">{p.data.title}</h3>
           </a>
         ))}
       </div>
     </div>
   </section>
-
-  <WebsiteScoreChat page="works" />
 </Layout>

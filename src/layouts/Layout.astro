@@ -3,6 +3,9 @@ import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import ContactModal from '../components/ContactModal.astro';
+import WebsiteScoreChat from '../components/WebsiteScoreChat.astro';
+import ReelLightbox from '../components/ReelLightbox.astro';
 
 interface Props {
   title: string;
@@ -63,7 +66,7 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#f6f6f4" />
+    <meta name="theme-color" content="#09090b" />
     {noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow" />}
     <meta name="author" content="Savelle McThias" />
 
@@ -93,24 +96,31 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
       // gone — content always renders; motion is CSS/hover only.)
       document.documentElement.classList.remove('no-js');
     </script>
+    <script src="../scripts/smooth-scroll.ts"></script>
+    <script src="../scripts/word-reveal.ts"></script>
+    <script src="../scripts/pillar-scroll.ts"></script>
   </head>
 
-  <body>
+  <body class="bg-zinc-950">
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`} height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-ink focus:text-paper focus:font-medium">Skip to content</a>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-white focus:text-zinc-950 focus:font-medium focus:rounded-lg">Skip to content</a>
 
     <Nav />
 
-    <main id="main" class="relative z-10 pt-16 md:pt-20">
+    <main id="main" class="relative z-10 pt-16 md:pt-[138px]">
       <slot />
     </main>
 
     <Footer />
+
+    <ContactModal />
+    <WebsiteScoreChat />
+    <ReelLightbox />
 
     <!-- Base organization schema; pages add their own Service / CreativeWork / FAQ -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify({

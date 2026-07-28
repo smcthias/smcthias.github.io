@@ -1,176 +1,123 @@
 ---
-// Top navigation. Light, minimal, plain-text wordmark. Work and About are
-// both single flat links (no dropdowns) — there is no Services page or nav
-// item. Blog isn't in the top nav either, it's reachable from the footer
-// and featured on the About page. The full list lives in the mobile
-// drawer. The hamburger morphs into a close mark. Active state from the
-// path.
+// v4 redesign nav: SAVELLE wordmark, a LET'S TALK pill (opens the contact
+// modal via [data-contact-open]) and a MENU pill that reveals a full-screen
+// drawer with Home/About/Work/Contact. Blog is deliberately not in the nav —
+// reachable from the footer and featured on /about. Contact in the drawer
+// scrolls to the footer anchor (#contact); LET'S TALK opens the modal
+// directly — both coexist per the design brief.
+// Transparent, floating on the page — safe now that every page is dark.
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const path = Astro.url.pathname;
-const on = (frag: string) => path.includes(frag);
 ---
 
-<header
-  id="site-nav"
-  class="fixed top-0 inset-x-0 z-50 transition-colors duration-300 border-b border-transparent"
->
-  <div class="px-5 sm:px-8">
-    <div class="flex items-center justify-between h-16 md:h-20">
-      <!-- Wordmark: plain text, nothing else -->
-      <a
-        href={`${base}/`}
-        class="text-lg font-semibold tracking-tight text-ink"
-        aria-label="Savelle Design home"
-      >
-        Savelle Design
+<header id="site-nav" class="fixed top-0 inset-x-0 z-90">
+  <div class="px-5 sm:px-8 md:px-12">
+    <div class="flex items-center justify-between h-16 md:h-auto md:py-12">
+      <a href={`${base}/`} class="font-head text-lg md:text-4xl font-normal tracking-tight text-white" aria-label="Savelle home">
+        SAVELLE
       </a>
 
-      <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center gap-8 text-sm">
-        <a href={`${base}/works`} class={`nav-link ${on('/works') ? 'is-active' : ''}`}>Work</a>
-
-        <a href={`${base}/about`} class={`nav-link ${on('/about') || on('/blog') ? 'is-active' : ''}`}>About</a>
-
-        <a
-          href={`${base}/contact`}
-          class="inline-flex items-center px-5 py-2.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors"
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          data-contact-open
+          class="inline-flex items-center gap-2 pl-5 pr-4 py-2.5 rounded-full bg-white text-zinc-950 text-sm font-medium hover:bg-zinc-200 transition-colors cursor-pointer"
         >
-          Start a project
-        </a>
-      </nav>
+          LET'S TALK
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M8 7h9v9" /></svg>
+        </button>
 
-      <!-- Mobile toggle: two bars that morph into a close mark -->
-      <button
-        id="nav-toggle"
-        class="nav-burger md:hidden relative inline-flex items-center justify-center w-10 h-10 -mr-2 text-ink"
-        aria-label="Open menu"
-        aria-expanded="false"
-        aria-controls="mobile-drawer"
-      >
-        <span class="burger-bar burger-top" aria-hidden="true"></span>
-        <span class="burger-bar burger-bottom" aria-hidden="true"></span>
-      </button>
+        <button
+          id="nav-menu-toggle"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="nav-drawer"
+          class="inline-flex items-center gap-2 pl-4 pr-3.5 py-2.5 rounded-full border border-zinc-700 text-white text-sm font-medium hover:bg-zinc-900 transition-colors"
+        >
+          <span id="nav-menu-label">MENU</span>
+          <span class="nav-burger relative inline-flex items-center justify-center w-4 h-4" aria-hidden="true">
+            <span class="nav-burger-bar nav-burger-top"></span>
+            <span class="nav-burger-bar nav-burger-bottom"></span>
+          </span>
+        </button>
+      </div>
     </div>
-  </div>
-
-  <!-- Mobile drawer -->
-  <div
-    id="mobile-drawer"
-    class="drawer md:hidden fixed inset-x-0 top-16 bottom-0 bg-paper border-t border-hairline overflow-y-auto"
-    hidden
-  >
-    <nav class="px-5 py-8 flex flex-col gap-1 text-2xl font-semibold tracking-tight">
-      <a href={`${base}/works`} class="drawer-link">Work</a>
-      <a href={`${base}/ux-health-check`} class="drawer-link">Website Score</a>
-      <a href={`${base}/about`} class="drawer-link">About</a>
-      <a
-        href={`${base}/contact`}
-        class="mt-6 inline-flex items-center justify-center px-6 py-4 bg-ink text-paper text-lg font-medium"
-      >
-        Start a project
-      </a>
-    </nav>
   </div>
 </header>
 
+<div id="nav-drawer" class="nav-drawer fixed inset-0 z-80 bg-zinc-950" hidden>
+  <nav class="h-full flex flex-col justify-center px-5 sm:px-8 md:px-12">
+    <a href={`${base}/`} class="drawer-link">Home</a>
+    <a href={`${base}/about`} class="drawer-link">About</a>
+    <a href={`${base}/works`} class="drawer-link">Work</a>
+    <a href={`${base}/#contact`} class="drawer-link">Contact</a>
+  </nav>
+</div>
+
 <style>
-  .nav-link {
-    position: relative;
-    color: var(--color-slate);
-    transition: color 0.2s;
-    padding-bottom: 2px;
-  }
-  .nav-link:hover,
-  .nav-link.is-active { color: var(--color-ink); }
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -2px;
-    height: 1.5px; width: 0;
-    background: var(--color-ink);
-    transition: width 0.25s var(--ease-out-expo);
-  }
-  .nav-link:hover::after,
-  .nav-link.is-active::after { width: 100%; }
-
-  .menu-item {
-    display: block;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-    color: var(--color-ink);
-    transition: background 0.15s;
-  }
-  .menu-item:hover { background: var(--color-paper); }
-
   .drawer-link {
-    padding: 0.6rem 0;
-    color: var(--color-ink);
-    border-bottom: 1px solid var(--color-hairline);
+    display: block;
+    padding: 0.5rem 0;
+    font-family: var(--font-head);
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: white;
+    border-bottom: 1px solid #18181b;
+    transition: color 0.2s;
   }
+  .drawer-link:hover { color: #a1a1aa; }
 
-  /* Hamburger morph: two bars rotate into an X. Quick and smooth. */
-  .burger-bar {
+  .nav-burger-bar {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 22px;
-    height: 2px;
+    width: 14px;
+    height: 1.5px;
     background: currentColor;
     transition: transform 0.25s var(--ease-out-expo);
   }
-  .burger-top { transform: translate(-50%, calc(-50% - 4px)); }
-  .burger-bottom { transform: translate(-50%, calc(-50% + 4px)); }
-  .nav-burger[aria-expanded='true'] .burger-top { transform: translate(-50%, -50%) rotate(45deg); }
-  .nav-burger[aria-expanded='true'] .burger-bottom { transform: translate(-50%, -50%) rotate(-45deg); }
+  .nav-burger-top { transform: translate(-50%, calc(-50% - 3px)); }
+  .nav-burger-bottom { transform: translate(-50%, calc(-50% + 3px)); }
+  #nav-menu-toggle[aria-expanded='true'] .nav-burger-top { transform: translate(-50%, -50%) rotate(45deg); }
+  #nav-menu-toggle[aria-expanded='true'] .nav-burger-bottom { transform: translate(-50%, -50%) rotate(-45deg); }
 
-  /* Drawer reveal: quick fade + short slide. */
-  .drawer {
-    transition: opacity 0.22s var(--ease-out-expo), transform 0.22s var(--ease-out-expo);
+  .nav-drawer {
+    transition: opacity 0.25s var(--ease-out-expo);
   }
-  .drawer[hidden] { display: none; }
-  .drawer.is-closed {
-    opacity: 0;
-    transform: translateY(-8px);
-    pointer-events: none;
-  }
+  .nav-drawer[hidden] { display: none; }
+  .nav-drawer.is-closed { opacity: 0; pointer-events: none; }
 </style>
 
 <script>
-  // Nav interactions: scrolled-bar background + mobile drawer with morph.
-  // Re-binds after every View Transition via astro:page-load.
   function initNav() {
-    const nav = document.getElementById('site-nav');
-    const toggle = document.getElementById('nav-toggle');
-    const drawer = document.getElementById('mobile-drawer');
-    if (!nav || !toggle || !drawer) return;
-
-    const solid = () => {
-      const scrolled = window.scrollY > 24;
-      nav.classList.toggle('bg-paper/90', scrolled);
-      nav.classList.toggle('backdrop-blur-md', scrolled);
-      nav.classList.toggle('border-hairline', scrolled);
-      nav.classList.toggle('border-transparent', !scrolled);
-    };
-    solid();
-    window.addEventListener('scroll', solid, { passive: true });
+    const toggle = document.getElementById('nav-menu-toggle');
+    const label = document.getElementById('nav-menu-label');
+    const drawer = document.getElementById('nav-drawer');
+    if (!toggle || !drawer || !label) return;
 
     const setDrawer = (open: boolean) => {
       if (open) {
         drawer.hidden = false;
         drawer.classList.add('is-closed');
         requestAnimationFrame(() => requestAnimationFrame(() => drawer.classList.remove('is-closed')));
+        window.__lenis?.stop();
       } else {
         drawer.classList.add('is-closed');
-        window.setTimeout(() => { drawer.hidden = true; }, 220);
+        window.setTimeout(() => { drawer.hidden = true; }, 250);
+        window.__lenis?.start();
       }
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      label.textContent = open ? 'CLOSE' : 'MENU';
       document.body.style.overflow = open ? 'hidden' : '';
     };
+
     toggle.addEventListener('click', () => setDrawer(Boolean(drawer.hidden)));
-    drawer.querySelectorAll('a').forEach((a) =>
-      a.addEventListener('click', () => setDrawer(false))
-    );
+    drawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setDrawer(false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !drawer.hidden) setDrawer(false);
+    });
   }
   document.addEventListener('astro:page-load', initNav);
 </script>

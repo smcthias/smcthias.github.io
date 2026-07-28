@@ -70,4 +70,4 @@ Open your services section and ask:
 
 ---
 
-**Want a teardown of your service pages?** [Get in touch](/contact) and I'll look at your site the way a buyer does — one job, one city, one decision — and walk you through what to split, what to say, and what to cut.
+**Want a teardown of your service pages?** [Get in touch](#contact) and I'll look at your site the way a buyer does — one job, one city, one decision — and walk you through what to split, what to say, and what to cut.

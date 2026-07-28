@@ -71,76 +71,76 @@ const articleData = {
   image={`/images/${post.data.image}`}
 >
   <!-- ── Article header ───────────────────────────────────────────────── -->
-  <section class="pt-12 md:pt-16 pb-10 md:pb-14">
-    <div class="px-5 sm:px-8">
-      <a href={`${base}/blog`} class="group inline-flex items-center gap-2 text-sm text-mist hover:text-ink transition-colors mb-10">
+  <section class="bg-zinc-950 pt-12 md:pt-16 pb-10 md:pb-14">
+    <div class="px-5 sm:px-8 md:px-12">
+      <a href={`${base}/blog`} class="group inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors mb-10">
         <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         All posts
       </a>
-      <p class="text-sm text-mist mb-5">{post.data.category} · {formattedDate}</p>
-      <h1 class="text-huge font-semibold text-ink">{post.data.title}</h1>
-      <p class="mt-6 text-lg md:text-xl text-slate leading-relaxed">
+      <p class="text-sm text-zinc-500 mb-5">{post.data.category} · {formattedDate}</p>
+      <h1 data-word-reveal class="font-head text-huge font-semibold text-white">{post.data.title}</h1>
+      <p class="mt-6 text-lg md:text-xl text-zinc-400 leading-relaxed">
         {post.data.description}
       </p>
     </div>
   </section>
 
   <!-- ── Featured image ───────────────────────────────────────────────── -->
-  <section class="pb-14 md:pb-20">
-    <div class="px-5 sm:px-8">
+  <section class="bg-zinc-950 pb-14 md:pb-20">
+    <div class="px-5 sm:px-8 md:px-12">
       <img
         src={`${base}/images/${post.data.image}`}
         alt={post.data.imageAlt}
-        class="w-full aspect-[16/9] object-cover"
+        class="w-full aspect-[16/9] object-cover rounded-2xl md:rounded-3xl"
         loading="eager"
       />
     </div>
   </section>
 
   <!-- ── Article body ─────────────────────────────────────────────────── -->
-  <section class="pb-20 md:pb-28">
-    <div class="px-5 sm:px-8">
-      <div class="prose prose-lg max-w-none
-        prose-headings:font-semibold prose-headings:text-ink
+  <section class="bg-zinc-950 pb-20 md:pb-28">
+    <div class="px-5 sm:px-8 md:px-12">
+      <div class="prose prose-lg prose-invert max-w-none
+        prose-headings:font-head prose-headings:font-semibold prose-headings:text-white
         prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
         prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-        prose-p:text-slate prose-p:leading-relaxed prose-p:mb-6
-        prose-strong:text-ink prose-strong:font-semibold
-        prose-ul:my-6 prose-li:text-slate prose-ol:text-slate
-        prose-blockquote:border-l-ink prose-blockquote:text-slate
-        prose-img:border prose-img:border-hairline
-        prose-code:text-ink prose-hr:border-hairline
-        prose-a:text-ink prose-a:underline prose-a:underline-offset-4 prose-a:decoration-hairline hover:prose-a:decoration-ink">
+        prose-p:text-zinc-400 prose-p:leading-relaxed prose-p:mb-6
+        prose-strong:text-white prose-strong:font-semibold
+        prose-ul:my-6 prose-li:text-zinc-400 prose-ol:text-zinc-400
+        prose-blockquote:border-l-zinc-700 prose-blockquote:text-zinc-400
+        prose-img:rounded-2xl
+        prose-code:text-white prose-hr:border-zinc-800
+        prose-a:text-white prose-a:underline prose-a:underline-offset-4 prose-a:decoration-zinc-700 hover:prose-a:decoration-white">
         <Content />
       </div>
     </div>
   </section>
 
   <!-- ── Post navigation ──────────────────────────────────────────────── -->
-  <section class="border-t border-hairline">
-    <div class="px-5 sm:px-8 py-14 md:py-16">
+  <section class="bg-zinc-950 border-t border-zinc-900">
+    <div class="px-5 sm:px-8 md:px-12 py-14 md:py-16">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="min-w-0">
           {prev && (
-            <a href={`${base}/blog/${prev.id}`} class="group flex items-center gap-3 text-slate hover:text-ink transition-colors">
+            <a href={`${base}/blog/${prev.id}`} class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
               <svg class="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
               <span class="min-w-0">
-                <span class="block text-sm text-mist">Previous post</span>
-                <span class="block font-medium text-ink truncate">{prev.data.title}</span>
+                <span class="block text-sm text-zinc-500">Previous post</span>
+                <span class="block font-medium text-white truncate">{prev.data.title}</span>
               </span>
             </a>
           )}
         </div>
         <div class="min-w-0 sm:text-right">
           {next && (
-            <a href={`${base}/blog/${next.id}`} class="group flex items-center gap-3 sm:justify-end text-slate hover:text-ink transition-colors">
+            <a href={`${base}/blog/${next.id}`} class="group flex items-center gap-3 sm:justify-end text-zinc-400 hover:text-white transition-colors">
               <span class="min-w-0 sm:order-1">
-                <span class="block text-sm text-mist">Next post</span>
-                <span class="block font-medium text-ink truncate">{next.data.title}</span>
+                <span class="block text-sm text-zinc-500">Next post</span>
+                <span class="block font-medium text-white truncate">{next.data.title}</span>
               </span>
               <svg class="w-5 h-5 shrink-0 sm:order-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

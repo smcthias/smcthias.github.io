@@ -8,15 +8,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   title="Page Not Found - Savelle Design"
   description="This page doesn't exist. Head back to the homepage or see the work."
 >
-  <section class="py-28 md:py-44">
-    <div class="px-5 sm:px-8">
-      <h1 class="text-mega font-semibold text-ink">This page doesn't exist.</h1>
+  <section class="bg-zinc-950 py-28 md:py-44">
+    <div class="px-5 sm:px-8 md:px-12">
+      <h1 data-word-reveal class="font-head text-mega font-semibold text-white">This page doesn't exist.</h1>
       <div class="mt-12 flex flex-wrap items-center gap-6">
-        <a href={`${base}/`} class="inline-flex items-center gap-2 px-7 py-3.5 bg-ink text-paper font-medium hover:bg-ink/85 transition-colors">
+        <a href={`${base}/`} class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-zinc-950 font-medium hover:bg-zinc-200 transition-colors">
           Back to the homepage
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a href={`${base}/works`} class="text-ink font-medium underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
+        <a href={`${base}/works`} class="text-white font-medium underline underline-offset-8 decoration-zinc-700 hover:decoration-white transition-colors">
           See the work
         </a>
       </div>

@@ -24,11 +24,7 @@ A free self-serve UX Health Check scores your site and surfaces prioritized fixe
 
 ${link('Home', '/', 'Overview of services, selected work, and client results')}
 ${link('About', '/about', 'Savelle McThias’s background, approach, and client testimonials')}
-${link('Contact', '/contact', 'Project inquiry form — project type, budget range, and details')}
-
-## Products
-
-${link('UX Health Check', '/ux-health-check', 'Free 10-question self-assessment that scores your site’s UX and returns prioritized findings')}
+${link('Contact', '/#contact', 'Project inquiry modal, opens from any page — name, work email, and project details')}
 
 ## Work
 

@@ -6,7 +6,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const allPosts = await getCollection('blog');
 const featuredPosts = allPosts
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 3);
+  .slice(0, 2);
 
 // Testimonials: real names and quotes, verbatim except dash-as-punctuation
 // rewritten to periods/commas per the redesign brief. Each opens with a bold
@@ -71,60 +71,58 @@ const testimonials = [
   title="About - Savelle Design"
   description="Two decades of design and development for startups, agencies, and enterprise teams. Savelle McThias, designer and developer in Scottsdale, Arizona."
 >
-  <!-- ── Hero: who this is, in plain statements ───────────────────────── -->
-  <section class="pt-16 md:pt-28 pb-16 md:pb-24">
-    <div class="px-5 sm:px-8">
-      <h1 class="text-mega font-semibold text-ink">
-        Two decades of design that ships.
+  <!-- ── Hero: headline, line-art portrait, three paragraphs ──────────── -->
+  <section class="bg-zinc-950 pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="px-5 sm:px-8 md:px-12">
+      <h1 data-word-reveal class="font-head text-mega font-semibold text-white max-w-4xl">
+        Eighteen years in, still hands-on.
       </h1>
       <div class="mt-12 md:mt-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-        <div class="min-w-0 lg:col-span-7">
-          <p class="text-lg md:text-xl text-slate leading-relaxed">
-            I'm Savelle McThias, a designer and developer in Scottsdale, Arizona.
-            I design and build websites that turn visitors into customers.
-          </p>
-          <p class="mt-6 text-lg text-slate leading-relaxed">
-            Two decades of work for startups, agencies, and enterprise teams taught me
-            what matters: clear communication, design decisions grounded in real data,
-            and work that serves the business as well as it serves the customer.
-          </p>
-          <p class="mt-6 text-lg text-slate leading-relaxed">
-            I carry a project from Figma to production code in modern frameworks,
-            with AI integrated into my workflow at every step. One accountable
-            person, with the speed of a full team.
-          </p>
+        <div class="min-w-0 lg:col-span-5 order-2 lg:order-1">
+          <img
+            src={`${base}/images/about/savelle.svg`}
+            alt="Line-art portrait of Savelle McThias"
+            class="w-full max-w-sm"
+          />
         </div>
-        <div class="min-w-0 lg:col-span-5">
-          <div class="border border-hairline bg-card p-3">
-            <img
-              src={`${base}/images/about/profile.jpg`}
-              alt="Savelle McThias, designer and developer"
-              class="w-full aspect-square object-cover"
-            />
-          </div>
+        <div class="min-w-0 lg:col-span-7 order-1 lg:order-2">
+          <p data-word-reveal data-word-reveal-speed="fast" class="text-lg md:text-xl text-zinc-400 leading-relaxed">
+            I started in agencies, moved through tech startups and corporate teams, and went
+            independent in 2021. Somewhere in there I designed for PetSmart, General Motors,
+            Universal, Plexus, and a long list of businesses you haven't heard of that just
+            needed their website to work harder.
+          </p>
+          <p data-word-reveal data-word-reveal-speed="fast" class="mt-6 text-lg md:text-xl text-zinc-400 leading-relaxed">
+            When you work with me, you work with me. No account managers, no juniors, no
+            surprises.
+          </p>
+          <p data-word-reveal data-word-reveal-speed="fast" class="mt-6 text-lg md:text-xl text-zinc-400 leading-relaxed">
+            I design and I build, and I run AI through both. That means fewer meetings, faster
+            launches, and the judgment of a senior designer moving at the pace of a full team.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ── Testimonials ─────────────────────────────────────────────────── -->
-  <section id="testimonials" class="border-t border-hairline py-24 md:py-36">
-    <div class="px-5 sm:px-8">
+  <section id="testimonials" class="bg-zinc-950 border-t border-zinc-900 py-24 md:py-36">
+    <div class="px-5 sm:px-8 md:px-12">
       <div class="mb-16 md:mb-20">
-        <h2 class="text-huge font-semibold text-ink">In their words.</h2>
+        <h2 class="font-head text-huge font-semibold text-white">In their words.</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {testimonials.map((t) => (
-          <figure class="bg-card border border-hairline p-8 md:p-10">
+          <figure class="rounded-2xl bg-zinc-900 border border-zinc-800 p-8 md:p-10">
             <blockquote>
-              <p class="text-xl md:text-2xl font-semibold text-ink leading-snug mb-6">{t.pull}</p>
+              <p class="text-xl md:text-2xl font-semibold text-white leading-snug mb-6">{t.pull}</p>
               {t.paras.map((para) => (
-                <p class="text-slate leading-relaxed mb-5">{para}</p>
+                <p class="text-zinc-400 leading-relaxed mb-5">{para}</p>
               ))}
             </blockquote>
-            <figcaption class="mt-2 pt-6 border-t border-hairline">
-              <p class="font-medium text-ink">{t.name}</p>
-              <p class="text-mist">{t.role}</p>
+            <figcaption class="mt-2 pt-6 border-t border-zinc-800">
+              <p class="font-medium text-white">{t.name}</p>
+              <p class="text-zinc-500">{t.role}</p>
             </figcaption>
           </figure>
         ))}
@@ -132,19 +130,19 @@ const testimonials = [
     </div>
   </section>
 
-  <!-- ── From the blog ────────────────────────────────────────────────── -->
-  <section class="border-t border-hairline py-24 md:py-36">
-    <div class="px-5 sm:px-8">
+  <!-- ── From the blog: 2 posts + link to all articles ────────────────── -->
+  <section class="bg-zinc-950 border-t border-zinc-900 py-24 md:py-36">
+    <div class="px-5 sm:px-8 md:px-12">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-16 md:mb-20">
         <div>
-          <h2 class="text-huge font-semibold text-ink">Notes from real projects.</h2>
+          <h2 class="font-head text-huge font-semibold text-white">Notes from real projects.</h2>
         </div>
-        <a href={`${base}/blog`} class="inline-flex items-center gap-2 font-medium text-ink underline underline-offset-8 decoration-hairline hover:decoration-ink transition-colors">
+        <a href={`${base}/blog`} class="inline-flex items-center gap-2 font-medium text-white underline underline-offset-8 decoration-zinc-700 hover:decoration-white transition-colors">
           View all articles
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {featuredPosts.map((post) => {
           const formattedDate = new Date(post.data.date).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -152,7 +150,7 @@ const testimonials = [
             day: 'numeric',
           });
           return (
-            <a href={`${base}/blog/${post.id}`} class="group block border border-hairline bg-card hover:border-ink transition-colors">
+            <a href={`${base}/blog/${post.id}`} class="group block rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-colors">
               <div class="overflow-hidden">
                 <img
                   src={`${base}/images/${post.data.image}`}
@@ -162,11 +160,11 @@ const testimonials = [
                 />
               </div>
               <div class="p-6">
-                <p class="text-xs text-mist mb-3">{formattedDate}</p>
-                <h3 class="text-lg font-semibold text-ink mb-2 group-hover:underline underline-offset-4 decoration-hairline">
+                <p class="text-xs text-zinc-500 mb-3">{formattedDate}</p>
+                <h3 class="text-lg font-semibold text-white mb-2 group-hover:underline underline-offset-4 decoration-zinc-700">
                   {post.data.title}
                 </h3>
-                <p class="text-sm text-slate leading-relaxed">{post.data.description}</p>
+                <p class="text-sm text-zinc-400 leading-relaxed">{post.data.description}</p>
               </div>
             </a>
           );

@@ -64,4 +64,4 @@ If the honest answer is no, the good news is the same as always in this series �
 
 ---
 
-**Want your booking path mapped?** [Get in touch](/contact) and I'll walk your site the way a new patient does — landing page to confirmed appointment — and show you exactly where the path breaks.
+**Want your booking path mapped?** [Get in touch](#contact) and I'll walk your site the way a new patient does — landing page to confirmed appointment — and show you exactly where the path breaks.

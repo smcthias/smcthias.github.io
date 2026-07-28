@@ -15,27 +15,15 @@
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Design tokens. Swiss modern: monochrome, light-first, dark where the work
-   is shown. No accent color — the portfolio imagery carries the color; type
-   and space carry the design. Light ground for reading, ink for galleries.
+   Design tokens. v4 redesign: black ground throughout, monochrome — colors
+   come straight off Tailwind's zinc scale in markup (per the brief), so
+   there are no custom color tokens here anymore. No accent color — the
+   portfolio imagery carries the color; type and space carry the design.
    ────────────────────────────────────────────────────────────────────────── */
 @theme {
   --font-sans: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-display: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-
-  /* Light ground (default) */
-  --color-paper: #f6f6f4;     /* page base — cool off-white */
-  --color-card: #ffffff;      /* raised panels on light */
-  --color-ink: #0e0e10;       /* near-black — text on light, dark ground */
-  --color-slate: #4c4c54;     /* secondary text on light */
-  --color-mist: #86868d;      /* captions / labels on light */
-  --color-hairline: #e2e2de;  /* rules on light */
-
-  /* Dark ground (gallery bands, hero video) */
-  --color-ink-soft: #17171a;  /* dark surface / cards on ink */
-  --color-fog: #b8b8be;       /* secondary text on dark */
-  --color-dusk: #7d7d85;      /* captions on dark */
-  --color-seam: #26262b;      /* rules on dark */
+  --font-head: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   /* Display scale — fluid, tight, confident */
   --text-mega: clamp(2.75rem, 7vw, 6rem);
@@ -56,21 +44,21 @@
    ────────────────────────────────────────────────────────────────────────── */
 html {
   font-family: var(--font-sans);
-  background-color: var(--color-paper);
-  color: var(--color-ink);
+  background-color: #09090b;
+  color: white;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
+  background-color: #09090b;
+  color: white;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: white;
+  color: #09090b;
 }
 
 :focus-visible {
@@ -80,33 +68,10 @@ body {
 
 @layer base {
   h1, h2, h3, h4 {
-    font-family: var(--font-display);
+    font-family: var(--font-head);
     font-weight: 600;
     text-wrap: balance;
   }
-}
-
-/* ──────────────────────────────────────────────────────────────────────────
-   Section labels. One quiet convention: small, medium-weight, tracked caps.
-   No counters, no ticks, no ornament — a label, nothing more.
-   ────────────────────────────────────────────────────────────────────────── */
-.label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-mist);
-}
-.on-dark .label, .label-dark { color: var(--color-dusk); }
-
-/* Vertical edge label — a headline demoted to marginalia (hero). */
-.edge-label {
-  writing-mode: vertical-rl;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-mist);
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -148,6 +113,51 @@ body {
   scroll-snap-align: start;
 }
 
+/* ──────────────────────────────────────────────────────────────────────────
+   Lenis smooth scroll (src/scripts/smooth-scroll.ts). Easing only — Lenis
+   drives the native scrollbar, it never hijacks direction or captures
+   input. Boilerplate classes per lenis docs.
+   ────────────────────────────────────────────────────────────────────────── */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Word-by-word scroll reveal (src/scripts/word-reveal.ts). GSAP SplitText
+   wraps each word in a .word span; this just gives them a sane display
+   mode so translateY doesn't collapse line-height mid-animation.
+   ────────────────────────────────────────────────────────────────────────── */
+[data-word-reveal] .word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Plain fade-in, chained after a [data-word-reveal] element finishes via
+   data-reveal-next="#selector" — see src/scripts/word-reveal.ts. */
+[data-fade-reveal] {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+[data-fade-reveal].is-visible {
+  opacity: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Forced horizontal-scroll section (services/pillars). The one deliberate
+   scroll-hijack exception, contained to this section only — see
+   src/scripts/pillar-scroll.ts.
+   ────────────────────────────────────────────────────────────────────────── */
+.pillar-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+.pillar-track.is-horizontal {
+  flex-direction: row;
+  height: 100%;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .marquee { display: block; }
@@ -156,6 +166,13 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     min-width: 0;
+  }
+  [data-word-reveal] .word {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-fade-reveal] {
+    opacity: 1 !important;
   }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;

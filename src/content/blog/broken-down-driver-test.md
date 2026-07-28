@@ -56,4 +56,4 @@ The drivers are already breaking down. The only question is whose site is ready 
 
 ---
 
-**Want a second opinion on whether your site would pass the test?** The free UX Health Check scores your site across clarity, conversion, mobile, accessibility, and consistency — the same territory as the three questions every stressed customer is asking. [Take the free UX Health Check](/ux-health-check).
+**Want a second opinion on whether your site would pass the test?** The free UX Health Check scores your site across clarity, conversion, mobile, accessibility, and consistency — the same territory as the three questions every stressed customer is asking. [Take the free UX Health Check](#website-score).

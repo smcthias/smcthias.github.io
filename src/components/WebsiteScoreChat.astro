@@ -1,11 +1,11 @@
 ---
-// Floating chat-style Website Score tool, embedded on the contact and work
-// pages. A condensed, conversational version of the full /ux-health-check
-// quiz: same ten questions, same scoring, same lead-capture endpoint,
-// presented as a bottom-right chat widget instead of a full page. See
-// ux-health-check.astro for the full-page version and the FORM_ENDPOINT note.
-const { page = 'site' } = Astro.props as { page?: string };
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+// Global floating chat-style Website Score tool (2026-07-27 redesign:
+// rendered once in Layout.astro, bottom-right, on every page — the old
+// full-page /ux-health-check quiz was removed, this widget is now the only
+// way to run it). Same ten questions, same scoring, same lead-capture
+// endpoint as that former page, presented as chat bubbles with quick-reply
+// chips. `page` is captured from the URL for lead attribution only.
+const page = Astro.url.pathname;
 const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
 
 type Option = { label: string; value: number };
@@ -121,7 +121,7 @@ const questions: Question[] = [
     type="button"
     aria-expanded="false"
     aria-controls="wsc-panel"
-    class="inline-flex items-center gap-2.5 px-5 py-3.5 bg-ink text-paper font-medium shadow-xl shadow-black/15 hover:bg-ink/85 transition-colors"
+    class="inline-flex items-center gap-2.5 pl-5 pr-5 py-3.5 rounded-full bg-white text-zinc-950 font-medium shadow-xl shadow-black/30 hover:bg-zinc-200 transition-colors"
   >
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.06 0-2.078-.163-3.024-.463L3 21l1.395-3.72C3.512 15.898 3 14.5 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -136,30 +136,29 @@ const questions: Question[] = [
   aria-label="Website Score chat"
   aria-hidden="true"
   data-endpoint={FORM_ENDPOINT}
-  data-base={base}
   data-page={page}
-  class="wsc-panel fixed bottom-5 right-5 z-40 w-[min(24rem,calc(100vw-2.5rem))] max-h-[min(38rem,calc(100vh-2.5rem))] bg-paper border border-hairline shadow-2xl shadow-black/20 flex flex-col"
+  class="wsc-panel fixed bottom-5 right-5 z-40 w-[min(24rem,calc(100vw-2.5rem))] max-h-[min(38rem,calc(100vh-2.5rem))] rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl shadow-black/40 flex flex-col overflow-hidden"
   hidden
 >
-  <div class="flex items-center justify-between gap-3 px-5 py-4 bg-ink text-paper shrink-0">
+  <div class="flex items-center justify-between gap-3 px-5 py-4 bg-zinc-900 shrink-0">
     <div class="min-w-0">
-      <p class="text-sm font-semibold text-paper">Website Score</p>
-      <p class="text-xs text-fog">Ten quick questions, about 2 minutes</p>
+      <p class="text-sm font-semibold text-white">Website Score</p>
+      <p class="text-xs text-zinc-400">Ten quick questions, about 2 minutes</p>
     </div>
-    <button id="wsc-close" type="button" aria-label="Close Website Score chat" class="shrink-0 text-fog hover:text-paper transition-colors">
+    <button id="wsc-close" type="button" aria-label="Close Website Score chat" class="shrink-0 text-zinc-400 hover:text-white transition-colors">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
     </button>
   </div>
 
   <div class="px-5 pt-3 shrink-0">
-    <div class="h-1 w-full bg-hairline overflow-hidden">
-      <div id="wsc-progress" class="h-full bg-ink transition-all duration-300" style="width:0%"></div>
+    <div class="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
+      <div id="wsc-progress" class="h-full bg-white transition-all duration-300" style="width:0%"></div>
     </div>
   </div>
 
   <div id="wsc-messages" class="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0" aria-live="polite"></div>
 
-  <div id="wsc-dock" class="border-t border-hairline p-3 shrink-0"></div>
+  <div id="wsc-dock" class="border-t border-zinc-800 p-3 shrink-0"></div>
 </div>
 
 <script
@@ -177,7 +176,6 @@ const questions: Question[] = [
     const dockEl = document.getElementById('wsc-dock');
     const progressEl = document.getElementById('wsc-progress');
     const endpoint = panel.dataset.endpoint || '';
-    const base = panel.dataset.base || '';
     const page = panel.dataset.page || 'site';
 
     const TOTAL = questions.length + 1; // + email step
@@ -257,8 +255,8 @@ const questions: Question[] = [
       row.className = 'flex items-center gap-2';
       row.innerHTML =
         '<input type="email" required autocomplete="email" placeholder="you@yourbusiness.com" ' +
-        'class="min-w-0 flex-1 px-3 py-2.5 bg-card border border-hairline text-sm text-ink placeholder-mist focus:outline-hidden focus:border-ink" />' +
-        '<button type="submit" class="shrink-0 px-4 py-2.5 bg-ink text-paper text-sm font-medium hover:bg-ink/85 transition-colors">Send</button>';
+        'class="min-w-0 flex-1 px-3 py-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-white placeholder-zinc-500 focus:outline-hidden focus:border-white" />' +
+        '<button type="submit" class="shrink-0 px-4 py-2.5 rounded-full bg-white text-zinc-950 text-sm font-medium hover:bg-zinc-200 transition-colors">Send</button>';
       const input = row.querySelector('input');
       row.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -342,10 +340,9 @@ const questions: Question[] = [
       clearDock();
       const ctaWrap = document.createElement('div');
       ctaWrap.className = 'space-y-2';
-      const contactLink = document.createElement('a');
-      contactLink.href = page === 'contact'
-        ? '#contact-form'
-        : base + '/contact?ref=' + page + '-chat';
+      const contactLink = document.createElement('button');
+      contactLink.type = 'button';
+      contactLink.setAttribute('data-contact-open', '');
       contactLink.className = 'wsc-cta-primary';
       contactLink.textContent = 'Ask about your results';
       ctaWrap.appendChild(contactLink);
@@ -393,6 +390,15 @@ const questions: Question[] = [
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !panel.hidden) close();
     });
+    // Since the full-page /ux-health-check quiz was removed, in-content
+    // links (e.g. blog CTAs) point at this widget via #website-score.
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest && e.target.closest('a[href="#website-score"]');
+      if (trigger) {
+        e.preventDefault();
+        open();
+      }
+    });
   })();
 </script>
 
@@ -414,17 +420,18 @@ const questions: Question[] = [
     padding: 0.65rem 0.9rem;
     font-size: 0.875rem;
     line-height: 1.5;
+    border-radius: 0.75rem;
   }
   :global(.wsc-bubble p + p) { margin-top: 0.4rem; }
   :global(.wsc-bubble-bot) {
-    background: var(--color-card);
-    border: 1px solid var(--color-hairline);
-    color: var(--color-ink);
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: white;
   }
   :global(.wsc-bubble-user) {
     margin-left: auto;
-    background: var(--color-ink);
-    color: var(--color-paper);
+    background: white;
+    color: #09090b;
   }
   :global(.wsc-eyebrow) {
     display: block;
@@ -432,24 +439,24 @@ const questions: Question[] = [
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-mist);
+    color: #71717a;
     margin-bottom: 0.25rem;
   }
   :global(.wsc-score) {
     font-size: 2.5rem;
     font-weight: 600;
     line-height: 1;
-    color: var(--color-ink);
+    color: white;
   }
   :global(.wsc-score span) {
     font-size: 1.125rem;
-    color: var(--color-mist);
+    color: #71717a;
     font-weight: 500;
   }
   :global(.wsc-score-label) {
     margin-top: 0.35rem;
     font-weight: 600;
-    color: var(--color-ink);
+    color: white;
   }
 
   :global(.wsc-chip) {
@@ -458,13 +465,14 @@ const questions: Question[] = [
     text-align: left;
     padding: 0.6rem 0.85rem;
     font-size: 0.875rem;
-    background: var(--color-paper);
-    border: 1px solid var(--color-hairline);
-    color: var(--color-ink);
+    border-radius: 0.5rem;
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: white;
     transition: border-color 0.15s;
   }
   :global(.wsc-chip:hover) {
-    border-color: var(--color-ink);
+    border-color: white;
   }
   :global(.wsc-cta-primary) {
     display: block;
@@ -473,9 +481,11 @@ const questions: Question[] = [
     padding: 0.7rem 1rem;
     font-size: 0.875rem;
     font-weight: 500;
-    background: var(--color-ink);
-    color: var(--color-paper);
+    border-radius: 999px;
+    background: white;
+    color: #09090b;
     transition: opacity 0.15s;
+    cursor: pointer;
   }
   :global(.wsc-cta-primary:hover) { opacity: 0.85; }
   :global(.wsc-cta-secondary) {
@@ -484,7 +494,8 @@ const questions: Question[] = [
     text-align: center;
     padding: 0.6rem 1rem;
     font-size: 0.8125rem;
-    color: var(--color-slate);
+    color: #a1a1aa;
+    cursor: pointer;
   }
-  :global(.wsc-cta-secondary:hover) { color: var(--color-ink); }
+  :global(.wsc-cta-secondary:hover) { color: white; }
 </style>
