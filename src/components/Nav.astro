@@ -12,7 +12,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 <header id="site-nav" class="fixed top-0 inset-x-0 z-90">
   <div class="px-5 sm:px-8 md:px-12">
     <div class="flex items-center justify-between h-16 md:h-auto md:py-12">
-      <a href={`${base}/`} class="font-head text-lg md:text-4xl font-normal tracking-tight text-zinc-50" aria-label="Savelle home">
+      <a href={`${base}/`} data-nav-intro class="font-head text-lg md:text-4xl font-normal tracking-tight text-zinc-50" aria-label="Savelle home">
         SAVELLE
       </a>
 
@@ -20,6 +20,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <button
           type="button"
           data-contact-open
+          data-nav-intro
           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-zinc-950 text-sm md:text-lg font-semibold hover:bg-zinc-200 transition-colors cursor-pointer"
         >
           LET'S TALK
@@ -29,6 +30,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <button
           id="nav-menu-toggle"
           type="button"
+          data-nav-intro
           aria-label="Open menu"
           aria-expanded="false"
           aria-controls="nav-drawer"
@@ -90,6 +92,35 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </style>
 
 <script>
+  import { gsap } from 'gsap';
+
+  // Wordmark + the two nav buttons drop/fade in TOGETHER (no stagger — a
+  // single simultaneous beat, not sequenced word-by-word or card-by-card
+  // like other reveals) on every page load — the one entrance animation on
+  // the site that isn't scroll-triggered, since the nav is visible
+  // immediately with nothing to scroll toward yet. Nav isn't
+  // transition:persist'd, so this replays on every navigation, consistent
+  // with how word-reveal/image-reveal also re-run per page.
+  //
+  // On the homepage this is the second beat of a deliberate sequence
+  // (headline, then nav+logo together) — start right as the headline's
+  // own word-reveal finishes: 8 words × 0.09s stagger + 0.9s duration =
+  // 1.53s (src/pages/index.astro's hero h1, data-word-reveal-speed="slow").
+  // Hardcoded rather than read from the DOM since word-reveal.ts doesn't
+  // expose a per-element finish time; update this if that headline's word
+  // count or speed ever changes. Elsewhere (no showreel on the page, i.e.
+  // not the homepage) it plays almost immediately, same as before.
+  function initNavIntro() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+    const els = document.querySelectorAll<HTMLElement>('#site-nav [data-nav-intro]');
+    if (!els.length) return;
+    const isHomepage = !!document.querySelector('[data-reel-play]');
+    const delay = isHomepage ? 1.53 : 0.1;
+    gsap.set(els, { opacity: 0, y: -16 });
+    gsap.to(els, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', delay });
+  }
+
   function initNav() {
     const toggle = document.getElementById('nav-menu-toggle');
     const label = document.getElementById('nav-menu-label');
@@ -120,4 +151,5 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     });
   }
   document.addEventListener('astro:page-load', initNav);
+  document.addEventListener('astro:page-load', initNavIntro);
 </script>

@@ -38,7 +38,7 @@ const work = [...FEATURED.map((f) => byId[f.slug]), ...rest];
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
         {work.map((p, i) => (
           <a href={`${base}/works/${p.id}`} class="group block min-w-0">
-            <div class="overflow-hidden rounded-2xl bg-zinc-900">
+            <div data-image-reveal class="overflow-hidden rounded-2xl bg-zinc-900">
               <img
                 src={`${base}/images/works/${p.data.thumbnail}`}
                 alt={`${p.data.title}, ${p.data.category}`}
@@ -46,10 +46,10 @@ const work = [...FEATURED.map((f) => byId[f.slug]), ...rest];
                 loading={i < 2 ? 'eager' : 'lazy'}
               />
             </div>
-            <p class="mt-5 md:text-xl font-medium text-zinc-50 uppercase">
+            <p data-word-reveal data-word-reveal-speed="fast" class="mt-5 md:text-xl font-medium text-zinc-50 uppercase">
               {p.data.tags.join(' • ')}
             </p>
-            <h3 class="mt-2 font-head text-2xl md:text-5xl font-normal text-zinc-50">{p.data.title}</h3>
+            <h3 data-word-reveal class="mt-2 font-head text-2xl md:text-5xl font-normal text-zinc-50">{p.data.title}</h3>
           </a>
         ))}
       </div>

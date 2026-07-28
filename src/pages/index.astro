@@ -48,6 +48,17 @@ const pillars = [
        starts flush at the top of the page — auto-height padding (not a
        fixed row) keeps the two-line headline from overflowing past the
        viewport edge. ── -->
+  <!-- Load-in sequence, deliberately staggered across separate reveal
+       systems/files rather than one master timeline: headline first (below,
+       starts immediately — 8 words × 0.09s stagger + 0.9s duration = 1.53s
+       to finish), then the showreel AND the nav/wordmark together, both
+       starting right as the headline finishes (data-image-reveal-delay
+       ="1.53" below; Nav.astro hardcodes the same 1.53s, see its comment),
+       then this section's scroll indicator once the last of those two to
+       finish — the showreel, at 1.53 + 1.4s duration = 2.93s, since the nav
+       itself only takes another 0.6s — settles
+       (data-drop-reveal-delay below). If any of these durations change,
+       the dependent delays need updating too. -->
   <section class="relative bg-zinc-950 md:-mt-[138px] md:h-screen md:flex md:flex-col">
     <div class="pt-24 pb-8 md:pt-12 md:pb-12 md:shrink-0 px-5 sm:px-8 md:px-12">
       <h1
@@ -64,6 +75,9 @@ const pillars = [
     <div class="mt-8 md:mt-0 md:flex-1 md:min-h-0 px-5 sm:px-8 md:px-12">
       <button
         data-reel-play
+        data-image-reveal
+        data-image-reveal-duration="1.4"
+        data-image-reveal-delay="1.53"
         class="group relative block w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-auto md:h-full rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer bg-zinc-900"
         aria-label="Play the portfolio showreel with sound"
       >
@@ -83,7 +97,11 @@ const pillars = [
       </button>
     </div>
 
-    <div class="mt-12 md:shrink-0 md:pb-8 px-5 sm:px-8 md:px-12 flex items-center justify-center gap-4 text-zinc-600">
+    <div
+      data-drop-reveal
+      data-drop-reveal-delay="2.93"
+      class="mt-12 md:shrink-0 md:pb-8 px-5 sm:px-8 md:px-12 flex items-center justify-center gap-4 text-zinc-600"
+    >
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 5v14M6 13l6 6 6-6" /></svg>
       <span class="text-xs font-medium tracking-[0.2em] uppercase">Scroll</span>
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 5v14M6 13l6 6 6-6" /></svg>
@@ -105,7 +123,7 @@ const pillars = [
       </h2>
     </div>
     <div class="mt-8 md:mt-16 px-5 sm:px-8 md:px-12 md:flex md:justify-end max-w-7xl">
-      <p id="opener-subtext" data-fade-reveal class="max-w-md text-lg md:text-4xl text-zinc-400">
+      <p id="opener-subtext" data-fade-reveal class="max-w-md text-lg md:text-4xl text-zinc-50">
         I make sure it holds. AI runs through my process, the craft stays mine.
       </p>
     </div>
@@ -192,7 +210,7 @@ const pillars = [
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
         {work.map((p) => (
           <a href={`${base}/works/${p.id}`} class="group block min-w-0">
-            <div class="overflow-hidden rounded-2xl bg-zinc-900">
+            <div data-image-reveal class="overflow-hidden rounded-2xl bg-zinc-900">
               <img
                 src={`${base}/images/works/${p.data.thumbnail}`}
                 alt={`${p.data.title}, ${p.data.category}`}
@@ -200,15 +218,15 @@ const pillars = [
                 loading="lazy"
               />
             </div>
-            <p class="mt-5 md:text-xl font-medium text-zinc-50 uppercase">
+            <p data-word-reveal data-word-reveal-speed="fast" class="mt-5 md:text-xl font-medium text-zinc-50 uppercase">
               {p.data.tags.join(' • ')}
             </p>
-            <h3 class="mt-2 font-head text-2xl md:text-5xl font-normal text-zinc-50">{p.data.title}</h3>
+            <h3 data-word-reveal class="mt-2 font-head text-2xl md:text-5xl font-normal text-zinc-50">{p.data.title}</h3>
           </a>
         ))}
       </div>
 
-      <div class="mt-16 md:mt-20 md:text-center">
+      <div data-drop-reveal class="mt-16 md:mt-20 md:text-center">
         <a href={`${base}/works`} class="inline-flex items-center gap-3 text-xl md:text-6xl font-normal text-zinc-50 hover:text-zinc-400 transition-colors">
           More projects
           <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
