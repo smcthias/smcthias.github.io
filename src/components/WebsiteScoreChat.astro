@@ -142,10 +142,10 @@ const questions: Question[] = [
 >
   <div class="flex items-center justify-between gap-3 px-5 py-4 bg-zinc-900 shrink-0">
     <div class="min-w-0">
-      <p class="text-sm font-semibold text-white">Website Score</p>
+      <p class="text-sm font-semibold text-zinc-50">Website Score</p>
       <p class="text-xs text-zinc-400">Ten quick questions, about 2 minutes</p>
     </div>
-    <button id="wsc-close" type="button" aria-label="Close Website Score chat" class="shrink-0 text-zinc-400 hover:text-white transition-colors">
+    <button id="wsc-close" type="button" aria-label="Close Website Score chat" class="shrink-0 text-zinc-400 hover:text-zinc-50 transition-colors">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
     </button>
   </div>
@@ -255,7 +255,7 @@ const questions: Question[] = [
       row.className = 'flex items-center gap-2';
       row.innerHTML =
         '<input type="email" required autocomplete="email" placeholder="you@yourbusiness.com" ' +
-        'class="min-w-0 flex-1 px-3 py-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-white placeholder-zinc-500 focus:outline-hidden focus:border-white" />' +
+        'class="min-w-0 flex-1 px-3 py-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white" />' +
         '<button type="submit" class="shrink-0 px-4 py-2.5 rounded-full bg-white text-zinc-950 text-sm font-medium hover:bg-zinc-200 transition-colors">Send</button>';
       const input = row.querySelector('input');
       row.addEventListener('submit', (e) => {
@@ -426,7 +426,7 @@ const questions: Question[] = [
   :global(.wsc-bubble-bot) {
     background: #18181b;
     border: 1px solid #27272a;
-    color: white;
+    color: #fafafa;
   }
   :global(.wsc-bubble-user) {
     margin-left: auto;
@@ -446,7 +446,7 @@ const questions: Question[] = [
     font-size: 2.5rem;
     font-weight: 600;
     line-height: 1;
-    color: white;
+    color: #fafafa;
   }
   :global(.wsc-score span) {
     font-size: 1.125rem;
@@ -456,7 +456,7 @@ const questions: Question[] = [
   :global(.wsc-score-label) {
     margin-top: 0.35rem;
     font-weight: 600;
-    color: white;
+    color: #fafafa;
   }
 
   :global(.wsc-chip) {
@@ -468,7 +468,7 @@ const questions: Question[] = [
     border-radius: 0.5rem;
     background: #18181b;
     border: 1px solid #27272a;
-    color: white;
+    color: #fafafa;
     transition: border-color 0.15s;
   }
   :global(.wsc-chip:hover) {
@@ -497,5 +497,5 @@ const questions: Question[] = [
     color: #a1a1aa;
     cursor: pointer;
   }
-  :global(.wsc-cta-secondary:hover) { color: white; }
+  :global(.wsc-cta-secondary:hover) { color: #fafafa; }
 </style>

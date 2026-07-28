@@ -63,14 +63,14 @@ const creativeWorkLd = {
   <!-- ── Hero: full-bleed image ────────────────────────────────────────── -->
   <section class="bg-zinc-950">
     <div class="px-5 sm:px-8 md:px-12 pt-12 md:pt-16 pb-14 md:pb-20">
-      <a href={`${base}/works`} class="group inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors mb-12">
+      <a href={`${base}/works`} class="group inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-50 transition-colors mb-12">
         <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         All work
       </a>
-      <h1 data-word-reveal class="font-head text-mega font-semibold text-white">{project.data.title}</h1>
-      <p class="mt-8 text-lg md:text-xl text-zinc-400 leading-relaxed">
+      <h1 data-word-reveal class="font-head text-mega md:text-9xl font-normal text-zinc-50">{project.data.title}</h1>
+      <p class="mt-8 text-lg md:text-xl text-zinc-50 leading-relaxed">
         {project.data.description}
       </p>
     </div>
@@ -89,7 +89,7 @@ const creativeWorkLd = {
         <div class="flex flex-wrap gap-x-16 gap-y-10">
           {project.data.results.map((result) => (
             <div class="min-w-0">
-              <p class="font-head text-big font-semibold text-white leading-none">{result.value}</p>
+              <p class="font-head text-big font-semibold text-zinc-50 leading-none">{result.value}</p>
               <p class="mt-3 text-zinc-400 leading-snug">{result.label}</p>
             </div>
           ))}
@@ -107,15 +107,15 @@ const creativeWorkLd = {
           <dl class="space-y-6">
             <div>
               <dt class="text-sm text-zinc-500 mb-1">Role</dt>
-              <dd class="text-white">{project.data.role}</dd>
+              <dd class="text-zinc-50">{project.data.role}</dd>
             </div>
             <div>
               <dt class="text-sm text-zinc-500 mb-1">Timeline</dt>
-              <dd class="text-white">{project.data.timeline}</dd>
+              <dd class="text-zinc-50">{project.data.timeline}</dd>
             </div>
             <div>
               <dt class="text-sm text-zinc-500 mb-1">Services</dt>
-              <dd class="text-white">{project.data.services}</dd>
+              <dd class="text-zinc-50">{project.data.services}</dd>
             </div>
             <div>
               <dt class="text-sm text-zinc-500 mb-1">Tags</dt>
@@ -126,11 +126,11 @@ const creativeWorkLd = {
 
         <!-- Narrative -->
         <div class="min-w-0 lg:col-span-8">
-          <h2 class="font-head text-big font-semibold text-white mb-6">The project.</h2>
-          <p class="text-xl md:text-2xl text-white leading-relaxed">{lead}</p>
+          <h2 class="font-head text-big font-semibold text-zinc-50 mb-6">The project.</h2>
+          <p class="text-xl md:text-2xl text-zinc-50 leading-relaxed">{lead}</p>
           {restBrief.length > 0 && (
             <>
-              <h2 class="font-head text-big font-semibold text-white mt-16 mb-6">The work.</h2>
+              <h2 class="font-head text-big font-semibold text-zinc-50 mt-16 mb-6">The work.</h2>
               {restBrief.map((paragraph) => (
                 <p class="text-lg text-zinc-400 leading-relaxed mb-6">{paragraph}</p>
               ))}
@@ -168,23 +168,23 @@ const creativeWorkLd = {
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div class="min-w-0">
           {prev && (
-            <a href={`${base}/works/${prev.id}`} class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+            <a href={`${base}/works/${prev.id}`} class="group flex items-center gap-3 text-zinc-400 hover:text-zinc-50 transition-colors">
               <svg class="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
               <span class="min-w-0">
                 <span class="block text-sm text-zinc-500">Previous</span>
-                <span class="block font-medium text-white truncate">{prev.data.title}</span>
+                <span class="block font-medium text-zinc-50 truncate">{prev.data.title}</span>
               </span>
             </a>
           )}
         </div>
         <div class="min-w-0 sm:text-right">
           {next && (
-            <a href={`${base}/works/${next.id}`} class="group flex items-center gap-3 sm:justify-end text-zinc-400 hover:text-white transition-colors">
+            <a href={`${base}/works/${next.id}`} class="group flex items-center gap-3 sm:justify-end text-zinc-400 hover:text-zinc-50 transition-colors">
               <span class="min-w-0 sm:order-1">
                 <span class="block text-sm text-zinc-500">Next</span>
-                <span class="block font-medium text-white truncate">{next.data.title}</span>
+                <span class="block font-medium text-zinc-50 truncate">{next.data.title}</span>
               </span>
               <svg class="w-5 h-5 shrink-0 sm:order-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

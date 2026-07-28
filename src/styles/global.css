@@ -45,14 +45,14 @@
 html {
   font-family: var(--font-sans);
   background-color: #09090b;
-  color: white;
+  color: #fafafa;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 body {
   background-color: #09090b;
-  color: white;
+  color: #fafafa;
   overflow-x: hidden;
 }
 
