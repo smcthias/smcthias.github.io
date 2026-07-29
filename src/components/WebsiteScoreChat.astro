@@ -1,0 +1,515 @@
+---
+// Global floating chat-style Website Score tool (2026-07-27 redesign:
+// rendered once in Layout.astro, bottom-right, on every page — the old
+// full-page /ux-health-check quiz was removed, this widget is now the only
+// way to run it). Same ten questions, same scoring, same lead-capture
+// endpoint as that former page, presented as chat bubbles with quick-reply
+// chips. `page` is captured from the URL for lead attribution only.
+const page = Astro.url.pathname;
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
+
+type Option = { label: string; value: number };
+type Question = { id: string; category: string; text: string; options: Option[] };
+
+const questions: Question[] = [
+  {
+    id: 'first-impression-1',
+    category: 'First Impression',
+    text: 'When someone finds your site, how fast can they tell what you do and how to contact you?',
+    options: [
+      { label: "Right away, it's obvious", value: 2 },
+      { label: 'Takes a little digging', value: 1 },
+      { label: 'Not clear at all', value: 0 },
+    ],
+  },
+  {
+    id: 'first-impression-2',
+    category: 'First Impression',
+    text: "If someone's never used your site before, is it easy for them to find what they came for?",
+    options: [
+      { label: 'Yes, clearly laid out', value: 2 },
+      { label: 'Somewhat, if they look around', value: 1 },
+      { label: "No, it's confusing", value: 0 },
+    ],
+  },
+  {
+    id: 'conversion-1',
+    category: 'Conversion',
+    text: 'Do you know how many people leave your site without calling, booking, or filling out a form?',
+    options: [
+      { label: 'Yes, we track this', value: 2 },
+      { label: 'We have a rough idea', value: 1 },
+      { label: 'No idea', value: 0 },
+    ],
+  },
+  {
+    id: 'conversion-2',
+    category: 'Conversion',
+    text: 'How many steps does it take for someone to book, call, or request a quote?',
+    options: [
+      { label: 'One or two, quick and easy', value: 2 },
+      { label: 'A few, could be simpler', value: 1 },
+      { label: 'Long or confusing', value: 0 },
+    ],
+  },
+  {
+    id: 'mobile-1',
+    category: 'Mobile',
+    text: 'How does your site feel on a phone?',
+    options: [
+      { label: 'Looks and works great', value: 2 },
+      { label: 'Works, but built for desktop', value: 1 },
+      { label: 'Hard to use', value: 0 },
+    ],
+  },
+  {
+    id: 'mobile-2',
+    category: 'Mobile',
+    text: 'Are buttons, text, and forms easy to tap and read on a phone?',
+    options: [
+      { label: 'Yes, no issues', value: 2 },
+      { label: 'Mostly, a few rough spots', value: 1 },
+      { label: 'No, hard to use', value: 0 },
+    ],
+  },
+  {
+    id: 'accessibility-1',
+    category: 'Accessibility',
+    text: 'Is your site easy to read for people with vision or color differences?',
+    options: [
+      { label: "Yes, we've checked", value: 2 },
+      { label: 'Not sure', value: 1 },
+      { label: 'Never thought about it', value: 0 },
+    ],
+  },
+  {
+    id: 'accessibility-2',
+    category: 'Accessibility',
+    text: 'Do your photos and forms make sense to someone using a screen reader or keyboard only?',
+    options: [
+      { label: 'Yes', value: 2 },
+      { label: 'Some of it', value: 1 },
+      { label: 'Not sure', value: 0 },
+    ],
+  },
+  {
+    id: 'consistency-1',
+    category: 'Consistency',
+    text: 'Does your site look consistent from page to page: same fonts, colors, buttons?',
+    options: [
+      { label: "Yes, it's all consistent", value: 2 },
+      { label: 'Mostly, a few mismatches', value: 1 },
+      { label: 'No, it feels thrown together', value: 0 },
+    ],
+  },
+  {
+    id: 'consistency-2',
+    category: 'Consistency',
+    text: 'If you hired someone new to update your site, would they know where things are and keep it looking right?',
+    options: [
+      { label: "Yes, it's organized well", value: 2 },
+      { label: "They'd need some help", value: 1 },
+      { label: "No, it'd be a mess", value: 0 },
+    ],
+  },
+];
+---
+
+<div id="wsc-launcher" class="fixed bottom-5 right-5 z-40">
+  <button
+    id="wsc-open"
+    type="button"
+    aria-expanded="false"
+    aria-controls="wsc-panel"
+    class="inline-flex items-center gap-2.5 pl-5 pr-5 py-3.5 rounded-full bg-white text-zinc-950 font-medium shadow-xl shadow-black/30 hover:bg-zinc-200 transition-colors cursor-pointer"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.06 0-2.078-.163-3.024-.463L3 21l1.395-3.72C3.512 15.898 3 14.5 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
+    <span id="wsc-open-label">Website Score</span>
+  </button>
+</div>
+
+<div
+  id="wsc-panel"
+  role="dialog"
+  aria-label="Website Score chat"
+  aria-hidden="true"
+  data-endpoint={FORM_ENDPOINT}
+  data-page={page}
+  class="wsc-panel fixed bottom-5 right-5 z-40 w-[min(24rem,calc(100vw-2.5rem))] max-h-[min(38rem,calc(100vh-2.5rem))] rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl shadow-black/40 flex flex-col overflow-hidden"
+  hidden
+>
+  <div class="flex items-center justify-between gap-3 px-5 py-4 bg-zinc-900 shrink-0">
+    <div class="min-w-0">
+      <p class="text-sm font-semibold text-zinc-50">Website Score</p>
+      <p class="text-xs text-zinc-400">Ten quick questions, about 2 minutes</p>
+    </div>
+    <button id="wsc-close" type="button" aria-label="Close Website Score chat" class="shrink-0 text-zinc-400 hover:text-zinc-50 transition-colors cursor-pointer">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
+  </div>
+
+  <div class="px-5 pt-3 shrink-0">
+    <div class="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
+      <div id="wsc-progress" class="h-full bg-white transition-all duration-300" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="wsc-messages" class="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0" aria-live="polite"></div>
+
+  <div id="wsc-dock" class="border-t border-zinc-800 p-3 shrink-0"></div>
+</div>
+
+<script
+  is:inline
+  define:vars={{ questions }}
+>
+  // Bound via astro:page-load (not run once as a bare IIFE) — Astro's
+  // ClientRouter swaps this component's DOM back in fresh on every
+  // client-side navigation (e.g. clicking a link inside the nav drawer),
+  // and a plain top-level IIFE only ever runs once, against the very first
+  // page's elements. Without re-binding here, the launcher button that
+  // appears after any such navigation is a listener-less clone — it looks
+  // identical but clicking it does nothing, which is exactly what "works
+  // on load, stops working after using the menu" was. dataset.bound guards
+  // against double-binding on a page-load event that didn't actually swap
+  // this element (mirrors ContactModal.astro's identical guard).
+  function initWsc() {
+    const launcher = document.getElementById('wsc-launcher');
+    const openBtn = document.getElementById('wsc-open');
+    const closeBtn = document.getElementById('wsc-close');
+    const panel = document.getElementById('wsc-panel');
+    if (!launcher || !openBtn || !closeBtn || !panel) return;
+    if (launcher.dataset.bound) return;
+    launcher.dataset.bound = '1';
+
+    const messagesEl = document.getElementById('wsc-messages');
+    const dockEl = document.getElementById('wsc-dock');
+    const progressEl = document.getElementById('wsc-progress');
+    const endpoint = panel.dataset.endpoint || '';
+    const page = panel.dataset.page || 'site';
+
+    const TOTAL = questions.length + 1; // + email step
+    let step = 0; // 0..questions.length-1 = quiz, questions.length = email, then results
+    let started = false;
+    const answers = {}; // question id -> { value, category }
+
+    const RECOS = {
+      'First Impression': 'Make your headline and hero instantly show what you do and how to reach you: service, location, and a phone or booking button above the fold.',
+      Conversion: 'Add simple analytics to see where visitors drop off, then shorten the path. A single "Call Now" or "Book" button beats a multi-step form.',
+      Mobile: 'Rebuild key pages mobile-first: big tap-friendly buttons, a click-to-call number, forms that don’t require zooming.',
+      Accessibility: 'Check color contrast, add alt text, and make sure forms and menus work with a keyboard or screen reader.',
+      Consistency: 'Standardize fonts, colors, and buttons across every page so it reads as one professional site, not several stitched together.',
+    };
+
+    function scrollDown() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function setProgress() {
+      const pct = Math.round((Math.min(step, TOTAL) / TOTAL) * 100);
+      progressEl.style.width = pct + '%';
+    }
+
+    function bubble(role, html) {
+      const wrap = document.createElement('div');
+      wrap.className = role === 'user' ? 'wsc-bubble wsc-bubble-user' : 'wsc-bubble wsc-bubble-bot';
+      wrap.innerHTML = html;
+      messagesEl.appendChild(wrap);
+      scrollDown();
+      return wrap;
+    }
+
+    function clearDock() {
+      dockEl.innerHTML = '';
+    }
+
+    function esc(s) {
+      return String(s).replace(/[&<>"]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+    }
+
+    function askQuestion(index) {
+      const q = questions[index];
+      bubble('bot', '<p class="wsc-eyebrow">' + esc(q.category) + '</p><p>' + esc(q.text) + '</p>');
+      clearDock();
+      const list = document.createElement('div');
+      list.className = 'space-y-2';
+      q.options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'wsc-chip';
+        btn.textContent = opt.label;
+        btn.addEventListener('click', () => {
+          answers[q.id] = { value: opt.value, category: q.category };
+          bubble('user', '<p>' + esc(opt.label) + '</p>');
+          clearDock();
+          step += 1;
+          setProgress();
+          window.setTimeout(() => {
+            if (step < questions.length) askQuestion(step);
+            else askEmail();
+          }, 350);
+        });
+        list.appendChild(btn);
+      });
+      dockEl.appendChild(list);
+    }
+
+    function validEmail(v) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+
+    function askEmail() {
+      bubble('bot', '<p>Where should I send your results?</p>');
+      clearDock();
+      const row = document.createElement('form');
+      row.className = 'flex items-center gap-2';
+      row.innerHTML =
+        '<input type="email" required autocomplete="email" placeholder="you@yourbusiness.com" ' +
+        'class="min-w-0 flex-1 px-3 py-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white" />' +
+        '<button type="submit" class="shrink-0 px-4 py-2.5 rounded-full bg-white text-zinc-950 text-sm font-medium hover:bg-zinc-200 transition-colors">Send</button>';
+      const input = row.querySelector('input');
+      row.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = (input.value || '').trim();
+        if (!validEmail(val)) {
+          input.focus();
+          return;
+        }
+        bubble('user', '<p>' + esc(val) + '</p>');
+        clearDock();
+        step += 1;
+        setProgress();
+        window.setTimeout(() => finish(val), 350);
+      });
+      dockEl.appendChild(row);
+      window.setTimeout(() => input.focus(), 50);
+    }
+
+    function computeScores() {
+      const cat = {};
+      Object.values(answers).forEach((a) => {
+        if (!cat[a.category]) cat[a.category] = { sum: 0, max: 0 };
+        cat[a.category].sum += a.value;
+        cat[a.category].max += 2;
+      });
+      let total = 0, totalMax = 0;
+      const perCategory = Object.keys(cat).map((c) => {
+        total += cat[c].sum; totalMax += cat[c].max;
+        return { category: c, score: Math.round((cat[c].sum / cat[c].max) * 100) };
+      });
+      return { overall: Math.round((total / totalMax) * 100), perCategory };
+    }
+
+    function band(score) {
+      if (score >= 80) return { label: 'Strong online presence', note: 'Your site is doing right by your customers. There is still room to squeeze out a few more calls and bookings.' };
+      if (score >= 55) return { label: 'Solid, with clear opportunities', note: 'Your site is working, but a few specific gaps are likely costing you calls or bookings.' };
+      if (score >= 30) return { label: 'Needs work', note: 'There is real friction here, and it is likely turning away customers before they contact you.' };
+      return { label: 'At risk', note: 'Your website may be costing you more customers than you realize. The good news: fast wins are available.' };
+    }
+
+    function postLead(email, data) {
+      if (!endpoint) return;
+      const details = data.perCategory.map((c) => c.category + ' ' + c.score).join(' · ');
+      try {
+        fetch(endpoint, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            form_type: 'website-score-chat',
+            site: 'savelledesign.com',
+            page: page,
+            email: email,
+            score: data.overall,
+            details: details,
+          }),
+        }).catch(() => {});
+      } catch (_) { /* ignore */ }
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'ux_health_check_completed', { score: data.overall, method: 'chat' });
+        window.gtag('event', 'generate_lead', { method: 'website_score_chat', score: data.overall });
+      }
+    }
+
+    function finish(email) {
+      const data = computeScores();
+      postLead(email, data);
+      const b = band(data.overall);
+      const weakest = [...data.perCategory].sort((a, z) => a.score - z.score).slice(0, 3);
+
+      bubble('bot',
+        '<p class="wsc-score">' + data.overall + '<span>/100</span></p>' +
+        '<p class="wsc-score-label">' + esc(b.label) + '</p>'
+      );
+      bubble('bot', '<p>' + esc(b.note) + '</p>');
+      const priorities = weakest
+        .map((c, i) => '<p class="mt-2 first:mt-0"><strong>' + (i + 1) + '. ' + esc(c.category) + '</strong> — ' + esc(RECOS[c.category]) + '</p>')
+        .join('');
+      bubble('bot', '<p class="wsc-eyebrow">Your top priorities</p>' + priorities);
+
+      clearDock();
+      const ctaWrap = document.createElement('div');
+      ctaWrap.className = 'space-y-2';
+      const contactLink = document.createElement('button');
+      contactLink.type = 'button';
+      contactLink.setAttribute('data-contact-open', '');
+      contactLink.className = 'wsc-cta-primary';
+      contactLink.textContent = 'Ask about your results';
+      ctaWrap.appendChild(contactLink);
+
+      const restart = document.createElement('button');
+      restart.type = 'button';
+      restart.className = 'wsc-cta-secondary';
+      restart.textContent = 'Start over';
+      restart.addEventListener('click', reset);
+      ctaWrap.appendChild(restart);
+
+      dockEl.appendChild(ctaWrap);
+    }
+
+    function reset() {
+      messagesEl.innerHTML = '';
+      Object.keys(answers).forEach((k) => delete answers[k]);
+      step = 0;
+      setProgress();
+      bubble('bot', '<p>Answer ten quick questions and I’ll score how well your site turns visitors into customers, plus your top three fixes.</p>');
+      window.setTimeout(() => askQuestion(0), 300);
+    }
+
+    function open() {
+      panel.hidden = false;
+      panel.setAttribute('aria-hidden', 'false');
+      openBtn.setAttribute('aria-expanded', 'true');
+      launcher.hidden = true;
+      if (!started) {
+        started = true;
+        reset();
+      }
+      scrollDown();
+    }
+
+    function close() {
+      panel.hidden = true;
+      panel.setAttribute('aria-hidden', 'true');
+      openBtn.setAttribute('aria-expanded', 'false');
+      launcher.hidden = false;
+    }
+
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) close();
+    });
+    // Since the full-page /ux-health-check quiz was removed, in-content
+    // links (e.g. blog CTAs) point at this widget via #website-score.
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest && e.target.closest('a[href="#website-score"]');
+      if (trigger) {
+        e.preventDefault();
+        open();
+      }
+    });
+  }
+  document.addEventListener('astro:page-load', initWsc);
+</script>
+
+<style>
+  /* #wsc-messages and #wsc-dock are static containers, but everything inside
+     them is injected by the script below, so every rule targeting that
+     injected content must be :global() or Astro's scoped-style attribute
+     (only present on markup written in this file) will never match it. */
+  .wsc-panel {
+    animation: wsc-in 0.18s ease-out;
+  }
+  @keyframes wsc-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  :global(.wsc-bubble) {
+    max-width: 88%;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.75rem;
+  }
+  :global(.wsc-bubble p + p) { margin-top: 0.4rem; }
+  :global(.wsc-bubble-bot) {
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: #fafafa;
+  }
+  :global(.wsc-bubble-user) {
+    margin-left: auto;
+    background: white;
+    color: #09090b;
+  }
+  :global(.wsc-eyebrow) {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #71717a;
+    margin-bottom: 0.25rem;
+  }
+  :global(.wsc-score) {
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #fafafa;
+  }
+  :global(.wsc-score span) {
+    font-size: 1.125rem;
+    color: #71717a;
+    font-weight: 500;
+  }
+  :global(.wsc-score-label) {
+    margin-top: 0.35rem;
+    font-weight: 600;
+    color: #fafafa;
+  }
+
+  :global(.wsc-chip) {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    background: #18181b;
+    border: 1px solid #27272a;
+    color: #fafafa;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  :global(.wsc-chip:hover) {
+    border-color: white;
+  }
+  :global(.wsc-cta-primary) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.7rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 999px;
+    background: white;
+    color: #09090b;
+    transition: opacity 0.15s;
+    cursor: pointer;
+  }
+  :global(.wsc-cta-primary:hover) { opacity: 0.85; }
+  :global(.wsc-cta-secondary) {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.8125rem;
+    color: #a1a1aa;
+    cursor: pointer;
+  }
+  :global(.wsc-cta-secondary:hover) { color: #fafafa; }
+</style>

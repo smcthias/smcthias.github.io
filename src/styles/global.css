@@ -1,8 +1,234 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* ──────────────────────────────────────────────────────────────────────────
+   Self-hosted type — Inter, variable font. One file covers the whole
+   weight axis (100–900); font-weight in CSS picks the instance. WOFF2
+   only, swap so text paints fast.
+   ────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-var.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Design tokens. v4 redesign: black ground throughout, monochrome — colors
+   come straight off Tailwind's zinc scale in markup (per the brief), so
+   there are no custom color tokens here anymore. No accent color — the
+   portfolio imagery carries the color; type and space carry the design.
+   ────────────────────────────────────────────────────────────────────────── */
 @theme {
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --color-primary: #1a1a1a;
-  --color-secondary: #4a4a4a;
+  --font-sans: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-head: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* Display scale — fluid, tight, confident */
+  --text-mega: clamp(2.75rem, 7vw, 6rem);
+  --text-mega--line-height: 1.02;
+  --text-mega--letter-spacing: -0.03em;
+  --text-huge: clamp(2.1rem, 5vw, 4rem);
+  --text-huge--line-height: 1.05;
+  --text-huge--letter-spacing: -0.025em;
+  --text-big: clamp(1.6rem, 3vw, 2.5rem);
+  --text-big--line-height: 1.1;
+  --text-big--letter-spacing: -0.02em;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Base. Native scroll only — nothing takes over the user's device.
+   ────────────────────────────────────────────────────────────────────────── */
+html {
+  font-family: var(--font-sans);
+  background-color: #09090b;
+  color: #fafafa;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Always reserve the scrollbar's gutter, whether or not it's actually
+     rendered — otherwise toggling overflow:hidden (nav drawer open, Lenis
+     stopped) removes the scrollbar and every fixed-position, viewport-wide
+     element (e.g. #site-nav's inset-x-0 header) shifts right by its width,
+     visibly nudging the MENU/CLOSE button sideways on open/close. */
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: #09090b;
+  color: #fafafa;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: white;
+  color: #09090b;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-head);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Logo marquee — the one requested ambient motion. Pauses on hover,
+   disabled under reduced motion (falls back to a static wrapped row).
+   ────────────────────────────────────────────────────────────────────────── */
+.marquee {
+  overflow: hidden;
+  display: flex;
+}
+.marquee-track {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 100%;
+  gap: clamp(3rem, 6vw, 6rem);
+  padding-right: clamp(3rem, 6vw, 6rem);
+  animation: marquee 36s linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  to { transform: translateX(-100%); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Horizontal case-study strip — native scroll, snap, no hijack.
+   ────────────────────────────────────────────────────────────────────────── */
+.hstrip {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.75rem;
+  cursor: grab;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 transparent; /* zinc-700 thumb, transparent track */
+}
+.hstrip > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+.hstrip.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+.hstrip.is-dragging > * {
+  pointer-events: none;
+}
+.hstrip::-webkit-scrollbar {
+  height: 6px;
+}
+.hstrip::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hstrip::-webkit-scrollbar-thumb {
+  background: #3f3f46; /* zinc-700 */
+  border-radius: 999px;
+}
+.hstrip::-webkit-scrollbar-thumb:hover {
+  background: #52525b; /* zinc-600 */
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Lenis smooth scroll (src/scripts/smooth-scroll.ts). Easing only — Lenis
+   drives the native scrollbar, it never hijacks direction or captures
+   input. Boilerplate classes per lenis docs.
+   ────────────────────────────────────────────────────────────────────────── */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Word-by-word scroll reveal (src/scripts/word-reveal.ts). GSAP SplitText
+   wraps each word in a .word span; this just gives them a sane display
+   mode so translateY doesn't collapse line-height mid-animation.
+   ────────────────────────────────────────────────────────────────────────── */
+[data-word-reveal] .word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Plain fade-in, chained after a [data-word-reveal] element finishes via
+   data-reveal-next="#selector" — see src/scripts/word-reveal.ts. */
+[data-fade-reveal] {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+[data-fade-reveal].is-visible {
+  opacity: 1;
+}
+
+/* Scroll-triggered expand+fade for images/visual blocks — see
+   src/scripts/image-reveal.ts. */
+[data-image-reveal] {
+  will-change: transform, opacity;
+}
+
+/* Scroll-triggered fade + slide-down-into-place for standalone UI bits —
+   see src/scripts/drop-reveal.ts. */
+[data-drop-reveal] {
+  will-change: transform, opacity;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Forced horizontal-scroll section (services/pillars). The one deliberate
+   scroll-hijack exception, contained to this section only — see
+   src/scripts/pillar-scroll.ts.
+   ────────────────────────────────────────────────────────────────────────── */
+.pillar-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+.pillar-track.is-horizontal {
+  flex-direction: row;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee { display: block; }
+  .marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-width: 0;
+  }
+  [data-word-reveal] .word {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-fade-reveal] {
+    opacity: 1 !important;
+  }
+  [data-image-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-drop-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  #dot-grid-canvas {
+    display: none !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

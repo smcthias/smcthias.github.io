@@ -1,122 +1,66 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import { FEATURED } from '../data/featured';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-// Get all projects from content collections and sort by date (newest first)
+// Same editorial order as the homepage (FEATURED first), then anything not
+// featured, newest first. Same card visual language as the homepage grid —
+// the comp shows the archive using the identical card pattern, just with
+// the fuller project list.
 const allProjects = await getCollection('projects');
-const sortedProjects = allProjects.sort((a, b) =>
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+const byId = Object.fromEntries(allProjects.map((p) => [p.id, p]));
+const featuredIds = new Set(FEATURED.map((f) => f.slug));
+const rest = allProjects
+  .filter((p) => !featuredIds.has(p.id))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const work = [...FEATURED.map((f) => byId[f.slug]), ...rest];
 ---
 
-<Layout title="Works - Savelle Design" description="Explore my portfolio of web design and development projects.">
-    <!-- Hero Section -->
-    <section class="py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-6">Selected Work</h1>
-      <p class="text-xl text-zinc-600 max-w-3xl">
-        Over 18+ years, I've worked with companies ranging from small startups to major brands. Here's a selection of projects that demonstrate my approach to creating effective, user-friendly design.
-      </p>
-      </div>
-    </section>
+<Layout
+  title="Work - Savelle Design"
+  description="Selected design and development projects with real results. Two decades of work for startups, agencies, and enterprise teams."
+>
+  <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
+       behind the intro section below (its bg-zinc-950 is dropped so it
+       shows through; body's own bg-zinc-950 is the fallback before JS
+       draws anything). Fades out as the archive grid scrolls into view.
+       pointer-events-none so it never intercepts clicks — mouse position
+       is read via a window-level listener instead. -->
+  <canvas id="dot-grid-canvas" data-fade-trigger="#works-archive" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
 
-    <!-- Projects Grid -->
-    <section class="pb-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {sortedProjects.map((project) => {
-          return (
-          <a href={`${base}/works/${project.id}`} class="group block">
-            <div class="relative aspect-[4/3] rounded-lg mb-6 overflow-hidden bg-zinc-100">
+  <!-- ── Intro ────────────────────────────────────────────────────────── -->
+  <section class="relative pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="px-5 sm:px-8 md:px-12">
+      <h1 data-word-reveal class="font-head font-normal text-mega md:text-9xl text-zinc-50">
+        The work speaks first.
+      </h1>
+    </div>
+  </section>
+
+  <!-- ── Archive grid: same card language as the homepage ─────────────── -->
+  <section id="works-archive" class="bg-zinc-950 pb-24 md:pb-36">
+    <div class="px-5 sm:px-8 md:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+        {work.map((p, i) => (
+          <a href={`${base}/works/${p.id}`} class="group block min-w-0">
+            <div data-image-reveal class="overflow-hidden rounded-2xl bg-zinc-900">
               <img
-                src={`${base}/images/works/${project.data.thumbnail}`}
-                alt={`${project.data.title} - ${project.data.category} project by Savelle Design`}
-                class="w-full h-full object-cover"
-                loading="lazy"
+                src={`${base}/images/works/${p.data.thumbnail}`}
+                alt={`${p.data.title}, ${p.data.category}`}
+                class="w-full aspect-[4/3] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                loading={i < 2 ? 'eager' : 'lazy'}
               />
             </div>
-            <div class="mb-2">
-              <span class="text-sm font-medium text-zinc-500">{project.data.category}</span>
-            </div>
-            <h2 class="text-2xl font-bold text-zinc-900 mb-3 group-hover:text-zinc-600 transition-colors">
-              {project.data.title}
-            </h2>
-            <p class="text-zinc-600 mb-4">
-              {project.data.description}
+            <p data-word-reveal data-word-reveal-speed="fast" class="mt-5 md:text-xl font-medium text-zinc-50 uppercase">
+              {p.data.tags.join(' • ')}
             </p>
-            <div class="flex flex-wrap gap-2">
-              {project.data.tags.map((tag: string) => (
-                <span class="px-3 py-1 bg-zinc-100 text-zinc-700 rounded-full text-sm">
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <h3 data-word-reveal class="mt-2 font-head text-2xl md:text-5xl font-normal text-zinc-50">{p.data.title}</h3>
           </a>
-          );
-        })}
+        ))}
       </div>
-      </div>
-    </section>
-
-    <!-- Capabilities Section -->
-    <section class="py-20 bg-zinc-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Core Capabilities</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 class="text-xl font-semibold text-white mb-3">Design</h3>
-            <ul class="space-y-2 text-zinc-300">
-              <li>• User Interface Design</li>
-              <li>• User Experience Design</li>
-              <li>• Brand Identity</li>
-              <li>• Visual Design Systems</li>
-              <li>• Prototyping</li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="text-xl font-semibold text-white mb-3">Development</h3>
-            <ul class="space-y-2 text-zinc-300">
-              <li>• HTML/CSS/JavaScript</li>
-              <li>• React & Modern Frameworks</li>
-              <li>• Responsive Development</li>
-              <li>• Performance Optimization</li>
-              <li>• CMS Integration</li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="text-xl font-semibold text-white mb-3">Strategy</h3>
-            <ul class="space-y-2 text-zinc-300">
-              <li>• User Research</li>
-              <li>• Conversion Optimization</li>
-              <li>• SEO Best Practices</li>
-              <li>• Analytics & Testing</li>
-              <li>• Digital Marketing</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-20 bg-zinc-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl">
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-            Want similar results?
-          </h2>
-          <p class="text-xl text-zinc-300 mb-8">
-            Whether you need a new landing page, a website refresh, or help with your brand identity, I can help you achieve your goals. Let's discuss your project.
-          </p>
-          <a
-            href={`${base}/contact`}
-            class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
-          >
-            Start a Conversation
-          </a>
-        </div>
-      </div>
-    </section>
-
+    </div>
+  </section>
 </Layout>

@@ -29,4 +29,4 @@ This project reinforced what I already knew: landing pages aren't just about con
 
 ---
 
-**Need a landing page that converts?** I design landing pages that build trust from the first pixel and turn visitors into engaged users. From SEO optimization to strategic branding, let's create a first impression that lasts. [Let's talk about your project](/contact).
+**Need a landing page that converts?** I design landing pages that build trust from the first pixel and turn visitors into engaged users. From SEO optimization to strategic branding, let's create a first impression that lasts. [Let's talk about your project](#contact).

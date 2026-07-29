@@ -31,4 +31,4 @@ A content hub is only as good as its design. You can have the best content in th
 
 ---
 
-**Have great content but struggling with engagement?** Let's design a content hub that makes your articles discoverable, your navigation intuitive, and your user experience delightful. [Connect with me](/contact) to discuss how thoughtful UX can transform your content platform.
+**Have great content but struggling with engagement?** Let's design a content hub that makes your articles discoverable, your navigation intuitive, and your user experience delightful. [Connect with me](#contact) to discuss how thoughtful UX can transform your content platform.

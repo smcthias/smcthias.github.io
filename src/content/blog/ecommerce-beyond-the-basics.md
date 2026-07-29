@@ -37,4 +37,4 @@ E-commerce isn't about the transaction—it's about the experience. When you get
 
 ---
 
-**Have a complex e-commerce challenge?** Whether you're managing inventory across multiple locations, integrating services with product sales, or need a completely custom solution, I can help. [Let's discuss your e-commerce needs](/contact) and create an experience your customers will love.
+**Have a complex e-commerce challenge?** Whether you're managing inventory across multiple locations, integrating services with product sales, or need a completely custom solution, I can help. [Let's discuss your e-commerce needs](#contact) and create an experience your customers will love.

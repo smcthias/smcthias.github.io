@@ -65,4 +65,4 @@ If the trail runs cold anywhere between *felt something* and *talked to someone*
 
 ---
 
-**Want to find out where your site loses the lead?** The free UX Health Check scores your site across the five dimensions that decide whether a browser becomes a conversation, including the conversion paths your IDX template shipped with. [Take the free UX Health Check](/ux-health-check).
+**Want to find out where your site loses the lead?** The free UX Health Check scores your site across the five dimensions that decide whether a browser becomes a conversation, including the conversion paths your IDX template shipped with. [Take the free UX Health Check](#website-score).

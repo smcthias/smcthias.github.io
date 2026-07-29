@@ -1,0 +1,196 @@
+---
+// Ambient interactive background — a field of small registration ticks that
+// drift slowly, brighten toward neon and draw alignment lines to their
+// neighbours near the cursor ("scattered pieces assembling where you look"),
+// and pick up energy from scroll velocity. Sits fixed behind all content.
+//
+// Degradations: reduced-motion draws one static, dim frame and never animates;
+// coarse pointers (touch) drop cursor interaction and lean on drift + scroll;
+// hidden tabs pause the loop. Purely decorative, so aria-hidden + pointer-none.
+---
+
+<canvas id="bg-field" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+
+<style>
+  #bg-field { width: 100vw; height: 100vh; opacity: 0.9; }
+</style>
+
+<script>
+  function initBackgroundField() {
+    const canvas = document.getElementById('bg-field') as HTMLCanvasElement | null;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+
+    // Accent + base tick colours (kept in sync with the design tokens).
+    const ACCENT = [180, 255, 61];   // #b4ff3d
+    const BASE = [120, 120, 132];    // dim grey tick
+
+    type Tick = { x: number; y: number; vx: number; vy: number; a: number; s: number };
+    let ticks: Tick[] = [];
+    let w = 0, h = 0, dpr = 1;
+    const mouse = { x: -9999, y: -9999, active: false };
+    let energy = 0;               // scroll-driven excitement, decays each frame
+    let lastScroll = window.scrollY;
+    let raf = 0;
+    let running = false;
+
+    const TICK_ARM = 5;           // half-length of each crosshair arm (css px)
+    const CURSOR_R = 190;         // cursor influence radius
+    const LINK_R = 132;           // max distance to draw an alignment line
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas!.width = Math.round(w * dpr);
+      canvas!.height = Math.round(h * dpr);
+      canvas!.style.width = w + 'px';
+      canvas!.style.height = h + 'px';
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Density scales with area; capped for performance.
+      const target = Math.min(140, Math.max(28, Math.round((w * h) / 15000)));
+      ticks = [];
+      for (let i = 0; i < target; i++) {
+        ticks.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.22,
+          vy: (Math.random() - 0.5) * 0.22,
+          a: Math.random() * Math.PI,          // slow rotation phase
+          s: 0,                                 // current activation 0..1
+        });
+      }
+    }
+
+    function drawTick(t: Tick, activation: number) {
+      const arm = TICK_ARM * (1 + activation * 0.6);
+      const rot = t.a + activation * 0.6;      // ticks nudge toward alignment when active
+      const cos = Math.cos(rot), sin = Math.sin(rot);
+      const r = Math.round(BASE[0] + (ACCENT[0] - BASE[0]) * activation);
+      const g = Math.round(BASE[1] + (ACCENT[1] - BASE[1]) * activation);
+      const b = Math.round(BASE[2] + (ACCENT[2] - BASE[2]) * activation);
+      const alpha = 0.18 + activation * 0.7;
+      ctx!.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+      ctx!.lineWidth = 1;
+      ctx!.beginPath();
+      ctx!.moveTo(t.x - arm * cos, t.y - arm * sin);
+      ctx!.lineTo(t.x + arm * cos, t.y + arm * sin);
+      ctx!.moveTo(t.x - arm * -sin, t.y - arm * cos);
+      ctx!.lineTo(t.x + arm * -sin, t.y + arm * cos);
+      ctx!.stroke();
+    }
+
+    function frame() {
+      if (!running) return;
+      ctx!.clearRect(0, 0, w, h);
+
+      // Scroll energy decays smoothly.
+      energy *= 0.92;
+      const drift = 1 + energy * 3;
+
+      // Track active ticks near the cursor to link them afterward.
+      const active: Tick[] = [];
+
+      for (const t of ticks) {
+        t.x += t.vx * drift;
+        t.y += t.vy * drift + energy * 0.6;   // scroll pushes the field slightly
+        t.a += 0.002;
+        // wrap around edges
+        if (t.x < -10) t.x = w + 10; else if (t.x > w + 10) t.x = -10;
+        if (t.y < -10) t.y = h + 10; else if (t.y > h + 10) t.y = -10;
+
+        let activation = energy * 0.25;
+        if (mouse.active) {
+          const dx = t.x - mouse.x, dy = t.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < CURSOR_R) {
+            const prox = 1 - dist / CURSOR_R;
+            activation = Math.max(activation, prox * prox);
+            if (prox > 0.25) active.push(t);
+          }
+        }
+        t.s += (activation - t.s) * 0.2;       // ease activation
+        drawTick(t, t.s);
+      }
+
+      // Alignment lines between nearby active ticks + a line to the cursor.
+      if (active.length) {
+        for (let i = 0; i < active.length; i++) {
+          for (let j = i + 1; j < active.length; j++) {
+            const a = active[i], b = active[j];
+            const d = Math.hypot(a.x - b.x, a.y - b.y);
+            if (d < LINK_R) {
+              const alpha = (1 - d / LINK_R) * 0.5 * Math.min(a.s, b.s);
+              ctx!.strokeStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${alpha})`;
+              ctx!.lineWidth = 1;
+              ctx!.beginPath();
+              ctx!.moveTo(a.x, a.y);
+              ctx!.lineTo(b.x, b.y);
+              ctx!.stroke();
+            }
+          }
+        }
+      }
+
+      raf = requestAnimationFrame(frame);
+    }
+
+    function staticFrame() {
+      ctx!.clearRect(0, 0, w, h);
+      for (const t of ticks) drawTick(t, 0);
+    }
+
+    // ── Events ────────────────────────────────────────────────────────────
+    const onMove = (e: PointerEvent) => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true; };
+    const onLeave = () => { mouse.active = false; };
+    const onScroll = () => {
+      const y = window.scrollY;
+      energy = Math.min(1, energy + Math.min(0.5, Math.abs(y - lastScroll) / 90));
+      lastScroll = y;
+    };
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else if (!reduced) start();
+    };
+
+    function start() {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(frame);
+    }
+    function stop() {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+    }
+
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+    if (reduced) {
+      staticFrame();
+    } else {
+      if (!coarse) {
+        window.addEventListener('pointermove', onMove, { passive: true });
+        document.addEventListener('pointerleave', onLeave);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      document.addEventListener('visibilitychange', onVisibility);
+      start();
+    }
+
+    // Clean up before a View Transition swaps the DOM.
+    document.addEventListener('astro:before-swap', () => {
+      stop();
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerleave', onLeave);
+      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('visibilitychange', onVisibility);
+    }, { once: true });
+  }
+  document.addEventListener('astro:page-load', initBackgroundField);
+</script>

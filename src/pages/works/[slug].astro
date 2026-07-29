@@ -1,5 +1,5 @@
 ---
-import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -15,8 +15,8 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { Content } = await render(project);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const siteUrl = (Astro.site?.toString() || 'https://savelledesign.com').replace(/\/$/, '');
 
 // Get all projects sorted by date for navigation
 const allProjects = (await getCollection('projects')).sort(
@@ -27,145 +27,196 @@ const allProjects = (await getCollection('projects')).sort(
 const currentIndex = allProjects.findIndex((p) => p.id === project.id);
 const prev = currentIndex > 0 ? allProjects[currentIndex - 1] : null;
 const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
+
+// The markdown bodies are intentionally empty. The case study is built from
+// frontmatter: brief[] carries the problem and the work, results[] carries
+// the outcome. Nothing here is invented beyond connective framing.
+const [lead, ...restBrief] = project.data.brief;
+
+const detailImages = [
+  project.data.images.detail1,
+  project.data.images.detail2,
+  project.data.images.detail3,
+];
+
+// CreativeWork JSON-LD (extends the base ProfessionalService schema in Layout).
+const creativeWorkLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: project.data.title,
+  description: project.data.description,
+  url: `${siteUrl}/works/${project.id}`,
+  image: `${siteUrl}/images/works/${project.data.images.hero}`,
+  keywords: project.data.tags.join(', '),
+  about: project.data.category,
+  creator: {
+    '@type': 'Person',
+    name: 'Savelle McThias',
+    url: `${siteUrl}/about`,
+  },
+};
 ---
 
 <Layout title={`${project.data.title} - Savelle Design`} description={project.data.description}>
-  <!-- Hero Section -->
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <a href={`${base}/works`} class="inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors mb-8">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(creativeWorkLd)} />
+
+  <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
+       behind the hero section below (its bg-zinc-950 is dropped so it
+       shows through; body's own bg-zinc-950 is the fallback before JS
+       draws anything). Fades out as the narrative section scrolls into
+       view — that section is unconditional (unlike the results strip right
+       above it, which only renders when a project has results), so it's a
+       reliable fade-trigger target on every case study. pointer-events-none
+       so it never intercepts clicks. -->
+  <canvas id="dot-grid-canvas" data-fade-trigger="#case-narrative" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+
+  <!-- ── Hero: full-bleed image ────────────────────────────────────────── -->
+  <section class="relative">
+    <div class="px-5 sm:px-8 md:px-12 pt-12 md:pt-16 pb-14 md:pb-20">
+      <a href={`${base}/works`} class="group inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-50 transition-colors mb-12">
+        <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
-        Back to Works
+        All work
       </a>
-      <div class="mb-4">
-        <span class="text-sm font-semibold text-zinc-500">{project.data.category}</span>
-      </div>
-      <h1 class="text-4xl md:text-6xl font-bold text-zinc-900 mb-6">{project.data.title}</h1>
-      <p class="text-xl md:text-2xl text-zinc-600 max-w-3xl">
+      <h1 data-word-reveal class="font-head text-mega md:text-9xl font-normal text-zinc-50">{project.data.title}</h1>
+      <p class="mt-8 text-lg md:text-xl text-zinc-50 leading-relaxed">
         {project.data.description}
       </p>
     </div>
+    <img
+      src={`${base}/images/works/${project.data.images.hero}`}
+      alt={`${project.data.title} hero image`}
+      class="mx-12 w-[calc(100%-6rem)] aspect-[16/9] max-h-[80vh] object-cover rounded-2xl md:rounded-3xl"
+      loading="eager"
+    />
   </section>
 
-  <!-- Full-width border -->
-  <div class="border-t border-zinc-200"></div>
-
-  <!-- Project Brief -->
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-zinc-900 mb-6">The Brief</h2>
-      <div class="grid md:grid-cols-3 gap-8 mb-12">
-        <div>
-          <h3 class="text-sm font-semibold text-zinc-500 mb-2">Role</h3>
-          <p class="text-zinc-900">{project.data.role}</p>
-        </div>
-        <div>
-          <h3 class="text-sm font-semibold text-zinc-500 mb-2">Timeline</h3>
-          <p class="text-zinc-900">{project.data.timeline}</p>
-        </div>
-        <div>
-          <h3 class="text-sm font-semibold text-zinc-500 mb-2">Services</h3>
-          <p class="text-zinc-900">{project.data.services}</p>
+  <!-- ── Results strip: the outcome, visible early ────────────────────── -->
+  {project.data.results.length > 0 && (
+    <section class="bg-zinc-950 border-b border-zinc-900">
+      <div class="px-5 sm:px-8 md:px-12 py-14 md:py-16">
+        <div class="flex flex-wrap gap-x-16 gap-y-10">
+          {project.data.results.map((result) => (
+            <div class="min-w-0">
+              <p data-count-up class="font-head text-big font-semibold text-zinc-50 leading-none">{result.value}</p>
+              <p class="mt-3 text-zinc-400 leading-snug">{result.label}</p>
+            </div>
+          ))}
         </div>
       </div>
-      {project.data.brief.map((paragraph) => (
-        <p class="text-lg text-zinc-600 mb-6">
-          {paragraph}
-        </p>
-      ))}
+    </section>
+  )}
+
+  <!-- ── Narrative ─────────────────────────────────────────────────────── -->
+  <section id="case-narrative" class="bg-zinc-950 py-20 md:py-28">
+    <div class="px-5 sm:px-8 md:px-12">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <!-- Meta rail -->
+        <aside class="min-w-0 lg:col-span-4">
+          <dl class="space-y-6">
+            <div>
+              <dt class="text-sm text-zinc-500 mb-1">Role</dt>
+              <dd class="text-zinc-50">{project.data.role}</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-zinc-500 mb-1">Timeline</dt>
+              <dd class="text-zinc-50">{project.data.timeline}</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-zinc-500 mb-1">Services</dt>
+              <dd class="text-zinc-50">{project.data.services}</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-zinc-500 mb-1">Tags</dt>
+              <dd class="text-zinc-400">{project.data.tags.join(', ')}</dd>
+            </div>
+          </dl>
+        </aside>
+
+        <!-- Narrative -->
+        <div class="min-w-0 lg:col-span-8">
+          <h2 class="font-head text-big font-semibold text-zinc-50 mb-6">The project.</h2>
+          <p class="text-xl md:text-2xl text-zinc-50 leading-relaxed">{lead}</p>
+          {restBrief.length > 0 && (
+            <>
+              <h2 class="font-head text-big font-semibold text-zinc-50 mt-16 mb-6">The work.</h2>
+              {restBrief.map((paragraph) => (
+                <p class="text-lg text-zinc-400 leading-relaxed mb-6">{paragraph}</p>
+              ))}
+            </>
+          )}
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Visuals Section -->
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="space-y-8">
-        <div class="relative aspect-[16/9] rounded-lg overflow-hidden bg-zinc-100">
-          <img
-            src={`${base}/images/works/${project.data.images.hero}`}
-            alt={`${project.data.title} Hero`}
-            class="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="relative aspect-[4/3] rounded-lg overflow-hidden bg-zinc-100">
+  <!-- ── Detail gallery: horizontal strip ──────────────────────────────── -->
+  <section class="bg-zinc-950 border-t border-zinc-900">
+    <div class="px-5 sm:px-8 md:px-12 py-20 md:py-28">
+      <div class="relative" data-hstrip-wrap>
+        <div
+          class="hstrip"
+          data-hstrip
+          role="region"
+          aria-label={`${project.data.title} detail image gallery. Click and drag, swipe, or use the arrow buttons to scroll horizontally.`}
+          tabindex="0"
+        >
+          {detailImages.map((image, i) => (
             <img
-              src={`${base}/images/works/${project.data.images.detail1}`}
-              alt={`${project.data.title} Detail 1`}
-              class="w-full h-full object-cover"
+              src={`${base}/images/works/${image}`}
+              alt={`${project.data.title} detail image ${i + 1}`}
+              class="h-[55vh] min-h-[320px] max-h-[680px] w-auto object-cover rounded-2xl bg-zinc-900"
               loading="lazy"
+              draggable="false"
             />
-          </div>
-          <div class="relative aspect-[4/3] rounded-lg overflow-hidden bg-zinc-100">
-            <img
-              src={`${base}/images/works/${project.data.images.detail2}`}
-              alt={`${project.data.title} Detail 2`}
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
+          ))}
         </div>
-        <div class="relative aspect-[16/9] rounded-lg overflow-hidden bg-zinc-100">
-          <img
-            src={`${base}/images/works/${project.data.images.detail3}`}
-            alt={`${project.data.title} Detail 3`}
-            class="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
+        <button
+          type="button"
+          data-hstrip-prev
+          aria-label="Scroll gallery left"
+          class="hidden sm:inline-flex items-center justify-center w-10 h-10 rounded-full border border-zinc-700 bg-zinc-950/80 backdrop-blur-sm text-zinc-50 hover:bg-zinc-900 transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer absolute left-2 top-1/2 -translate-y-1/2 z-10"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18l-6-6 6-6" /></svg>
+        </button>
+        <button
+          type="button"
+          data-hstrip-next
+          aria-label="Scroll gallery right"
+          class="hidden sm:inline-flex items-center justify-center w-10 h-10 rounded-full border border-zinc-700 bg-zinc-950/80 backdrop-blur-sm text-zinc-50 hover:bg-zinc-900 transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 z-10"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 6l6 6-6 6" /></svg>
+        </button>
       </div>
     </div>
   </section>
 
-  <!-- Full-width border -->
-  <div class="border-t border-zinc-200"></div>
-
-  <!-- Results Section (Light Gray Background) -->
-  <section class="pt-12 bg-zinc-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-      <h2 class="text-3xl font-bold text-zinc-900 mb-8">By the Numbers</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {project.data.results.map((result) => (
-          <div>
-            <div class="text-4xl font-bold text-zinc-900 mb-2">{result.value}</div>
-            <p class="text-zinc-600">{result.label}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Full-width border -->
-  <div class="border-t border-zinc-200"></div>
-
-  <!-- Project Navigation -->
-  <section class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div class="flex-1 w-full sm:w-auto">
+  <!-- ── Project navigation ───────────────────────────────────────────── -->
+  <section class="bg-zinc-950 border-t border-zinc-900">
+    <div class="px-5 sm:px-8 md:px-12 py-14 md:py-16">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="min-w-0">
           {prev && (
-            <a href={`${base}/works/${prev.id}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
-              <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`${base}/works/${prev.id}`} class="group flex items-center gap-3 text-zinc-400 hover:text-zinc-50 transition-colors">
+              <svg class="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
-              <div>
-                <div class="text-sm text-zinc-500">Previous Project</div>
-                <div class="font-semibold">{prev.data.title}</div>
-              </div>
+              <span class="min-w-0">
+                <span class="block text-sm text-zinc-500">Previous</span>
+                <span class="block font-medium text-zinc-50 truncate">{prev.data.title}</span>
+              </span>
             </a>
           )}
         </div>
-        <div class="flex-1 w-full sm:w-auto text-left sm:text-right">
+        <div class="min-w-0 sm:text-right">
           {next && (
-            <a href={`${base}/works/${next.id}`} class="group inline-flex items-center text-zinc-600 hover:text-zinc-900 transition-colors">
-              <div>
-                <div class="text-sm text-zinc-500">Next Project</div>
-                <div class="font-semibold">{next.data.title}</div>
-              </div>
-              <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`${base}/works/${next.id}`} class="group flex items-center gap-3 sm:justify-end text-zinc-400 hover:text-zinc-50 transition-colors">
+              <span class="min-w-0 sm:order-1">
+                <span class="block text-sm text-zinc-500">Next</span>
+                <span class="block font-medium text-zinc-50 truncate">{next.data.title}</span>
+              </span>
+              <svg class="w-5 h-5 shrink-0 sm:order-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
             </a>
@@ -174,26 +225,4 @@ const next = currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 
       </div>
     </div>
   </section>
-
-  <!-- Full-width border -->
-  <div class="border-t border-zinc-200"></div>
-
-  <!-- CTA Section (Dark Background) -->
-  <section class="py-20 bg-zinc-900">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-        {project.data.ctaHeading}
-      </h2>
-      <p class="text-xl text-zinc-300 mb-8">
-        {project.data.ctaDescription}
-      </p>
-      <a
-        href={`${base}/contact`}
-        class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
-      >
-        Start a Conversation
-      </a>
-    </div>
-  </section>
-
 </Layout>

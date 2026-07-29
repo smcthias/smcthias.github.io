@@ -1,0 +1,74 @@
+---
+// Ambient reel layer — fills a positioned 16:9 parent. The poster paints
+// immediately (it's the hero LCP); the muted Vimeo background iframe is injected
+// only after load, and only when motion is allowed and the visitor isn't on
+// Save-Data. Poster stays otherwise. Pair with <ReelLightbox /> (rendered once
+// on the page) and a [data-reel-play] trigger for full playback with sound.
+interface Props {
+  videoId?: string;
+  poster?: string;
+  ambient?: boolean;
+}
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const {
+  videoId = '1212791575',
+  poster = `${base}/images/reel/reel-poster.jpg`,
+  ambient = true,
+} = Astro.props;
+---
+
+<div class="reel" data-reel-ambient data-video-id={videoId} data-ambient={ambient ? 'true' : 'false'} aria-hidden="true">
+  <img src={poster} alt="" class="reel-poster" width="1920" height="1080" fetchpriority="high" />
+  <div class="reel-mount" data-reel-ambient-mount></div>
+</div>
+
+<style>
+  .reel { position: absolute; inset: 0; overflow: hidden; background: #09090b; }
+  .reel-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .reel-mount { position: absolute; inset: 0; opacity: 0; transition: opacity 0.9s ease; }
+  .reel-mount.is-live { opacity: 1; }
+  /* Iframes can't take object-fit, and Vimeo's own scaling here still
+     letterboxes/pillarboxes to preserve its 16:9 ratio inside a container
+     that isn't itself 16:9 — so it doesn't reach the container's edges.
+     Force full width instead: size to width:100% + the native aspect
+     ratio, center vertically, and let the ancestor overflow:hidden crop
+     whatever's taller than the container (acceptable — width matters more
+     here than vertical framing). */
+  .reel-mount :global(iframe) {
+    position: absolute; top: 50%; left: 0;
+    width: 100%; aspect-ratio: 16 / 9;
+    transform: translateY(-50%);
+    border: 0; pointer-events: none;
+  }
+</style>
+
+<script>
+  function initReelAmbient() {
+    const reel = document.querySelector<HTMLElement>('[data-reel-ambient]');
+    const mount = reel?.querySelector<HTMLElement>('[data-reel-ambient-mount]');
+    if (!reel || !mount) return;
+    const wantAmbient = reel.dataset.ambient === 'true';
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    if (!wantAmbient || reduced || saveData || mount.dataset.loaded) return;
+
+    const load = () => {
+      if (mount.dataset.loaded) return;
+      mount.dataset.loaded = '1';
+      const f = document.createElement('iframe');
+      f.src = `https://player.vimeo.com/video/${reel.dataset.videoId}?background=1&autoplay=1&loop=1&muted=1&dnt=1`;
+      f.allow = 'autoplay';
+      f.setAttribute('tabindex', '-1');
+      f.setAttribute('aria-hidden', 'true');
+      f.addEventListener('load', () => mount.classList.add('is-live'));
+      mount.appendChild(f);
+    };
+    // Defer past first paint so it never competes with LCP.
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(load, { timeout: 2500 });
+    } else {
+      setTimeout(load, 1200);
+    }
+  }
+  document.addEventListener('astro:page-load', initReelAmbient);
+</script>

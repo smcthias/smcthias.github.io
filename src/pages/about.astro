@@ -1,303 +1,100 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import SectionDivider from '../components/SectionDivider.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const allPosts = await getCollection('blog');
+const featuredPosts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 2);
+
 ---
 
-<Layout title="About - Savelle Design" description="Learn more about my background, experience, and approach to design for growing businesses.">
-    <!-- Hero Section -->
-    <section class="py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-4xl md:text-5xl font-bold text-zinc-900 mb-6">About Me</h1>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        <div>
-          <p class="text-xl text-zinc-600 mb-6 leading-relaxed">
-            I'm Savelle McThias, a designer and developer based in Scottsdale, Arizona. I help growing businesses create beautiful, effective websites that connect with customers and drive real results.
-          </p>
-          <p class="text-lg text-zinc-600 mb-6 leading-relaxed">
-            With 18+ years of experience, I've had the privilege of working with companies ranging from small startups to major brands. Along the way, I've learned what really matters: clear communication, thoughtful design, and solutions that work for your business and your customers.
-          </p>
-          <p class="text-lg text-zinc-600 leading-relaxed">
-            Today, I focus on helping small to medium-sized businesses with landing pages, website refreshes, brand touchups, and email campaigns. My goal is simple: create design that looks professional, works smoothly, and helps your business grow.
-          </p>
-        </div>
-        <div class="aspect-square bg-zinc-100 rounded-lg overflow-hidden">
+<Layout
+  title="About - Savelle Design"
+  description="Two decades of design and development for startups, agencies, and enterprise teams. Savelle McThias, designer and developer in Scottsdale, Arizona."
+>
+  <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
+       behind the hero section below (its bg-zinc-950 is dropped so it
+       shows through; body's own bg-zinc-950 is the fallback before JS
+       draws anything). Fades out as the "From the blog" section scrolls
+       into view. pointer-events-none so it never intercepts clicks —
+       mouse position is read via a window-level listener instead. -->
+  <canvas id="dot-grid-canvas" data-fade-trigger="#about-field-notes" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+  <!-- ── Hero: headline, line-art portrait, three paragraphs ──────────── -->
+  <section class="relative pt-16 md:pt-28 pb-16 md:pb-24">
+    <div class="px-5 sm:px-8 md:px-12">
+      <h1 data-word-reveal class="font-head text-mega md:text-9xl font-normal text-zinc-50">
+        Eighteen years in, still hands-on.
+      </h1>
+      <div class="mt-12 md:mt-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <div class="min-w-0 lg:col-span-5 order-2 lg:order-1">
           <img
-            src={`${base}/images/about/profile.jpg`}
-            alt="Savelle McThias - Designer and Developer"
-            class="w-full h-full object-cover"
+            src={`${base}/images/about/savelle.svg`}
+            alt="Line-art portrait of Savelle McThias"
+            class="w-full max-w-md mx-auto"
           />
         </div>
-      </div>
-      </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section class="py-20 bg-zinc-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">Experience & Expertise</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div>
-          <h3 class="text-2xl font-semibold text-zinc-900 mb-6">Design & Strategy</h3>
-          <div class="space-y-6">
-            <div>
-              <h4 class="font-semibold text-zinc-900 mb-2">User-Centered Design</h4>
-              <p class="text-zinc-600">
-                Creating designs that are intuitive, accessible, and focused on helping your customers accomplish their goals easily.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-semibold text-zinc-900 mb-2">Brand Consistency</h4>
-              <p class="text-zinc-600">
-                Ensuring your visual identity is cohesive across all touchpoints, from your website to emails to social media.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-semibold text-zinc-900 mb-2">Practical Solutions</h4>
-              <p class="text-zinc-600">
-                Delivering designs that look great but are also practical, maintainable, and aligned with your business goals.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div>
-          <h3 class="text-2xl font-semibold text-zinc-900 mb-6">Development & Tools</h3>
-          <div class="space-y-6">
-            <div>
-              <h4 class="font-semibold text-zinc-900 mb-2">Modern Development</h4>
-              <p class="text-zinc-600">
-                Building with React, Tailwind CSS, and modern frameworks to create fast, responsive websites.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-semibold text-zinc-900 mb-2">AI-Enhanced Workflows</h4>
-              <p class="text-zinc-600">
-                Leveraging AI-powered tools to accelerate design workflows and enhance quality while maintaining the human touch.
-              </p>
-            </div>
-            <div>
-              <h4 class="font-semibold text-zinc-900 mb-2">Performance-Focused</h4>
-              <p class="text-zinc-600">
-                Creating websites that load quickly and work smoothly, providing better experiences for your visitors.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-    </section>
-
-    <!-- Tools & Technologies -->
-    <section class="py-20 bg-zinc-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Tools & Technologies</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div>
-          <h3 class="text-xl font-semibold text-white mb-4">Design Tools</h3>
-          <ul class="space-y-2 text-zinc-300">
-            <li>• Figma</li>
-            <li>• Adobe Creative Suite</li>
-            <li>• AI-enhanced design tools</li>
-            <li>• Prototyping tools</li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-xl font-semibold text-white mb-4">Development</h3>
-          <ul class="space-y-2 text-zinc-300">
-            <li>• React & Next.js</li>
-            <li>• HTML/CSS/JavaScript</li>
-            <li>• Tailwind CSS</li>
-            <li>• WordPress & Webflow</li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-xl font-semibold text-white mb-4">Research & Testing</h3>
-          <ul class="space-y-2 text-zinc-300">
-            <li>• A/B Testing & Analytics</li>
-            <li>• User Interviews</li>
-            <li>• Heat Mapping</li>
-            <li>• Cognitive Walkthroughs</li>
-          </ul>
-        </div>
-      </div>
-      </div>
-    </section>
-
-    <!-- Values Section -->
-    <section class="py-20 bg-zinc-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">How the Pieces Come Together</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Data-Driven</h3>
-          <p class="text-zinc-600">
-            Every design decision is informed by research, testing, and real user data.
+        <div class="min-w-0 lg:col-span-5 order-1 lg:order-2">
+          <p data-word-reveal data-word-reveal-speed="fast" class="text-lg md:text-3xl text-zinc-50 text-normal">
+            I started in agencies, moved through tech startups and corporate teams, and went
+            independent in 2021. Somewhere in there I designed for PetSmart, General Motors,
+            Universal, Plexus, and a long list of businesses you haven't heard of that just
+            needed their website to work harder.
           </p>
-        </div>
-        <div>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Transparent</h3>
-          <p class="text-zinc-600">
-            Clear communication and collaboration throughout the entire process.
+          <p data-word-reveal data-word-reveal-speed="fast" class="mt-6 text-lg md:text-3xl text-zinc-50 text-normal">
+            When you work with me, you work with me. No account managers, no juniors, no
+            surprises.
           </p>
-        </div>
-        <div>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Business-Focused</h3>
-          <p class="text-zinc-600">
-            Beautiful design that delivers measurable results and ROI.
-          </p>
-        </div>
-        <div>
-          <h3 class="text-xl font-semibold text-zinc-900 mb-3">Accessible</h3>
-          <p class="text-zinc-600">
-            Making high-quality design and development accessible to growing businesses.
+          <p data-word-reveal data-word-reveal-speed="fast" class="mt-6 text-lg md:text-3xl text-zinc-50 text-normal">
+            I design and I build, and I run AI through both. That means fewer meetings, faster
+            launches, and the judgment of a senior designer moving at the pace of a full team.
           </p>
         </div>
       </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionDivider class="mb-12" />
-        <h2 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-12">What Clients Say</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Testimonial 1 - Heather Jablow -->
-          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "Savelle played a central role in elevating Atana's digital presence during a period when we were juggling a lot of moving parts. He contributed to nearly every area of our front-end experience, including navigation, blog structure, email templates, landing pages, and even the training portal. He handled all of it while working within the constraints of our existing Salesforce and Magento systems, which required both creativity and patience.
-            </p>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              What stood out to me was his ability to maintain a high standard of design while staying grounded in the practical needs of the business and the realities of our audience. He understood that our workplace training users needed clarity above all else, and he consistently delivered solutions that balanced usability, brand consistency, and visual quality.
-            </p>
-            <p class="text-lg text-zinc-700 leading-relaxed">
-              He was also an excellent remote collaborator. He communicated clearly, responded quickly, and reliably turned high-level or ambiguous requests into work that needed very little refinement. That kind of partnership made my job significantly easier. If you are looking for someone who can work across a wide variety of digital projects, adapt to your existing platforms, and bring a thoughtful balance of design intuition and business sense, don't hesitate to hire Savelle."
-            </p>
-            <div class="mt-6 pt-6 border-t border-zinc-200">
-              <p class="font-semibold text-zinc-900">Heather Jablow</p>
-              <p class="text-zinc-600">Vice President of Marketing, Atana Inc</p>
-            </div>
-          </div>
-
-          <!-- Testimonial 2 - Brian Fidler -->
-          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "Working with Savelle wasn't like working with a typical designer - it felt more like having a co-founder who just happened to be insanely talented at UX. When we were drowning in the complexity of 11 RV dealership locations and needed customers to actually find what they were looking for, Savelle didn't just design a filter system. He got in the weeds with us, understood our sales team's pain points, and built something that made everyone's life easier. That's rare.
-            </p>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              Then we threw him the Van Up curveball - a completely new brand, e-commerce platform, service tracker, and lifestyle blog all rolled into one. Most designers would've buckled under that scope. Savelle thrived. He helped us figure out who we were as a brand while simultaneously building the entire digital experience from scratch.
-            </p>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              What I appreciated most was that he never made us feel like 'the client' - he made us feel like collaborators. He'd push back when our ideas were overcomplicated, suggest things we hadn't thought of, and move fast without cutting corners. When you're launching something new, that kind of partnership is everything.
-            </p>
-            <p class="text-lg text-zinc-700 leading-relaxed">
-              If you need someone who can think strategically, move quickly, and actually give a damn about whether your business succeeds - not just whether the design looks pretty - call Savelle. Just be ready to keep up, because he doesn't mess around."
-            </p>
-            <div class="mt-6 pt-6 border-t border-zinc-200">
-              <p class="font-semibold text-zinc-900">Brian Fidler</p>
-              <p class="text-zinc-600">Former Head of Marketing, La Mesa RV & Van Up</p>
-            </div>
-          </div>
-
-          <!-- Testimonial 3 - Daniel Kruger -->
-          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "Savelle is one of the most talented UX experts I've had the pleasure of working with. Within a very short period of time after his hire, he was knocking out work items and client side code. The impact of his effort and his work will be felt for a very long time. It seemed like every day, he was revealing a new talent. My favorite Savelle anecdote is the time he re-designed the product logo, and came up with something better than the marketing company effort after doodling for about 10 minutes. Simply amazing.
-            </p>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              On the team he was the go-to "finisher" for his development-side colleagues. His ability to quickly turn "programmer UI" into something awesome is a super power. Savelle is patient and has a pretty solid understanding of that middle ground between development and the desired outcome of an elegant design. His communication skills are second to none in this area.
-            </p>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              His grasp of design processes around UI/UX is clear in his work. Savelle was a frequent collaborator within the dev process and is a key reason the application has been received with praise universally by customers and investors.
-            </p>
-            <p class="text-lg text-zinc-700 leading-relaxed">
-              I could always count on Savelle to be positive, solution oriented, and supportive of his fellow teammates at any given time of the journey. Savelle is one of the most creative guys I've had the pleasure to work with, and cannot stress enough how much his presence, sense of humor, talents and foodie opinions adds to the team dynamic. I would hire/work with Savelle again without hesitation. I can't wait to see what he does next!"
-            </p>
-            <div class="mt-6 pt-6 border-t border-zinc-200">
-              <p class="font-semibold text-zinc-900">Daniel Kruger</p>
-              <p class="text-zinc-600">VP of Software Development, SyberSafe</p>
-            </div>
-          </div>
-
-          <!-- Testimonial 4 - Caitlin Kelly -->
-          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "It was an honor to work with Savelle and be mentored in the art of weaving storytelling through design. He is full of incredible ideas and his depth of knowledge in design and development was critical to the success of many projects we worked on together. Don't come to Savelle if you're looking for cookie-cutter work - but if you're looking for innovation, imagination, and magic, he's your guy!"
-            </p>
-            <div class="mt-6 pt-6 border-t border-zinc-200">
-              <p class="font-semibold text-zinc-900">Caitlin Kelly</p>
-              <p class="text-zinc-600">Design Lead, RedSky Engineering</p>
-            </div>
-          </div>
-
-          <!-- Testimonial 5 - Roxana Epps -->
-          <div class="bg-zinc-50 p-8 rounded-lg border border-zinc-200">
-            <div class="mb-6">
-              <svg class="w-10 h-10 text-zinc-300" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              "I've worked with Savelle across multiple organizations, including Young Living, LifeWave, and Green Compass. Across those experiences, he consistently demonstrated strong design capability, a solid understanding of brand, and an ability to bring complex ideas to life in a clear, approachable way.
-            </p>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              Savelle's strength is his versatility. He brings a broad range of skills across UI/UX design, front- and back-end development, email design and systems, and full website creation. This allows him to contribute across many stages of a project and reduces dependency on multiple resources. He is able to take company goals and translate them into tangible outputs, often moving quickly from concept to execution.
-            </p>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              At LifeWave, he supported large-scale digital initiatives that required coordination across markets, timelines, and localization needs. That work required speed, adaptability, and the ability to build repeatable structures rather than one-off solutions.
-            </p>
-            <p class="text-lg text-zinc-700 mb-6 leading-relaxed">
-              Savelle is able to create a clearly defined scopes, timelines, and ownership models. In those environments, he executes efficiently, meets deadlines, and delivers work that aligns with brand standards and business objectives. His technical skill set allows him to understand constraints and implement solutions without unnecessary handoffs.
-            </p>
-            <p class="text-lg text-zinc-700 leading-relaxed">
-              Overall, Savelle is a capable, all-in-one designer with a strong grasp of brand, systems, and execution. He is a valuable contributor to digital and design initiatives and leadership."
-            </p>
-            <div class="mt-6 pt-6 border-t border-zinc-200">
-              <p class="font-semibold text-zinc-900">Roxana Epps</p>
-              <p class="text-zinc-600">SVP of Marketing, Young Living / LifeWave / Green Compass</p>
-            </div>
-          </div>
+  <!-- ── From the blog: 2 posts + link to all articles ────────────────── -->
+  <section id="about-field-notes" class="bg-zinc-950 border-t border-zinc-900 py-24 md:py-36">
+    <div class="px-5 sm:px-8 md:px-12">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-16 md:mb-20">
+        <div>
+          <h2 class="font-head text-huge md:text-9xl font-normal text-zinc-50">Field notes</h2>
         </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-20 bg-zinc-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl">
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-          Let's work together
-        </h2>
-        <p class="text-xl text-zinc-300 mb-8">
-          I'm currently available for select projects and would love to hear about yours. Whether you need a full product build or strategic design guidance, let's discuss how I can help your business grow.
-        </p>
-        <a
-          href={`${base}/contact`}
-          class="inline-block px-8 py-3 bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors font-medium"
-        >
-          Get in Touch
+        <a href={`${base}/blog`} class="inline-flex items-center gap-2 font-medium text-zinc-50 underline underline-offset-8 decoration-zinc-700 hover:decoration-white transition-colors">
+          View all articles
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        </div>
       </div>
-    </section>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {featuredPosts.map((post) => {
+          const formattedDate = new Date(post.data.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          });
+          return (
+            <a href={`${base}/blog/${post.id}`} class="group block rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-colors">
+              <div class="overflow-hidden">
+                <img
+                  src={`${base}/images/${post.data.image}`}
+                  alt={post.data.imageAlt}
+                  class="w-full aspect-[16/10] object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-6">
+                <p class="text-xs text-zinc-500 mb-3">{formattedDate}</p>
+                <h3 class="text-lg font-semibold text-zinc-50 mb-2 group-hover:underline underline-offset-4 decoration-zinc-700">
+                  {post.data.title}
+                </h3>
+                <p class="text-sm text-zinc-400 leading-relaxed">{post.data.description}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
 </Layout>

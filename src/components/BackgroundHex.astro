@@ -1,0 +1,279 @@
+---
+import { getCollection } from 'astro:content';
+
+// Interactive honeycomb background — an interlocking hex grid (the brand idea:
+// separate pieces locking into one surface).
+//
+//  • Faint grid at rest; a neon aura of lit cells follows the cursor; occasional
+//    "pulse" cells glimmer; scroll velocity briefly charges the field.
+//  • PROJECT PORTALS: on each page load a few random cells become links to
+//    random projects. At rest they carry a faint neon hint; hovering one lights
+//    its outline and fills it with the project's image; clicking opens the case
+//    study. Randomized every load, so the entry points move around.
+//
+// The canvas is fixed + pointer-events-none, so portals never steal clicks from
+// real content — hover/click only register when the pointer is over background.
+// Degradations: reduced-motion drops the loop/aura but keeps portals hoverable;
+// coarse pointers drop the cursor aura; hidden tabs pause.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const projects = (await getCollection('projects'))
+  .filter((p) => p.id !== 'adorned')
+  .map((p) => ({ title: p.data.title, url: `${base}/works/${p.id}`, thumb: `${base}/images/works/${p.data.thumbnail}` }));
+---
+
+<canvas id="bg-hex" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true" data-projects={JSON.stringify(projects)}></canvas>
+
+<style>
+  #bg-hex { width: 100vw; height: 100vh; }
+</style>
+
+<script>
+  type Proj = { title: string; url: string; thumb: string };
+
+  function initHexField() {
+    const canvas = document.getElementById('bg-hex') as HTMLCanvasElement | null;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const ACCENT = [180, 255, 61];
+    let projects: Proj[] = [];
+    try { projects = JSON.parse(canvas.dataset.projects || '[]'); } catch {}
+
+    type Cell = { x: number; y: number; phase: number };
+    // Portals sit on real honeycomb cells (so they align to the grid). `covered`
+    // is true when the cell is currently behind page content, so it stays dark
+    // instead of peeking out from under a headline or the hero video.
+    type Portal = { x: number; y: number; proj: Proj; img: HTMLImageElement; loaded: boolean; hoverEase: number; covered: boolean };
+    let cells: Cell[] = [];
+    let portals: Portal[] = [];
+    let w = 0, h = 0, dpr = 1, R = 54;
+    const mouse = { x: -9999, y: -9999, active: false };
+    let energy = 0, lastScroll = window.scrollY, t = 0, raf = 0, running = false;
+
+    const AURA = 210;
+
+    type Pulse = { i: number; life: number; dur: number };
+    let pulses: Pulse[] = [];
+    function seedPulses() {
+      pulses = [];
+      const n = Math.max(3, Math.round(cells.length / 90));
+      for (let k = 0; k < n; k++) pulses.push({ i: (Math.random() * cells.length) | 0, life: Math.random(), dur: 180 + Math.random() * 200 });
+    }
+
+    // Elements that count as "real content" — pointer over these never triggers
+    // a portal, so the honeycomb never hijacks a genuine click/hover.
+    const CONTENT = 'a,button,input,textarea,select,label,[role="button"],h1,h2,h3,h4,p,li,figure,img,form';
+    const isBackground = (el: EventTarget | null) => !(el instanceof Element) || !el.closest(CONTENT);
+
+    function hexPath(cx: number, cy: number, r: number) {
+      ctx!.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const ang = (Math.PI / 180) * (60 * i - 90);
+        const px = cx + r * Math.cos(ang), py = cy + r * Math.sin(ang);
+        if (i === 0) ctx!.moveTo(px, py); else ctx!.lineTo(px, py);
+      }
+      ctx!.closePath();
+    }
+
+    function seedPortals() {
+      portals = [];
+      if (!projects.length || !cells.length) return;
+      const count = w < 640 ? 4 : 6;
+      // Pick real honeycomb cells (below the nav band), spread apart, so each
+      // portal is locked to the grid like every other hexagon.
+      const usable = cells.filter((c) => c.y > 150 && c.y < h - 60 && c.x > R && c.x < w - R);
+      const picked: Cell[] = [];
+      let guard = 0;
+      while (picked.length < count && usable.length && guard++ < 600) {
+        const c = usable[(Math.random() * usable.length) | 0];
+        if (picked.every((q) => Math.hypot(q.x - c.x, q.y - c.y) > R * 2.6)) picked.push(c);
+      }
+      for (const c of picked) {
+        const proj = projects[(Math.random() * projects.length) | 0];
+        const img = new Image();
+        const portal: Portal = { x: c.x, y: c.y, proj, img, loaded: false, hoverEase: 0, covered: false };
+        img.onload = () => { portal.loaded = true; };
+        img.src = proj.thumb;
+        portals.push(portal);
+      }
+    }
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth; h = window.innerHeight;
+      canvas!.width = Math.round(w * dpr); canvas!.height = Math.round(h * dpr);
+      canvas!.style.width = w + 'px'; canvas!.style.height = h + 'px';
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      R = w < 640 ? 40 : 54;
+      const hSpace = Math.sqrt(3) * R, vSpace = 1.5 * R;
+      cells = [];
+      let row = 0;
+      for (let cy = 0; cy <= h + R; cy += vSpace, row++) {
+        const offset = row % 2 ? hSpace / 2 : 0;
+        for (let cx = offset; cx <= w + R; cx += hSpace) cells.push({ x: Math.round(cx), y: Math.round(cy), phase: Math.random() * Math.PI * 2 });
+      }
+      seedPulses();
+      seedPortals();
+    }
+
+    function drawImageCover(img: HTMLImageElement, x: number, y: number, size: number) {
+      const ir = img.width / img.height;
+      let dw = size, dh = size;
+      if (ir > 1) dw = size * ir; else dh = size / ir;
+      ctx!.drawImage(img, x + (size - dw) / 2, y + (size - dh) / 2, dw, dh);
+    }
+
+    function drawPortal(p: Portal) {
+      const hv = p.hoverEase; // proximity 0→1
+      if (hv < 0.02) return; // nothing at rest
+      const scale = 1 + hv * 0.08;
+      const r = (R - 1) * scale;
+      const cx = p.x, cy = p.y;
+
+      // Approaching glow — a soft neon wash so the beacon reads as a distinctly
+      // lit cell (out-glowing the ambient aura) well before the image appears.
+      ctx!.fillStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${hv * 0.13})`;
+      hexPath(cx, cy, r); ctx!.fill();
+
+      // Image only fills once you're nearly on it — the reward for arriving.
+      const imgA = Math.max(0, (hv - 0.6) / 0.4);
+      if (p.loaded && imgA > 0.01) {
+        ctx!.save();
+        hexPath(cx, cy, r); ctx!.clip();
+        ctx!.globalAlpha = imgA;
+        drawImageCover(p.img, cx - r, cy - r, r * 2);
+        ctx!.fillStyle = `rgba(10,10,11,${0.35 * (1 - imgA) + 0.15})`;
+        ctx!.fillRect(cx - r, cy - r, r * 2, r * 2);
+        ctx!.globalAlpha = 1;
+        ctx!.restore();
+      }
+
+      // Neon outline — brightens quickly with proximity (sqrt curve) so it
+      // telegraphs from a few cells away, brightest when directly on it.
+      ctx!.strokeStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${Math.min(1, Math.sqrt(hv) * 0.95)})`;
+      ctx!.lineWidth = 1 + hv;
+      hexPath(cx, cy, r); ctx!.stroke();
+    }
+
+    function draw(animated: boolean) {
+      ctx!.clearRect(0, 0, w, h);
+      ctx!.lineWidth = 1;
+
+      const pulseAt = new Map<number, number>();
+      if (animated) for (const p of pulses) {
+        const a = Math.sin(Math.min(1, p.life) * Math.PI);
+        if (a > 0.02) pulseAt.set(p.i, Math.max(pulseAt.get(p.i) || 0, a * 0.7));
+      }
+      const globalCharge = energy * 0.25;
+
+      for (let i = 0; i < cells.length; i++) {
+        const c = cells[i];
+        let act = globalCharge + (pulseAt.get(i) || 0);
+        if (animated && mouse.active) {
+          const dx = c.x - mouse.x, dy = c.y - mouse.y, d = Math.hypot(dx, dy);
+          if (d < AURA) { const p = 1 - d / AURA; act = Math.max(act, p * p * (3 - 2 * p)); }
+        }
+        if (act > 1) act = 1;
+        const alpha = 0.05 + act * 0.7;
+        const r = Math.round(80 + (ACCENT[0] - 80) * act);
+        const g = Math.round(80 + (ACCENT[1] - 80) * act);
+        const b = Math.round(90 + (ACCENT[2] - 90) * act);
+        hexPath(c.x, c.y, R - 1);
+        if (act > 0.12) { ctx!.fillStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${(act - 0.1) * 0.2})`; ctx!.fill(); }
+        ctx!.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+        ctx!.stroke();
+      }
+
+      // Portals drawn on top of the ambient grid.
+      for (const p of portals) drawPortal(p);
+    }
+
+    // Portal activation by proximity: a portal warms up as the cursor comes
+    // within a few cells, reaching full reveal only when directly on it.
+    function updatePortalProx(instant: boolean) {
+      const PROX_R = R * 5.2; // ~3 hexes — reaches beyond the cursor aura so a
+                              // portal telegraphs as a lone lit cell ahead of you
+      // Refresh coverage periodically (or immediately in reduced-motion) so a
+      // portal that's behind content stays dark.
+      const checkCover = instant || t % 5 === 0;
+      for (const p of portals) {
+        if (checkCover) p.covered = !isBackground(document.elementFromPoint(p.x, p.y));
+        let target = 0;
+        if (mouse.active && !p.covered) {
+          const d = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+          if (d < PROX_R) { const tt = 1 - d / PROX_R; target = tt * tt * (3 - 2 * tt); }
+        }
+        p.hoverEase = instant ? target : p.hoverEase + (target - p.hoverEase) * 0.18;
+      }
+    }
+
+    function frame() {
+      if (!running) return;
+      t += 1; energy *= 0.9;
+      for (const p of pulses) {
+        p.life += 1 / p.dur;
+        if (p.life >= 1) { p.life = 0; p.i = (Math.random() * cells.length) | 0; p.dur = 180 + Math.random() * 200; }
+      }
+      updatePortalProx(false);
+      draw(true);
+      raf = requestAnimationFrame(frame);
+    }
+
+    function portalAt(x: number, y: number): Portal | null {
+      for (const p of portals) if (!p.covered && Math.hypot(p.x - x, p.y - y) < R * 0.86) return p;
+      return null;
+    }
+
+    const onMove = (e: PointerEvent) => {
+      mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true;
+      const on = isBackground(e.target) ? portalAt(e.clientX, e.clientY) : null;
+      document.body.style.cursor = on ? 'pointer' : '';
+      if (reduced) { updatePortalProx(true); draw(false); }
+    };
+    const onLeave = () => { mouse.active = false; document.body.style.cursor = ''; if (reduced) { updatePortalProx(true); draw(false); } };
+    const onClick = (e: MouseEvent) => {
+      if (!isBackground(e.target)) return;
+      const p = portalAt(e.clientX, e.clientY);
+      if (p) { e.preventDefault(); window.location.href = p.proj.url; }
+    };
+    const onScroll = () => {
+      const y = window.scrollY;
+      energy = Math.min(1, energy + Math.min(0.6, Math.abs(y - lastScroll) / 80));
+      lastScroll = y;
+      if (reduced) { updatePortalProx(true); draw(false); } // portals move with scroll
+    };
+    const onVisibility = () => { if (document.hidden) stop(); else if (!reduced) start(); };
+
+    function start() { if (running) return; running = true; raf = requestAnimationFrame(frame); }
+    function stop() { running = false; if (raf) cancelAnimationFrame(raf); }
+
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+    window.addEventListener('click', onClick);
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    if (reduced) {
+      window.addEventListener('pointermove', onMove, { passive: true });
+      draw(false);
+    } else {
+      if (!coarse) { window.addEventListener('pointermove', onMove, { passive: true }); document.addEventListener('pointerleave', onLeave); }
+      document.addEventListener('visibilitychange', onVisibility);
+      start();
+    }
+
+    document.addEventListener('astro:before-swap', () => {
+      stop();
+      document.body.style.cursor = '';
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerleave', onLeave);
+      window.removeEventListener('click', onClick);
+      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('visibilitychange', onVisibility);
+    }, { once: true });
+  }
+  document.addEventListener('astro:page-load', initHexField);
+</script>

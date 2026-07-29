@@ -36,4 +36,4 @@ Sometimes speed is a requirement, not a compromise.
 
 ---
 
-**Working on a tight deadline?** I specialize in rapid delivery without sacrificing quality. Whether you need a complete brand revamp, a new website, or both, let's talk about how we can make it happen—fast. [Get in touch](/contact) and let's discuss your timeline.
+**Working on a tight deadline?** I specialize in rapid delivery without sacrificing quality. Whether you need a complete brand revamp, a new website, or both, let's talk about how we can make it happen—fast. [Get in touch](#contact) and let's discuss your timeline.

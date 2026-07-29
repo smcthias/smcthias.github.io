@@ -42,7 +42,7 @@ None of these show up in the books as "design problems." That's exactly why they
 
 ## The five places it hides
 
-After years of auditing products, I check the same five places first. They map to the five dimensions of my [UX Health Check](/ux-health-check), because they're where the money consistently is.
+After years of auditing products, I check the same five places first. They map to the five dimensions of my [UX Health Check](#website-score), because they're where the money consistently is.
 
 ### 1. Onboarding — your first promise
 
@@ -119,10 +119,10 @@ Start with the two exercises from this article — they cost nothing and take an
 1. Read your last fifty support tickets and list every "how do I…" question. Each one names a failed screen.
 2. Go through your own signup and checkout on your phone, as a stranger. Count your hesitations.
 
-Then, if you want a second set of eyes on where you stand, [let's talk about your project](/contact) — I'll tell you where I'd look first.
+Then, if you want a second set of eyes on where you stand, [let's talk about your project](#contact) — I'll tell you where I'd look first.
 
 Confusion is expensive. Clarity sells.
 
 ---
 
-**Want a second set of eyes on where confusion might be costing you?** The free UX Health Check scores your product 0–100 across the same five leaks described above — onboarding, conversion, mobile, accessibility, and consistency — and hands you your three highest-priority fixes. [Take the free UX Health Check](/ux-health-check).
+**Want a second set of eyes on where confusion might be costing you?** The free UX Health Check scores your product 0–100 across the same five leaks described above — onboarding, conversion, mobile, accessibility, and consistency — and hands you your three highest-priority fixes. [Take the free UX Health Check](#website-score).

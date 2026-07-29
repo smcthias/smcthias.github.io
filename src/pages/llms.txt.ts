@@ -18,27 +18,13 @@ export const GET: APIRoute = async () => {
 
 > UX/UI design and web development for growing businesses, run by Savelle McThias (he/him) from Scottsdale, Arizona. 18+ years designing for companies ranging from PetSmart, General Motors, Sotheby's, Universal, and bareMinerals to solo-founder startups. The work covers landing pages, website refreshes, brand identity, and email campaigns.
 
-Two ways to start are offered on the site: a free self-serve UX Health Check that scores your site, and a fixed-price 48-hour UX Audit. Project work is quoted from a published rate card.
+A free self-serve UX Health Check scores your site and surfaces prioritized fixes. Project work is quoted individually as a fixed price after a conversation about scope.
 
 ## Start here
 
 ${link('Home', '/', 'Overview of services, selected work, and client results')}
-${link('About', '/about', 'Savelle McThias’s background, approach, and client testimonials')}
-${link('Contact', '/contact', 'Project inquiry form — project type, budget range, and details')}
-
-## Services
-
-${link('All Services', '/services', 'Overview of the four core service offerings')}
-${link('Landing Page Design', '/services/landing-page-design', 'Single-page design focused on a specific conversion goal')}
-${link('Website Refresh', '/services/website-refresh', 'Redesign of an existing site’s structure, visuals, and content')}
-${link('Brand Identity', '/services/brand-identity', 'Logo, visual system, and brand guidelines')}
-${link('Email Campaigns', '/services/email-campaigns', 'Designed and built email templates and campaigns')}
-${link('Pricing', '/pricing', 'Published rate card for project work')}
-
-## Products
-
-${link('UX Health Check', '/ux-health-check', 'Free 10-question self-assessment that scores your site’s UX and returns prioritized findings')}
-${link('48-Hour UX Audit', '/ux-audit', 'Fixed-price $997 audit: recorded walkthrough video, prioritized issues list, quick-win recommendations, and a 60-minute strategy call. Delivered within two business days.')}
+${link('About', '/about', 'Savelle McThias’s background and approach')}
+${link('Contact', '/#contact', 'Project inquiry modal, opens from any page — name, work email, and project details')}
 
 ## Work
 

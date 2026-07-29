@@ -1,0 +1,90 @@
+---
+// Full-player lightbox for the showreel. Rendered once per page. Any element
+// with [data-reel-play] opens it (with sound); ESC / backdrop / close button
+// dismiss it. The iframe is created on open and destroyed on close so audio
+// never lingers, and focus returns to the trigger.
+interface Props {
+  videoId?: string;
+}
+const { videoId = '1212791575' } = Astro.props;
+---
+
+
+<div class="reel-lightbox" data-reel-lightbox data-video-id={videoId} hidden>
+  <div class="reel-lightbox-stage" data-reel-stage role="dialog" aria-modal="true" aria-label="Portfolio showreel"></div>
+  <button class="reel-lightbox-close" data-reel-close aria-label="Close showreel">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="1.75" d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<style>
+  /* True full-viewport takeover — no padding, no card, just the video and a
+     close button, per the redesign brief. */
+  .reel-lightbox {
+    position: fixed; inset: 0; z-index: 100;
+    background: #000;
+  }
+  .reel-lightbox[hidden] { display: none; }
+  .reel-lightbox-stage { position: absolute; inset: 0; overflow: hidden; }
+  /* Vimeo's standard (non-background) embed letterboxes to preserve its
+     16:9 aspect ratio inside width:100%/height:100% — which, against a
+     full-viewport box that isn't itself 16:9, reads as a small "preview"
+     floating in black. Force-crop instead: size the iframe to a true 16:9
+     box guaranteed to overflow the viewport in both dimensions, center it,
+     and let the stage's overflow:hidden clip the excess — the standard
+     technique for filling a container with an embed that can't take
+     object-fit directly (iframes don't support it). */
+  .reel-lightbox-stage :global(iframe) {
+    position: absolute; top: 50%; left: 50%; border: 0;
+    width: 100vw; height: 56.25vw; /* 16/9 */
+    min-height: 100vh; min-width: 177.78vh; /* 16/9 */
+    transform: translate(-50%, -50%);
+  }
+  .reel-lightbox-close {
+    position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 3rem; height: 3rem; border-radius: 999px;
+    background: rgba(24, 24, 27, 0.7); backdrop-filter: blur(6px);
+    color: #fafafa; transition: background-color 0.2s;
+  }
+  .reel-lightbox-close:hover { background: #27272a; }
+</style>
+
+<script>
+  function initReelLightbox() {
+    const lightbox = document.querySelector<HTMLElement>('[data-reel-lightbox]');
+    if (!lightbox) return;
+    const videoId = lightbox.dataset.videoId!;
+    const stage = lightbox.querySelector<HTMLElement>('[data-reel-stage]')!;
+    let lastFocus: HTMLElement | null = null;
+
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
+    const open = (trigger: HTMLElement) => {
+      lastFocus = trigger;
+      const f = document.createElement('iframe');
+      f.src = `https://player.vimeo.com/video/${videoId}?autoplay=1&title=0&byline=0&portrait=0&dnt=1`;
+      f.allow = 'autoplay; fullscreen; picture-in-picture';
+      f.setAttribute('allowfullscreen', '');
+      stage.replaceChildren(f);
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+      (lightbox.querySelector('.reel-lightbox-close') as HTMLElement)?.focus();
+      document.addEventListener('keydown', onKey);
+    };
+    const close = () => {
+      lightbox.hidden = true;
+      stage.replaceChildren(); // stop playback
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+      lastFocus?.focus();
+    };
+
+    document.querySelectorAll<HTMLElement>('[data-reel-play]').forEach((btn) =>
+      btn.addEventListener('click', () => open(btn))
+    );
+    lightbox.querySelectorAll('[data-reel-close]').forEach((el) =>
+      el.addEventListener('click', close)
+    );
+  }
+  document.addEventListener('astro:page-load', initReelLightbox);
+</script>

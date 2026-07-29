@@ -1,0 +1,44 @@
+---
+// v4 redesign footer. Doubles as the "Contact" anchor target (#contact) —
+// the nav's Contact drawer link and any /#contact link scroll here, while
+// LET'S TALK opens the modal directly (both patterns from the brief).
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const year = new Date().getFullYear();
+
+const explore = [
+  { href: '/', label: 'Home' },
+  { href: '/works', label: 'Work' },
+  { href: '/about', label: 'About' },
+  { href: '/blog', label: 'Blog' },
+];
+---
+
+<footer id="contact" class="relative z-10 bg-zinc-950 text-zinc-50 scroll-mt-20">
+  <div class="px-5 sm:px-8 md:px-12 py-20 md:py-28">
+    <div class="mb-20">
+      <p data-word-reveal class="font-head text-huge md:text-9xl font-normal text-zinc-50">
+        Let's make <br/> something great.
+      </p>
+      <p data-word-reveal data-word-reveal-speed="fast" class="mt-4 md:mt-12 text-lg md:text-4xl text-zinc-50 max-w-md">
+        Tell me what you're building. I'll tell you how design gets it there.
+      </p>
+      <button
+        type="button"
+        data-contact-open
+        data-drop-reveal
+        class="mt-8 md:mt-16 inline-flex text-lg items-center gap-2 px-7 py-3.5 rounded-full bg-white text-zinc-950 font-semibold hover:bg-zinc-200 transition-colors cursor-pointer"
+      >
+        LET'S TALK
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M8 7h9v9" /></svg>
+      </button>
+    </div>
+
+    <div class="mt-14 pt-8 border-t border-zinc-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-sm text-zinc-500">
+      <p>&copy; {year} Savelle Design. Built by hand in Scottsdale.</p>
+      <div class="flex items-center gap-6">
+        <a href={`${base}/privacy`} class="hover:text-zinc-50 transition-colors">Privacy Policy</a>
+        <a href={`${base}/terms`} class="hover:text-zinc-50 transition-colors">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>

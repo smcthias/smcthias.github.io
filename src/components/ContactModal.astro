@@ -1,0 +1,255 @@
+---
+// Global contact modal. Rendered once in Layout.astro. Any element anywhere
+// with [data-contact-open] opens it (event-delegated, so it works for
+// elements injected later by other scripts too — e.g. WebsiteScoreChat's
+// results CTA). Same 3 fields + same Google Apps Script endpoint as the old
+// /contact page, which this replaces (2026-07-27 redesign — contact is a
+// modal, not a route).
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
+---
+
+<div id="contact-modal" class="fixed inset-0 z-100 hidden" aria-hidden="true">
+  <div id="contact-modal-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+  <div class="relative min-h-full flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div
+      id="contact-modal-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="contact-modal-title"
+      class="relative w-full max-w-lg bg-zinc-950 border border-zinc-800 rounded-2xl p-6 sm:p-10 my-8"
+    >
+      <button
+        id="contact-modal-close"
+        type="button"
+        aria-label="Close"
+        class="absolute top-5 right-5 sm:top-6 sm:right-6 inline-flex items-center justify-center w-9 h-9 rounded-full text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <h2 id="contact-modal-title" class="font-head text-2xl sm:text-3xl font-semibold text-zinc-50 pr-10">
+        Let's make something great.
+      </h2>
+      <p class="mt-2 text-zinc-400 text-sm sm:text-base">
+        Tell me what you're building. I'll tell you how design gets it there.
+      </p>
+
+      <form id="contact-form" data-endpoint={FORM_ENDPOINT} action={FORM_ENDPOINT} method="POST" class="mt-8" novalidate>
+        <input type="hidden" name="form_type" value="contact" />
+        <input type="hidden" name="site" value="savelledesign.com" />
+        <input type="hidden" name="utm_source" />
+        <input type="hidden" name="utm_medium" />
+        <input type="hidden" name="utm_campaign" />
+        <input type="hidden" name="utm_content" />
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+        <div class="space-y-5">
+          <div>
+            <label for="cf-name" class="block text-sm text-zinc-400 mb-2">Name</label>
+            <input id="cf-name" name="name" type="text" required autocomplete="name"
+              class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors" />
+            <p data-error-for="cf-name" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter your name.</p>
+          </div>
+
+          <div>
+            <label for="cf-email" class="block text-sm text-zinc-400 mb-2">Work email</label>
+            <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="you@company.com"
+              class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors" />
+            <p data-error-for="cf-email" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter a valid email address.</p>
+          </div>
+
+          <div>
+            <label for="cf-message" class="block text-sm text-zinc-400 mb-2">Tell me about the project</label>
+            <textarea id="cf-message" name="message" rows="4" required
+              class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors resize-y"
+              placeholder="The project, what's not working, and what success looks like."></textarea>
+            <p data-error-for="cf-message" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please add a few details.</p>
+          </div>
+        </div>
+
+        <button type="submit" id="cf-submit"
+          class="mt-7 w-full inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-white text-zinc-950 font-medium hover:bg-zinc-200 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+          <span id="cf-submit-label">Send project inquiry</span>
+          <svg id="cf-spinner" class="hidden ml-2 w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+        </button>
+
+        <p id="cf-form-error" class="text-sm text-red-400 mt-4 hidden" role="alert"></p>
+        <p class="text-xs text-zinc-500 mt-4">No newsletter. This goes straight to my inbox, and I reply personally within one business day.</p>
+      </form>
+
+      <div id="contact-success" class="mt-8 text-center py-6" hidden>
+        <div class="w-14 h-14 mx-auto bg-white rounded-full flex items-center justify-center mb-6">
+          <svg class="w-7 h-7 text-zinc-950" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <h3 class="font-head text-2xl font-semibold text-zinc-50 mb-2">Got it<span id="cf-success-name"></span>. Your inquiry is in.</h3>
+        <p class="text-zinc-400">I read every message personally and reply within one business day. Talk soon.</p>
+      </div>
+
+      <p class="text-sm text-zinc-500 mt-6">
+        <a href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 decoration-zinc-700 hover:decoration-white hover:text-zinc-300 transition-colors">Connect on LinkedIn</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initContactModal() {
+    const modal = document.getElementById('contact-modal');
+    const backdrop = document.getElementById('contact-modal-backdrop');
+    const panel = document.getElementById('contact-modal-panel');
+    const closeBtn = document.getElementById('contact-modal-close');
+    if (!modal || !backdrop || !panel || !closeBtn) return;
+    if ((modal as HTMLElement).dataset.bound) return;
+    (modal as HTMLElement).dataset.bound = '1';
+
+    let lastFocused: HTMLElement | null = null;
+    let scrollY = 0;
+
+    function lockScroll() {
+      scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      window.__lenis?.stop();
+    }
+
+    function unlockScroll() {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollY);
+      window.__lenis?.start();
+    }
+
+    function open(e?: Event) {
+      e?.preventDefault();
+      lastFocused = document.activeElement as HTMLElement;
+      lockScroll();
+      modal!.classList.remove('hidden');
+      modal!.setAttribute('aria-hidden', 'false');
+      requestAnimationFrame(() => document.getElementById('cf-name')?.focus());
+    }
+
+    function close() {
+      modal!.classList.add('hidden');
+      modal!.setAttribute('aria-hidden', 'true');
+      unlockScroll();
+      lastFocused?.focus();
+    }
+
+    // Event-delegated so triggers added later (widgets, dynamic CTAs) work too.
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('[data-contact-open]')) {
+        open(e);
+        return;
+      }
+      if (target === backdrop) close();
+    });
+
+    closeBtn.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal!.classList.contains('hidden')) close();
+    });
+
+    // Basic focus trap.
+    panel.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const focusables = panel.querySelectorAll<HTMLElement>('a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+
+    // Form submission — same endpoint/behavior as the old contact page.
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const endpoint = (form.dataset.endpoint || '').trim();
+    const submitBtn = document.getElementById('cf-submit') as HTMLButtonElement;
+    const submitLabel = document.getElementById('cf-submit-label')!;
+    const spinner = document.getElementById('cf-spinner')!;
+    const formError = document.getElementById('cf-form-error')!;
+    const successEl = document.getElementById('contact-success')!;
+    const successName = document.getElementById('cf-success-name')!;
+
+    const params = new URLSearchParams(window.location.search);
+    (['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'] as const).forEach((k) => {
+      const input = form.querySelector(`input[name="${k}"]`) as HTMLInputElement | null;
+      if (input) input.value = params.get(k) || '';
+    });
+
+    const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+    function showFieldError(id: string, show: boolean) {
+      form.querySelector(`[data-error-for="${id}"]`)?.classList.toggle('hidden', !show);
+    }
+
+    function validate() {
+      const name = (form.querySelector('#cf-name') as HTMLInputElement).value.trim();
+      const email = (form.querySelector('#cf-email') as HTMLInputElement).value;
+      const message = (form.querySelector('#cf-message') as HTMLTextAreaElement).value.trim();
+      showFieldError('cf-name', !name);
+      showFieldError('cf-email', !emailOk(email));
+      showFieldError('cf-message', !message);
+      return !!name && emailOk(email) && !!message;
+    }
+
+    ['cf-name', 'cf-email', 'cf-message'].forEach((id) => {
+      form.querySelector(`#${id}`)?.addEventListener('input', () => showFieldError(id, false));
+    });
+
+    function setLoading(on: boolean) {
+      submitBtn.disabled = on;
+      spinner.classList.toggle('hidden', !on);
+      submitLabel.textContent = on ? 'Sending…' : 'Send project inquiry';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formError.classList.add('hidden');
+      if ((form.querySelector('input[name="_gotcha"]') as HTMLInputElement).value) return;
+      if (!validate()) return;
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      delete (data as Record<string, unknown>)._gotcha;
+      setLoading(true);
+
+      try {
+        if (endpoint) {
+          await fetch(endpoint, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(data),
+          });
+        }
+        if (typeof (window as any).gtag === 'function') {
+          (window as any).gtag('event', 'generate_lead', { method: 'contact_form' });
+        }
+        successName.textContent = data.name ? `, ${String(data.name).split(' ')[0]}` : '';
+        form.hidden = true;
+        successEl.hidden = false;
+      } catch (_) {
+        setLoading(false);
+        formError.innerHTML =
+          'Something went wrong sending that. Please try again, or reach out on <a class="underline" href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.';
+        formError.classList.remove('hidden');
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initContactModal);
+</script>

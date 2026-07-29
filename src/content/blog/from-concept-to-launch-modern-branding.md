@@ -33,4 +33,4 @@ Whether you're launching a startup, refreshing an existing brand, or pitching to
 
 ---
 
-**Building something innovative?** Your brand identity should be as cutting-edge as your product. Whether you're preparing for investor pitches or launching to the public, let's create a visual identity that opens doors. [Start your branding journey](/contact) today.
+**Building something innovative?** Your brand identity should be as cutting-edge as your product. Whether you're preparing for investor pitches or launching to the public, let's create a visual identity that opens doors. [Start your branding journey](#contact) today.
