@@ -33,18 +33,30 @@
 // for, and it released as soon as the user's next scroll tick, whether or
 // not the exit animation was ready. That read as an abrupt pop. The pin's
 // scroll range is padded with extra distance (see holdDistance()) after
-// the horizontal scroll completes — the track stops moving once it
-// reaches the last card (a separate, unpadded ScrollTrigger drives the
-// horizontal scrub and simply holds its final position once its own,
-// shorter range is used up), but the *pin itself* keeps consuming scroll
-// input for a while longer. updateCardVisibility keeps being fed a
-// conceptual "phantom" offset that keeps advancing past the track's real
-// width during that padding, so the same overlap-fraction math that
-// handles every other transition naturally decays the last card's
-// fraction below EXIT_THRESHOLD partway through — with room left
-// afterward for its reverse animation to actually play out while still
-// pinned, rather than the pin releasing (and page scroll resuming) the
-// instant it starts.
+// the horizontal scroll completes — the track's x position is clamped to
+// stop advancing once it reaches the last card (see the single onUpdate
+// below), but the *pin itself* keeps consuming scroll input for a while
+// longer. updateCardVisibility keeps being fed a conceptual "phantom"
+// offset that keeps advancing past the track's real width during that
+// padding, so the same overlap-fraction math that handles every other
+// transition naturally decays the last card's fraction below
+// EXIT_THRESHOLD partway through — with room left afterward for its
+// reverse animation to actually play out while still pinned, rather than
+// the pin releasing (and page scroll resuming) the instant it starts.
+//
+// The first card also gets a scroll-distance hold (PRE_HOLD, see below)
+// before the track starts translating at all, so Web sits still for a
+// beat before Brand starts sliding in — the mirror image of the last-card
+// hold above, at the opposite end of the same padded pin range. Both the
+// track's x position and updateCardVisibility's camera position are
+// driven off one single source (the pin's own onUpdate, see below) rather
+// than a second independently-scrubbed ScrollTrigger — an earlier version
+// used a second trigger offset via "start: 'top top+=N'" to delay when it
+// began scrubbing the track, but that desynced from the pin once PRE_HOLD
+// grew: it doesn't reliably track N px after the first trigger's start
+// through GSAP's refresh cycle (depends on refresh ordering between the
+// two), so Web ended up sliding most of the way toward Brand before the
+// "held" state visibly kicked in. Single source of truth avoids that.
 //
 // All of them reset when the pin itself is left, so re-entering the
 // section always starts from the first card.
@@ -54,7 +66,20 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
+// Astro's ClientRouter swaps the DOM between pages without a full reload, so
+// this module's scope (and GSAP's internal registry) survives navigation.
+// Without reverting the previous page's matchMedia context first, leaving
+// the homepage mid-pin left its pin/spacer and ScrollTriggers dangling —
+// the next page loaded with the leftover (now-detached) pinned-section
+// height still factored into the scrollable area, landing scrolled near
+// the bottom instead of the top. Mirrors the cleanup?.() pattern used by
+// the other astro:page-load scripts (e.g. dot-grid.ts).
+let currentMM: ReturnType<typeof gsap.matchMedia> | null = null;
+
 function initPillarScroll() {
+  currentMM?.revert();
+  currentMM = null;
+
   const section = document.getElementById('pillars-section');
   const track = document.querySelector<HTMLElement>('[data-pillar-track]');
   const controls = document.querySelector<HTMLElement>('.pillar-controls');
@@ -62,6 +87,7 @@ function initPillarScroll() {
   if (!section || !track) return;
 
   const mm = gsap.matchMedia();
+  currentMM = mm;
 
   mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
     track.classList.add('is-horizontal');
@@ -136,7 +162,15 @@ function initPillarScroll() {
       const lastCardWidth = cards[cards.length - 1]?.offsetWidth ?? 0;
       return (Math.max(0, window.innerWidth - EXIT_THRESHOLD * lastCardWidth) + POST_EXIT_HOLD()) * HOLD_SCALE;
     };
-    const totalDistance = () => distance() + holdDistance();
+    // A dwell on the first (Web) card before the horizontal scroll starts
+    // moving it toward Brand — the mirror image of holdDistance() above
+    // (which pads the END, after the last card, for its exit to play out).
+    // This pads the START: scrubTrigger below is offset to begin PRE_HOLD()
+    // px later than the pin itself, so for that first stretch of scroll the
+    // section is already pinned (Web sits still) but the track hasn't
+    // started translating yet.
+    const PRE_HOLD = () => window.innerHeight * 0.75;
+    const totalDistance = () => PRE_HOLD() + distance() + holdDistance();
 
     const shown = new Set<number>();
     const updateCardVisibility = (viewLeft: number) => {
@@ -186,27 +220,17 @@ function initPillarScroll() {
       onLeaveBack: () => hideCard(0),
     });
 
-    // Two separate ScrollTriggers on the same section, deliberately: this
-    // one drives only the horizontal scrub (unpadded — end is the actual
-    // track distance) so it naturally holds at its final position once its
-    // own, shorter range is exhausted, without any manual clamping. It
-    // does not pin anything itself.
-    const scrubTrigger = gsap.to(track, {
-      x: () => -distance(),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        scrub: 1,
-        start: 'top top',
-        end: () => '+=' + distance(),
-        invalidateOnRefresh: true,
-      },
-    }).scrollTrigger!;
+    // Eased "catch up" setter for the track's x position, rather than a
+    // second, independently-scrubbed tween — see the file header for why
+    // that desynced. quickTo just adds a touch of smoothing on top of
+    // whatever value we feed it each onUpdate below, so movement still
+    // feels eased rather than input-locked despite being driven directly.
+    const setX = gsap.quickTo(track, 'x', { duration: 0.5, ease: 'power3' });
 
-    // This one owns the pin, over the padded (horizontal-scroll +
-    // hold) range, and feeds updateCardVisibility a "phantom" offset that
-    // keeps advancing past the real track width during the hold — see the
-    // file header and holdDistance() above.
+    // Owns the pin, over the padded (pre-hold + horizontal-scroll +
+    // post-hold) range, and is the single source of truth for both the
+    // track's x position and updateCardVisibility's camera position — see
+    // the file header for why these used to be split across two triggers.
     const st = ScrollTrigger.create({
       trigger: section,
       pin: true,
@@ -215,7 +239,14 @@ function initPillarScroll() {
       invalidateOnRefresh: true,
       onUpdate(self) {
         const dist = distance();
-        const viewLeft = self.progress * totalDistance();
+        // Raw scroll since the pin engaged, minus the pre-hold, clamped to
+        // 0 — during that first stretch this stays pinned at 0 (held);
+        // once past it, matches the real horizontal-scroll pixels 1:1,
+        // then keeps advancing past dist as a "phantom" offset during the
+        // post-exit hold (see holdDistance() above) to decay the last
+        // card's overlap fraction.
+        const viewLeft = Math.max(0, self.progress * totalDistance() - PRE_HOLD());
+        setX(-Math.min(viewLeft, dist));
         const frac = dist ? Math.min(1, viewLeft / dist) : 0;
         const idx = Math.min(cards.length - 1, Math.round(frac * (cards.length - 1)));
         dots.forEach((d, i) => d.classList.toggle('bg-white', i === idx));
@@ -268,12 +299,15 @@ function initPillarScroll() {
       const clamped = Math.max(0, Math.min(cards.length - 1, index));
       const dist = distance();
       const targetViewLeft = (clamped / (cards.length - 1)) * dist;
-      const targetProgress = targetViewLeft / totalDistance();
+      // viewLeft is rawScroll - PRE_HOLD (see onUpdate above) — invert
+      // that to find the raw progress that lands on the desired camera
+      // position.
+      const targetProgress = (targetViewLeft + PRE_HOLD()) / totalDistance();
       st.scroll(st.start + (st.end - st.start) * targetProgress);
     };
     const currentIndex = () => {
       const dist = distance();
-      const viewLeft = Math.min(st.progress * totalDistance(), dist);
+      const viewLeft = Math.min(Math.max(0, st.progress * totalDistance() - PRE_HOLD()), dist);
       return dist ? Math.round((viewLeft / dist) * (cards.length - 1)) : 0;
     };
 
@@ -288,10 +322,10 @@ function initPillarScroll() {
       track.classList.remove('is-horizontal');
       if (controls) controls.style.display = 'none';
       if (hint) hint.style.display = 'none';
+      gsap.killTweensOf(track);
       gsap.set(track, { clearProps: 'transform' });
       ScrollTrigger.removeEventListener('refresh', onGlobalRefresh);
       earlyTrigger.kill();
-      scrubTrigger.kill();
       st.kill();
     };
   });

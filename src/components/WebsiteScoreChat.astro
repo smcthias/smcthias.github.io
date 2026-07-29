@@ -121,7 +121,7 @@ const questions: Question[] = [
     type="button"
     aria-expanded="false"
     aria-controls="wsc-panel"
-    class="inline-flex items-center gap-2.5 pl-5 pr-5 py-3.5 rounded-full bg-white text-zinc-950 font-medium shadow-xl shadow-black/30 hover:bg-zinc-200 transition-colors"
+    class="inline-flex items-center gap-2.5 pl-5 pr-5 py-3.5 rounded-full bg-white text-zinc-950 font-medium shadow-xl shadow-black/30 hover:bg-zinc-200 transition-colors cursor-pointer"
   >
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8-1.06 0-2.078-.163-3.024-.463L3 21l1.395-3.72C3.512 15.898 3 14.5 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -145,7 +145,7 @@ const questions: Question[] = [
       <p class="text-sm font-semibold text-zinc-50">Website Score</p>
       <p class="text-xs text-zinc-400">Ten quick questions, about 2 minutes</p>
     </div>
-    <button id="wsc-close" type="button" aria-label="Close Website Score chat" class="shrink-0 text-zinc-400 hover:text-zinc-50 transition-colors">
+    <button id="wsc-close" type="button" aria-label="Close Website Score chat" class="shrink-0 text-zinc-400 hover:text-zinc-50 transition-colors cursor-pointer">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
     </button>
   </div>
@@ -165,12 +165,24 @@ const questions: Question[] = [
   is:inline
   define:vars={{ questions }}
 >
-  (() => {
+  // Bound via astro:page-load (not run once as a bare IIFE) — Astro's
+  // ClientRouter swaps this component's DOM back in fresh on every
+  // client-side navigation (e.g. clicking a link inside the nav drawer),
+  // and a plain top-level IIFE only ever runs once, against the very first
+  // page's elements. Without re-binding here, the launcher button that
+  // appears after any such navigation is a listener-less clone — it looks
+  // identical but clicking it does nothing, which is exactly what "works
+  // on load, stops working after using the menu" was. dataset.bound guards
+  // against double-binding on a page-load event that didn't actually swap
+  // this element (mirrors ContactModal.astro's identical guard).
+  function initWsc() {
     const launcher = document.getElementById('wsc-launcher');
     const openBtn = document.getElementById('wsc-open');
     const closeBtn = document.getElementById('wsc-close');
     const panel = document.getElementById('wsc-panel');
     if (!launcher || !openBtn || !closeBtn || !panel) return;
+    if (launcher.dataset.bound) return;
+    launcher.dataset.bound = '1';
 
     const messagesEl = document.getElementById('wsc-messages');
     const dockEl = document.getElementById('wsc-dock');
@@ -399,7 +411,8 @@ const questions: Question[] = [
         open();
       }
     });
-  })();
+  }
+  document.addEventListener('astro:page-load', initWsc);
 </script>
 
 <style>
@@ -469,6 +482,7 @@ const questions: Question[] = [
     background: #18181b;
     border: 1px solid #27272a;
     color: #fafafa;
+    cursor: pointer;
     transition: border-color 0.15s;
   }
   :global(.wsc-chip:hover) {

@@ -52,42 +52,166 @@ covers conventions and history that aren't obvious from reading the code.
   `astro:content` and call `const { Content } = await render(entry)` instead
   of the old `entry.render()` method, which no longer exists on
   loader-based collections.
+- GSAP (core + `ScrollTrigger` + `SplitText` plugins) drives essentially all
+  motion, and Lenis drives smooth scroll — both loaded per-page via a fixed
+  list of `<script src="../scripts/*.ts">` tags at the bottom of
+  `Layout.astro`'s `<head>` (see "Motion & animation system" below for what
+  each one does). `ClientRouter` (`astro:transitions`) is enabled sitewide,
+  so navigation is client-side (View Transitions), not a full page reload.
+
+  **Trap, and the most common bug in this codebase: every script that
+  touches the DOM must bind its init logic to the `astro:page-load` event,
+  not run it as a bare top-level IIFE/statement.** `astro:page-load` fires
+  on the *first* load and again after *every* client-side navigation;
+  a plain top-level IIFE only ever runs once, against whichever page
+  happened to be loaded first. Since `ClientRouter` swaps the DOM (not just
+  `<main>`) on navigation, any component rendered by `Layout.astro`
+  (nav, footer, modals, floating widgets) gets fresh, listener-less DOM
+  nodes on every navigation — a script that isn't re-bound via
+  `astro:page-load` silently stops doing anything the moment the user
+  navigates once, even though it worked perfectly on first load. This has
+  bitten this codebase twice for real: `WebsiteScoreChat.astro`'s launcher
+  button looked identical but did nothing after any client-side nav until
+  its script was rewired to `document.addEventListener('astro:page-load',
+  initWsc)`, and `pillar-scroll.ts`'s GSAP `matchMedia` context/pins were
+  never reverted between page loads, leaving a homepage visit's pinned
+  section dangling and corrupting the *next* page's scroll-height
+  bookkeeping (case studies would load pre-scrolled near the bottom). The
+  established pattern everywhere in `src/scripts/` and the inline
+  `<script>`s in `src/components/*.astro`: wrap init logic in a named
+  function, call `cleanup?.()` (or an equivalent revert) at its top if the
+  script owns any GSAP triggers/pins/tweens or global listeners, then
+  `document.addEventListener('astro:page-load', initFn)` at module scope —
+  never invoke `initFn()` directly at the top level.
 
 ## Design conventions
 
-The site is light-themed throughout. When adding pages, match the existing
-pattern rather than introducing new tokens:
+**v4 redesign: the site is dark/monochrome throughout** (`bg-zinc-950`
+sections, `text-zinc-50` body copy, `zinc-*` scale for everything else —
+per `global.css`'s own comment: "black ground throughout, monochrome...
+there are no custom color tokens... no accent color — the portfolio
+imagery carries the color; type and space carry the design"). This
+superseded an earlier light-themed version of the site (see "History"
+sections below, which describe that earlier version and predate this
+redesign — treat any light-theme/color specifics down there as historical,
+not current). When adding pages, match the current dark pattern:
 
-- Container: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`, wrapped in a `py-20`
-  (or `pb-20`) section.
-- Headings: `text-4xl md:text-5xl font-bold text-zinc-900` for page `<h1>`,
-  `text-3xl md:text-4xl font-bold` for section `<h2>`.
-- Body copy: `text-zinc-600` (or `text-xl text-zinc-600` for hero intros).
-- Cards: `bg-white border border-zinc-200 rounded-lg`, or `bg-zinc-50` for a
-  subtly recessed variant.
-- Buttons: solid `bg-zinc-900 text-white rounded-lg hover:bg-zinc-800`;
-  outline `border-2 border-zinc-900 text-zinc-900 rounded-lg hover:bg-zinc-50`.
-  Corners are `rounded-lg` site-wide — no pill/`rounded-full` buttons.
-- Nav items live in `src/layouts/Layout.astro` in **two** places (desktop
-  `<div class="hidden md:flex ...">` and the mobile menu `<div id="mobile-menu">`)
-  — both must be updated together when adding/removing a page from nav.
-- No custom fonts beyond Plus Jakarta Sans (`font-sans`); there's no
-  `font-display` token like the old uxblog site had.
+- Font: self-hosted **Inter** (variable font, `public/fonts/inter-var.woff2`,
+  `font-weight: 100 900`), not Plus Jakarta Sans. `--font-sans`,
+  `--font-display`, and `--font-head` in `global.css`'s `@theme` block all
+  resolve to the same Inter stack — there's no separate display face.
+- Custom fluid type scale (also in `@theme`, `global.css`): `text-mega`
+  (clamp 2.75rem→6rem, hero h1s), `text-huge` (clamp 2.1rem→4rem, section
+  h2s), `text-big` (clamp 1.6rem→2.5rem, stat numbers/subsection headings) —
+  each ships its own `line-height`/`letter-spacing` pair via Tailwind v4's
+  `--text-*--line-height` / `--text-*--letter-spacing` token suffixes.
+- Container/padding: `px-5 sm:px-8 md:px-12` (no `max-w-7xl mx-auto` cap —
+  sections run full-bleed), wrapped in a section with generous vertical
+  padding (`py-20 md:py-28`/`py-24 md:py-36` are common).
+- Section rhythm: consecutive `<section class="bg-zinc-950">` blocks,
+  sometimes separated by `border-t border-zinc-900` rather than visible gaps.
+- Cards/recessed surfaces: `bg-zinc-900` (image placeholders, hover
+  backgrounds) or `bg-zinc-800` (pillar visual placeholders); border accents
+  use `border-zinc-800`/`border-zinc-700`/`border-zinc-900` depending on
+  contrast needed.
+- Buttons: solid pill `rounded-full bg-white text-zinc-950
+  hover:bg-zinc-200` (primary, e.g. "LET'S TALK"); secondary pill
+  `rounded-full bg-zinc-800 text-zinc-50 hover:bg-zinc-900` (e.g. the nav's
+  "MENU" toggle). **Pills (`rounded-full`) are the button convention now** —
+  the opposite of the old light-theme `rounded-lg`-only rule below. Every
+  `<button>` needs an explicit `cursor-pointer` class — browsers don't
+  default one for buttons (only `<a>` gets a pointer cursor for free), and
+  this has already shipped as a real bug once (`WebsiteScoreChat.astro`'s
+  launcher, close button, and quiz-answer chips were all missing it).
+- Nav (`src/components/Nav.astro`) is a fixed, transparent, floating header
+  (`SAVELLE` wordmark + LET'S TALK + MENU) that opens a full-screen dark
+  drawer (`#nav-drawer`) with four links (Home/About/Work/Contact) — not the
+  old light-theme desktop-dropdown-plus-`#mobile-menu` pattern. There's only
+  one nav markup location now, not two to keep in sync.
 
-### Scanline theme & motion policy
+### Motion & animation system
 
-**All canvas/JS motion has been removed (2026-07-24) — the user found it
-glitchy.** The homepage hero canvas weave (`#hero-weave`), the hover shred
-pulse (`src/scripts/scanline-cards.ts`, `initScanlineHover()`, wired via
-`data-sl-hover` on the homepage Featured Work grid, `/works`, case-study
-visuals, blog cards, and gallery thumbs), the gallery hover zoom/shimmer
-loading effect, and the 404 page's ambient drift canvas (`#nf-weave`) were
-all deleted. `scanline-cards.ts` no longer exists. Images sitewide are now
-plain static `<img>` tags with zero animation — no hover zoom, no fade-in,
-no shred/glitch effects. **Do not reintroduce any of this** without
-explicit user request; the old implementation is in git history
-(pre-2026-07-24) if it's ever wanted again. `SectionDivider.astro` (a few
-ragged offset strips) is unaffected — it was always static CSS, no motion.
+Every scroll-driven animation is a GSAP `ScrollTrigger` (imported per-script,
+`gsap.registerPlugin(...)` at module scope); Lenis (`src/scripts/smooth-scroll.ts`)
+provides the eased scroll feel and is wired to `ScrollTrigger.update` via
+`lenis.on('scroll', ScrollTrigger.update)`. Every script:
+
+- Checks `window.matchMedia('(prefers-reduced-motion: reduce)').matches` and
+  either bails entirely or skips straight to the final visual state — never
+  animates when the user has asked not to.
+- Binds via `astro:page-load`, not a bare top-level call (see the Stack
+  section's trap above — this is the rule the whole system depends on).
+
+The named scripts (`src/scripts/`), each opted into per-element via a
+`data-*` attribute:
+
+- **`word-reveal.ts`** (`data-word-reveal`, optional
+  `data-word-reveal-speed="slow|base|fast"`) — splits text into words
+  (`SplitText`) and staggers them in on scroll entry; replays on every
+  re-entry (both directions). `data-reveal-next="#selector"` chains a plain
+  fade-in on another element once the split finishes.
+- **`image-reveal.ts`** (`data-image-reveal`, optional
+  `data-image-reveal-duration`/`data-image-reveal-delay`) — opacity+scale
+  reveal for images/visual blocks; also replays on re-entry. The `-delay`
+  only applies the *first* time an element plays — later re-entries (user
+  scrolls away and back) play immediately, so there's never a repeat dead
+  pause. This first-play-only-delay pattern is reused by `count-up.ts`.
+- **`drop-reveal.ts`** (`data-drop-reveal`) — simple drop-in fade, used for
+  CTAs/closing elements.
+- **`dot-grid.ts`** (`<canvas id="dot-grid-canvas" data-fade-trigger="#selector">`)
+  — an interactive, cursor-repelling dot grid rendered behind a page's hero
+  section(s) (which must drop their own `bg-zinc-950` — see existing pages
+  for the pattern), fading out via a scrubbed `ScrollTrigger` as
+  `data-fade-trigger`'s element scrolls into place. **Trap:** the fade's
+  `start: 'top bottom'` assumes the hero is at least one viewport tall: on
+  a page with a short hero (e.g. `/works`'s one-line intro), the
+  fade-trigger element can already be behind that "top bottom" point at
+  scroll position 0, giving a *negative* computed start and thus the canvas
+  rendering already partway faded (dimmer than every other page) before any
+  scrolling happens at all. Fixed by flooring the effective start at 0
+  inside the `onUpdate` (`Math.max(0, self.start)`) rather than assuming
+  `self.progress` is trustworthy as-is — check for this again if the canvas
+  ever looks dimmer-than-expected on a new page with a short hero.
+- **`pillar-scroll.ts`** (`#pillars-section`, homepage only, desktop +
+  motion-allowed only) — pins the Web/Brand/Reach section and converts
+  vertical scroll into horizontal movement across the three cards; the
+  single deliberate scroll-hijack on the site. A single `ScrollTrigger`
+  (the pin itself) is the sole source of truth for the track's x position
+  *and* each card's reveal timing — **do not** split those across two
+  independently-scrubbed triggers (e.g. one pinning, another driving the
+  horizontal tween via its own offset `start`): an earlier version tried
+  exactly that to add a pause on the first card, and the second trigger's
+  `"top top+=N"` offset didn't reliably track N px after the first
+  trigger's start through GSAP's refresh cycle, silently desyncing once the
+  pause grew — the card would already be most of the way through its
+  transition before the "held" state visibly kicked in. Track position is
+  now set directly via `gsap.quickTo` from inside the pin's own `onUpdate`.
+- **`hstrip-drag.ts`** (`.hstrip` + `[data-hstrip-wrap]`/`[data-hstrip]`/
+  `[data-hstrip-prev]`/`[data-hstrip-next]`, case-study detail galleries) —
+  click-and-drag horizontal scroll plus prev/next arrow buttons; styled
+  scrollbar lives in `global.css`. Arrow disabled-state is computed from
+  `scrollWidth`, which is wrong until lazy-loaded images inside the strip
+  finish loading — the script re-checks on each image's `load` event, not
+  just once at init, to avoid the "next" arrow getting stuck disabled.
+- **`count-up.ts`** (`data-count-up`) — counts a stat number up from 0 to
+  its authored value (case-study Results strip), preserving whatever
+  prefix/suffix/commas were authored (`"209K+"`, `"2,000"`, `"5 Days"`) and
+  leaving genuinely non-numeric values (`"Custom"`) untouched. Uses the same
+  first-play-only-delay idea as `image-reveal.ts`, but inverted: the number
+  sits at its *starting* value (0) for a deliberate beat (`FIRST_PLAY_DELAY`,
+  currently 0.6s) before counting begins, so the count-up reads as a second,
+  noticeable beat rather than firing instantly the moment the section
+  crosses the reveal threshold (easy to miss mid-scroll).
+
+Two files exist in `src/scripts/` but are **dead code, not wired into
+`Layout.astro`'s script list, and describe the pre-v4 motion policy**
+("hover-triggered snaps... no scroll reveals" — the opposite of the system
+above): `motion.ts` (an alternate/earlier Lenis setup) and
+`src/components/BackgroundField.astro` / `BackgroundHex.astro` (unused
+canvas backdrop components). Don't wire these up thinking they're the
+active system — grep for the filename before trusting a comment inside one
+of them. Ask the user before deleting; they may be intentionally kept for
+recovery.
 
 ### Known Tailwind gotcha
 
@@ -98,6 +222,56 @@ to hide an element that also carries a `flex`/`grid`/etc. class, toggle
 `el.style.display = 'none'` instead of the `hidden` property/attribute. This
 bit the UX Health Check nav bar during migration (see below) — check for it
 again if you add similar step-based UI.
+
+## The v4 redesign — current page/component architecture
+
+The dark-theme redesign described above (roughly 2026-07-27 onward, per the
+"v4 redesign" comments left in `Nav.astro`, `Footer.astro`,
+`WebsiteScoreChat.astro`, `ContactModal.astro`, and `global.css`) replaced
+large parts of what the two "History"/"Pages added independently" sections
+below describe. Those sections predate v4 and are kept for git-archaeology
+(recovering old copy, layouts, or approaches) — their *structural* facts
+(no email/phone anywhere, content-collection merges, which pages got
+deleted and when) still hold, but anything about **colors, the contact
+page, the footer, or the nav** describes the superseded light-theme version.
+Current reality:
+
+- **Contact is a modal, not a page.** `src/pages/contact.astro` no longer
+  exists. `src/components/ContactModal.astro` renders once in
+  `Layout.astro` and opens from *any* element anywhere with a
+  `[data-contact-open]` attribute (event-delegated on `document`, so it
+  works for elements injected later by other scripts too, e.g.
+  `WebsiteScoreChat`'s results CTA). The footer (`id="contact"`) doubles as
+  the scroll target for `/#contact` links; `LET'S TALK` opens the modal
+  directly. Both coexist deliberately.
+- **`src/pages/services.astro` no longer exists** (deleted 2026-07-25, see
+  the "Pages added independently" section below for that history) — nothing
+  in the current nav/footer links to it.
+- **`WebsiteScoreChat.astro` no longer takes a `page` prop.** It renders
+  once, sitewide, from `Layout.astro`, reading `Astro.url.pathname` itself
+  for lead-attribution — the "Pages added independently" section below
+  describes an earlier version gated to `/contact` and `/works` via a
+  required prop; that's no longer how it works. It's a fixed bottom-right
+  chat-bubble launcher (`#wsc-launcher`/`#wsc-open`/`#wsc-panel`) running
+  the same 10-question scoring logic as before, duplicated by hand (not
+  shared) from nothing now — the old full-page `/ux-health-check` quiz it
+  used to duplicate is gone too.
+- **The footer is a single minimal block**, not a multi-column sitemap:
+  headline + "Let's make something great." + LET'S TALK button + a bottom
+  bar with copyright/Privacy/Terms links. No LinkedIn link, no
+  Explore/Start-here columns despite `Footer.astro`'s frontmatter still
+  defining an unused `explore` array — that array is dead data, not
+  rendered anywhere; don't assume it reflects the actual footer.
+- **Nav is a single fixed header + full-screen drawer** (see Design
+  conventions above), not the old two-places-to-update desktop-dropdown +
+  `#mobile-menu` pattern.
+- Current page inventory: `index.astro`, `about.astro`, `works.astro` +
+  `works/[slug].astro`, `blog.astro` + `blog/[slug].astro`, `privacy.astro`,
+  `terms.astro`, `404.astro`, `llms.txt.ts`. That's the full list —
+  `contact.astro`, `services.astro`, `gallery.astro`, `agencies.astro`,
+  `pricing.astro`, and `ux-audit.astro` are all gone (some pre-date v4, see
+  below); `ux-health-check.astro` is also gone, fully superseded by the
+  `WebsiteScoreChat` widget.
 
 ## History: the former `uxblog/` directory
 
@@ -210,6 +384,12 @@ rhyming sign-off mentioned above. If the user ever asks for one of these,
 it'll need to be recovered from git history rather than the working tree.
 
 ## Pages and content added independently of `uxblog/` (not migrations)
+
+This section also predates the v4 redesign — see "The v4 redesign" section
+above for what superseded it (contact is a modal now, not `contact.astro`;
+`WebsiteScoreChat` no longer takes a `page` prop or lives only on
+`/contact`+`/works`; the footer/nav described below are the pre-v4 ones).
+The deletions and dates below are still accurate as history.
 
 - **Pricing** — a rate-card page (`src/pages/pricing.astro`) built from
   figures the user supplied in chat existed briefly, linked from the Services

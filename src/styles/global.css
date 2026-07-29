@@ -48,6 +48,12 @@ html {
   color: #fafafa;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Always reserve the scrollbar's gutter, whether or not it's actually
+     rendered — otherwise toggling overflow:hidden (nav drawer open, Lenis
+     stopped) removes the scrollbar and every fixed-position, viewport-wide
+     element (e.g. #site-nav's inset-x-0 header) shifts right by its width,
+     visibly nudging the MENU/CLOSE button sideways on open/close. */
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -105,12 +111,35 @@ body {
   overflow-x: auto;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
   padding-bottom: 0.75rem;
+  cursor: grab;
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 transparent; /* zinc-700 thumb, transparent track */
 }
 .hstrip > * {
   flex: 0 0 auto;
   scroll-snap-align: start;
+}
+.hstrip.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+.hstrip.is-dragging > * {
+  pointer-events: none;
+}
+.hstrip::-webkit-scrollbar {
+  height: 6px;
+}
+.hstrip::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hstrip::-webkit-scrollbar-thumb {
+  background: #3f3f46; /* zinc-700 */
+  border-radius: 999px;
+}
+.hstrip::-webkit-scrollbar-thumb:hover {
+  background: #52525b; /* zinc-600 */
 }
 
 /* ──────────────────────────────────────────────────────────────────────────

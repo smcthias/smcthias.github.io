@@ -49,16 +49,38 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <div id="nav-drawer" class="nav-drawer fixed inset-0 z-80 bg-zinc-950" hidden>
   <nav class="h-full flex flex-col justify-center px-5 sm:px-8 md:px-12">
-    <a href={`${base}/`} class="drawer-link">Home</a>
-    <a href={`${base}/about`} class="drawer-link">About</a>
-    <a href={`${base}/works`} class="drawer-link">Work</a>
-    <a href={`${base}/#contact`} class="drawer-link">Contact</a>
+    <a href={`${base}/`} class="drawer-link">
+      <span class="drawer-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7" /></svg>
+      </span>
+      <span class="drawer-link-text">Home</span>
+    </a>
+    <a href={`${base}/about`} class="drawer-link">
+      <span class="drawer-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7" /></svg>
+      </span>
+      <span class="drawer-link-text">About</span>
+    </a>
+    <a href={`${base}/works`} class="drawer-link">
+      <span class="drawer-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7" /></svg>
+      </span>
+      <span class="drawer-link-text">Work</span>
+    </a>
+    <a href={`${base}/#contact`} class="drawer-link">
+      <span class="drawer-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7" /></svg>
+      </span>
+      <span class="drawer-link-text">Contact</span>
+    </a>
   </nav>
 </div>
 
 <style>
   .drawer-link {
-    display: block;
+    position: relative;
+    display: flex;
+    align-items: center;
     padding: 0.5rem 0;
     font-family: var(--font-head);
     font-size: clamp(2.5rem, 8vw, 4.5rem);
@@ -69,6 +91,34 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     transition: color 0.2s;
   }
   .drawer-link:hover { color: #a1a1aa; }
+
+  /* Arrow sits absolutely at the link's left edge, starting off past it
+     (translateX) and invisible. On hover it slides in — passing over the
+     word's own start as it travels — while the word shifts right by about
+     the arrow's width to make room, landing clear of it rather than
+     overlapping once settled. */
+  .drawer-arrow {
+    position: absolute;
+    left: 0;
+    display: inline-flex;
+    width: clamp(1.5rem, 4vw, 2.25rem);
+    opacity: 0;
+    transform: translateX(-2.5rem);
+    transition: transform 0.35s var(--ease-out-expo), opacity 0.3s var(--ease-out-expo);
+    pointer-events: none;
+  }
+  .drawer-arrow svg { width: 100%; height: auto; }
+  .drawer-link-text {
+    display: inline-block;
+    transition: transform 0.35s var(--ease-out-expo);
+  }
+  .drawer-link:hover .drawer-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .drawer-link:hover .drawer-link-text {
+    transform: translateX(clamp(2rem, 5vw, 3rem));
+  }
 
   .nav-burger-bar {
     position: absolute;
@@ -127,11 +177,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     const drawer = document.getElementById('nav-drawer');
     if (!toggle || !drawer || !label) return;
 
+    // Cascading entrance for the drawer links each time the menu opens —
+    // top-to-bottom stagger, each one dropping down into place slightly
+    // after the one above it. Re-set every open (not just the first) since
+    // by the next open the links are already sitting at their settled
+    // opacity/y from the previous animation.
+    const links = gsap.utils.toArray<HTMLElement>('.drawer-link', drawer);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const animateLinksIn = () => {
+      if (reduced || !links.length) return;
+      gsap.set(links, { opacity: 0, y: -24 });
+      gsap.to(links, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08, delay: 0.05 });
+    };
+
     const setDrawer = (open: boolean) => {
       if (open) {
         drawer.hidden = false;
         drawer.classList.add('is-closed');
-        requestAnimationFrame(() => requestAnimationFrame(() => drawer.classList.remove('is-closed')));
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          drawer.classList.remove('is-closed');
+          animateLinksIn();
+        }));
         window.__lenis?.stop();
       } else {
         drawer.classList.add('is-closed');

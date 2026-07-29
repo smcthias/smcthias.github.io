@@ -23,8 +23,16 @@ const work = [...FEATURED.map((f) => byId[f.slug]), ...rest];
   title="Work - Savelle Design"
   description="Selected design and development projects with real results. Two decades of work for startups, agencies, and enterprise teams."
 >
+  <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
+       behind the intro section below (its bg-zinc-950 is dropped so it
+       shows through; body's own bg-zinc-950 is the fallback before JS
+       draws anything). Fades out as the archive grid scrolls into view.
+       pointer-events-none so it never intercepts clicks — mouse position
+       is read via a window-level listener instead. -->
+  <canvas id="dot-grid-canvas" data-fade-trigger="#works-archive" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+
   <!-- ── Intro ────────────────────────────────────────────────────────── -->
-  <section class="bg-zinc-950 pt-16 md:pt-28 pb-16 md:pb-24">
+  <section class="relative pt-16 md:pt-28 pb-16 md:pb-24">
     <div class="px-5 sm:px-8 md:px-12">
       <h1 data-word-reveal class="font-head font-normal text-mega md:text-9xl text-zinc-50">
         The work speaks first.
@@ -33,7 +41,7 @@ const work = [...FEATURED.map((f) => byId[f.slug]), ...rest];
   </section>
 
   <!-- ── Archive grid: same card language as the homepage ─────────────── -->
-  <section class="bg-zinc-950 pb-24 md:pb-36">
+  <section id="works-archive" class="bg-zinc-950 pb-24 md:pb-36">
     <div class="px-5 sm:px-8 md:px-12">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
         {work.map((p, i) => (

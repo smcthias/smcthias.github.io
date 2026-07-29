@@ -60,8 +60,18 @@ const creativeWorkLd = {
 <Layout title={`${project.data.title} - Savelle Design`} description={project.data.description}>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(creativeWorkLd)} />
 
+  <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
+       behind the hero section below (its bg-zinc-950 is dropped so it
+       shows through; body's own bg-zinc-950 is the fallback before JS
+       draws anything). Fades out as the narrative section scrolls into
+       view — that section is unconditional (unlike the results strip right
+       above it, which only renders when a project has results), so it's a
+       reliable fade-trigger target on every case study. pointer-events-none
+       so it never intercepts clicks. -->
+  <canvas id="dot-grid-canvas" data-fade-trigger="#case-narrative" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+
   <!-- ── Hero: full-bleed image ────────────────────────────────────────── -->
-  <section class="bg-zinc-950">
+  <section class="relative">
     <div class="px-5 sm:px-8 md:px-12 pt-12 md:pt-16 pb-14 md:pb-20">
       <a href={`${base}/works`} class="group inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-50 transition-colors mb-12">
         <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,7 +87,7 @@ const creativeWorkLd = {
     <img
       src={`${base}/images/works/${project.data.images.hero}`}
       alt={`${project.data.title} hero image`}
-      class="w-full aspect-[16/9] max-h-[80vh] object-cover rounded-2xl md:rounded-3xl"
+      class="mx-12 w-[calc(100%-6rem)] aspect-[16/9] max-h-[80vh] object-cover rounded-2xl md:rounded-3xl"
       loading="eager"
     />
   </section>
@@ -89,7 +99,7 @@ const creativeWorkLd = {
         <div class="flex flex-wrap gap-x-16 gap-y-10">
           {project.data.results.map((result) => (
             <div class="min-w-0">
-              <p class="font-head text-big font-semibold text-zinc-50 leading-none">{result.value}</p>
+              <p data-count-up class="font-head text-big font-semibold text-zinc-50 leading-none">{result.value}</p>
               <p class="mt-3 text-zinc-400 leading-snug">{result.label}</p>
             </div>
           ))}
@@ -99,7 +109,7 @@ const creativeWorkLd = {
   )}
 
   <!-- ── Narrative ─────────────────────────────────────────────────────── -->
-  <section class="bg-zinc-950 py-20 md:py-28">
+  <section id="case-narrative" class="bg-zinc-950 py-20 md:py-28">
     <div class="px-5 sm:px-8 md:px-12">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <!-- Meta rail -->
@@ -144,20 +154,40 @@ const creativeWorkLd = {
   <!-- ── Detail gallery: horizontal strip ──────────────────────────────── -->
   <section class="bg-zinc-950 border-t border-zinc-900">
     <div class="px-5 sm:px-8 md:px-12 py-20 md:py-28">
-      <div
-        class="hstrip"
-        role="region"
-        aria-label={`${project.data.title} detail image gallery, scrolls horizontally`}
-        tabindex="0"
-      >
-        {detailImages.map((image, i) => (
-          <img
-            src={`${base}/images/works/${image}`}
-            alt={`${project.data.title} detail image ${i + 1}`}
-            class="h-[55vh] min-h-[320px] max-h-[680px] w-auto object-cover rounded-2xl bg-zinc-900"
-            loading="lazy"
-          />
-        ))}
+      <div class="relative" data-hstrip-wrap>
+        <div
+          class="hstrip"
+          data-hstrip
+          role="region"
+          aria-label={`${project.data.title} detail image gallery. Click and drag, swipe, or use the arrow buttons to scroll horizontally.`}
+          tabindex="0"
+        >
+          {detailImages.map((image, i) => (
+            <img
+              src={`${base}/images/works/${image}`}
+              alt={`${project.data.title} detail image ${i + 1}`}
+              class="h-[55vh] min-h-[320px] max-h-[680px] w-auto object-cover rounded-2xl bg-zinc-900"
+              loading="lazy"
+              draggable="false"
+            />
+          ))}
+        </div>
+        <button
+          type="button"
+          data-hstrip-prev
+          aria-label="Scroll gallery left"
+          class="hidden sm:inline-flex items-center justify-center w-10 h-10 rounded-full border border-zinc-700 bg-zinc-950/80 backdrop-blur-sm text-zinc-50 hover:bg-zinc-900 transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer absolute left-2 top-1/2 -translate-y-1/2 z-10"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18l-6-6 6-6" /></svg>
+        </button>
+        <button
+          type="button"
+          data-hstrip-next
+          aria-label="Scroll gallery right"
+          class="hidden sm:inline-flex items-center justify-center w-10 h-10 rounded-full border border-zinc-700 bg-zinc-950/80 backdrop-blur-sm text-zinc-50 hover:bg-zinc-900 transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer absolute right-2 top-1/2 -translate-y-1/2 z-10"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 6l6 6-6 6" /></svg>
+        </button>
       </div>
     </div>
   </section>

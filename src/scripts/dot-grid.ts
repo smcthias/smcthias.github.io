@@ -28,7 +28,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const SPACING = 44;
 const DOT_RADIUS = 1;
-const DOT_COLOR = '#27272a'; // zinc-800 — darker/more subtle against the zinc-950 page bg
+const DOT_COLOR = '#3f3f46'; // zinc-700 — slightly brighter against the zinc-950 page bg
 const REPEL_RADIUS = 190;
 const REPEL_STRENGTH = 46;
 const EASE = 0.15;
@@ -154,8 +154,20 @@ function initDotGrid() {
       end: 'top top',
       scrub: true,
       onUpdate(self) {
-        canvas.style.opacity = String(1 - self.progress);
-        const done = self.progress >= 1;
+        // 'top bottom' fires as soon as the fade-trigger's top is within one
+        // viewport height of the page top — on a page with a short hero
+        // (e.g. works.astro's one-line intro), that point can already be
+        // behind us at scrollY 0, giving a negative self.start and thus a
+        // positive self.progress (i.e. partway faded) before the user has
+        // scrolled at all. Recompute progress with self.start floored at 0
+        // so the fade can never begin before real scrolling does; pages
+        // with a tall enough hero already have self.start >= 0, so this is
+        // a no-op for them and their fade timing is unchanged.
+        const start = Math.max(0, self.start);
+        const end = self.end;
+        const progress = end > start ? gsap.utils.clamp(0, 1, (self.scroll() - start) / (end - start)) : self.progress;
+        canvas.style.opacity = String(1 - progress);
+        const done = progress >= 1;
         if (done !== faded) {
           faded = done;
           if (interactive) {
