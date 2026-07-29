@@ -14,8 +14,28 @@ declare global {
   }
 }
 
+// The gsap.ticker callback that drives the current Lenis instance's raf loop
+// (autoRaf: false means WE own that loop). Tracked at module scope so it can
+// be removed before the next one is added — see the trap note below.
+let lenisTick: ((time: number) => void) | null = null;
+
 function initSmoothScroll() {
   window.__lenis?.destroy();
+  // Trap: gsap.ticker.add() below runs on every astro:page-load (every
+  // navigation, not just the first). destroy()ing the old Lenis instance
+  // doesn't remove OUR externally-added ticker callback — Lenis has no way
+  // to know it exists, since we (not Lenis) registered it. Without this
+  // removal, every navigation permanently leaks one more ticker callback
+  // still calling .raf() on an already-destroyed Lenis instance forever
+  // after. In practice, enough of these pile up over a session that one of
+  // them still forces the scroll position back to whatever stale target it
+  // held right as a new page finishes loading — the exact cause of case
+  // studies intermittently loading scrolled partway (or all the way) down
+  // instead of at the top, only after several navigations in one session.
+  if (lenisTick) {
+    gsap.ticker.remove(lenisTick);
+    lenisTick = null;
+  }
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.__lenis = undefined;
@@ -26,7 +46,8 @@ function initSmoothScroll() {
   window.__lenis = lenis;
 
   lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  lenisTick = (time) => lenis.raf(time * 1000);
+  gsap.ticker.add(lenisTick);
   gsap.ticker.lagSmoothing(0);
 
   // Land on the right spot if the page loaded with a hash (e.g. navigating
