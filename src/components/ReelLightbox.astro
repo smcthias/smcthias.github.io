@@ -26,18 +26,21 @@ const { videoId = '1212791575' } = Astro.props;
   }
   .reel-lightbox[hidden] { display: none; }
   .reel-lightbox-stage { position: absolute; inset: 0; overflow: hidden; }
-  /* Vimeo's standard (non-background) embed letterboxes to preserve its
-     16:9 aspect ratio inside width:100%/height:100% — which, against a
-     full-viewport box that isn't itself 16:9, reads as a small "preview"
-     floating in black. Force-crop instead: size the iframe to a true 16:9
-     box guaranteed to overflow the viewport in both dimensions, center it,
-     and let the stage's overflow:hidden clip the excess — the standard
-     technique for filling a container with an embed that can't take
-     object-fit directly (iframes don't support it). */
+  /* Size the iframe to the largest true 16:9 box that fits entirely inside
+     the viewport (whichever dimension is the binding constraint), then
+     center it — the full frame is always visible, never cropped. On a
+     landscape desktop viewport that's close to width:100vw/height:56.25vw
+     (barely any bars). On a tall mobile viewport in portrait, width would
+     have to blow out far past the video's natural size to cover full
+     height — that's what used to happen here (a `min-width/min-height`
+     "cover" trick borrowed from full-bleed background video), and on
+     mobile it cropped nearly the entire frame away. The stage's black
+     background (see .reel-lightbox above) makes any resulting letterbox/
+     pillarbox bars invisible, so there's no visual cost to not cropping. */
   .reel-lightbox-stage :global(iframe) {
     position: absolute; top: 50%; left: 50%; border: 0;
-    width: 100vw; height: 56.25vw; /* 16/9 */
-    min-height: 100vh; min-width: 177.78vh; /* 16/9 */
+    width: min(100vw, 177.78vh); /* 16/9 */
+    height: min(100vh, 56.25vw); /* 16/9 */
     transform: translate(-50%, -50%);
   }
   .reel-lightbox-close {

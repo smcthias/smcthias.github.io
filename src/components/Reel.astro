@@ -33,7 +33,9 @@ const {
      Force full width instead: size to width:100% + the native aspect
      ratio, center vertically, and let the ancestor overflow:hidden crop
      whatever's taller than the container (acceptable — width matters more
-     here than vertical framing). */
+     here than vertical framing). This ambient hero reel is deliberately
+     cropped (unlike the full-sound lightbox, which must show the whole
+     frame) — don't "fix" this into a contain/letterbox fit again. */
   .reel-mount :global(iframe) {
     position: absolute; top: 50%; left: 0;
     width: 100%; aspect-ratio: 16 / 9;
