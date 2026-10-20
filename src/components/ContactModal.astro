@@ -10,7 +10,7 @@ const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19
 
 <div id="contact-modal" class="fixed inset-0 z-100 hidden" aria-hidden="true">
   <div id="contact-modal-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-  <div class="relative min-h-full flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+  <div class="relative h-full flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
     <div
       id="contact-modal-panel"
       role="dialog"
@@ -95,6 +95,22 @@ const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19
       <p class="text-sm text-zinc-500 mt-6">
         <a href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 decoration-zinc-700 hover:decoration-white hover:text-zinc-300 transition-colors">Connect on LinkedIn</a>
       </p>
+
+      <!-- Survey promo: kept below the form/LinkedIn line so the contact
+           form stays the primary thing visible when this modal opens. -->
+      <div class="mt-8 pt-8 border-t border-zinc-800">
+        <h3 class="font-head text-xl sm:text-2xl font-semibold text-zinc-50">Is your website design reaching your customers?</h3>
+        <p class="mt-2 text-sm text-zinc-400">A free design audit from an 18-year designer.</p>
+        <button
+          type="button"
+          id="contact-survey-link"
+          data-survey-open
+          class="mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-800 text-zinc-50 font-medium hover:bg-zinc-900 transition-colors cursor-pointer"
+        >
+          Find out
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M8 7h9v9" /></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -158,6 +174,11 @@ const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !modal!.classList.contains('hidden')) close();
     });
+
+    // The survey promo button opens SurveyModal (handled by that
+    // component's own document-level [data-survey-open] listener); close
+    // this modal at the same time so the two don't stack.
+    document.getElementById('contact-survey-link')?.addEventListener('click', close);
 
     // Basic focus trap.
     panel.addEventListener('keydown', (e) => {

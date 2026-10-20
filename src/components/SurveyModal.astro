@@ -1,0 +1,619 @@
+---
+// Shared "website design audit" survey modal. Rendered once in Layout.astro.
+// Any element anywhere with [data-survey-open] opens it (event-delegated on
+// document, same pattern as ContactModal's [data-contact-open] — works for
+// triggers in Nav.astro, Footer.astro, ContactModal.astro, and this file
+// itself). `a[href="#website-score"]` is also honored so the existing blog
+// post CTAs (src/content/blog/*.md) keep working unmodified.
+//
+// 2026-10-20 rework: replaces the old floating bottom-right WebsiteScoreChat
+// chat widget with a step-per-question modal (progress bar, Back/Next, one
+// question per screen). Same ten questions, same scoring/band/recommendation
+// logic, and the same Google Apps Script lead endpoint as that widget — only
+// the presentation and flow changed. See initSurveyModal() below for what
+// had to change to make the data fit a modal instead of chat bubbles.
+const page = Astro.url.pathname;
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
+
+type Option = { label: string; value: number };
+type Question = { id: string; category: string; text: string; options: Option[] };
+
+const questions: Question[] = [
+  {
+    id: 'first-impression-1',
+    category: 'First Impression',
+    text: 'When someone finds your site, how fast can they tell what you do and how to contact you?',
+    options: [
+      { label: "Right away, it's obvious", value: 2 },
+      { label: 'Takes a little digging', value: 1 },
+      { label: 'Not clear at all', value: 0 },
+    ],
+  },
+  {
+    id: 'first-impression-2',
+    category: 'First Impression',
+    text: "If someone's never used your site before, is it easy for them to find what they came for?",
+    options: [
+      { label: 'Yes, clearly laid out', value: 2 },
+      { label: 'Somewhat, if they look around', value: 1 },
+      { label: "No, it's confusing", value: 0 },
+    ],
+  },
+  {
+    id: 'conversion-1',
+    category: 'Conversion',
+    text: 'Do you know how many people leave your site without calling, booking, or filling out a form?',
+    options: [
+      { label: 'Yes, we track this', value: 2 },
+      { label: 'We have a rough idea', value: 1 },
+      { label: 'No idea', value: 0 },
+    ],
+  },
+  {
+    id: 'conversion-2',
+    category: 'Conversion',
+    text: 'How many steps does it take for someone to book, call, or request a quote?',
+    options: [
+      { label: 'One or two, quick and easy', value: 2 },
+      { label: 'A few, could be simpler', value: 1 },
+      { label: 'Long or confusing', value: 0 },
+    ],
+  },
+  {
+    id: 'mobile-1',
+    category: 'Mobile',
+    text: 'How does your site feel on a phone?',
+    options: [
+      { label: 'Looks and works great', value: 2 },
+      { label: 'Works, but built for desktop', value: 1 },
+      { label: 'Hard to use', value: 0 },
+    ],
+  },
+  {
+    id: 'mobile-2',
+    category: 'Mobile',
+    text: 'Are buttons, text, and forms easy to tap and read on a phone?',
+    options: [
+      { label: 'Yes, no issues', value: 2 },
+      { label: 'Mostly, a few rough spots', value: 1 },
+      { label: 'No, hard to use', value: 0 },
+    ],
+  },
+  {
+    id: 'accessibility-1',
+    category: 'Accessibility',
+    text: 'Is your site easy to read for people with vision or color differences?',
+    options: [
+      { label: "Yes, we've checked", value: 2 },
+      { label: 'Not sure', value: 1 },
+      { label: 'Never thought about it', value: 0 },
+    ],
+  },
+  {
+    id: 'accessibility-2',
+    category: 'Accessibility',
+    text: 'Do your photos and forms make sense to someone using a screen reader or keyboard only?',
+    options: [
+      { label: 'Yes', value: 2 },
+      { label: 'Some of it', value: 1 },
+      { label: 'Not sure', value: 0 },
+    ],
+  },
+  {
+    id: 'consistency-1',
+    category: 'Consistency',
+    text: 'Does your site look consistent from page to page: same fonts, colors, buttons?',
+    options: [
+      { label: "Yes, it's all consistent", value: 2 },
+      { label: 'Mostly, a few mismatches', value: 1 },
+      { label: 'No, it feels thrown together', value: 0 },
+    ],
+  },
+  {
+    id: 'consistency-2',
+    category: 'Consistency',
+    text: 'If you hired someone new to update your site, would they know where things are and keep it looking right?',
+    options: [
+      { label: "Yes, it's organized well", value: 2 },
+      { label: "They'd need some help", value: 1 },
+      { label: "No, it'd be a mess", value: 0 },
+    ],
+  },
+];
+---
+
+<div id="survey-modal" class="fixed inset-0 z-100 hidden" aria-hidden="true">
+  <div id="survey-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+  <!-- pointer-events-none here (restored on the panel below) lets clicks in
+       the empty space around the panel fall through to #survey-backdrop
+       instead of being captured by this full-bleed centering wrapper —
+       otherwise a click anywhere outside the panel never actually reaches
+       the backdrop element, and "click outside to close" silently never
+       fires. -->
+  <div class="relative h-full flex items-center justify-center sm:p-6 pointer-events-none">
+    <div
+      id="survey-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="survey-title"
+      data-endpoint={FORM_ENDPOINT}
+      data-page={page}
+      data-questions={JSON.stringify(questions)}
+      class="survey-panel pointer-events-auto relative w-full h-full sm:h-auto sm:max-h-[85vh] sm:max-w-lg bg-zinc-950 sm:border sm:border-zinc-800 sm:rounded-2xl flex flex-col overflow-hidden"
+    >
+      <h2 id="survey-title" class="sr-only">Website design audit</h2>
+
+      <div class="flex items-center gap-4 px-5 sm:px-8 pt-6 pb-4 shrink-0">
+        <div
+          id="survey-progress-track"
+          class="flex-1 h-1 bg-zinc-800 rounded-full overflow-hidden"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <div id="survey-progress" class="h-full bg-white transition-all duration-300" style="width:0%"></div>
+        </div>
+        <button
+          id="survey-close"
+          type="button"
+          aria-label="Close"
+          class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 transition-colors cursor-pointer"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div id="survey-body" class="flex-1 overflow-y-auto px-5 sm:px-8 pb-4 min-h-0" aria-live="polite"></div>
+
+      <div id="survey-nav" class="flex items-center justify-between gap-3 px-5 sm:px-8 py-5 border-t border-zinc-900 shrink-0">
+        <button
+          id="survey-back"
+          type="button"
+          disabled
+          class="px-5 py-2.5 rounded-full text-sm font-medium text-zinc-400 hover:text-zinc-50 transition-colors cursor-pointer disabled:opacity-0 disabled:pointer-events-none"
+        >
+          Back
+        </button>
+        <button
+          id="survey-next"
+          type="button"
+          disabled
+          class="px-6 py-3 rounded-full bg-white text-zinc-950 text-sm font-medium hover:bg-zinc-200 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  interface Option { label: string; value: number }
+  interface Question { id: string; category: string; text: string; options: Option[] }
+  interface SurveyState {
+    step: number; // 0..questions.length-1 = quiz, questions.length = contact info
+    answers: Record<string, number>; // question id -> option value
+    contact: { name: string; email: string; url: string };
+    finished: boolean;
+    results?: { overall: number; perCategory: { category: string; score: number }[] };
+  }
+
+  // Bound via astro:page-load, not a bare top-level call — Astro's
+  // ClientRouter swaps this component's DOM back in fresh on every
+  // client-side navigation, and a plain top-level IIFE only ever runs once
+  // against the first page's elements (see ContactModal.astro for the same
+  // pattern/reasoning). dataset.bound guards double-binding.
+  function initSurveyModal() {
+    const modal = document.getElementById('survey-modal');
+    const backdrop = document.getElementById('survey-backdrop');
+    const panel = document.getElementById('survey-panel');
+    const closeBtn = document.getElementById('survey-close');
+    const body = document.getElementById('survey-body');
+    const navEl = document.getElementById('survey-nav');
+    const backBtn = document.getElementById('survey-back');
+    const nextBtn = document.getElementById('survey-next');
+    const progressEl = document.getElementById('survey-progress');
+    const progressTrack = document.getElementById('survey-progress-track');
+    if (!modal || !backdrop || !panel || !closeBtn || !body || !navEl || !backBtn || !nextBtn || !progressEl || !progressTrack) return;
+    if (modal.dataset.bound) return;
+    modal.dataset.bound = '1';
+
+    // Re-aliased as explicitly non-null below the guard above (see
+    // CLAUDE.md: TS narrowing from an `if (!x) return` guard doesn't
+    // reliably carry into nested closures defined further down).
+    const modalEl: HTMLElement = modal;
+    const backdropEl: HTMLElement = backdrop;
+    const panelEl: HTMLElement = panel;
+    const bodyEl: HTMLElement = body;
+    const navBarEl: HTMLElement = navEl;
+    const backBtnEl = backBtn as HTMLButtonElement;
+    const nextBtnEl = nextBtn as HTMLButtonElement;
+    const progressBarEl: HTMLElement = progressEl;
+    const progressTrackEl: HTMLElement = progressTrack;
+
+    const questions: Question[] = JSON.parse(panelEl.dataset.questions || '[]');
+    const endpoint = panelEl.dataset.endpoint || '';
+    const pagePath = panelEl.dataset.page || 'site';
+    const TOTAL_STEPS = questions.length + 1; // + contact info step
+    const STORAGE_KEY = 'sd-survey-state';
+
+    const RECOS: Record<string, string> = {
+      'First Impression': 'Make your headline and hero instantly show what you do and how to reach you: service, location, and a phone or booking button above the fold.',
+      Conversion: 'Add simple analytics to see where visitors drop off, then shorten the path. A single "Call Now" or "Book" button beats a multi-step form.',
+      Mobile: 'Rebuild key pages mobile-first: big tap-friendly buttons, a click-to-call number, forms that don’t require zooming.',
+      Accessibility: 'Check color contrast, add alt text, and make sure forms and menus work with a keyboard or screen reader.',
+      Consistency: 'Standardize fonts, colors, and buttons across every page so it reads as one professional site, not several stitched together.',
+    };
+
+    let lastFocused: HTMLElement | null = null;
+    let scrollY = 0;
+
+    function defaultState(): SurveyState {
+      return { step: 0, answers: {}, contact: { name: '', email: '', url: '' }, finished: false };
+    }
+
+    function loadState(): SurveyState {
+      try {
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') {
+            return {
+              step: typeof parsed.step === 'number' ? parsed.step : 0,
+              answers: parsed.answers || {},
+              contact: parsed.contact || { name: '', email: '', url: '' },
+              finished: !!parsed.finished,
+              results: parsed.results,
+            };
+          }
+        }
+      } catch (_) { /* ignore */ }
+      return defaultState();
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) { /* ignore */ }
+    }
+
+    function esc(s: unknown): string {
+      return String(s).replace(/[&<>"]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m] as string));
+    }
+
+    function validEmail(v: string): boolean {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+
+    function setProgress() {
+      const pct = state.finished ? 100 : Math.round((Math.min(state.step, TOTAL_STEPS) / TOTAL_STEPS) * 100);
+      progressBarEl.style.width = pct + '%';
+      progressTrackEl.setAttribute('aria-valuenow', String(pct));
+    }
+
+    function updateNav() {
+      backBtnEl.disabled = state.step === 0;
+      if (state.step < questions.length) {
+        const q = questions[state.step];
+        nextBtnEl.disabled = state.answers[q.id] === undefined;
+        nextBtnEl.textContent = 'Next';
+      } else {
+        nextBtnEl.disabled = false;
+        nextBtnEl.textContent = 'See my results';
+      }
+    }
+
+    function renderQuestion(index: number) {
+      const q = questions[index];
+      const selected = state.answers[q.id];
+      bodyEl.innerHTML =
+        '<p class="survey-eyebrow">' + esc(q.category) + '</p>' +
+        '<h3 class="mt-2 text-xl sm:text-2xl font-semibold text-zinc-50">' + esc(q.text) + '</h3>' +
+        '<div class="mt-5 space-y-2.5" id="survey-options"></div>';
+      const optionsWrap = document.getElementById('survey-options')!;
+      q.options.forEach((opt) => {
+        const isSelected = selected === opt.value;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-pressed', String(isSelected));
+        btn.className =
+          'block w-full text-left px-5 py-4 rounded-xl border text-base sm:text-lg font-medium transition-colors cursor-pointer ' +
+          (isSelected ? 'border-white bg-zinc-900 text-zinc-50' : 'border-zinc-800 bg-zinc-950 text-zinc-200 hover:border-zinc-600');
+        btn.textContent = opt.label;
+        btn.addEventListener('click', () => {
+          state.answers[q.id] = opt.value;
+          saveState();
+          renderQuestion(index);
+          updateNav();
+        });
+        optionsWrap.appendChild(btn);
+      });
+    }
+
+    function renderContactStep() {
+      bodyEl.innerHTML =
+        '<p class="survey-eyebrow">Almost done</p>' +
+        '<h3 class="mt-2 text-xl sm:text-2xl font-semibold text-zinc-50">Where should I send your results?</h3>' +
+        '<div class="mt-5 space-y-4">' +
+        '<div>' +
+        '<label for="survey-name" class="block text-sm text-zinc-400 mb-2">Name <span class="text-zinc-600">(optional)</span></label>' +
+        '<input id="survey-name" type="text" autocomplete="name" value="' + esc(state.contact.name) + '" ' +
+        'class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors" />' +
+        '</div>' +
+        '<div>' +
+        '<label for="survey-email" class="block text-sm text-zinc-400 mb-2">Email</label>' +
+        '<input id="survey-email" type="email" required autocomplete="email" placeholder="you@yourbusiness.com" value="' + esc(state.contact.email) + '" ' +
+        'class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors" />' +
+        '<p id="survey-contact-error" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter a valid email address.</p>' +
+        '</div>' +
+        '<div>' +
+        '<label for="survey-url" class="block text-sm text-zinc-400 mb-2">Website URL <span class="text-zinc-600">(optional)</span></label>' +
+        '<input id="survey-url" type="text" autocomplete="url" placeholder="yourbusiness.com" value="' + esc(state.contact.url) + '" ' +
+        'class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors" />' +
+        '</div>' +
+        '</div>';
+
+      const nameInput = document.getElementById('survey-name') as HTMLInputElement;
+      const emailInput = document.getElementById('survey-email') as HTMLInputElement;
+      const urlInput = document.getElementById('survey-url') as HTMLInputElement;
+      const sync = () => {
+        state.contact.name = nameInput.value;
+        state.contact.email = emailInput.value;
+        state.contact.url = urlInput.value;
+        saveState();
+      };
+      nameInput.addEventListener('input', sync);
+      urlInput.addEventListener('input', sync);
+      emailInput.addEventListener('input', () => {
+        sync();
+        document.getElementById('survey-contact-error')?.classList.add('hidden');
+      });
+    }
+
+    function computeScores(): { overall: number; perCategory: { category: string; score: number }[] } {
+      const cat: Record<string, { sum: number; max: number }> = {};
+      questions.forEach((q) => {
+        const val = state.answers[q.id];
+        if (val === undefined) return;
+        if (!cat[q.category]) cat[q.category] = { sum: 0, max: 0 };
+        cat[q.category].sum += val;
+        cat[q.category].max += 2;
+      });
+      let total = 0, totalMax = 0;
+      const perCategory = Object.keys(cat).map((c) => {
+        total += cat[c].sum; totalMax += cat[c].max;
+        return { category: c, score: Math.round((cat[c].sum / cat[c].max) * 100) };
+      });
+      return { overall: totalMax ? Math.round((total / totalMax) * 100) : 0, perCategory };
+    }
+
+    function band(score: number): { label: string; note: string } {
+      if (score >= 80) return { label: 'Strong online presence', note: 'Your site is doing right by your customers. There is still room to squeeze out a few more calls and bookings.' };
+      if (score >= 55) return { label: 'Solid, with clear opportunities', note: 'Your site is working, but a few specific gaps are likely costing you calls or bookings.' };
+      if (score >= 30) return { label: 'Needs work', note: 'There is real friction here, and it is likely turning away customers before they contact you.' };
+      return { label: 'At risk', note: 'Your website may be costing you more customers than you realize. The good news: fast wins are available.' };
+    }
+
+    function postLead(data: { overall: number; perCategory: { category: string; score: number }[] }) {
+      if (!endpoint) return;
+      const details = data.perCategory.map((c) => c.category + ' ' + c.score).join(' · ');
+      try {
+        fetch(endpoint, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            form_type: 'website-score-chat',
+            site: 'savelledesign.com',
+            page: pagePath,
+            name: state.contact.name,
+            email: state.contact.email,
+            website_url: state.contact.url,
+            score: data.overall,
+            details: details,
+          }),
+        }).catch(() => {});
+      } catch (_) { /* ignore */ }
+      if (typeof (window as any).gtag === 'function') {
+        (window as any).gtag('event', 'ux_health_check_completed', { score: data.overall, method: 'modal' });
+        (window as any).gtag('event', 'generate_lead', { method: 'website_score_modal', score: data.overall });
+      }
+    }
+
+    function renderResults() {
+      const data = state.results;
+      if (!data) return;
+      const b = band(data.overall);
+      const weakest = [...data.perCategory].sort((a, z) => a.score - z.score).slice(0, 3);
+      const priorities = weakest
+        .map((c, i) =>
+          '<div class="mt-3 first:mt-0">' +
+          '<p class="font-semibold text-zinc-50">' + (i + 1) + '. ' + esc(c.category) + '</p>' +
+          '<p class="mt-1 text-sm text-zinc-400">' + esc(RECOS[c.category] || '') + '</p>' +
+          '</div>'
+        )
+        .join('');
+
+      bodyEl.innerHTML =
+        '<div class="text-center py-2">' +
+        '<p class="text-5xl font-semibold text-zinc-50">' + data.overall + '<span class="text-lg text-zinc-500 font-medium">/100</span></p>' +
+        '<p class="mt-2 font-semibold text-zinc-50">' + esc(b.label) + '</p>' +
+        '<p class="mt-3 text-sm text-zinc-400">' + esc(b.note) + '</p>' +
+        '</div>' +
+        '<div class="mt-7">' +
+        '<p class="survey-eyebrow">Your top priorities</p>' +
+        '<div class="mt-3">' + priorities + '</div>' +
+        '</div>' +
+        '<div class="mt-7 space-y-2.5 pb-2">' +
+        '<button type="button" id="survey-results-cta" data-contact-open ' +
+        'class="block w-full text-center px-7 py-3.5 rounded-full bg-white text-zinc-950 font-medium hover:bg-zinc-200 transition-colors cursor-pointer">' +
+        'Talk to me about your results</button>' +
+        '<button type="button" id="survey-restart" class="block w-full text-center px-4 py-2.5 text-sm text-zinc-500 hover:text-zinc-50 transition-colors cursor-pointer">' +
+        'Start over</button>' +
+        '</div>';
+
+      document.getElementById('survey-restart')?.addEventListener('click', restart);
+      document.getElementById('survey-results-cta')?.addEventListener('click', close);
+      navBarEl.hidden = true;
+    }
+
+    function renderStep() {
+      if (state.finished && state.results) {
+        renderResults();
+        setProgress();
+        bodyEl.scrollTop = 0;
+        return;
+      }
+      navBarEl.hidden = false;
+      if (state.step < questions.length) {
+        renderQuestion(state.step);
+      } else {
+        renderContactStep();
+      }
+      updateNav();
+      setProgress();
+      bodyEl.scrollTop = 0;
+    }
+
+    function restart() {
+      state = defaultState();
+      saveState();
+      renderStep();
+    }
+
+    function lockScroll() {
+      scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      window.__lenis?.stop();
+    }
+
+    function unlockScroll() {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollY);
+      window.__lenis?.start();
+    }
+
+    function open(e?: Event) {
+      e?.preventDefault();
+      lastFocused = document.activeElement as HTMLElement;
+      lockScroll();
+      modalEl.classList.remove('hidden');
+      modalEl.setAttribute('aria-hidden', 'false');
+      renderStep();
+      requestAnimationFrame(() => {
+        const first = panelEl.querySelector<HTMLElement>('button, input, [tabindex]:not([tabindex="-1"])');
+        first?.focus();
+      });
+    }
+
+    function close() {
+      modalEl.classList.add('hidden');
+      modalEl.setAttribute('aria-hidden', 'true');
+      unlockScroll();
+      lastFocused?.focus();
+    }
+
+    backBtnEl.addEventListener('click', () => {
+      if (state.step === 0) return;
+      state.step -= 1;
+      saveState();
+      renderStep();
+    });
+
+    nextBtnEl.addEventListener('click', () => {
+      if (state.step < questions.length) {
+        const q = questions[state.step];
+        if (state.answers[q.id] === undefined) return;
+        state.step += 1;
+        saveState();
+        renderStep();
+        return;
+      }
+      const emailInput = document.getElementById('survey-email') as HTMLInputElement | null;
+      const email = (emailInput?.value || '').trim();
+      if (!validEmail(email)) {
+        document.getElementById('survey-contact-error')?.classList.remove('hidden');
+        emailInput?.focus();
+        return;
+      }
+      state.contact.email = email;
+      saveState();
+      const data = computeScores();
+      postLead(data);
+      state.finished = true;
+      state.results = data;
+      saveState();
+      renderStep();
+    });
+
+    closeBtn.addEventListener('click', close);
+
+    // Event-delegated so triggers in any other component (Nav, Footer,
+    // ContactModal) and blog-post CTAs work without each needing their own
+    // script. Mirrors ContactModal.astro's [data-contact-open] pattern.
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('[data-survey-open]')) {
+        open(e);
+        return;
+      }
+      if (target.closest('a[href="#website-score"]')) {
+        e.preventDefault();
+        open();
+        return;
+      }
+      if (target === backdropEl) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modalEl.classList.contains('hidden')) close();
+    });
+
+    // Basic focus trap — re-queries focusables live since survey-body's
+    // content is replaced via innerHTML on every step/question change.
+    panelEl.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const focusables = panelEl.querySelectorAll<HTMLElement>('a, button:not(:disabled), input:not(:disabled), textarea, select, [tabindex]:not([tabindex="-1"])');
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initSurveyModal);
+</script>
+
+<style>
+  .survey-panel {
+    animation: survey-in 0.18s ease-out;
+  }
+  @keyframes survey-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* #survey-body's content is injected by the script above, so rules
+     targeting it must be :global() — Astro's scoped-style attribute only
+     matches markup written directly in this file. */
+  :global(.survey-eyebrow) {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #71717a;
+  }
+</style>

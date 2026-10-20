@@ -4,7 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import ContactModal from '../components/ContactModal.astro';
-import WebsiteScoreChat from '../components/WebsiteScoreChat.astro';
+import SurveyModal from '../components/SurveyModal.astro';
 import ReelLightbox from '../components/ReelLightbox.astro';
 
 interface Props {
@@ -124,7 +124,7 @@ const ogImage = new URL(image, Astro.site || 'https://savelledesign.com');
     <Footer />
 
     <ContactModal />
-    <WebsiteScoreChat />
+    <SurveyModal />
     <ReelLightbox />
 
     <!-- Base organization schema; pages add their own Service / CreativeWork / FAQ -->
