@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
-// Generated at build time so new posts and case studies show up automatically.
+// Generated at build time so new case studies show up automatically.
 // Format follows the llms.txt convention: https://llmstxt.org/
 const SITE = 'https://savelledesign.com';
 
@@ -9,9 +9,6 @@ const link = (title: string, path: string, description: string) =>
   `- [${title}](${SITE}${path}): ${description}`;
 
 export const GET: APIRoute = async () => {
-  const posts = (await getCollection('blog')).sort(
-    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-  );
   const projects = await getCollection('projects');
 
   const body = `# Savelle Design
@@ -41,12 +38,7 @@ ${projects
 
 ## Writing
 
-${link('Blog', '/blog', 'Articles on UX, conversion, and web design for business owners')}
-${posts
-  .map((p) =>
-    link(p.data.title, `/blog/${p.id}`, `${p.data.date.slice(0, 10)}. ${p.data.description}`)
-  )
-  .join('\n')}
+- [Substack](https://savelledesign.substack.com): Everything I wish clients knew before starting a website. From a designer who’s built them.
 
 ## Optional
 

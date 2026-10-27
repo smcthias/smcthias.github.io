@@ -1,8 +1,8 @@
 ---
 // v4 redesign nav: SAVELLE wordmark, a LET'S TALK pill (opens the contact
 // modal via [data-contact-open]) and a MENU pill that reveals a full-screen
-// drawer with Home/About/Work/Contact. Blog is deliberately not in the nav —
-// reachable from the footer and featured on /about. Contact in the drawer
+// drawer with Home/About/Work/Contact, plus two small secondary links
+// (website survey, Substack). Contact in the drawer
 // scrolls to the footer anchor (#contact); LET'S TALK opens the modal
 // directly — both coexist per the design brief.
 // Transparent, floating on the page — safe now that every page is dark.
@@ -82,6 +82,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       Is your website reaching your customers?
       <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7" /></svg>
     </button>
+    <a
+      href="https://savelledesign.substack.com"
+      target="_blank"
+      rel="noopener"
+      class="mt-3 self-start inline-flex items-center gap-2 text-sm sm:text-base font-medium text-zinc-500 hover:text-zinc-50 transition-colors"
+    >
+      <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" /></svg>
+      Follow along on Substack
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9" /></svg>
+    </a>
   </nav>
 </div>
 

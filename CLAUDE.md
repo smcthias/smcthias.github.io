@@ -43,7 +43,7 @@ covers conventions and history that aren't obvious from reading the code.
     corresponding JSX closing tag for 'div'`). Don't treat a clean `astro
     check` as proof the build will succeed — run `astro build` too before
     trusting a change, especially after touching markup-heavy `.astro` files.
-- Content collections (`src/content/projects`, `src/content/blog`) defined in
+- Content collection (`src/content/projects`; the blog collection was removed) defined in
   `src/content.config.ts` (Astro 6 removed the legacy `src/content/config.ts`
   + `type: 'content'` API — collections now require an explicit `loader`,
   here `glob()` from `astro/loaders`). Entries no longer have a `.slug`
@@ -258,15 +258,25 @@ Current reality:
   used to duplicate is gone too.
 - **The footer is a single minimal block**, not a multi-column sitemap:
   headline + "Let's make something great." + LET'S TALK button + a bottom
-  bar with copyright/Privacy/Terms links. No LinkedIn link, no
-  Explore/Start-here columns despite `Footer.astro`'s frontmatter still
-  defining an unused `explore` array — that array is dead data, not
-  rendered anywhere; don't assume it reflects the actual footer.
+  bar with copyright, Follow (LinkedIn + Substack icons), and
+  Privacy/Terms links. No
+  Explore/Start-here columns.
 - **Nav is a single fixed header + full-screen drawer** (see Design
   conventions above), not the old two-places-to-update desktop-dropdown +
   `#mobile-menu` pattern.
+- **The blog is gone — writing lives on Substack** (2026-10-27,
+  savelledesign.substack.com). Removed: `src/content/blog/` + its
+  collection in `content.config.ts`, `blog.astro`/`blog/[slug].astro`,
+  `public/images/blog/`, `/about`'s "Field notes" section, the footer's
+  dead `explore` array, llms.txt's post list (now one Substack line), and
+  SurveyModal's `a[href="#website-score"]` handler (only blog posts used
+  it). The Substack link is a small item in the footer, right of
+  the survey link (a full-width section above the footer was tried and
+  dropped for competing with the footer headline), and the nav drawer has a small "Follow along
+  on Substack" link under the survey link. Older "History" notes below
+  that mention the blog describe the removed version.
 - Current page inventory: `index.astro`, `about.astro`, `works.astro` +
-  `works/[slug].astro`, `blog.astro` + `blog/[slug].astro`, `privacy.astro`,
+  `works/[slug].astro`, `privacy.astro`,
   `terms.astro`, `404.astro`, `llms.txt.ts`. That's the full list —
   `contact.astro`, `services.astro`, `gallery.astro`, `agencies.astro`,
   `pricing.astro`, and `ux-audit.astro` are all gone (some pre-date v4, see

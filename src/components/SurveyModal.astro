@@ -3,8 +3,7 @@
 // Any element anywhere with [data-survey-open] opens it (event-delegated on
 // document, same pattern as ContactModal's [data-contact-open] — works for
 // triggers in Nav.astro, Footer.astro, ContactModal.astro, and this file
-// itself). `a[href="#website-score"]` is also honored so the existing blog
-// post CTAs (src/content/blog/*.md) keep working unmodified.
+// itself).
 //
 // 2026-10-20 rework: replaces the old floating bottom-right WebsiteScoreChat
 // chat widget with a step-per-question modal (progress bar, Back/Next, one
@@ -556,17 +555,12 @@ const questions: Question[] = [
     closeBtn.addEventListener('click', close);
 
     // Event-delegated so triggers in any other component (Nav, Footer,
-    // ContactModal) and blog-post CTAs work without each needing their own
+    // ContactModal) work without each needing their own
     // script. Mirrors ContactModal.astro's [data-contact-open] pattern.
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       if (target.closest('[data-survey-open]')) {
         open(e);
-        return;
-      }
-      if (target.closest('a[href="#website-score"]')) {
-        e.preventDefault();
-        open();
         return;
       }
       if (target === backdropEl) close();

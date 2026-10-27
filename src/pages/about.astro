@@ -1,12 +1,6 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-
-const allPosts = await getCollection('blog');
-const featuredPosts = allPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 2);
 
 ---
 
@@ -17,10 +11,9 @@ const featuredPosts = allPosts
   <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
        behind the hero section below (its bg-zinc-950 is dropped so it
        shows through; body's own bg-zinc-950 is the fallback before JS
-       draws anything). Fades out as the "From the blog" section scrolls
-       into view. pointer-events-none so it never intercepts clicks —
+       draws anything). Fades out as the footer (#contact) scrolls into view. pointer-events-none so it never intercepts clicks —
        mouse position is read via a window-level listener instead. -->
-  <canvas id="dot-grid-canvas" data-fade-trigger="#about-field-notes" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+  <canvas id="dot-grid-canvas" data-fade-trigger="#contact" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
   <!-- ── Hero: headline, line-art portrait, three paragraphs ──────────── -->
   <section class="relative pt-16 md:pt-28 pb-16 md:pb-24">
     <div class="px-5 sm:px-8 md:px-12">
@@ -55,46 +48,4 @@ const featuredPosts = allPosts
     </div>
   </section>
 
-  <!-- ── From the blog: 2 posts + link to all articles ────────────────── -->
-  <section id="about-field-notes" class="bg-zinc-950 border-t border-zinc-900 py-24 md:py-36">
-    <div class="px-5 sm:px-8 md:px-12">
-      <div class="flex flex-wrap items-end justify-between gap-6 mb-16 md:mb-20">
-        <div>
-          <h2 class="font-head text-huge md:text-9xl font-normal text-zinc-50">Field notes</h2>
-        </div>
-        <a href={`${base}/blog`} class="inline-flex items-center gap-2 font-medium text-zinc-50 underline underline-offset-8 decoration-zinc-700 hover:decoration-white transition-colors">
-          View all articles
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {featuredPosts.map((post) => {
-          const formattedDate = new Date(post.data.date).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          });
-          return (
-            <a href={`${base}/blog/${post.id}`} class="group block rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-colors">
-              <div class="overflow-hidden">
-                <img
-                  src={`${base}/images/${post.data.image}`}
-                  alt={post.data.imageAlt}
-                  class="w-full aspect-[16/10] object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-                  loading="lazy"
-                />
-              </div>
-              <div class="p-6">
-                <p class="text-xs text-zinc-500 mb-3">{formattedDate}</p>
-                <h3 class="text-lg font-semibold text-zinc-50 mb-2 group-hover:underline underline-offset-4 decoration-zinc-700">
-                  {post.data.title}
-                </h3>
-                <p class="text-sm text-zinc-400 leading-relaxed">{post.data.description}</p>
-              </div>
-            </a>
-          );
-        })}
-      </div>
-    </div>
-  </section>
 </Layout>

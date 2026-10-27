@@ -29,21 +29,6 @@ const projectsCollection = defineCollection({
   }),
 });
 
-const blogCollection = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.string(),
-    author: z.string().default('Savelle Design'),
-    category: z.string(),
-    tags: z.array(z.string()),
-    image: z.string(),
-    imageAlt: z.string(),
-  }),
-});
-
 export const collections = {
   projects: projectsCollection,
-  blog: blogCollection,
 };
