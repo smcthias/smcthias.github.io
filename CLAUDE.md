@@ -283,6 +283,39 @@ Current reality:
   below); `ux-health-check.astro` is also gone, fully superseded by the
   `WebsiteScoreChat` widget.
 
+## Short links (`/go/<key>`)
+
+`savelledesign.com/go/<key>` forwards to a full URL with UTMs attached — for
+links posted OFF-site (LinkedIn first). Registry: `src/data/go-links.ts`;
+page: `src/pages/go/[key].astro`. UTMs are assembled from each entry
+(`utm_source`=platform, default `linkedin`; `utm_medium`=channel, default
+`social`; `utm_campaign`=program, default `linkedin-posts`;
+`utm_content`=`<date>-<content>`), all lowercase-hyphenated. Never use them
+on internal links — UTMs mid-visit overwrite the visitor's real source.
+
+- **GitHub Pages can't do server redirects**, so each key prerenders a bare
+  static page (meta refresh + `location.replace` + a fallback link). It
+  intentionally skips `Layout.astro` so GTM never loads on the hop page;
+  otherwise GA4 would record a UTM-less `/go/...` pageview as the landing
+  page. `/go/*` is filtered out of the sitemap and every page is `noindex`.
+- **The build fails on a bad entry** — invalid key/date/UTM value, a
+  non-https `url`, or a `path` that isn't a real page (static pages plus
+  `/works/<project id>`). Every rejection path was tested to fire. If a page
+  is deleted while a key still points at it, the build will fail; repoint the
+  key's `path` rather than deleting the key.
+- **Never re-date or delete a key that has been posted.** `date`+`content`
+  is the `utm_content` already counted against that post, and old posts link
+  to the key forever. A new post gets a NEW key, even to the same page.
+- **Link previews:** a platform that unfurls the `/go/` URL itself sees the
+  page's own OG tags. Case-study destinations reuse the project's title,
+  description and hero image automatically; others use the site default or
+  the entry's `previewTitle`/`previewDescription`.
+- **Off-site destinations (Substack) are not trackable in GA4** — the visitor
+  never lands on savelledesign.com. Their UTMs only help whatever analytics
+  the destination has.
+- Unknown keys hit the normal 404 page. Verify a new key after deploy by
+  opening it and checking the address bar's final URL carries the UTMs.
+
 ## History: the former `uxblog/` directory
 
 Through 2026-07-20, this repo also contained `uxblog/` — a full copy of an

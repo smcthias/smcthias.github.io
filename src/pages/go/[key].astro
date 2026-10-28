@@ -1,0 +1,77 @@
+---
+// /go/<key> -> forwards to the full UTM'd destination (registry:
+// src/data/go-links.ts). GitHub Pages has no server redirects, so this is a
+// bare static page: meta refresh + location.replace, plus a visible link as a
+// last resort. Deliberately does NOT use Layout.astro, so GTM never loads here.
+// Otherwise GA4 would record a hop page with no UTMs as the landing page.
+import type { InferGetStaticPropsType } from 'astro';
+import { getCollection } from 'astro:content';
+import { allGoLinks } from '../../data/go-links';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+
+  // Every real page on the site, so a /go link can't point at one that doesn't exist.
+  const pageFiles = Object.keys(import.meta.glob('/src/pages/**/*.astro'));
+  const sitePaths = new Set<string>(
+    pageFiles
+      .filter((file) => !file.includes('[') && !file.endsWith('/404.astro'))
+      .map((file) => file.replace(/^\/src\/pages/, '').replace(/\.astro$/, '').replace(/\/index$/, '') || '/'),
+  );
+  projects.forEach((project) => sitePaths.add(`/works/${project.id}`));
+
+  return allGoLinks().map((link) => {
+    let title = link.previewTitle ?? 'Savelle Design';
+    let description = link.previewDescription ?? 'Design and development that turns visitors into customers.';
+    let image = '/images/og-default.jpg';
+
+    if (link.sitePath !== null) {
+      const normalized = link.sitePath.length > 1 ? link.sitePath.replace(/\/$/, '') : link.sitePath;
+      if (!sitePaths.has(normalized)) {
+        throw new Error(`go-links: "${link.key}" points at ${link.sitePath}, which is not a page on this site`);
+      }
+      // Case studies get their own preview, matching what the page itself shows.
+      const project = projects.find((p) => `/works/${p.id}` === normalized);
+      if (project) {
+        title = link.previewTitle ?? `${project.data.title} - Savelle Design`;
+        description = link.previewDescription ?? project.data.description;
+        image = `/images/works/${project.data.images.hero}`;
+      }
+    }
+
+    return { params: { key: link.key }, props: { destination: link.destination, title, description, image } };
+  });
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { destination, title, description, image } = Astro.props as Props;
+const ogImage = new URL(image, Astro.site ?? 'https://savelledesign.com').toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline define:vars={{ destination }}>
+      location.replace(destination);
+    </script>
+    <style>
+      body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #09090b; color: #fafafa; font: 16px/1.5 system-ui, sans-serif; }
+      a { color: inherit; }
+    </style>
+  </head>
+  <body>
+    <p><a href={destination}>Continue</a></p>
+  </body>
+</html>
