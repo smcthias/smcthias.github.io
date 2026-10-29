@@ -151,6 +151,25 @@ images:
 3. Add corresponding images to `public/images/works/`
 4. The project will automatically appear on the works page
 
+### Adding a Short Link (for LinkedIn posts)
+
+Short links like `savelledesign.com/go/my-post` forward to the full URL with
+tracking (UTM) parameters attached, so posts stay clean and every click is
+attributed. Add an entry to `LINKS` in `src/data/go-links.ts`:
+
+```ts
+'my-post': {
+  path: '/works/young-living',   // a page on this site, or…
+  // url: 'https://savelledesign.substack.com/p/some-post',  // …an off-site https URL
+  date: '2026-11-03',            // the day the post goes live
+  content: 'my-post',            // short name for the post
+},
+```
+
+Push to `main` and `savelledesign.com/go/my-post` is live after the deploy.
+Use one new key per post, and never change or delete a key once it has
+been posted. The build fails with a plain message if an entry is wrong.
+
 ### Updating Site Information
 
 1. **Site URL**: Edit `astro.config.mjs` to update the `site` value
