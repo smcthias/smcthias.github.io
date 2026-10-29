@@ -30,7 +30,8 @@ export async function getStaticPaths() {
       if (!sitePaths.has(normalized)) {
         throw new Error(`go-links: "${link.key}" points at ${link.sitePath}, which is not a page on this site`);
       }
-      // Case studies get their own preview, matching what the page itself shows.
+      // Case studies preview with their own title, description and hero image.
+      // (The case-study page itself still uses the site's default OG image.)
       const project = projects.find((p) => `/works/${p.id}` === normalized);
       if (project) {
         title = link.previewTitle ?? `${project.data.title} - Savelle Design`;
