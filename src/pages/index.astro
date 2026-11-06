@@ -31,11 +31,12 @@ const logos = [
   description="Design and development that turns visitors into customers. Two decades of experience, AI-integrated workflows, and senior execution for startups, agencies, and enterprise marketing teams."
 >
   <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
-       behind the hero. Fades out as the #work case-studies section
-       scrolls into view. The hero's video fully covers it, so it first
+       behind everything. The hero's video covers it; the gallery section is
+       transparent so the dots show through behind the tiles (no fade trigger,
+       so it stays visible for the whole page). The hero's video fully covers it, so it first
        becomes visible once the hero scrolls away. pointer-events-none so it
        never intercepts clicks. -->
-  <canvas id="dot-grid-canvas" data-fade-trigger="#work" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+  <canvas id="dot-grid-canvas" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
 
   <!-- ── Hero: exactly one viewport (100svh, not vh, so mobile browser bars
        can't cut off the logo band). The looping reel covers the whole area,
@@ -86,7 +87,7 @@ const logos = [
   </section>
 
   <!-- ── Gallery: masonry + filter; tiles open a modal (no case-study pages) ── -->
-  <section id="work" class="bg-zinc-950">
+  <section id="work" class="relative">
     <div class="px-5 sm:px-8 md:px-12 py-16 md:py-24">
       <Gallery />
     </div>

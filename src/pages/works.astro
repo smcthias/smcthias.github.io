@@ -7,8 +7,12 @@ import Gallery from '../components/Gallery.astro';
   title="Work - Savelle Design"
   description="Selected design and development work: web, email, social, and brand. Two decades of work for startups, agencies, and enterprise teams."
 >
+  <!-- Dot grid sits behind the gallery as the page background (src/scripts/dot-grid.ts);
+       no data-fade-trigger, so it stays visible. -->
+  <canvas id="dot-grid-canvas" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+
   <!-- Gallery only: masonry + filter, tiles open a modal. No heading, no case-study pages. -->
-  <section id="works-archive" class="bg-zinc-950 pt-12 md:pt-8 pb-24 md:pb-36">
+  <section id="works-archive" class="relative pt-12 md:pt-8 pb-24 md:pb-36">
     <div class="px-5 sm:px-8 md:px-12">
       <Gallery />
     </div>

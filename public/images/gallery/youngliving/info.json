@@ -1,0 +1,8 @@
+{
+  "name": "Young Living",
+  "description": "News and promotion hub for Young Living distributors showcasing products and lifestyle content.",
+  "filters": [
+    "web"
+  ],
+  "order": 20
+}

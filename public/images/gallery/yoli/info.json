@@ -1,0 +1,9 @@
+{
+  "name": "Yoli",
+  "description": "Email design system and marketing campaigns built in Klaviyo for global wellness brand.",
+  "filters": [
+    "web",
+    "email"
+  ],
+  "order": 60
+}

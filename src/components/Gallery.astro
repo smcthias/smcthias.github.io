@@ -1,19 +1,20 @@
 ---
 // Work gallery: masonry grid of single pieces + a Web/Email/Social/Brand
-// filter. A piece is one client: every file in public/images/gallery/full
-// named full-<category>-<client>[-NN].jpg is grouped by <client>, and merged
-// with the matching case-study project (src/content/projects) when there is
-// one. Clicking a tile opens that piece's <dialog> with all its screenshots.
-// No titles on tiles; the only labels are the four filter names. A filter chip
-// only renders when some piece uses it (Social is empty today).
-// Tiles keep their natural aspect ratio (square / 16:9 / portrait files) so the
-// masonry has varied sizes; images are lazy and fade/rise in as they enter view.
+// filter. ONE FOLDER PER TILE: every subfolder of public/images/gallery/ is a
+// tile. Inside a folder:
+//   cover.jpg|png|webp   (optional) the image shown on the grid tile; without
+//                        it, the first screenshot is used.
+//   01-*.jpg, 02-*.png…  the screenshots shown in the modal, in filename order.
+//   info.json            (optional) { "name", "description", "filters": [...],
+//                        "featured": true, "order": 10 } — see CLAUDE.md.
+// Folders starting with "_" or "." are ignored (a handy way to park a tile).
+// Clicking a tile opens that piece's full-screen <dialog>. No titles on tiles;
+// the only labels are the four filter names, and a chip only renders when some
+// tile uses it. Tiles keep their natural aspect ratio so the masonry varies in
+// size; images are lazy and fade/rise in as they enter view.
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
-import { getCollection } from 'astro:content';
-import { FEATURED } from '../data/featured';
-import { CLIENTS, PROJECT_ALIASES, CATEGORY_TO_FILTER, FEATURE_FIRST } from '../data/gallery-clients';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -31,97 +32,66 @@ type Piece = {
   name: string;
   description?: string;
   filters: string[];
-  feature?: boolean;
+  feature: boolean;
+  order: number;
   cover: Img;
   shots: Img[];
 };
+type Info = { name?: string; description?: string; filters?: string[]; featured?: boolean; order?: number };
+
+const IMAGE_RE = /\.(jpe?g|png|webp|avif|gif)$/i;
+const galleryDir = path.join(process.cwd(), 'public/images/gallery');
+const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 
 const dims = async (file: string, src: string): Promise<Img> => {
   const m = await sharp(file).metadata();
   return { src, w: m.width ?? 800, h: m.height ?? 600 };
 };
-const worksDir = path.join(process.cwd(), 'public/images/works');
-const worksImg = (f: string) => dims(path.join(worksDir, f), `${base}/images/works/${f}`);
-const projectShots = (p: { data: { images: { hero: string; detail1?: string; detail2?: string; detail3?: string } } }) =>
-  Promise.all(
-    [...new Set([p.data.images.hero, p.data.images.detail1, p.data.images.detail2, p.data.images.detail3])]
-      .filter((f): f is string => !!f)
-      .map(worksImg),
-  );
-
-// ── gallery files, grouped by client ────────────────────────────────────
-const galleryDir = path.join(process.cwd(), 'public/images/gallery/full');
-const thumbsDir = path.join(process.cwd(), 'public/images/gallery/thumbs');
-// Tiles use the small thumb-* files (varied: square / 16:9 / portrait); the
-// modal uses the full-* screenshots, which are tall full-page captures.
-const thumbOf = (file: string) => {
-  const t = file.replace(/^full-/, 'thumb-');
-  return dims(path.join(thumbsDir, t), `${base}/images/gallery/thumbs/${t}`);
-};
-const files = fs.existsSync(galleryDir)
-  ? fs.readdirSync(galleryDir).filter((f) => /\.(jpe?g|png|webp)$/i.test(f)).sort()
-  : [];
-const groups = new Map<string, { category: string; file: string }[]>();
-for (const file of files) {
-  const m = file.match(/^full-([a-z]+)-([a-z0-9]+?)(?:-\d+)?\.[a-z]+$/i);
-  if (!m) continue;
-  const [, category, client] = m;
-  if (!groups.has(client)) groups.set(client, []);
-  groups.get(client)!.push({ category, file });
-}
-// Un-numbered file first, then -02, -03 … (plain sort puts "-02" before ".jpg").
-const order = (f: string) => Number(f.match(/-(\d+)\.[a-z]+$/i)?.[1] ?? 1);
-for (const items of groups.values()) items.sort((a, b) => order(a.file) - order(b.file) || a.file.localeCompare(b.file));
-
-// ── projects (case-study content) ───────────────────────────────────────
-const projects = await getCollection('projects');
-const projectById = Object.fromEntries(projects.map((p) => [p.id, p]));
 
 const pieces: Piece[] = [];
-const usedProjects = new Set<string>();
+const folders = fs.existsSync(galleryDir)
+  ? fs.readdirSync(galleryDir, { withFileTypes: true }).filter((d) => d.isDirectory() && !/^[_.]/.test(d.name))
+  : [];
 
-for (const [client, items] of groups) {
-  const project = projectById[PROJECT_ALIASES[client] ?? client];
-  if (project) usedProjects.add(project.id);
-  const filters = new Set<string>(items.map((i) => CATEGORY_TO_FILTER[i.category]).filter(Boolean));
-  if (project) filters.add(project.data.filter);
-  const gallery = await Promise.all(
-    items.map((i) => dims(path.join(galleryDir, i.file), `${base}/images/gallery/full/${i.file}`)),
-  );
+for (const dir of folders) {
+  const full = path.join(galleryDir, dir.name);
+  const all = fs.readdirSync(full).filter((f) => IMAGE_RE.test(f)).sort(collator.compare);
+  if (!all.length) continue;
+
+  const coverFile = all.find((f) => /^cover\./i.test(f));
+  const shotFiles = all.filter((f) => f !== coverFile);
+  const toImg = (f: string) => dims(path.join(full, f), `${base}/images/gallery/${dir.name}/${f}`);
+
+  let info: Info = {};
+  const infoPath = path.join(full, 'info.json');
+  if (fs.existsSync(infoPath)) {
+    try {
+      info = JSON.parse(fs.readFileSync(infoPath, 'utf-8'));
+    } catch (e) {
+      throw new Error(`gallery: ${dir.name}/info.json is not valid JSON (${(e as Error).message})`);
+    }
+  }
+  const filters = (info.filters ?? []).map((f) => f.toLowerCase());
+  for (const f of filters) {
+    if (!(f in labelOf)) throw new Error(`gallery: ${dir.name}/info.json has unknown filter "${f}" (use web, email, social, brand)`);
+  }
+
+  const shots = await Promise.all((shotFiles.length ? shotFiles : all).map(toImg));
   pieces.push({
-    id: client,
-    name: project?.data.title ?? CLIENTS[client]?.name ?? client,
-    description: project?.data.description ?? CLIENTS[client]?.description,
-    filters: [...filters],
-    feature: FEATURE_FIRST.includes(client),
-    cover: FEATURE_FIRST.includes(client) ? gallery[0] : await thumbOf(items[0].file),
-    shots: [...(project ? await projectShots(project) : []), ...gallery],
+    id: dir.name,
+    name: info.name ?? dir.name,
+    description: info.description,
+    filters,
+    feature: info.featured === true,
+    order: info.order ?? 9999,
+    cover: coverFile ? await toImg(coverFile) : shots[0],
+    shots,
   });
 }
-// Projects with no gallery images of their own still get a piece.
-for (const p of projects) {
-  if (usedProjects.has(p.id)) continue;
-  pieces.push({
-    id: p.id,
-    name: p.data.title,
-    description: p.data.description,
-    filters: [p.data.filter],
-    cover: await worksImg(p.data.thumbnail),
-    shots: await projectShots(p),
-  });
-}
 
-// Editorial order: FEATURED case studies first, then everything else A–Z.
-const featuredRank = (id: string) => {
-  const i = FEATURED.findIndex((f) => f.slug === id || f.slug === PROJECT_ALIASES[id]);
-  return i === -1 ? 999 : i;
-};
-const featureRank = (id: string) => {
-  const i = FEATURE_FIRST.indexOf(id);
-  return i === -1 ? 999 : i;
-};
+// Featured tiles first, then by "order" in info.json, then A–Z.
 pieces.sort(
-  (a, b) => featureRank(a.id) - featureRank(b.id) || featuredRank(a.id) - featuredRank(b.id) || a.name.localeCompare(b.name),
+  (a, b) => Number(b.feature) - Number(a.feature) || a.order - b.order || collator.compare(a.name, b.name),
 );
 
 const used = new Set(pieces.flatMap((p) => p.filters));
@@ -200,17 +170,19 @@ const chips = FILTERS.filter((f) => used.has(f.id));
 </div>
 
 <style>
-  /* Masonry via CSS columns: tiles keep their natural aspect ratio, so the
-     mix of square / 16:9 / portrait files gives varied sizes. */
-  .gallery-grid { columns: 1; column-gap: 1.25rem; }
-  @media (min-width: 640px)  { .gallery-grid { columns: 2; } }
-  @media (min-width: 1024px) { .gallery-grid { columns: 3; column-gap: 1.5rem; } }
-  .gallery-tile { break-inside: avoid; margin-bottom: 1.25rem; padding: 0; border: 0; }
-  @media (min-width: 1024px) { .gallery-tile { margin-bottom: 1.5rem; } }
+  /* Masonry: a 1/2/3-column grid. The script (initGallery → layout) sets each
+     tile's row span from its measured height on a 1px row grid, which packs
+     tiles masonry-style and lets the feature tile span 2 of the 3 columns.
+     Without JS it falls back to a plain stacked grid. */
+  .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; align-items: start; }
+  @media (min-width: 640px)  { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
+  .gallery-grid.is-masonry { grid-auto-flow: row dense; grid-auto-rows: 1px; row-gap: 0; }
+  .gallery-tile { padding: 0; border: 0; }
 
-  /* Feature tile: full width across every column, cropped to a wide banner. */
-  .gallery-feature { column-span: all; aspect-ratio: 16 / 9; }
-  @media (min-width: 768px) { .gallery-feature { aspect-ratio: 5 / 2; } }
+  /* Feature tile: 2 of 3 columns (full width where there are only 1-2), cropped. */
+  .gallery-feature { aspect-ratio: 4 / 3; }
+  @media (min-width: 640px) { .gallery-feature { grid-column: span 2; aspect-ratio: 16 / 10; } }
 
   /* Reveal: tiles start faded/low and ease in when they scroll into view
      (script adds .is-in). Only when JS is on and motion is allowed. */
@@ -300,6 +272,27 @@ const chips = FILTERS.filter((f) => used.has(f.id));
     const tiles = Array.from(root.querySelectorAll<HTMLElement>('[data-tile]'));
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Masonry layout: measure each visible tile and give it a row span on the
+    // 1px-row grid (height + gap). Re-run on width changes and filtering.
+    const grid = root.querySelector<HTMLElement>('.gallery-grid')!;
+    const layout = () => {
+      grid.classList.add('is-masonry');
+      const gap = parseFloat(getComputedStyle(grid).columnGap) || 20;
+      tiles.forEach((t) => {
+        if (t.style.display === 'none') return;
+        t.style.gridRowEnd = 'auto';
+      });
+      tiles.forEach((t) => {
+        if (t.style.display === 'none') return;
+        t.style.gridRowEnd = `span ${Math.ceil(t.offsetHeight + gap)}`;
+      });
+    };
+    layout();
+    let lastW = grid.clientWidth;
+    new ResizeObserver(() => {
+      if (grid.clientWidth !== lastW) { lastW = grid.clientWidth; layout(); }
+    }).observe(grid);
+
     // Scroll reveal: a tile fades in once it's on screen AND its image has
     // loaded; tiles revealed in the same moment stagger slightly.
     let io: IntersectionObserver | null = null;
@@ -347,6 +340,7 @@ const chips = FILTERS.filter((f) => used.has(f.id));
           t.classList.remove('is-in');
         });
         batch = 0;
+        layout();
         observe();
       }),
     );

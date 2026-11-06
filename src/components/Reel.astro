@@ -1,24 +1,26 @@
 ---
 // Ambient reel layer — fills a positioned 16:9 parent. The poster paints
-// immediately (it's the hero LCP); the self-hosted muted loop (an MP4 in
-// public/images/reel/, NOT Vimeo) is injected only after load, and only when
+// immediately (it's the hero LCP); the self-hosted muted loop (MP4s in
+// public/images/reel/ — desktop + a lighter mobile encode — NOT Vimeo) is injected only after load, and only when
 // motion is allowed and the visitor isn't on Save-Data. Poster stays
 // otherwise. The Vimeo player is loaded solely by <ReelLightbox /> when a
 // [data-reel-play] trigger is clicked (full playback with sound).
 interface Props {
   poster?: string;
   src?: string;
+  srcMobile?: string;
   ambient?: boolean;
 }
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const {
   poster = `${base}/images/reel/reel-poster.jpg`,
   src = `${base}/images/reel/SavelleDesign-PortfolioShowreelV2-Loop.mp4`,
+  srcMobile = `${base}/images/reel/Savelledesign-Portfolioshowreelv2-Loop-Mobile.mp4`,
   ambient = true,
 } = Astro.props;
 ---
 
-<div class="reel" data-reel-ambient data-src={src} data-ambient={ambient ? 'true' : 'false'} aria-hidden="true">
+<div class="reel" data-reel-ambient data-src={src} data-src-mobile={srcMobile} data-ambient={ambient ? 'true' : 'false'} aria-hidden="true">
   <img src={poster} alt="" class="reel-poster" width="1920" height="1080" fetchpriority="high" />
   <div class="reel-mount" data-reel-ambient-mount></div>
 </div>
@@ -57,7 +59,9 @@ const {
       v.setAttribute('tabindex', '-1');
       v.setAttribute('aria-hidden', 'true');
       v.addEventListener('playing', () => mount.classList.add('is-live'), { once: true });
-      v.src = reel.dataset.src!;
+      // Small screens get the lighter mobile encode (≤767px, matches Tailwind's md breakpoint).
+      const mobile = window.matchMedia('(max-width: 767px)').matches;
+      v.src = (mobile && reel.dataset.srcMobile) || reel.dataset.src!;
       mount.appendChild(v);
       v.play().catch(() => {});
     };

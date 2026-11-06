@@ -4,6 +4,13 @@ Guidance for working in this repo. See `README.md` for the general project
 overview, content-collection schema, and deploy instructions — this file
 covers conventions and history that aren't obvious from reading the code.
 
+> **Gallery work lives in folders — check them first.** Every tile on the
+> homepage/`/works` gallery is one folder in `public/images/gallery/<tile>/`
+> (images + `info.json`). Before changing, adding, removing, renaming, or
+> reordering work, or answering "what's in the gallery?", **list
+> `public/images/gallery/` and read each folder's `info.json`** — that is the
+> only source of truth. See "Work gallery" below for the folder format.
+
 ## Stack
 
 - Astro 7, Tailwind CSS 4 — **CSS-first config, not the old v3
@@ -284,25 +291,76 @@ Current reality:
   below); `ux-health-check.astro` is also gone, fully superseded by the
   `WebsiteScoreChat` widget.
 
-## Work gallery (replaced the case-study pages, 2026-11-06)
+## Design audit / survey removed (2026-11-06)
+
+The "Is your website reaching your customers?" design-audit survey is gone:
+`SurveyModal.astro` was deleted along with every `[data-survey-open]` trigger
+(nav drawer, footer, contact modal) and its `<SurveyModal />` mount in
+`Layout.astro`. Older notes below that mention the survey/WebsiteScore quiz,
+`#website-score`, or the footer "survey link" describe the removed version.
+The contact modal's own lead form (same Apps Script endpoint) is unaffected.
+
+## Work gallery (one folder per tile)
 
 `src/components/Gallery.astro` is the only place work is shown (homepage
-`#work` section and `/works`): CSS-columns masonry of single pieces plus a
-Web/Email/Social/Brand filter (`filter` field in each project's frontmatter,
-enum in `content.config.ts`; a chip only renders if some project uses it —
-Social has none yet). Tiles have no titles. A piece = one client: files in
-`public/images/gallery/full/` named `full-<category>-<client>[-NN].jpg` are
-grouped by `<client>` (names/descriptions in `src/data/gallery-clients.ts`)
-and merged with the matching project. Tiles use the small `gallery/thumbs/`
-files (varied aspect = masonry sizes), lazy-loaded and faded in by an
-IntersectionObserver; the modal (native `<dialog>`) lazy-loads the big `full-*`
-screenshots. Add a new piece by dropping files in using that naming.
-**`works/[slug].astro` is deleted** — there are no per-project URLs, so
-`/go/` keys can no longer point at `/works/<id>`, and `llms.txt` lists only
-`/works`. `hstrip-drag.ts` and `count-up.ts` (case-study-only) and
-`pillar-scroll.ts` (pillars section removed) are now unused. The hero is the
-`100svh` reel + Play pill + logo band (`index.astro`); the headline,
-"Trust is built in seconds" and Web/Brand/Reach sections are gone.
+`#work` section and `/works`): a masonry of single pieces (CSS grid on a 1px
+row grid; the component's script sets each tile's row span from its measured
+height, so a featured tile can span 2 of 3 columns) plus a
+Web/Email/Social/Brand filter. Tiles have no titles. Clicking one opens a
+full-screen native `<dialog>` (floating close + prev/next arrows that step
+through the currently visible tiles; the screenshots inside are a masonry
+too). There are no case-study pages (`works/[slug].astro` is deleted; `/go/`
+keys can't point at per-project URLs, and `llms.txt` lists only `/works`).
+
+**Every tile is a folder: `public/images/gallery/<slug>/`.** The component
+reads the directory at build time, so adding/removing a tile = adding/removing
+a folder — no code changes.
+
+```
+public/images/gallery/vanup/
+  cover.jpg        optional — image shown on the grid tile (else the 1st screenshot)
+  01-web.jpg       screenshots for the modal, shown in filename order
+  02-web-02.jpg    (rename/prefix with numbers to reorder; delete a file to drop it)
+  info.json        optional metadata (below)
+```
+
+```json
+{
+  "name": "VanUp",                       // modal heading + aria-label (falls back to the folder name)
+  "description": "One short line…",      // optional; modal copy
+  "filters": ["web"],                    // any of: web, email, social, brand (a tile can have several)
+  "featured": true,                      // optional; the big 2-of-3-column tile, pinned first
+  "order": 10                            // optional; lower = earlier (default 9999, then A–Z)
+}
+```
+
+(`info.json` itself must be plain JSON — no comments; the notes above are
+annotations only.) Rules:
+- Image types: jpg/jpeg/png/webp/avif/gif. `cover.*` is excluded from the
+  modal list. Folders starting with `_` or `.` are ignored — rename a folder
+  `_name` to park a tile without deleting it.
+- An unknown `filters` value fails the build; a filter chip only appears when
+  some tile uses it (Social has none yet). A tile with no `filters` shows only
+  under "All".
+- Tile covers keep their natural aspect ratio — that's what makes the masonry
+  varied. Keep covers small (≈600–800px wide); the modal screenshots can be
+  big full-page captures (lazy-loaded, only fetched when a modal opens).
+- Folder slugs are plain lowercase ids; the `<dialog>` id is `g-<slug>`.
+- **When asked to edit the gallery, `ls public/images/gallery/*` and read the
+  relevant `info.json` first, then edit the files/JSON directly.** Don't
+  reintroduce per-project data in `src/data/` or `src/content/`.
+
+Legacy: `src/content/projects/*.md` and the `projects` collection in
+`content.config.ts` are no longer read by the gallery (their names/descriptions
+were migrated into each folder's `info.json`). They're only referenced by the
+dead `BackgroundHex.astro`; ask the user before deleting them. Leftover
+`public/images/works/` holds old unused thumbnails and
+`young-living-detail1.png` (removed from the site on purpose).
+
+`hstrip-drag.ts` and `count-up.ts` (case-study-only) and `pillar-scroll.ts`
+(pillars section removed) are unused. The hero is the `100svh` reel + Play pill
++ logo band (`index.astro`); the headline, "Trust is built in seconds" and
+Web/Brand/Reach sections are gone.
 
 ## Short links (`/go/<key>`)
 

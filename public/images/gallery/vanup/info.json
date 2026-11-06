@@ -1,0 +1,8 @@
+{
+  "name": "VanUp",
+  "filters": [
+    "web"
+  ],
+  "featured": true,
+  "order": 10
+}
