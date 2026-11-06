@@ -2,6 +2,7 @@
 title: "Omegas411"
 description: "Branding and landing page for a comprehensive Omega-3 essential fatty acids resource guide."
 category: "Web Design & Development"
+filter: "web"
 date: "2025-01-01"
 tags: ["Branding", "Tailwind", "SEO"]
 thumbnail: "omegas411-detail3.png"

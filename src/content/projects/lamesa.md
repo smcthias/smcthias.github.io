@@ -1,7 +1,8 @@
 ---
-title: "La Mesa RV & Van Up"
-description: "E-commerce experience design for RV dealership inventory system and van upgrade marketplace."
+title: "La Mesa RV"
+description: "E-commerce experience design for an RV dealership inventory system."
 category: "E-Commerce Design & Development"
+filter: "web"
 date: "2023-01-01"
 tags: ["E-Commerce", "UX Design", "Branding"]
 thumbnail: "lamesa-hero.png"

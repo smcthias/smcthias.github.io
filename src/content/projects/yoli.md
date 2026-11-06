@@ -2,6 +2,7 @@
 title: "Yoli"
 description: "Email design system and marketing campaigns built in Klaviyo for global wellness brand."
 category: "Email Design & Development"
+filter: "email"
 date: "2025-01-01"
 tags: ["Email Design", "Klaviyo", "Strategy"]
 thumbnail: "yoli-hero.png"

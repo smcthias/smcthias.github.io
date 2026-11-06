@@ -2,6 +2,7 @@
 title: "Nikkl"
 description: "Branding revamp and website redesign for innovative fintech startup serving unicorn employees."
 category: "Branding & Web Development"
+filter: "brand"
 date: "2023-01-01"
 tags: ["Branding", "Fintech", "Web Development"]
 thumbnail: "nikkl-detail3.png"

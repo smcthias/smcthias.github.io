@@ -7,6 +7,7 @@ const projectsCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     category: z.string(),
+    filter: z.enum(['web', 'email', 'social', 'brand']),
     date: z.string(),
     tags: z.array(z.string()),
     thumbnail: z.string(),
@@ -22,9 +23,9 @@ const projectsCollection = defineCollection({
     ctaDescription: z.string(),
     images: z.object({
       hero: z.string(),
-      detail1: z.string(),
-      detail2: z.string(),
-      detail3: z.string(),
+      detail1: z.string().optional(),
+      detail2: z.string().optional(),
+      detail3: z.string().optional(),
     }),
   }),
 });

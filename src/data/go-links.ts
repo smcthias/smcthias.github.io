@@ -30,7 +30,7 @@ const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 type Destination =
-  /** on-site path, e.g. "/works/young-living" or "/" */
+  /** on-site path, e.g. "/works" or "/" */
   | { path: string; url?: never }
   /** off-site https URL, e.g. a Substack post */
   | { url: string; path?: never };

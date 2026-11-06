@@ -5,12 +5,9 @@
 // last resort. Deliberately does NOT use Layout.astro, so GTM never loads here.
 // Otherwise GA4 would record a hop page with no UTMs as the landing page.
 import type { InferGetStaticPropsType } from 'astro';
-import { getCollection } from 'astro:content';
 import { allGoLinks } from '../../data/go-links';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-
   // Every real page on the site, so a /go link can't point at one that doesn't exist.
   const pageFiles = Object.keys(import.meta.glob('/src/pages/**/*.astro'));
   const sitePaths = new Set<string>(
@@ -18,7 +15,6 @@ export async function getStaticPaths() {
       .filter((file) => !file.includes('[') && !file.endsWith('/404.astro'))
       .map((file) => file.replace(/^\/src\/pages/, '').replace(/\.astro$/, '').replace(/\/index$/, '') || '/'),
   );
-  projects.forEach((project) => sitePaths.add(`/works/${project.id}`));
 
   return allGoLinks().map((link) => {
     let title = link.previewTitle ?? 'Savelle Design';
@@ -29,14 +25,6 @@ export async function getStaticPaths() {
       const normalized = link.sitePath.length > 1 ? link.sitePath.replace(/\/$/, '') : link.sitePath;
       if (!sitePaths.has(normalized)) {
         throw new Error(`go-links: "${link.key}" points at ${link.sitePath}, which is not a page on this site`);
-      }
-      // Case studies preview with their own title, description and hero image.
-      // (The case-study page itself still uses the site's default OG image.)
-      const project = projects.find((p) => `/works/${p.id}` === normalized);
-      if (project) {
-        title = link.previewTitle ?? `${project.data.title} - Savelle Design`;
-        description = link.previewDescription ?? project.data.description;
-        image = `/images/works/${project.data.images.hero}`;
       }
     }
 

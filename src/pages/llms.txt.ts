@@ -1,7 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
 
-// Generated at build time so new case studies show up automatically.
+// Generated at build time.
 // Format follows the llms.txt convention: https://llmstxt.org/
 const SITE = 'https://savelledesign.com';
 
@@ -9,7 +8,6 @@ const link = (title: string, path: string, description: string) =>
   `- [${title}](${SITE}${path}): ${description}`;
 
 export const GET: APIRoute = async () => {
-  const projects = await getCollection('projects');
 
   const body = `# Savelle Design
 
@@ -25,16 +23,7 @@ ${link('Contact', '/#contact', 'Project inquiry modal, opens from any page — n
 
 ## Work
 
-${link('Case Studies', '/works', 'Detailed project write-ups with brief, role, and measured results')}
-${projects
-  .map((p) =>
-    link(
-      p.data.title,
-      `/works/${p.id.replace(/\.md$/, '')}`,
-      `${p.data.category}. ${p.data.description}`
-    )
-  )
-  .join('\n')}
+${link('Work', '/works', 'Gallery of selected web, email, social, and brand projects; each piece opens in a modal with a short description and screenshots')}
 
 ## Writing
 

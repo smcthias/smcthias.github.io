@@ -2,6 +2,7 @@
 title: "Adorned"
 description: "Modern branding kit for an augmented reality mobile game to help pitch to investors."
 category: "Branding & Design"
+filter: "brand"
 date: "2020-01-01"
 tags: ["Branding", "AR/VR", "Visual Design"]
 thumbnail: "adorned-hero.png"

@@ -1,14 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Reel from '../components/Reel.astro';
-import { FEATURED } from '../data/featured';
+import Gallery from '../components/Gallery.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const projects = await getCollection('projects');
-const byId = Object.fromEntries(projects.map((p) => [p.id, p]));
-const work = FEATURED.slice(0, 4).map((f) => byId[f.slug]);
 
 // One uniform box per logo (not a per-logo custom height) — equal visual
 // weight regardless of each mark's native aspect ratio, and guarantees
@@ -28,227 +24,246 @@ const logos = [
   { src: '/images/logos/logo-sanity.svg', alt: 'Sanity' },
 ];
 
-const pillars = [
-  { name: 'Web', items: ['Conversion.', 'Ecommerce.', 'Mobile.', 'Speed.'], gif: 'Web-Pillar.gif' },
-  { name: 'Brand', items: ['Identity.', 'Voice.', 'Logo.', 'Feel.'], gif: 'Brand-Pillar.gif' },
-  { name: 'Reach', items: ['Inbox.', 'Social.', 'Campaigns.', 'Engagement.'], gif: 'Reach-Pillar.gif' },
-];
-
 ---
 
 <Layout
   title="Savelle Design - Websites That Turn Visitors Into Customers"
   description="Design and development that turns visitors into customers. Two decades of experience, AI-integrated workflows, and senior execution for startups, agencies, and enterprise marketing teams."
 >
-  <!-- ── Hero: full viewport height on desktop. The headline sits in-flow
-       at the top, lining up visually between the wordmark and the nav
-       buttons without being part of Nav.astro itself. md:-mt-[138px]
-       cancels Layout's md:pt-[138px] (nav clearance, nav is now
-       padding-driven at 48px rather than a fixed h-20) so this section
-       starts flush at the top of the page — auto-height padding (not a
-       fixed row) keeps the two-line headline from overflowing past the
-       viewport edge. ── -->
-  <!-- Load-in sequence, deliberately staggered across separate reveal
-       systems/files rather than one master timeline: headline first (below,
-       starts immediately — 8 words × 0.09s stagger + 0.9s duration = 1.53s
-       to finish), then the showreel AND the nav/wordmark together, both
-       starting right as the headline finishes (data-image-reveal-delay
-       ="1.53" below; Nav.astro hardcodes the same 1.53s, see its comment),
-       then this section's scroll indicator once the last of those two to
-       finish — the showreel, at 1.53 + 1.4s duration = 2.93s, since the nav
-       itself only takes another 0.6s — settles
-       (data-drop-reveal-delay below). If any of these durations change,
-       the dependent delays need updating too. -->
   <!-- Interactive dot grid backdrop (src/scripts/dot-grid.ts): fixed,
-       behind the hero + opener sections below (their bg-zinc-950 is
-       dropped so it shows through; body's own bg-zinc-950 is the fallback
-       before JS draws anything). Fades out as #pillars-section (Web/Brand/
-       Reach) scrolls into view. pointer-events-none so it never intercepts
-       clicks — mouse position is read via a window-level listener instead. -->
-  <canvas id="dot-grid-canvas" data-fade-trigger="#pillars-section" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
-  <section class="relative md:-mt-[138px] md:h-screen md:flex md:flex-col">
-    <div class="pt-24 pb-8 md:pt-12 md:pb-12 md:shrink-0 px-5 sm:px-8 md:px-12">
-      <h1
-        data-word-reveal
-        data-word-reveal-speed="slow"
-        class="font-sans font-normal text-5xl text-zinc-50 md:w-fit md:mx-auto md:text-left"
-      >
-        Design is the first thing<br />your customers trust.
-      </h1>
+       behind the hero. Fades out as the #work case-studies section
+       scrolls into view. The hero's video fully covers it, so it first
+       becomes visible once the hero scrolls away. pointer-events-none so it
+       never intercepts clicks. -->
+  <canvas id="dot-grid-canvas" data-fade-trigger="#work" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+
+  <!-- ── Hero: exactly one viewport (100svh, not vh, so mobile browser bars
+       can't cut off the logo band). The looping reel covers the whole area,
+       the fixed nav floats over it, the Play pill is the only thing in the
+       middle, and the logo marquee sits on a dark translucent strip at the
+       bottom edge. -mt-16 / md:-mt-[138px] cancel Layout's <main> nav-
+       clearance padding so the hero starts flush at the top of the page. ── -->
+  <section class="relative -mt-16 md:-mt-[138px] h-[100svh] overflow-hidden bg-zinc-950">
+    <div data-image-reveal data-image-reveal-duration="1.4" data-image-reveal-delay="0.2" class="absolute inset-0">
+      <Reel />
+      <div class="absolute inset-0 bg-black/30"></div>
     </div>
 
-    <!-- Showreel: ambient muted loop, deliberately cropped (see Reel.astro)
-         so it reads as a cinematic backdrop behind the headline rather than
-         a letterboxed video. The "Play Showreel" affordance stays visible
-         at rest (not hover-only) so it reads as clickable before the user
-         ever touches it; hover just intensifies the scrim and nudges the
-         icon. Clicking anywhere opens the full-sound lightbox, which shows
-         the entire frame uncropped (see ReelLightbox.astro). -->
-    <div class="mt-8 md:mt-0 md:flex-1 md:min-h-0 px-5 sm:px-8 md:px-12">
+    <!-- Only the pill opens the lightbox (full-sound Vimeo, loaded on click). -->
+    <div class="absolute inset-0 flex items-center justify-center">
+      <!-- data-play-zone: transparent 80px halo around the pill; the magnetic
+           pull is only tracked while the pointer is inside it. -->
+      <div data-play-zone class="p-20">
       <button
         data-reel-play
-        data-image-reveal
-        data-image-reveal-duration="1.4"
-        data-image-reveal-delay="1.53"
-        class="group relative block w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-auto md:h-full rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer bg-zinc-900"
+        data-play-btn
+        class="play-btn group inline-flex items-center gap-3 md:gap-4 rounded-full bg-white text-zinc-950 cursor-pointer pl-3 pr-7 py-3 md:pl-4 md:pr-9 md:py-4 text-base md:text-xl font-medium"
         aria-label="Play the portfolio showreel with sound"
       >
-        <Reel />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-        <div class="absolute inset-0 flex items-center justify-center gap-5 md:gap-6 bg-black/40 group-hover:bg-black/60 transition-colors duration-300">
-          <span class="text-zinc-50 text-xl md:text-2xl font-medium">
-            Play
-          </span>
-          <span class="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-white text-zinc-950 scale-90 group-hover:scale-100 transition-transform duration-300">
-            <svg class="w-6 h-6 md:w-7 md:h-7 ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
-          </span>
-          <span class="text-zinc-50 text-xl md:text-2xl font-medium">
-            Showreel
-          </span>
-        </div>
+        <span class="inline-flex items-center justify-center w-11 h-11 md:w-14 md:h-14 rounded-full bg-zinc-950 text-white transition-transform duration-300 group-hover:scale-105">
+          <svg class="w-4 h-4 md:w-5 md:h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+        </span>
+        Play showreel
       </button>
-    </div>
-
-    <div
-      data-drop-reveal
-      data-drop-reveal-delay="2.93"
-      class="mt-12 md:shrink-0 md:pb-8 px-5 sm:px-8 md:px-12 flex items-center justify-center gap-4 text-zinc-600"
-    >
-      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 5v14M6 13l6 6 6-6" /></svg>
-      <span class="text-xs font-medium tracking-[0.2em] uppercase">Scroll</span>
-      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 5v14M6 13l6 6 6-6" /></svg>
-    </div>
-  </section>
-
-  <!-- ── Services opener: headline top-left, subtext bottom-right ────────
-       The subtext fades in only once the headline's word-reveal finishes
-       (data-reveal-next chains it, see src/scripts/word-reveal.ts) rather
-       than animating in alongside it. ── -->
-  <section class="relative pt-20 md:pt-28 pb-14 md:pb-16 md:min-h-[560px] md:flex md:flex-col md:justify-between">
-    <div class="px-5 sm:px-8 md:px-12">
-      <h2
-        data-word-reveal
-        data-reveal-next="#opener-subtext"
-        class="font-head text-huge md:text-9xl font-normal text-zinc-50"
-      >
-        Trust is built<br />in seconds.
-      </h2>
-    </div>
-    <div class="mt-8 md:mt-16 px-5 sm:px-8 md:px-12 md:flex md:justify-end max-w-7xl">
-      <p id="opener-subtext" data-fade-reveal class="max-w-md text-lg md:text-4xl text-zinc-50">
-        I make sure it holds. AI runs through my process, the craft stays mine.
-      </p>
-    </div>
-  </section>
-
-  <!-- ── Web / Brand / Reach pillars ──────────────────────────────────── -->
-  <!-- Mobile: plain stacked column. Desktop: gsap ScrollTrigger pins this
-       section and converts vertical scroll into horizontal movement across
-       the three cards (src/scripts/pillar-scroll.ts) — the one deliberate
-       scroll-hijack exception, contained to this section only. Falls back
-       to the stacked layout under prefers-reduced-motion or if JS never
-       runs, since .pillar-track only gets flex-direction:row from the
-       is-horizontal class the script adds. The logo strip lives inside
-       this section (not a separate one after it) so it stays pinned at
-       the bottom of the viewport for the whole horizontal-scroll pin,
-       underneath the cards, rather than only appearing once it ends. -->
-  <section id="pillars-section" class="relative bg-zinc-950 md:h-screen md:overflow-hidden md:flex md:flex-col">
-    <div class="relative md:flex-1 md:min-h-0">
-      <div data-pillar-track class="pillar-track flex flex-col">
-        {pillars.map((p) => (
-          <div data-pillar-card class="shrink-0 w-full md:w-[85vw] flex flex-col md:flex-row items-center gap-8 md:gap-16 px-5 sm:px-8 md:px-12 py-16 md:py-0">
-            <div data-pillar-visual class="w-full md:w-1/2 aspect-[4/3] rounded-2xl bg-zinc-800 overflow-hidden shrink-0">
-              <img
-                src={`${base}/images/pillars/${p.gif}`}
-                alt={`${p.name} pillar visual`}
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div class="w-full md:w-1/2">
-              <h2 data-word-reveal class="font-head text-huge md:text-8xl font-normal text-zinc-50">{p.name}</h2>
-              <ul class="mt-6 space-y-6 text-xl md:text-4xl text-zinc-50">
-                {p.items.map((i) => <li data-word-reveal data-word-reveal-speed="fast">{i}</li>)}
-              </ul>
-            </div>
-          </div>
-        ))}
       </div>
-
-      <!-- Affordance: arrows + progress dots (desktop, once the pin is active).
-           Starts hidden via inline style (not the `hidden` attribute) since it
-           also carries `flex` — see CLAUDE.md's Preflight [hidden] gotcha. -->
-      <div class="items-center justify-center gap-6 px-5 sm:px-8 md:px-12 z-10 pillar-controls absolute inset-x-0 bottom-6" style="display:none">
-        <button type="button" data-pillar-prev aria-label="Previous pillar" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-zinc-700 text-zinc-50 hover:bg-zinc-900 transition-colors cursor-pointer">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18l-6-6 6-6" /></svg>
-        </button>
-        <div class="flex gap-2" data-pillar-dots aria-hidden="true">
-          {pillars.map((_, i) => <span class={`w-6 h-1 rounded-full transition-colors ${i === 0 ? 'bg-white' : 'bg-zinc-700'}`}></span>)}
-        </div>
-        <button type="button" data-pillar-next aria-label="Next pillar" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-zinc-700 text-zinc-50 hover:bg-zinc-900 transition-colors cursor-pointer">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 6l6 6-6 6" /></svg>
-        </button>
-      </div>
-
-      <!-- Affordance: scroll-sideways hint, shown before the user scrolls (desktop only, JS toggles it off on first progress) -->
-      <p class="pillar-hint absolute right-8 bottom-6 z-10 text-xs font-medium text-zinc-500 uppercase tracking-[0.2em]" style="display:none">
-        Keep scrolling →
-      </p>
     </div>
 
-    <!-- Logo strip: pinned at the bottom of the viewport underneath the
-         cards, endlessly scrolling, full set of logos (no truncation). -->
-    <div class="md:shrink-0 border-t border-zinc-900 pt-6 pb-8 md:pt-5 md:pb-5 overflow-hidden">
-      <p class="text-center text-xs font-medium text-zinc-500 uppercase tracking-[0.2em] mb-5">
-        Trusted by brands you know
-      </p>
+    <!-- Logo band: translucent black strip, white logos at 60%, slow marquee. -->
+    <div class="absolute inset-x-0 bottom-0 bg-black/60 py-5 md:py-6 overflow-hidden">
       <div class="marquee" aria-label="Client brands">
         <div class="marquee-track">
           {logos.map(({ src, alt }) => (
-            <img src={`${base}${src}`} alt={alt} class="h-9 md:h-11 w-28 md:w-32 shrink-0 object-contain brightness-0 invert opacity-60" loading="lazy" />
+            <img src={`${base}${src}`} alt={alt} class="h-9 md:h-11 w-28 md:w-32 shrink-0 object-contain brightness-0 invert opacity-60" />
           ))}
         </div>
         <div class="marquee-track" aria-hidden="true">
           {logos.map(({ src }) => (
-            <img src={`${base}${src}`} alt="" class="h-9 md:h-11 w-28 md:w-32 shrink-0 object-contain brightness-0 invert opacity-60" loading="lazy" />
+            <img src={`${base}${src}`} alt="" class="h-9 md:h-11 w-28 md:w-32 shrink-0 object-contain brightness-0 invert opacity-60" />
           ))}
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── Case studies: 2x2 grid, per the comp ─────────────────────────── -->
-  <section class="bg-zinc-950">
-    <div class="px-5 sm:px-8 md:px-12 py-24 md:py-36">
-      <div class="mb-16 md:mb-20">
-        <h2 data-word-reveal class="font-head text-huge md:text-9xl font-normal text-zinc-50">The work speaks first.</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
-        {work.map((p) => (
-          <a href={`${base}/works/${p.id}`} class="group block min-w-0">
-            <div data-image-reveal class="overflow-hidden rounded-2xl bg-zinc-900">
-              <img
-                src={`${base}/images/works/${p.data.thumbnail}`}
-                alt={`${p.data.title}, ${p.data.category}`}
-                class="w-full aspect-[4/3] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                loading="lazy"
-              />
-            </div>
-            <p data-word-reveal data-word-reveal-speed="fast" class="mt-5 md:text-xl font-medium text-zinc-50 uppercase">
-              {p.data.tags.join(' • ')}
-            </p>
-            <h3 data-word-reveal class="mt-2 font-head text-2xl md:text-5xl font-normal text-zinc-50">{p.data.title}</h3>
-          </a>
-        ))}
-      </div>
-
-      <div data-drop-reveal class="mt-16 md:mt-20 md:text-center">
-        <a href={`${base}/works`} class="inline-flex items-center gap-3 text-xl md:text-6xl font-normal text-zinc-50 hover:text-zinc-400 transition-colors">
-          More projects
-          <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
+  <!-- ── Gallery: masonry + filter; tiles open a modal (no case-study pages) ── -->
+  <section id="work" class="bg-zinc-950">
+    <div class="px-5 sm:px-8 md:px-12 py-16 md:py-24">
+      <Gallery />
     </div>
   </section>
 </Layout>
+
+<style>
+  /* Hero "Play showreel" pill. Motion (magnetic pull, jelly scale + corner
+     wobble) is a spring simulation in the script below; CSS only handles
+     colour, shimmer, focus ring and the touch press state. */
+  .play-btn {
+    position: relative;
+    overflow: hidden;
+    will-change: auto;
+    transition: background-color 0.3s ease;
+  }
+  .play-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+    transform: translateX(-120%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .play-btn:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+  .play-btn:hover,
+  .play-btn:focus-visible { background-color: #e4e4e7; }
+
+  @keyframes play-shimmer {
+    0%   { transform: translateX(-120%); opacity: 0.55; }
+    100% { transform: translateX(120%); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @media (hover: hover) and (pointer: fine) {
+      .play-btn:hover::after { animation: play-shimmer 0.7s ease-out; }
+    }
+    .play-btn:focus-visible::after { animation: play-shimmer 0.7s ease-out; }
+  }
+
+  /* Touch: no hover/magnetic, just a press state. */
+  @media (hover: none) {
+    .play-btn:hover { background-color: #fff; }
+    .play-btn:active { transform: scale(0.97); }
+  }
+</style>
+
+<script>
+  // Spring-driven "jelly + magnetic" for the hero Play pill.
+  // The rAF loop exists only while the pointer/focus is on the button or the
+  // springs are still settling; once everything is at rest it stops and all
+  // inline styles are cleared. Skipped entirely on touch and reduced motion.
+  function initPlayJelly() {
+    const zone = document.querySelector<HTMLElement>('[data-play-zone]');
+    const btn = zone?.querySelector<HTMLElement>('[data-play-btn]');
+    if (!zone || !btn || zone.dataset.jellyBound) return;
+    zone.dataset.jellyBound = '1';
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const MAX_PULL = 8;
+    const HOVER_SCALE = 1.06;
+
+    // Each channel: position, velocity, target, stiffness, damping.
+    type Spring = { p: number; v: number; t: number; k: number; c: number };
+    const mk = (p: number, k: number, c: number): Spring => ({ p, v: 0, t: p, k, c });
+    const x = mk(0, 180, 16);
+    const y = mk(0, 180, 16);
+    const sc = mk(1, 230, 11);      // under-damped → springy overshoot
+    const wob = mk(0, 260, 7);      // jelly wobble amount, kicked by impulses
+    const all = [x, y, sc, wob];
+
+    let raf = 0;
+    let last = 0;
+    let hovering = false;
+    let focused = false;
+
+    const apply = () => {
+      // Squash & stretch from the wobble channel; corner radii shift in px so
+      // they ease continuously (no px↔% interpolation).
+      const w = wob.p;
+      const R = btn.offsetHeight / 2;
+      const sx = sc.p * (1 + w * 0.05);
+      const sy = sc.p * (1 - w * 0.05);
+      btn.style.transform = `translate3d(${x.p.toFixed(2)}px, ${y.p.toFixed(2)}px, 0) scale(${sx.toFixed(4)}, ${sy.toFixed(4)})`;
+      const r = (m: number) => Math.max(0, R * (1 + m * w)).toFixed(1) + 'px';
+      btn.style.borderRadius = `${r(0.7)} ${r(-0.5)} ${r(0.6)} ${r(-0.6)} / ${r(-0.5)} ${r(0.7)} ${r(-0.6)} ${r(0.6)}`;
+    };
+
+    const clear = () => {
+      btn.style.removeProperty('transform');
+      btn.style.removeProperty('border-radius');
+      btn.style.removeProperty('will-change');
+    };
+
+    const step = (now: number) => {
+      const dt = Math.min(0.032, (now - last) / 1000 || 0.016);
+      last = now;
+      const n = 2; // substeps for stability
+      const h = dt / n;
+      for (let i = 0; i < n; i++) {
+        for (const s of all) {
+          const a = -s.k * (s.p - s.t) - s.c * s.v;
+          s.v += a * h;
+          s.p += s.v * h;
+        }
+      }
+      apply();
+      const settled = all.every((s) => Math.abs(s.p - s.t) < 0.002 && Math.abs(s.v) < 0.01);
+      if (settled && !hovering && !focused) {
+        raf = 0;
+        all.forEach((s) => { s.p = s.t; s.v = 0; });
+        clear();
+        return;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    const wake = () => {
+      if (raf) return;
+      btn.style.willChange = 'transform';
+      last = performance.now();
+      raf = requestAnimationFrame(step);
+    };
+
+    const enabled = () => fine.matches && !reduced.matches;
+    const engage = () => {
+      sc.t = HOVER_SCALE;
+      wob.v += 9;            // kick the jelly
+      wake();
+    };
+    const release = () => {
+      sc.t = 1;
+      x.t = 0; y.t = 0;
+      wob.v -= 4;            // small counter-wobble on release
+      wake();
+    };
+
+    const move = (e: PointerEvent) => {
+      const z = zone.getBoundingClientRect();
+      const dx = e.clientX - (z.left + z.width / 2);
+      const dy = e.clientY - (z.top + z.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      const pull = Math.min(MAX_PULL, d * 0.12);
+      x.t = (dx / d) * pull;
+      y.t = (dy / d) * pull;
+      wake();
+    };
+
+    zone.addEventListener('pointerenter', (e) => {
+      if (!enabled() || e.pointerType !== 'mouse') return;
+      zone.addEventListener('pointermove', move);
+      wake();
+    });
+    zone.addEventListener('pointerleave', () => {
+      zone.removeEventListener('pointermove', move);
+      x.t = 0; y.t = 0;
+      if (!hovering && !focused) wake();
+    });
+    btn.addEventListener('pointerenter', (e) => {
+      if (!enabled() || e.pointerType !== 'mouse') return;
+      hovering = true;
+      engage();
+    });
+    btn.addEventListener('pointerleave', () => {
+      if (!hovering) return;
+      hovering = false;
+      if (!focused) release();
+    });
+    btn.addEventListener('focus', () => {
+      if (!enabled() || !btn.matches(':focus-visible')) return;
+      focused = true;
+      engage();
+    });
+    btn.addEventListener('blur', () => {
+      if (!focused) return;
+      focused = false;
+      if (!hovering) release();
+    });
+  }
+  document.addEventListener('astro:page-load', initPlayJelly);
+</script>

@@ -171,13 +171,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   // transition:persist'd, so this replays on every navigation, consistent
   // with how word-reveal/image-reveal also re-run per page.
   //
-  // On the homepage this is the second beat of a deliberate sequence
-  // (headline, then nav+logo together) — start right as the headline's
-  // own word-reveal finishes: 8 words × 0.09s stagger + 0.9s duration =
-  // 1.53s (src/pages/index.astro's hero h1, data-word-reveal-speed="slow").
-  // Hardcoded rather than read from the DOM since word-reveal.ts doesn't
-  // expose a per-element finish time; update this if that headline's word
-  // count or speed ever changes. Elsewhere (no showreel on the page, i.e.
+  // On the homepage the nav floats over the hero reel, which fades in
+  // first (data-image-reveal-delay 0.2s in src/pages/index.astro), so the
+  // nav follows shortly after (0.4s). Elsewhere (no showreel on the page, i.e.
   // not the homepage) it plays almost immediately, same as before.
   function initNavIntro() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -185,7 +181,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     const els = document.querySelectorAll<HTMLElement>('#site-nav [data-nav-intro]');
     if (!els.length) return;
     const isHomepage = !!document.querySelector('[data-reel-play]');
-    const delay = isHomepage ? 1.53 : 0.1;
+    const delay = isHomepage ? 0.4 : 0.1;
     gsap.set(els, { opacity: 0, y: -16 });
     gsap.to(els, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', delay });
   }

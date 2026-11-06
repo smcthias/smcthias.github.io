@@ -96,10 +96,11 @@ sections below, which describe that earlier version and predate this
 redesign — treat any light-theme/color specifics down there as historical,
 not current). When adding pages, match the current dark pattern:
 
-- Font: self-hosted **Inter** (variable font, `public/fonts/inter-var.woff2`,
-  `font-weight: 100 900`), not Plus Jakarta Sans. `--font-sans`,
+- Font: self-hosted **Instrument Sans** (variable font,
+  `public/fonts/instrument-sans-var.woff2`, `font-weight: 400 700` — no
+  light/black weights available; Inter's old file is unused), not Plus Jakarta Sans. `--font-sans`,
   `--font-display`, and `--font-head` in `global.css`'s `@theme` block all
-  resolve to the same Inter stack — there's no separate display face.
+  resolve to the same Instrument Sans stack — there's no separate display face.
 - Custom fluid type scale (also in `@theme`, `global.css`): `text-mega`
   (clamp 2.75rem→6rem, hero h1s), `text-huge` (clamp 2.1rem→4rem, section
   h2s), `text-big` (clamp 1.6rem→2.5rem, stat numbers/subsection headings) —
@@ -282,6 +283,26 @@ Current reality:
   `pricing.astro`, and `ux-audit.astro` are all gone (some pre-date v4, see
   below); `ux-health-check.astro` is also gone, fully superseded by the
   `WebsiteScoreChat` widget.
+
+## Work gallery (replaced the case-study pages, 2026-11-06)
+
+`src/components/Gallery.astro` is the only place work is shown (homepage
+`#work` section and `/works`): CSS-columns masonry of single pieces plus a
+Web/Email/Social/Brand filter (`filter` field in each project's frontmatter,
+enum in `content.config.ts`; a chip only renders if some project uses it —
+Social has none yet). Tiles have no titles. A piece = one client: files in
+`public/images/gallery/full/` named `full-<category>-<client>[-NN].jpg` are
+grouped by `<client>` (names/descriptions in `src/data/gallery-clients.ts`)
+and merged with the matching project. Tiles use the small `gallery/thumbs/`
+files (varied aspect = masonry sizes), lazy-loaded and faded in by an
+IntersectionObserver; the modal (native `<dialog>`) lazy-loads the big `full-*`
+screenshots. Add a new piece by dropping files in using that naming.
+**`works/[slug].astro` is deleted** — there are no per-project URLs, so
+`/go/` keys can no longer point at `/works/<id>`, and `llms.txt` lists only
+`/works`. `hstrip-drag.ts` and `count-up.ts` (case-study-only) and
+`pillar-scroll.ts` (pillars section removed) are now unused. The hero is the
+`100svh` reel + Play pill + logo band (`index.astro`); the headline,
+"Trust is built in seconds" and Web/Brand/Reach sections are gone.
 
 ## Short links (`/go/<key>`)
 

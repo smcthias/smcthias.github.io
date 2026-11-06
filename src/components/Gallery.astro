@@ -1,0 +1,401 @@
+---
+// Work gallery: masonry grid of single pieces + a Web/Email/Social/Brand
+// filter. A piece is one client: every file in public/images/gallery/full
+// named full-<category>-<client>[-NN].jpg is grouped by <client>, and merged
+// with the matching case-study project (src/content/projects) when there is
+// one. Clicking a tile opens that piece's <dialog> with all its screenshots.
+// No titles on tiles; the only labels are the four filter names. A filter chip
+// only renders when some piece uses it (Social is empty today).
+// Tiles keep their natural aspect ratio (square / 16:9 / portrait files) so the
+// masonry has varied sizes; images are lazy and fade/rise in as they enter view.
+import fs from 'node:fs';
+import path from 'node:path';
+import sharp from 'sharp';
+import { getCollection } from 'astro:content';
+import { FEATURED } from '../data/featured';
+import { CLIENTS, PROJECT_ALIASES, CATEGORY_TO_FILTER, FEATURE_FIRST } from '../data/gallery-clients';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const FILTERS = [
+  { id: 'web', label: 'Web' },
+  { id: 'email', label: 'Email' },
+  { id: 'social', label: 'Social' },
+  { id: 'brand', label: 'Brand' },
+] as const;
+const labelOf: Record<string, string> = Object.fromEntries(FILTERS.map((f) => [f.id, f.label]));
+
+type Img = { src: string; w: number; h: number };
+type Piece = {
+  id: string;
+  name: string;
+  description?: string;
+  filters: string[];
+  feature?: boolean;
+  cover: Img;
+  shots: Img[];
+};
+
+const dims = async (file: string, src: string): Promise<Img> => {
+  const m = await sharp(file).metadata();
+  return { src, w: m.width ?? 800, h: m.height ?? 600 };
+};
+const worksDir = path.join(process.cwd(), 'public/images/works');
+const worksImg = (f: string) => dims(path.join(worksDir, f), `${base}/images/works/${f}`);
+const projectShots = (p: { data: { images: { hero: string; detail1?: string; detail2?: string; detail3?: string } } }) =>
+  Promise.all(
+    [...new Set([p.data.images.hero, p.data.images.detail1, p.data.images.detail2, p.data.images.detail3])]
+      .filter((f): f is string => !!f)
+      .map(worksImg),
+  );
+
+// ── gallery files, grouped by client ────────────────────────────────────
+const galleryDir = path.join(process.cwd(), 'public/images/gallery/full');
+const thumbsDir = path.join(process.cwd(), 'public/images/gallery/thumbs');
+// Tiles use the small thumb-* files (varied: square / 16:9 / portrait); the
+// modal uses the full-* screenshots, which are tall full-page captures.
+const thumbOf = (file: string) => {
+  const t = file.replace(/^full-/, 'thumb-');
+  return dims(path.join(thumbsDir, t), `${base}/images/gallery/thumbs/${t}`);
+};
+const files = fs.existsSync(galleryDir)
+  ? fs.readdirSync(galleryDir).filter((f) => /\.(jpe?g|png|webp)$/i.test(f)).sort()
+  : [];
+const groups = new Map<string, { category: string; file: string }[]>();
+for (const file of files) {
+  const m = file.match(/^full-([a-z]+)-([a-z0-9]+?)(?:-\d+)?\.[a-z]+$/i);
+  if (!m) continue;
+  const [, category, client] = m;
+  if (!groups.has(client)) groups.set(client, []);
+  groups.get(client)!.push({ category, file });
+}
+// Un-numbered file first, then -02, -03 … (plain sort puts "-02" before ".jpg").
+const order = (f: string) => Number(f.match(/-(\d+)\.[a-z]+$/i)?.[1] ?? 1);
+for (const items of groups.values()) items.sort((a, b) => order(a.file) - order(b.file) || a.file.localeCompare(b.file));
+
+// ── projects (case-study content) ───────────────────────────────────────
+const projects = await getCollection('projects');
+const projectById = Object.fromEntries(projects.map((p) => [p.id, p]));
+
+const pieces: Piece[] = [];
+const usedProjects = new Set<string>();
+
+for (const [client, items] of groups) {
+  const project = projectById[PROJECT_ALIASES[client] ?? client];
+  if (project) usedProjects.add(project.id);
+  const filters = new Set<string>(items.map((i) => CATEGORY_TO_FILTER[i.category]).filter(Boolean));
+  if (project) filters.add(project.data.filter);
+  const gallery = await Promise.all(
+    items.map((i) => dims(path.join(galleryDir, i.file), `${base}/images/gallery/full/${i.file}`)),
+  );
+  pieces.push({
+    id: client,
+    name: project?.data.title ?? CLIENTS[client]?.name ?? client,
+    description: project?.data.description ?? CLIENTS[client]?.description,
+    filters: [...filters],
+    feature: FEATURE_FIRST.includes(client),
+    cover: FEATURE_FIRST.includes(client) ? gallery[0] : await thumbOf(items[0].file),
+    shots: [...(project ? await projectShots(project) : []), ...gallery],
+  });
+}
+// Projects with no gallery images of their own still get a piece.
+for (const p of projects) {
+  if (usedProjects.has(p.id)) continue;
+  pieces.push({
+    id: p.id,
+    name: p.data.title,
+    description: p.data.description,
+    filters: [p.data.filter],
+    cover: await worksImg(p.data.thumbnail),
+    shots: await projectShots(p),
+  });
+}
+
+// Editorial order: FEATURED case studies first, then everything else A–Z.
+const featuredRank = (id: string) => {
+  const i = FEATURED.findIndex((f) => f.slug === id || f.slug === PROJECT_ALIASES[id]);
+  return i === -1 ? 999 : i;
+};
+const featureRank = (id: string) => {
+  const i = FEATURE_FIRST.indexOf(id);
+  return i === -1 ? 999 : i;
+};
+pieces.sort(
+  (a, b) => featureRank(a.id) - featureRank(b.id) || featuredRank(a.id) - featuredRank(b.id) || a.name.localeCompare(b.name),
+);
+
+const used = new Set(pieces.flatMap((p) => p.filters));
+const chips = FILTERS.filter((f) => used.has(f.id));
+---
+
+<div id="gallery" data-gallery>
+  <div class="flex flex-wrap gap-2 md:gap-3 mb-10 md:mb-14" role="group" aria-label="Filter work">
+    <button type="button" data-filter="all" aria-pressed="true" class="gallery-chip cursor-pointer">All</button>
+    {chips.map((f) => (
+      <button type="button" data-filter={f.id} aria-pressed="false" class="gallery-chip cursor-pointer">{f.label}</button>
+    ))}
+  </div>
+
+  <div class="gallery-grid">
+    {pieces.map((p, i) => (
+      <button
+        type="button"
+        data-tile
+        data-filters={p.filters.join(' ')}
+        data-dialog={`g-${p.id}`}
+        aria-label={`Open ${p.name}`}
+        class:list={['gallery-tile group block w-full cursor-pointer overflow-hidden rounded-2xl bg-zinc-900', p.feature && 'gallery-feature']}
+      >
+        <img
+          src={p.cover.src}
+          width={p.cover.w}
+          height={p.cover.h}
+          alt={`${p.name} work`}
+          class:list={['w-full block transition-transform duration-700 ease-out group-hover:scale-[1.03]', p.feature ? 'h-full object-cover object-top' : 'h-auto']}
+          loading={i < 3 ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      </button>
+    ))}
+  </div>
+
+  {pieces.map((p) => (
+    <dialog id={`g-${p.id}`} class="gallery-dialog" aria-label={p.name}>
+      <div data-gallery-scroll data-lenis-prevent class="gallery-scroll">
+        <div class="gallery-modal-inner">
+          <div class="flex flex-wrap gap-2">
+            {p.filters.map((f) => (
+              <p class="inline-block rounded-full border border-zinc-700 px-3 py-1 text-xs font-medium uppercase tracking-[0.15em] text-zinc-300">{labelOf[f]}</p>
+            ))}
+          </div>
+          <h2 class="mt-5 pr-16 font-head text-4xl md:text-7xl font-normal text-zinc-50">{p.name}</h2>
+          {p.description && <p class="mt-4 max-w-2xl text-lg md:text-xl text-zinc-300">{p.description}</p>}
+          <div class:list={['gallery-shots mt-10 md:mt-14', p.shots.length === 1 && 'is-single', p.shots.length >= 3 && 'is-wide']}>
+            {p.shots.map((img, i) => (
+              <img
+                src={img.src}
+                width={img.w}
+                height={img.h}
+                alt={`${p.name} screenshot ${i + 1}`}
+                loading="lazy"
+                decoding="async"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating controls: fixed to the viewport, so they stay put while the modal scrolls. -->
+      <button type="button" data-gallery-close aria-label="Close" class="gallery-float gallery-close">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+      <button type="button" data-gallery-prev aria-label="Previous work" class="gallery-float gallery-prev">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18l-6-6 6-6" /></svg>
+      </button>
+      <button type="button" data-gallery-next aria-label="Next work" class="gallery-float gallery-next">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 6l6 6-6 6" /></svg>
+      </button>
+    </dialog>
+  ))}
+</div>
+
+<style>
+  /* Masonry via CSS columns: tiles keep their natural aspect ratio, so the
+     mix of square / 16:9 / portrait files gives varied sizes. */
+  .gallery-grid { columns: 1; column-gap: 1.25rem; }
+  @media (min-width: 640px)  { .gallery-grid { columns: 2; } }
+  @media (min-width: 1024px) { .gallery-grid { columns: 3; column-gap: 1.5rem; } }
+  .gallery-tile { break-inside: avoid; margin-bottom: 1.25rem; padding: 0; border: 0; }
+  @media (min-width: 1024px) { .gallery-tile { margin-bottom: 1.5rem; } }
+
+  /* Feature tile: full width across every column, cropped to a wide banner. */
+  .gallery-feature { column-span: all; aspect-ratio: 16 / 9; }
+  @media (min-width: 768px) { .gallery-feature { aspect-ratio: 5 / 2; } }
+
+  /* Reveal: tiles start faded/low and ease in when they scroll into view
+     (script adds .is-in). Only when JS is on and motion is allowed. */
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    .gallery-tile {
+      opacity: 0;
+      transform: translateY(28px) scale(0.97);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: var(--d, 0ms);
+    }
+    .gallery-tile.is-in { opacity: 1; transform: none; }
+  }
+
+  .gallery-chip {
+    border-radius: 9999px;
+    border: 1px solid #3f3f46;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #fafafa;
+    background: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .gallery-chip:hover { border-color: #a1a1aa; }
+  .gallery-chip[aria-pressed='true'] { background: #fff; color: #09090b; border-color: #fff; }
+  .gallery-chip:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+  /* Full-screen modal. Controls are position:fixed so they stay with the
+     viewer while the content scrolls; the shots are a masonry (CSS columns). */
+  .gallery-dialog {
+    position: fixed; inset: 0;
+    width: 100vw; max-width: none;
+    height: 100dvh; max-height: none;
+    margin: 0; padding: 0; border: 0;
+    background: #09090b;
+    color: inherit;
+  }
+  .gallery-dialog::backdrop { background: #09090b; }
+  @media (prefers-reduced-motion: no-preference) {
+    .gallery-dialog[open] { animation: gallery-in 0.35s ease-out; }
+  }
+  @keyframes gallery-in { from { opacity: 0; } to { opacity: 1; } }
+
+  .gallery-scroll { height: 100%; overflow-y: auto; padding: 5rem 1rem 6rem; }
+  @media (min-width: 768px) { .gallery-scroll { padding: 6rem 5rem 5rem; } }
+  .gallery-modal-inner { max-width: 1700px; margin: 0 auto; }
+
+  .gallery-shots { columns: 1; column-gap: 1rem; }
+  @media (min-width: 768px) { .gallery-shots { columns: 2; column-gap: 1.5rem; } }
+  @media (min-width: 1280px) { .gallery-shots.is-wide { columns: 3; } }
+  .gallery-shots.is-single { columns: 1; max-width: 64rem; margin-inline: auto; }
+  .gallery-shots img {
+    display: block; width: 100%; height: auto;
+    margin-bottom: 1rem; break-inside: avoid;
+    border-radius: 0.75rem; background: #18181b;
+  }
+  @media (min-width: 768px) { .gallery-shots img { margin-bottom: 1.5rem; } }
+
+  .gallery-float {
+    position: fixed; z-index: 10;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 3rem; height: 3rem; border-radius: 9999px;
+    color: #fafafa; cursor: pointer;
+    background: rgba(24, 24, 27, 0.72);
+    border: 1px solid #3f3f46;
+    backdrop-filter: blur(8px);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  .gallery-float:hover { background: #fff; color: #09090b; }
+  .gallery-float:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .gallery-close { top: 1rem; right: 1rem; }
+  .gallery-prev, .gallery-next { bottom: 1.25rem; }
+  .gallery-prev { left: 1rem; }
+  .gallery-next { right: 1rem; }
+  @media (min-width: 768px) {
+    .gallery-close { top: 1.5rem; right: 1.5rem; }
+    .gallery-prev, .gallery-next { bottom: auto; top: 50%; margin-top: -1.5rem; }
+    .gallery-prev { left: 1.5rem; }
+    .gallery-next { right: 1.5rem; }
+  }
+</style>
+
+<script>
+  function initGallery() {
+    const root = document.querySelector<HTMLElement>('[data-gallery]');
+    if (!root) return;
+    const tiles = Array.from(root.querySelectorAll<HTMLElement>('[data-tile]'));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Scroll reveal: a tile fades in once it's on screen AND its image has
+    // loaded; tiles revealed in the same moment stagger slightly.
+    let io: IntersectionObserver | null = null;
+    let batch = 0;
+    let batchTimer = 0;
+    const reveal = (tile: HTMLElement) => {
+      tile.style.setProperty('--d', `${Math.min(batch++, 6) * 90}ms`);
+      window.clearTimeout(batchTimer);
+      batchTimer = window.setTimeout(() => { batch = 0; }, 120);
+      tile.classList.add('is-in');
+    };
+    const observe = () => {
+      if (reduced || !('IntersectionObserver' in window)) {
+        tiles.forEach((t) => t.classList.add('is-in'));
+        return;
+      }
+      io?.disconnect();
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            const tile = e.target as HTMLElement;
+            observer.unobserve(tile);
+            const img = tile.querySelector('img');
+            if (!img || img.complete) reveal(tile);
+            else img.addEventListener('load', () => reveal(tile), { once: true });
+          });
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+      );
+      io = observer;
+      tiles.forEach((t) => observer.observe(t));
+    };
+    observe();
+
+    // Filter (a piece can carry several filters)
+    const chips = root.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    chips.forEach((chip) =>
+      chip.addEventListener('click', () => {
+        const f = chip.dataset.filter!;
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+        tiles.forEach((t) => {
+          const show = f === 'all' || (t.dataset.filters ?? '').split(' ').includes(f);
+          t.style.display = show ? '' : 'none';
+          t.classList.remove('is-in');
+        });
+        batch = 0;
+        observe();
+      }),
+    );
+
+    // Modal: full screen, arrows step through the currently visible works.
+    const lenis = () => (window as any).__lenis;
+    const visibleTiles = () => tiles.filter((t) => t.style.display !== 'none');
+    let currentTile: HTMLElement | null = null;
+    const dialogOf = (tile: HTMLElement) => document.getElementById(tile.dataset.dialog!) as HTMLDialogElement | null;
+
+    const openTile = (tile: HTMLElement) => {
+      const dlg = dialogOf(tile);
+      if (!dlg) return;
+      currentTile = tile;
+      dlg.showModal();
+      lenis()?.stop();
+      dlg.querySelector<HTMLElement>('[data-gallery-scroll]')?.scrollTo(0, 0);
+      const multiple = visibleTiles().length > 1;
+      dlg.querySelectorAll<HTMLElement>('[data-gallery-prev],[data-gallery-next]').forEach((b) => {
+        b.style.display = multiple ? '' : 'none';
+      });
+      dlg.focus({ preventScroll: true });
+    };
+    const step = (dir: 1 | -1) => {
+      const list = visibleTiles();
+      if (!currentTile || list.length < 2) return;
+      const i = list.indexOf(currentTile);
+      const next = list[(i + dir + list.length) % list.length];
+      const from = dialogOf(currentTile);
+      from?.close();
+      openTile(next);
+    };
+
+    tiles.forEach((tile) => tile.addEventListener('click', () => openTile(tile)));
+    root.querySelectorAll<HTMLDialogElement>('dialog').forEach((dlg) => {
+      // 'close' fires async; only resume smooth scroll if no other modal took over.
+      dlg.addEventListener('close', () =>
+        setTimeout(() => {
+          if (!document.querySelector('dialog[open]')) lenis()?.start();
+        }, 0),
+      );
+      dlg.querySelector('[data-gallery-close]')?.addEventListener('click', () => dlg.close());
+      dlg.querySelector('[data-gallery-prev]')?.addEventListener('click', () => step(-1));
+      dlg.querySelector('[data-gallery-next]')?.addEventListener('click', () => step(1));
+      dlg.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initGallery);
+</script>
