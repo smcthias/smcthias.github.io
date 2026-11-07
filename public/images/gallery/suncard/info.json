@@ -1,5 +1,6 @@
 {
   "name": "SunCard",
+  "description": "A tarot reading site, designed as a personal project." ,
   "filters": [
     "web"
   ],

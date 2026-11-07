@@ -1,5 +1,6 @@
 {
   "name": "iFoodDS",
+  "description": "An iPad dashboard redesign for a farm-to-table agriculture app.",
   "filters": [
     "web"
   ],

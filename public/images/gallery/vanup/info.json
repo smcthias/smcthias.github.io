@@ -1,5 +1,6 @@
 {
   "name": "VanUp",
+  "description": "A shoppable lifestyle blog for a van customization shop, built from scratch.",
   "filters": [
     "web"
   ],
