@@ -87,4 +87,29 @@ function initWordReveal() {
   });
 }
 
-document.addEventListener('astro:page-load', initWordReveal);
+// Trigger start/end are measured once at init. Anything that changes page
+// height afterwards (gallery masonry row spans, lazy images, web fonts, or a
+// client-side navigation that lands before layout settles) leaves them stale —
+// e.g. the footer subtext's short trigger zone ends up ABOVE the real element,
+// so scrolling to it counts as "already left" and the reveal reverses/never
+// plays. Re-measure whenever the document's height changes (observer lives on
+// <html>, which View Transitions keep, so it's bound once at module scope).
+let refreshTimer: number | undefined;
+function scheduleRefresh() {
+  window.clearTimeout(refreshTimer);
+  refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+}
+let lastHeight = 0;
+new ResizeObserver(() => {
+  const h = document.documentElement.scrollHeight;
+  if (Math.abs(h - lastHeight) > 2) {
+    lastHeight = h;
+    scheduleRefresh();
+  }
+}).observe(document.documentElement);
+
+document.addEventListener('astro:page-load', () => {
+  initWordReveal();
+  scheduleRefresh();
+  document.fonts?.ready.then(scheduleRefresh);
+});

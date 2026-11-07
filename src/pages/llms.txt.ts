@@ -17,13 +17,9 @@ A free self-serve UX Health Check scores your site and surfaces prioritized fixe
 
 ## Start here
 
-${link('Home', '/', 'Overview of services, selected work, and client results')}
+${link('Work', '/', 'Gallery of selected web, email, social, and brand projects; each piece opens in a modal with a short description and screenshots')}
 ${link('About', '/about', 'Savelle McThias’s background and approach')}
-${link('Contact', '/#contact', 'Project inquiry modal, opens from any page — name, work email, and project details')}
-
-## Work
-
-${link('Work', '/works', 'Gallery of selected web, email, social, and brand projects; each piece opens in a modal with a short description and screenshots')}
+${link('Contact', '/contact', 'Project inquiry form — name, work email, and project details')}
 
 ## Writing
 

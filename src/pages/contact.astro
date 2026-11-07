@@ -1,0 +1,173 @@
+---
+import Layout from '../layouts/Layout.astro';
+// Contact page (replaces the old global modal). Posts to the Google Apps
+// Script endpoint; the script below is bound via astro:page-load.
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxg4JxjE1jK4HHB19KOuXcHyNZT37dKvmwN0e8wz-ufeosZEeGMnT774Uk9rLjah3TW/exec';
+---
+
+<Layout
+  title="Contact - Savelle Design"
+  description="Tell me what you're building. I'll tell you how design gets it there. Send a project inquiry to Savelle Design."
+>
+  <canvas id="dot-grid-canvas" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
+
+  <section class="relative pt-16 md:pt-28 pb-24 md:pb-36">
+    <div class="px-5 sm:px-8 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <div class="lg:col-span-6">
+        <h1 data-word-reveal class="font-head text-mega md:text-9xl font-normal text-zinc-50">
+          Let's make <br/> something great.
+        </h1>
+        <p data-word-reveal data-word-reveal-speed="fast" class="mt-6 md:mt-10 text-lg md:text-3xl text-zinc-50 max-w-md">
+          Tell me what you're building. I'll tell you how design gets it there.
+        </p>
+      </div>
+
+      <div class="lg:col-span-5 lg:col-start-8">
+        <form id="contact-form" data-endpoint={FORM_ENDPOINT} action={FORM_ENDPOINT} method="POST" class="mt-8" novalidate>
+      <input type="hidden" name="form_type" value="contact" />
+      <input type="hidden" name="site" value="savelledesign.com" />
+      <input type="hidden" name="utm_source" />
+      <input type="hidden" name="utm_medium" />
+      <input type="hidden" name="utm_campaign" />
+      <input type="hidden" name="utm_content" />
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+      <div class="space-y-5">
+        <div>
+          <label for="cf-name" class="block text-sm text-zinc-400 mb-2">Name</label>
+          <input id="cf-name" name="name" type="text" required autocomplete="name"
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors" />
+          <p data-error-for="cf-name" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter your name.</p>
+        </div>
+
+        <div>
+          <label for="cf-email" class="block text-sm text-zinc-400 mb-2">Work email</label>
+          <input id="cf-email" name="email" type="email" required autocomplete="email" placeholder="you@company.com"
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors" />
+          <p data-error-for="cf-email" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please enter a valid email address.</p>
+        </div>
+
+        <div>
+          <label for="cf-message" class="block text-sm text-zinc-400 mb-2">Tell me about the project</label>
+          <textarea id="cf-message" name="message" rows="4" required
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-base text-zinc-50 placeholder-zinc-500 focus:outline-hidden focus:border-white transition-colors resize-y"
+            placeholder="The project, what's not working, and what success looks like."></textarea>
+          <p data-error-for="cf-message" class="text-sm text-red-400 mt-1.5 hidden" role="alert">Please add a few details.</p>
+        </div>
+      </div>
+
+      <button type="submit" id="cf-submit"
+        class="mt-7 w-full inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-white text-zinc-950 font-medium hover:bg-zinc-200 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+        <span id="cf-submit-label">Send project inquiry</span>
+        <svg id="cf-spinner" class="hidden ml-2 w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
+      </button>
+
+      <p id="cf-form-error" class="text-sm text-red-400 mt-4 hidden" role="alert"></p>
+      <p class="text-xs text-zinc-300 mt-4">No newsletter. This goes straight to my inbox, and I reply personally within two business days.</p>
+    </form>
+
+        <div id="contact-success" class="mt-8 text-center py-6" hidden>
+      <div class="w-14 h-14 mx-auto bg-white rounded-full flex items-center justify-center mb-6">
+        <svg class="w-7 h-7 text-zinc-950" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <h3 class="font-head text-2xl font-semibold text-zinc-50 mb-2">Got it<span id="cf-success-name"></span>. Your inquiry is in.</h3>
+      <p class="text-zinc-400">I read every message personally and reply within two business days. Talk soon.</p>
+    </div>
+
+
+        <p class="text-sm text-zinc-500 mt-6"><a href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 decoration-zinc-700 hover:decoration-white hover:text-zinc-300 transition-colors">Connect on LinkedIn</a>
+      </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  function initContactForm() {
+    const form0 = document.getElementById('contact-form');
+    if (!form0 || (form0 as HTMLElement).dataset.bound) return;
+    (form0 as HTMLElement).dataset.bound = '1';
+
+    // Form submission — same endpoint/behavior as the old contact page.
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const endpoint = (form.dataset.endpoint || '').trim();
+    const submitBtn = document.getElementById('cf-submit') as HTMLButtonElement;
+    const submitLabel = document.getElementById('cf-submit-label')!;
+    const spinner = document.getElementById('cf-spinner')!;
+    const formError = document.getElementById('cf-form-error')!;
+    const successEl = document.getElementById('contact-success')!;
+    const successName = document.getElementById('cf-success-name')!;
+
+    const params = new URLSearchParams(window.location.search);
+    (['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'] as const).forEach((k) => {
+      const input = form.querySelector(`input[name="${k}"]`) as HTMLInputElement | null;
+      if (input) input.value = params.get(k) || '';
+    });
+
+    const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+    function showFieldError(id: string, show: boolean) {
+      form.querySelector(`[data-error-for="${id}"]`)?.classList.toggle('hidden', !show);
+    }
+
+    function validate() {
+      const name = (form.querySelector('#cf-name') as HTMLInputElement).value.trim();
+      const email = (form.querySelector('#cf-email') as HTMLInputElement).value;
+      const message = (form.querySelector('#cf-message') as HTMLTextAreaElement).value.trim();
+      showFieldError('cf-name', !name);
+      showFieldError('cf-email', !emailOk(email));
+      showFieldError('cf-message', !message);
+      return !!name && emailOk(email) && !!message;
+    }
+
+    ['cf-name', 'cf-email', 'cf-message'].forEach((id) => {
+      form.querySelector(`#${id}`)?.addEventListener('input', () => showFieldError(id, false));
+    });
+
+    function setLoading(on: boolean) {
+      submitBtn.disabled = on;
+      spinner.classList.toggle('hidden', !on);
+      submitLabel.textContent = on ? 'Sending…' : 'Send project inquiry';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formError.classList.add('hidden');
+      if ((form.querySelector('input[name="_gotcha"]') as HTMLInputElement).value) return;
+      if (!validate()) return;
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      delete (data as Record<string, unknown>)._gotcha;
+      setLoading(true);
+
+      try {
+        if (endpoint) {
+          await fetch(endpoint, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(data),
+          });
+        }
+        if (typeof (window as any).gtag === 'function') {
+          (window as any).gtag('event', 'generate_lead', { method: 'contact_form' });
+        }
+        successName.textContent = data.name ? `, ${String(data.name).split(' ')[0]}` : '';
+        form.hidden = true;
+        successEl.hidden = false;
+      } catch (_) {
+        setLoading(false);
+        formError.innerHTML =
+          'Something went wrong sending that. Please try again, or reach out on <a class="underline" href="https://www.linkedin.com/in/savelle/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.';
+        formError.classList.remove('hidden');
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initContactForm);
+</script>

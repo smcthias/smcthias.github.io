@@ -5,7 +5,7 @@ overview, content-collection schema, and deploy instructions — this file
 covers conventions and history that aren't obvious from reading the code.
 
 > **Gallery work lives in folders — check them first.** Every tile on the
-> homepage/`/works` gallery is one folder in `public/images/gallery/<tile>/`
+> homepage gallery is one folder in `public/images/gallery/<tile>/`
 > (images + `info.json`). Before changing, adding, removing, renaming, or
 > reordering work, or answering "what's in the gallery?", **list
 > `public/images/gallery/` and read each folder's `info.json`** — that is the
@@ -132,8 +132,8 @@ not current). When adding pages, match the current dark pattern:
   this has already shipped as a real bug once (`WebsiteScoreChat.astro`'s
   launcher, close button, and quiz-answer chips were all missing it).
 - Nav (`src/components/Nav.astro`) is a fixed, transparent, floating header
-  (`SAVELLE` wordmark + LET'S TALK + MENU) that opens a full-screen dark
-  drawer (`#nav-drawer`) with four links (Home/About/Work/Contact) — not the
+  (`SAVELLE` wordmark + nav; no LET'S TALK pill in the header) that opens a full-screen dark
+  drawer (`#nav-drawer`) on mobile (MENU hamburger; on desktop `md+` the toggle and drawer are hidden and a single switch-style pill with Work → `/` / About / Contact → `/contact` shows instead, active page highlighted white). The drawer has three links (Work, About, Contact) — not the
   old light-theme desktop-dropdown-plus-`#mobile-menu` pattern. There's only
   one nav markup location now, not two to keep in sync.
 
@@ -172,7 +172,7 @@ The named scripts (`src/scripts/`), each opted into per-element via a
   for the pattern), fading out via a scrubbed `ScrollTrigger` as
   `data-fade-trigger`'s element scrolls into place. **Trap:** the fade's
   `start: 'top bottom'` assumes the hero is at least one viewport tall: on
-  a page with a short hero (e.g. `/works`'s one-line intro), the
+  a page with a short hero (e.g. `/contact`'s short intro), the
   fade-trigger element can already be behind that "top bottom" point at
   scroll position 0, giving a *negative* computed start and thus the canvas
   rendering already partway faded (dimmer than every other page) before any
@@ -244,14 +244,12 @@ deleted and when) still hold, but anything about **colors, the contact
 page, the footer, or the nav** describes the superseded light-theme version.
 Current reality:
 
-- **Contact is a modal, not a page.** `src/pages/contact.astro` no longer
-  exists. `src/components/ContactModal.astro` renders once in
-  `Layout.astro` and opens from *any* element anywhere with a
-  `[data-contact-open]` attribute (event-delegated on `document`, so it
-  works for elements injected later by other scripts too, e.g.
-  `WebsiteScoreChat`'s results CTA). The footer (`id="contact"`) doubles as
-  the scroll target for `/#contact` links; `LET'S TALK` opens the modal
-  directly. Both coexist deliberately.
+- **Contact is a page again (2026-11-07).** `src/pages/contact.astro` holds
+  the project-inquiry form (Apps Script endpoint, script bound via
+  `astro:page-load`). The old `ContactModal.astro` and all
+  `[data-contact-open]` triggers are deleted; `LET'S TALK` (nav + footer) and
+  the drawer's Contact link are plain links to `/contact`. The footer keeps
+  `id="contact"` only as the dot-grid fade marker for `about.astro`.
 - **`src/pages/services.astro` no longer exists** (deleted 2026-07-25, see
   the "Pages added independently" section below for that history) — nothing
   in the current nav/footer links to it.
@@ -283,10 +281,10 @@ Current reality:
   dropped for competing with the footer headline), and the nav drawer has a small "Follow along
   on Substack" link under the survey link. Older "History" notes below
   that mention the blog describe the removed version.
-- Current page inventory: `index.astro`, `about.astro`, `works.astro` +
-  `works/[slug].astro`, `privacy.astro`,
-  `terms.astro`, `404.astro`, `llms.txt.ts`. That's the full list —
-  `contact.astro`, `services.astro`, `gallery.astro`, `agencies.astro`,
+- Current page inventory: `index.astro`, `about.astro`, `contact.astro`,
+  `privacy.astro`, `terms.astro`, `404.astro`, `llms.txt.ts`, `go/[key].astro`.
+  That's the full list — `works.astro` (deleted 2026-11-07; the gallery lives
+  on the homepage only), `services.astro`, `gallery.astro`, `agencies.astro`,
   `pricing.astro`, and `ux-audit.astro` are all gone (some pre-date v4, see
   below); `ux-health-check.astro` is also gone, fully superseded by the
   `WebsiteScoreChat` widget.
@@ -298,19 +296,19 @@ The "Is your website reaching your customers?" design-audit survey is gone:
 (nav drawer, footer, contact modal) and its `<SurveyModal />` mount in
 `Layout.astro`. Older notes below that mention the survey/WebsiteScore quiz,
 `#website-score`, or the footer "survey link" describe the removed version.
-The contact modal's own lead form (same Apps Script endpoint) is unaffected.
+The contact page's own lead form (same Apps Script endpoint) is unaffected.
 
 ## Work gallery (one folder per tile)
 
 `src/components/Gallery.astro` is the only place work is shown (homepage
-`#work` section and `/works`): a masonry of single pieces (CSS grid on a 1px
+`#work` section): a masonry of single pieces (CSS grid on a 1px
 row grid; the component's script sets each tile's row span from its measured
 height, so a featured tile can span 2 of 3 columns) plus a
 Web/Email/Social/Brand filter. Tiles have no titles. Clicking one opens a
 full-screen native `<dialog>` (floating close + prev/next arrows that step
 through the currently visible tiles; the screenshots inside are a masonry
 too). There are no case-study pages (`works/[slug].astro` is deleted; `/go/`
-keys can't point at per-project URLs, and `llms.txt` lists only `/works`).
+keys can't point at per-project URLs, and `llms.txt` lists only the homepage).
 
 **Every tile is a folder: `public/images/gallery/<slug>/`.** The component
 reads the directory at build time, so adding/removing a tile = adding/removing
@@ -702,3 +700,11 @@ The deletions and dates below are still accurate as history.
     call to leave them; revisit if the user calls them out specifically.
   Recoverable from git history (pre-2026-07-25) if any of this is wanted
   back — nothing here deleted data, only presentation.
+
+## Pages restructure (2026-11-07)
+
+- `/works` removed; gallery is homepage-only (`#work`). Nav drawer: Work (→ `/`)
+  / About / Contact. `/go/work` now targets `/#work` (key and UTMs unchanged).
+- Contact modal replaced by `/contact` (see "The v4 redesign" above).
+- Footer on `/contact` drops the "Let's make something great" block and the
+  Substack callout (only the bottom bar remains).

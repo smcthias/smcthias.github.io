@@ -55,7 +55,7 @@ export type GoLink = Destination & {
 const LINKS: Record<string, GoLink> = {
   // Starter links for the LinkedIn profile (Featured section / website field).
   work: {
-    path: '/works',
+    path: '/#work',
     date: '2026-10-28',
     content: 'profile-work',
   },
