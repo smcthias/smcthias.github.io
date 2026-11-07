@@ -6,22 +6,23 @@ import Gallery from '../components/Gallery.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 
-// One uniform box per logo (not a per-logo custom height) — equal visual
-// weight regardless of each mark's native aspect ratio, and guarantees
-// consistent gaps in the marquee (mismatched heights were crowding/
-// colliding against neighbors).
+// Logos are sized by optical weight, not a uniform box: `h` is the desktop
+// height in px (mobile scales by --logo-scale). Wide wordmarks (bareMinerals,
+// Rich Dad) need to be wide to stay legible; dense/heavy marks (Sanity,
+// PetSmart) are pulled down so nothing dominates. Heights are whole numbers
+// so edges land on pixel boundaries instead of antialiasing into jaggies.
 const logos = [
-  { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart' },
-  { src: '/images/logos/logo-gm.svg', alt: 'General Motors' },
-  { src: '/images/logos/logo-sothebys.svg', alt: "Sotheby's" },
-  { src: '/images/logos/logo-universal.svg', alt: 'Universal' },
-  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records' },
-  { src: '/images/logos/logo-lamesa.svg', alt: 'La Mesa RV' },
-  { src: '/images/logos/logo-plexus.svg', alt: 'Plexus Worldwide' },
-  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals' },
-  { src: '/images/logos/logo-thebeachboys.svg', alt: 'The Beach Boys' },
-  { src: '/images/logos/logo-richdad.svg', alt: 'Rich Dad' },
-  { src: '/images/logos/logo-sanity.svg', alt: 'Sanity' },
+  { src: '/images/logos/logo-petsmart.svg', alt: 'PetSmart', h: 36 },
+  { src: '/images/logos/logo-gm.svg', alt: 'General Motors', h: 40 },
+  { src: '/images/logos/logo-sothebys.svg', alt: "Sotheby's", h: 28 },
+  { src: '/images/logos/logo-universal.svg', alt: 'Universal', h: 54 },
+  { src: '/images/logos/logo-capitolrecords.svg', alt: 'Capitol Records', h: 54 },
+  { src: '/images/logos/logo-lamesa.svg', alt: 'La Mesa RV', h: 34 },
+  { src: '/images/logos/logo-plexus.svg', alt: 'Plexus Worldwide', h: 38 },
+  { src: '/images/logos/logo-bareminerals.svg', alt: 'bareMinerals', h: 22 },
+  { src: '/images/logos/logo-thebeachboys.svg', alt: 'The Beach Boys', h: 54 },
+  { src: '/images/logos/logo-richdad.svg', alt: 'Rich Dad', h: 22 },
+  { src: '/images/logos/logo-sanity.svg', alt: 'Sanity', h: 34 },
 ];
 
 ---
@@ -71,15 +72,15 @@ const logos = [
 
     <!-- Logo band: translucent black strip, white logos at 60%, slow marquee. -->
     <div class="absolute inset-x-0 bottom-0 bg-black/60 py-5 md:py-6 overflow-hidden">
-      <div class="marquee" aria-label="Client brands">
+      <div class="marquee [--logo-scale:0.8] md:[--logo-scale:1]" aria-label="Client brands">
         <div class="marquee-track">
-          {logos.map(({ src, alt }) => (
-            <img src={`${base}${src}`} alt={alt} class="h-9 md:h-11 w-28 md:w-32 shrink-0 object-contain brightness-0 invert opacity-60" />
+          {logos.map(({ src, alt, h }) => (
+            <img src={`${base}${src}`} alt={alt} style={`height:calc(${h}px * var(--logo-scale))`} class="w-auto max-w-none shrink-0 brightness-0 invert opacity-60" />
           ))}
         </div>
         <div class="marquee-track" aria-hidden="true">
-          {logos.map(({ src }) => (
-            <img src={`${base}${src}`} alt="" class="h-9 md:h-11 w-28 md:w-32 shrink-0 object-contain brightness-0 invert opacity-60" />
+          {logos.map(({ src, h }) => (
+            <img src={`${base}${src}`} alt="" style={`height:calc(${h}px * var(--logo-scale))`} class="w-auto max-w-none shrink-0 brightness-0 invert opacity-60" />
           ))}
         </div>
       </div>
