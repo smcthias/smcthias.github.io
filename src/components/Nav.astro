@@ -21,7 +21,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           type="button"
           data-contact-open
           data-nav-intro
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-zinc-950 text-sm md:text-lg font-semibold hover:bg-zinc-200 transition-colors cursor-pointer"
+          data-jelly
+          class="jelly inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-zinc-950 text-sm md:text-lg font-semibold hover:bg-zinc-200 transition-colors cursor-pointer"
         >
           LET'S TALK
           <svg class="w-3.5 h-3.5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M8 7h9v9" /></svg>
@@ -31,10 +32,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           id="nav-menu-toggle"
           type="button"
           data-nav-intro
+          data-jelly
           aria-label="Open menu"
           aria-expanded="false"
           aria-controls="nav-drawer"
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-zinc-50 text-sm md:text-lg font-semibold bg-zinc-800 hover:bg-zinc-900 transition-colors cursor-pointer"
+          class="jelly inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-zinc-50 text-sm md:text-lg font-semibold bg-zinc-800 hover:bg-zinc-900 transition-colors cursor-pointer"
         >
           <span id="nav-menu-label">MENU</span>
           <span class="nav-burger relative inline-flex items-center justify-center w-4 h-4" aria-hidden="true">

@@ -3,5 +3,6 @@
   "filters": [
     "web"
   ],
-  "order": 110
+  "order": 170,
+  "wide": true
 }

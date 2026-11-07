@@ -98,9 +98,34 @@ body {
   padding-right: clamp(3rem, 6vw, 6rem);
   animation: marquee 36s linear infinite;
 }
-.marquee:hover .marquee-track { animation-play-state: paused; }
 @keyframes marquee {
   to { transform: translateX(-100%); }
+}
+
+/* Pill-button shimmer sweep (pairs with scripts/jelly.ts, same as the hero
+   Play pill). Opt in with class="jelly" + data-jelly. */
+.jelly { position: relative; overflow: hidden; }
+.jelly::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+  transform: translateX(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes jelly-shimmer {
+  0%   { transform: translateX(-120%); opacity: 0.55; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (pointer: fine) {
+    .jelly:hover::after { animation: jelly-shimmer 0.7s ease-out; }
+  }
+  .jelly:focus-visible::after { animation: jelly-shimmer 0.7s ease-out; }
+}
+@media (hover: none) {
+  .jelly:active { transform: scale(0.97); }
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
