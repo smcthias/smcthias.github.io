@@ -4,5 +4,6 @@
   "filters": [
     "web"
   ],
+  "columns": 2,
   "order": 90
 }

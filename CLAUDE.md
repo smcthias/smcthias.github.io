@@ -328,6 +328,7 @@ public/images/gallery/vanup/
   "description": "One short line…",      // optional; modal copy
   "filters": ["web"],                    // any of: web, email, social, brand (a tile can have several)
   "featured": true,                      // optional; the big 2-of-3-column tile, pinned first
+  "columns": 2,                         // optional; force 2 columns in the modal on wide screens (default: 3 when 3+ shots)
   "order": 10                            // optional; lower = earlier (default 9999, then A–Z)
 }
 ```

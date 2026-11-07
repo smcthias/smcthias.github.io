@@ -34,11 +34,12 @@ type Piece = {
   filters: string[];
   feature: boolean;
   wide: boolean;
+  twoCol: boolean;
   order: number;
   cover: Img;
   shots: Img[];
 };
-type Info = { name?: string; description?: string; filters?: string[]; featured?: boolean; wide?: boolean; order?: number };
+type Info = { name?: string; description?: string; filters?: string[]; featured?: boolean; wide?: boolean; columns?: number; order?: number };
 
 const IMAGE_RE = /\.(jpe?g|png|webp|avif|gif)$/i;
 const galleryDir = path.join(process.cwd(), 'public/images/gallery');
@@ -85,6 +86,7 @@ for (const dir of folders) {
     filters,
     feature: info.featured === true,
     wide: info.featured === true || info.wide === true,
+    twoCol: info.columns === 2,
     order: info.order ?? 9999,
     cover: coverFile ? await toImg(coverFile) : shots[0],
     shots,
@@ -143,7 +145,7 @@ const chips = FILTERS.filter((f) => used.has(f.id));
           </div>
           <h2 class="mt-5 pr-16 font-head text-4xl md:text-7xl font-normal text-zinc-50">{p.name}</h2>
           {p.description && <p class="mt-4 max-w-2xl text-lg md:text-xl text-zinc-300">{p.description}</p>}
-          <div class:list={['gallery-shots mt-10 md:mt-14', p.shots.length === 1 && 'is-single', p.shots.length >= 3 && 'is-wide']}>
+          <div class:list={['gallery-shots mt-10 md:mt-14', p.shots.length === 1 && 'is-single', p.shots.length >= 3 && !p.twoCol && 'is-wide']}>
             {p.shots.map((img, i) => (
               <img
                 src={img.src}
