@@ -115,13 +115,14 @@ const chips = FILTERS.filter((f) => used.has(f.id));
         data-dialog={`g-${p.id}`}
         aria-label={`Open ${p.name}`}
         class:list={['gallery-tile group block w-full cursor-pointer overflow-hidden rounded-2xl bg-zinc-900', p.feature && 'gallery-feature']}
+        style={!p.feature && p.cover.w > p.cover.h ? 'aspect-ratio: 1 / 1' : undefined}
       >
         <img
           src={p.cover.src}
           width={p.cover.w}
           height={p.cover.h}
           alt={`${p.name} work`}
-          class:list={['w-full block transition-transform duration-700 ease-out group-hover:scale-[1.03]', p.feature ? 'h-full object-cover object-top' : 'h-auto']}
+          class:list={['w-full block transition-transform duration-700 ease-out group-hover:scale-[1.03]', p.feature || p.cover.w > p.cover.h ? 'h-full object-cover object-top' : 'h-auto']}
           loading={i < 3 ? 'eager' : 'lazy'}
           decoding="async"
         />
